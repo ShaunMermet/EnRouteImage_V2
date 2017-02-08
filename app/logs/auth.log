@@ -13737,3 +13737,823 @@ Array
 ] []
 [2017-02-08 15:35:41] auth.DEBUG: Checking authorization for user 9 ('user1') on permission 'uri_dashboard'... [] []
 [2017-02-08 15:35:41] auth.DEBUG: No matching permissions found.  Access denied. [] []
+[2017-02-08 15:50:36] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\sprinkles\\account\\src\\Controller\\AccountController.php",
+        "line": 310,
+        "function": "UserFrosting\\Sprinkle\\Admin\\ServicesProvider\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Admin\\ServicesProvider\\AdminServicesProvider",
+        "type": "->"
+    },
+    {
+        "function": "login",
+        "class": "UserFrosting\\Sprinkle\\Account\\Controller\\AccountController",
+        "type": "->"
+    }
+] []
+[2017-02-08 15:50:36] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'uri_dashboard'... [] []
+[2017-02-08 15:50:36] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:50:36] auth.DEBUG: Authorization check requested at:  [
+    {
+        "function": "pageDashboard",
+        "class": "UserFrosting\\Sprinkle\\Admin\\Controller\\AdminController",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\slim\\slim\\Slim\\Handlers\\Strategies\\RequestResponse.php",
+        "line": 41,
+        "function": "call_user_func"
+    }
+] []
+[2017-02-08 15:50:36] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'uri_dashboard'... [] []
+[2017-02-08 15:50:36] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:50:37] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 32,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_userCard_menu",
+        "class": "__TwigTemplate_eb8c50e47742f55e6d8528b0171bbbf846b34969972f55bcf083ae7716afc408",
+        "type": "->"
+    }
+] []
+[2017-02-08 15:50:37] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'uri_dashboard'... [] []
+[2017-02-08 15:50:37] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:50:37] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 27,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_navigation",
+        "class": "__TwigTemplate_8bfa07b11b6a3f1bd1aa51b1cfd228794820a37bff36f78bbb6a169ea2f0f05f",
+        "type": "->"
+    }
+] []
+[2017-02-08 15:50:37] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'uri_dashboard'... [] []
+[2017-02-08 15:50:37] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:50:37] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 41,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_navigation",
+        "class": "__TwigTemplate_8bfa07b11b6a3f1bd1aa51b1cfd228794820a37bff36f78bbb6a169ea2f0f05f",
+        "type": "->"
+    }
+] []
+[2017-02-08 15:50:37] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'uri_users'... [] []
+[2017-02-08 15:50:37] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:50:37] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 69,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_navigation",
+        "class": "__TwigTemplate_8bfa07b11b6a3f1bd1aa51b1cfd228794820a37bff36f78bbb6a169ea2f0f05f",
+        "type": "->"
+    }
+] []
+[2017-02-08 15:50:37] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'uri_activities'... [] []
+[2017-02-08 15:50:37] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:50:37] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 83,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_navigation",
+        "class": "__TwigTemplate_8bfa07b11b6a3f1bd1aa51b1cfd228794820a37bff36f78bbb6a169ea2f0f05f",
+        "type": "->"
+    }
+] []
+[2017-02-08 15:50:37] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'uri_roles'... [] []
+[2017-02-08 15:50:37] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:50:37] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 97,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_navigation",
+        "class": "__TwigTemplate_8bfa07b11b6a3f1bd1aa51b1cfd228794820a37bff36f78bbb6a169ea2f0f05f",
+        "type": "->"
+    }
+] []
+[2017-02-08 15:50:37] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'uri_permissions'... [] []
+[2017-02-08 15:50:37] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:50:37] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 111,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_navigation",
+        "class": "__TwigTemplate_8bfa07b11b6a3f1bd1aa51b1cfd228794820a37bff36f78bbb6a169ea2f0f05f",
+        "type": "->"
+    }
+] []
+[2017-02-08 15:50:37] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'uri_groups'... [] []
+[2017-02-08 15:50:37] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:50:37] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 48,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_body_matter",
+        "class": "__TwigTemplate_f3ad218f5170b222285cf5be6dbc050d396a07014003dc74ab09c4f01902b929",
+        "type": "->"
+    }
+] []
+[2017-02-08 15:50:37] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'uri_users'... [] []
+[2017-02-08 15:50:37] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:50:37] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 161,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_body_matter",
+        "class": "__TwigTemplate_f3ad218f5170b222285cf5be6dbc050d396a07014003dc74ab09c4f01902b929",
+        "type": "->"
+    }
+] []
+[2017-02-08 15:50:37] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'uri_users'... [] []
+[2017-02-08 15:50:37] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:50:37] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 233,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_body_matter",
+        "class": "__TwigTemplate_f3ad218f5170b222285cf5be6dbc050d396a07014003dc74ab09c4f01902b929",
+        "type": "->"
+    }
+] []
+[2017-02-08 15:50:37] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'view_system_info'... [] []
+[2017-02-08 15:50:37] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:50:37] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 376,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_body_matter",
+        "class": "__TwigTemplate_f3ad218f5170b222285cf5be6dbc050d396a07014003dc74ab09c4f01902b929",
+        "type": "->"
+    }
+] []
+[2017-02-08 15:50:37] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'uri_activities'... [] []
+[2017-02-08 15:50:37] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:50:39] auth.DEBUG: Authorization check requested at:  [
+    {
+        "function": "getList",
+        "class": "UserFrosting\\Sprinkle\\Admin\\Controller\\ActivityController",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\slim\\slim\\Slim\\Handlers\\Strategies\\RequestResponse.php",
+        "line": 41,
+        "function": "call_user_func"
+    }
+] []
+[2017-02-08 15:50:39] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'uri_activities'... [] []
+[2017-02-08 15:50:39] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:51:26] auth.DEBUG: Authorization check requested at:  [
+    {
+        "function": "pageList",
+        "class": "UserFrosting\\Sprinkle\\Admin\\Controller\\UserController",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\slim\\slim\\Slim\\Handlers\\Strategies\\RequestResponse.php",
+        "line": 41,
+        "function": "call_user_func"
+    }
+] []
+[2017-02-08 15:51:26] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'uri_users'... [] []
+[2017-02-08 15:51:26] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:51:26] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 32,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_userCard_menu",
+        "class": "__TwigTemplate_eb8c50e47742f55e6d8528b0171bbbf846b34969972f55bcf083ae7716afc408",
+        "type": "->"
+    }
+] []
+[2017-02-08 15:51:26] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'uri_dashboard'... [] []
+[2017-02-08 15:51:26] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:51:26] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 27,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_navigation",
+        "class": "__TwigTemplate_8bfa07b11b6a3f1bd1aa51b1cfd228794820a37bff36f78bbb6a169ea2f0f05f",
+        "type": "->"
+    }
+] []
+[2017-02-08 15:51:26] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'uri_dashboard'... [] []
+[2017-02-08 15:51:26] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:51:26] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 41,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_navigation",
+        "class": "__TwigTemplate_8bfa07b11b6a3f1bd1aa51b1cfd228794820a37bff36f78bbb6a169ea2f0f05f",
+        "type": "->"
+    }
+] []
+[2017-02-08 15:51:26] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'uri_users'... [] []
+[2017-02-08 15:51:26] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:51:26] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 69,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_navigation",
+        "class": "__TwigTemplate_8bfa07b11b6a3f1bd1aa51b1cfd228794820a37bff36f78bbb6a169ea2f0f05f",
+        "type": "->"
+    }
+] []
+[2017-02-08 15:51:26] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'uri_activities'... [] []
+[2017-02-08 15:51:26] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:51:26] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 83,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_navigation",
+        "class": "__TwigTemplate_8bfa07b11b6a3f1bd1aa51b1cfd228794820a37bff36f78bbb6a169ea2f0f05f",
+        "type": "->"
+    }
+] []
+[2017-02-08 15:51:26] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'uri_roles'... [] []
+[2017-02-08 15:51:26] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:51:26] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 97,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_navigation",
+        "class": "__TwigTemplate_8bfa07b11b6a3f1bd1aa51b1cfd228794820a37bff36f78bbb6a169ea2f0f05f",
+        "type": "->"
+    }
+] []
+[2017-02-08 15:51:26] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'uri_permissions'... [] []
+[2017-02-08 15:51:26] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:51:26] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 111,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_navigation",
+        "class": "__TwigTemplate_8bfa07b11b6a3f1bd1aa51b1cfd228794820a37bff36f78bbb6a169ea2f0f05f",
+        "type": "->"
+    }
+] []
+[2017-02-08 15:51:26] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'uri_groups'... [] []
+[2017-02-08 15:51:26] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:51:28] auth.DEBUG: Authorization check requested at:  [
+    {
+        "function": "getList",
+        "class": "UserFrosting\\Sprinkle\\Admin\\Controller\\UserController",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\slim\\slim\\Slim\\Handlers\\Strategies\\RequestResponse.php",
+        "line": 41,
+        "function": "call_user_func"
+    }
+] []
+[2017-02-08 15:51:28] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'uri_users'... [] []
+[2017-02-08 15:51:28] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:51:34] auth.DEBUG: Authorization check requested at:  [
+    {
+        "function": "getModalConfirmDelete",
+        "class": "UserFrosting\\Sprinkle\\Admin\\Controller\\UserController",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\slim\\slim\\Slim\\Handlers\\Strategies\\RequestResponse.php",
+        "line": 41,
+        "function": "call_user_func"
+    }
+] []
+[2017-02-08 15:51:34] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'delete_user'... [] []
+[2017-02-08 15:51:34] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:51:38] auth.DEBUG: Authorization check requested at:  [
+    {
+        "function": "delete",
+        "class": "UserFrosting\\Sprinkle\\Admin\\Controller\\UserController",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\slim\\slim\\Slim\\Handlers\\Strategies\\RequestResponse.php",
+        "line": 41,
+        "function": "call_user_func"
+    }
+] []
+[2017-02-08 15:51:38] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'delete_user'... [] []
+[2017-02-08 15:51:38] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:51:38] auth.DEBUG: Authorization check requested at:  [
+    {
+        "function": "pageList",
+        "class": "UserFrosting\\Sprinkle\\Admin\\Controller\\UserController",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\slim\\slim\\Slim\\Handlers\\Strategies\\RequestResponse.php",
+        "line": 41,
+        "function": "call_user_func"
+    }
+] []
+[2017-02-08 15:51:38] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'uri_users'... [] []
+[2017-02-08 15:51:38] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:51:38] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 32,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_userCard_menu",
+        "class": "__TwigTemplate_eb8c50e47742f55e6d8528b0171bbbf846b34969972f55bcf083ae7716afc408",
+        "type": "->"
+    }
+] []
+[2017-02-08 15:51:38] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'uri_dashboard'... [] []
+[2017-02-08 15:51:38] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:51:38] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 27,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_navigation",
+        "class": "__TwigTemplate_8bfa07b11b6a3f1bd1aa51b1cfd228794820a37bff36f78bbb6a169ea2f0f05f",
+        "type": "->"
+    }
+] []
+[2017-02-08 15:51:38] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'uri_dashboard'... [] []
+[2017-02-08 15:51:38] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:51:38] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 41,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_navigation",
+        "class": "__TwigTemplate_8bfa07b11b6a3f1bd1aa51b1cfd228794820a37bff36f78bbb6a169ea2f0f05f",
+        "type": "->"
+    }
+] []
+[2017-02-08 15:51:38] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'uri_users'... [] []
+[2017-02-08 15:51:38] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:51:38] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 69,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_navigation",
+        "class": "__TwigTemplate_8bfa07b11b6a3f1bd1aa51b1cfd228794820a37bff36f78bbb6a169ea2f0f05f",
+        "type": "->"
+    }
+] []
+[2017-02-08 15:51:38] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'uri_activities'... [] []
+[2017-02-08 15:51:38] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:51:38] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 83,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_navigation",
+        "class": "__TwigTemplate_8bfa07b11b6a3f1bd1aa51b1cfd228794820a37bff36f78bbb6a169ea2f0f05f",
+        "type": "->"
+    }
+] []
+[2017-02-08 15:51:38] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'uri_roles'... [] []
+[2017-02-08 15:51:38] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:51:38] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 97,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_navigation",
+        "class": "__TwigTemplate_8bfa07b11b6a3f1bd1aa51b1cfd228794820a37bff36f78bbb6a169ea2f0f05f",
+        "type": "->"
+    }
+] []
+[2017-02-08 15:51:38] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'uri_permissions'... [] []
+[2017-02-08 15:51:38] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:51:38] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 111,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_navigation",
+        "class": "__TwigTemplate_8bfa07b11b6a3f1bd1aa51b1cfd228794820a37bff36f78bbb6a169ea2f0f05f",
+        "type": "->"
+    }
+] []
+[2017-02-08 15:51:38] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'uri_groups'... [] []
+[2017-02-08 15:51:38] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:51:41] auth.DEBUG: Authorization check requested at:  [
+    {
+        "function": "getList",
+        "class": "UserFrosting\\Sprinkle\\Admin\\Controller\\UserController",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\slim\\slim\\Slim\\Handlers\\Strategies\\RequestResponse.php",
+        "line": 41,
+        "function": "call_user_func"
+    }
+] []
+[2017-02-08 15:51:41] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'uri_users'... [] []
+[2017-02-08 15:51:41] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:52:17] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\sprinkles\\account\\src\\Controller\\AccountController.php",
+        "line": 310,
+        "function": "UserFrosting\\Sprinkle\\Admin\\ServicesProvider\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Admin\\ServicesProvider\\AdminServicesProvider",
+        "type": "->"
+    },
+    {
+        "function": "login",
+        "class": "UserFrosting\\Sprinkle\\Account\\Controller\\AccountController",
+        "type": "->"
+    }
+] []
+[2017-02-08 15:52:17] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'uri_dashboard'... [] []
+[2017-02-08 15:52:17] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:52:18] auth.DEBUG: Authorization check requested at:  [
+    {
+        "function": "pageDashboard",
+        "class": "UserFrosting\\Sprinkle\\Admin\\Controller\\AdminController",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\slim\\slim\\Slim\\Handlers\\Strategies\\RequestResponse.php",
+        "line": 41,
+        "function": "call_user_func"
+    }
+] []
+[2017-02-08 15:52:18] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'uri_dashboard'... [] []
+[2017-02-08 15:52:18] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:52:18] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 32,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_userCard_menu",
+        "class": "__TwigTemplate_eb8c50e47742f55e6d8528b0171bbbf846b34969972f55bcf083ae7716afc408",
+        "type": "->"
+    }
+] []
+[2017-02-08 15:52:18] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'uri_dashboard'... [] []
+[2017-02-08 15:52:18] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:52:18] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 27,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_navigation",
+        "class": "__TwigTemplate_8bfa07b11b6a3f1bd1aa51b1cfd228794820a37bff36f78bbb6a169ea2f0f05f",
+        "type": "->"
+    }
+] []
+[2017-02-08 15:52:18] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'uri_dashboard'... [] []
+[2017-02-08 15:52:18] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:52:18] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 41,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_navigation",
+        "class": "__TwigTemplate_8bfa07b11b6a3f1bd1aa51b1cfd228794820a37bff36f78bbb6a169ea2f0f05f",
+        "type": "->"
+    }
+] []
+[2017-02-08 15:52:18] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'uri_users'... [] []
+[2017-02-08 15:52:18] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:52:18] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 69,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_navigation",
+        "class": "__TwigTemplate_8bfa07b11b6a3f1bd1aa51b1cfd228794820a37bff36f78bbb6a169ea2f0f05f",
+        "type": "->"
+    }
+] []
+[2017-02-08 15:52:18] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'uri_activities'... [] []
+[2017-02-08 15:52:18] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:52:18] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 83,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_navigation",
+        "class": "__TwigTemplate_8bfa07b11b6a3f1bd1aa51b1cfd228794820a37bff36f78bbb6a169ea2f0f05f",
+        "type": "->"
+    }
+] []
+[2017-02-08 15:52:18] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'uri_roles'... [] []
+[2017-02-08 15:52:18] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:52:18] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 97,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_navigation",
+        "class": "__TwigTemplate_8bfa07b11b6a3f1bd1aa51b1cfd228794820a37bff36f78bbb6a169ea2f0f05f",
+        "type": "->"
+    }
+] []
+[2017-02-08 15:52:18] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'uri_permissions'... [] []
+[2017-02-08 15:52:18] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:52:18] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 111,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_navigation",
+        "class": "__TwigTemplate_8bfa07b11b6a3f1bd1aa51b1cfd228794820a37bff36f78bbb6a169ea2f0f05f",
+        "type": "->"
+    }
+] []
+[2017-02-08 15:52:18] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'uri_groups'... [] []
+[2017-02-08 15:52:18] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:52:18] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 48,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_body_matter",
+        "class": "__TwigTemplate_f3ad218f5170b222285cf5be6dbc050d396a07014003dc74ab09c4f01902b929",
+        "type": "->"
+    }
+] []
+[2017-02-08 15:52:18] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'uri_users'... [] []
+[2017-02-08 15:52:18] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:52:18] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 161,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_body_matter",
+        "class": "__TwigTemplate_f3ad218f5170b222285cf5be6dbc050d396a07014003dc74ab09c4f01902b929",
+        "type": "->"
+    }
+] []
+[2017-02-08 15:52:18] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'uri_users'... [] []
+[2017-02-08 15:52:18] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:52:18] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 233,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_body_matter",
+        "class": "__TwigTemplate_f3ad218f5170b222285cf5be6dbc050d396a07014003dc74ab09c4f01902b929",
+        "type": "->"
+    }
+] []
+[2017-02-08 15:52:18] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'view_system_info'... [] []
+[2017-02-08 15:52:18] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:52:18] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 376,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_body_matter",
+        "class": "__TwigTemplate_f3ad218f5170b222285cf5be6dbc050d396a07014003dc74ab09c4f01902b929",
+        "type": "->"
+    }
+] []
+[2017-02-08 15:52:18] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'uri_activities'... [] []
+[2017-02-08 15:52:18] auth.DEBUG: User is the master (root) user.  Access granted. [] []
+[2017-02-08 15:52:21] auth.DEBUG: Authorization check requested at:  [
+    {
+        "function": "getList",
+        "class": "UserFrosting\\Sprinkle\\Admin\\Controller\\ActivityController",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\slim\\slim\\Slim\\Handlers\\Strategies\\RequestResponse.php",
+        "line": 41,
+        "function": "call_user_func"
+    }
+] []
+[2017-02-08 15:52:21] auth.DEBUG: Checking authorization for user 1 ('root') on permission 'uri_activities'... [] []
+[2017-02-08 15:52:21] auth.DEBUG: User is the master (root) user.  Access granted. [] []

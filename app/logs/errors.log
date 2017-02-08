@@ -696,3 +696,79 @@ Trace: #0 C:\wamp64\www\UserFrostTest\app\sprinkles\account\src\Authenticate\Aut
 #25 {main}
 View in rendered output by enabling the "displayErrorDetails" setting.
  [] []
+[2017-02-08 15:53:14] errors.ERROR: Slim Application Error:
+Type: Illuminate\Database\QueryException
+Code: 23000
+Message: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'shaun.mermet@gmail.com' for key 'users_email_unique' (SQL: insert into `users` (`user_name`, `first_name`, `last_name`, `email`, `password`, `flag_verified`, `group_id`, `locale`, `updated_at`, `created_at`) values (User2, shaun, mermet, shaun.mermet@gmail.com, $2y$10$W/hb8d5z3d8EEw1OKlEKqOGvHkUiT7nw7/57t.2hLjWxjl0MAbtmq, 0, 1, en_US, 2017-02-08 15:53:14, 2017-02-08 15:53:14))
+File: C:\wamp64\www\EnRouteImage_V2\app\vendor\illuminate\database\Connection.php
+Line: 769
+Trace: #0 C:\wamp64\www\EnRouteImage_V2\app\vendor\illuminate\database\Connection.php(725): Illuminate\Database\Connection->runQueryCallback('insert into `us...', Array, Object(Closure))
+#1 C:\wamp64\www\EnRouteImage_V2\app\vendor\illuminate\database\Connection.php(480): Illuminate\Database\Connection->run('insert into `us...', Array, Object(Closure))
+#2 C:\wamp64\www\EnRouteImage_V2\app\vendor\illuminate\database\Connection.php(434): Illuminate\Database\Connection->statement('insert into `us...', Array)
+#3 C:\wamp64\www\EnRouteImage_V2\app\vendor\illuminate\database\Query\Processors\Processor.php(32): Illuminate\Database\Connection->insert('insert into `us...', Array)
+#4 C:\wamp64\www\EnRouteImage_V2\app\vendor\illuminate\database\Query\Builder.php(2152): Illuminate\Database\Query\Processors\Processor->processInsertGetId(Object(Illuminate\Database\Query\Builder), 'insert into `us...', Array, 'id')
+#5 [internal function]: Illuminate\Database\Query\Builder->insertGetId(Array, 'id')
+#6 C:\wamp64\www\EnRouteImage_V2\app\vendor\illuminate\database\Eloquent\Builder.php(1462): call_user_func_array(Array, Array)
+#7 C:\wamp64\www\EnRouteImage_V2\app\vendor\illuminate\database\Eloquent\Model.php(1607): Illuminate\Database\Eloquent\Builder->__call('insertGetId', Array)
+#8 C:\wamp64\www\EnRouteImage_V2\app\vendor\illuminate\database\Eloquent\Model.php(1576): Illuminate\Database\Eloquent\Model->insertAndSetId(Object(Illuminate\Database\Eloquent\Builder), Array)
+#9 C:\wamp64\www\EnRouteImage_V2\app\vendor\illuminate\database\Eloquent\Model.php(1472): Illuminate\Database\Eloquent\Model->performInsert(Object(Illuminate\Database\Eloquent\Builder))
+#10 C:\wamp64\www\EnRouteImage_V2\app\sprinkles\account\src\Controller\AccountController.php(637): Illuminate\Database\Eloquent\Model->save()
+#11 C:\wamp64\www\EnRouteImage_V2\app\vendor\illuminate\database\Connection.php(569): UserFrosting\Sprinkle\Account\Controller\AccountController->UserFrosting\Sprinkle\Account\Controller\{closure}(Object(Illuminate\Database\MySqlConnection))
+#12 C:\wamp64\www\EnRouteImage_V2\app\vendor\illuminate\database\Capsule\Manager.php(199): Illuminate\Database\Connection->transaction(Object(Closure))
+#13 C:\wamp64\www\EnRouteImage_V2\app\sprinkles\account\src\Controller\AccountController.php(675): Illuminate\Database\Capsule\Manager::__callStatic('transaction', Array)
+#14 [internal function]: UserFrosting\Sprinkle\Account\Controller\AccountController->register(Object(Slim\Http\Request), Object(Slim\Http\Response), Array)
+#15 C:\wamp64\www\EnRouteImage_V2\app\vendor\slim\slim\Slim\Handlers\Strategies\RequestResponse.php(41): call_user_func(Array, Object(Slim\Http\Request), Object(Slim\Http\Response), Array)
+#16 C:\wamp64\www\EnRouteImage_V2\app\vendor\slim\slim\Slim\Route.php(344): Slim\Handlers\Strategies\RequestResponse->__invoke(Array, Object(Slim\Http\Request), Object(Slim\Http\Response), Array)
+#17 C:\wamp64\www\EnRouteImage_V2\app\vendor\slim\slim\Slim\MiddlewareAwareTrait.php(116): Slim\Route->__invoke(Object(Slim\Http\Request), Object(Slim\Http\Response))
+#18 C:\wamp64\www\EnRouteImage_V2\app\vendor\slim\slim\Slim\Route.php(316): Slim\Route->callMiddlewareStack(Object(Slim\Http\Request), Object(Slim\Http\Response))
+#19 C:\wamp64\www\EnRouteImage_V2\app\vendor\slim\slim\Slim\App.php(438): Slim\Route->run(Object(Slim\Http\Request), Object(Slim\Http\Response))
+#20 C:\wamp64\www\EnRouteImage_V2\app\vendor\slim\csrf\src\Guard.php(177): Slim\App->__invoke(Object(Slim\Http\Request), Object(Slim\Http\Response))
+#21 [internal function]: Slim\Csrf\Guard->__invoke(Object(Slim\Http\Request), Object(Slim\Http\Response), Object(Slim\App))
+#22 C:\wamp64\www\EnRouteImage_V2\app\vendor\slim\slim\Slim\DeferredCallable.php(43): call_user_func_array(Object(Slim\Csrf\Guard), Array)
+#23 [internal function]: Slim\DeferredCallable->__invoke(Object(Slim\Http\Request), Object(Slim\Http\Response), Object(Slim\App))
+#24 C:\wamp64\www\EnRouteImage_V2\app\vendor\slim\slim\Slim\MiddlewareAwareTrait.php(67): call_user_func(Object(Slim\DeferredCallable), Object(Slim\Http\Request), Object(Slim\Http\Response), Object(Slim\App))
+#25 C:\wamp64\www\EnRouteImage_V2\app\vendor\slim\slim\Slim\MiddlewareAwareTrait.php(116): Slim\App->Slim\{closure}(Object(Slim\Http\Request), Object(Slim\Http\Response))
+#26 C:\wamp64\www\EnRouteImage_V2\app\vendor\slim\slim\Slim\App.php(332): Slim\App->callMiddlewareStack(Object(Slim\Http\Request), Object(Slim\Http\Response))
+#27 C:\wamp64\www\EnRouteImage_V2\app\vendor\slim\slim\Slim\App.php(293): Slim\App->process(Object(Slim\Http\Request), Object(Slim\Http\Response))
+#28 C:\wamp64\www\EnRouteImage_V2\public\index.php(57): Slim\App->run()
+#29 {main}
+Previous error:
+Type: PDOException
+Code: 23000
+Message: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'shaun.mermet@gmail.com' for key 'users_email_unique'
+File: C:\wamp64\www\EnRouteImage_V2\app\vendor\illuminate\database\Connection.php
+Line: 479
+Trace: #0 C:\wamp64\www\EnRouteImage_V2\app\vendor\illuminate\database\Connection.php(479): PDOStatement->execute()
+#1 C:\wamp64\www\EnRouteImage_V2\app\vendor\illuminate\database\Connection.php(762): Illuminate\Database\Connection->Illuminate\Database\{closure}(Object(Illuminate\Database\MySqlConnection), 'insert into `us...', Array)
+#2 C:\wamp64\www\EnRouteImage_V2\app\vendor\illuminate\database\Connection.php(725): Illuminate\Database\Connection->runQueryCallback('insert into `us...', Array, Object(Closure))
+#3 C:\wamp64\www\EnRouteImage_V2\app\vendor\illuminate\database\Connection.php(480): Illuminate\Database\Connection->run('insert into `us...', Array, Object(Closure))
+#4 C:\wamp64\www\EnRouteImage_V2\app\vendor\illuminate\database\Connection.php(434): Illuminate\Database\Connection->statement('insert into `us...', Array)
+#5 C:\wamp64\www\EnRouteImage_V2\app\vendor\illuminate\database\Query\Processors\Processor.php(32): Illuminate\Database\Connection->insert('insert into `us...', Array)
+#6 C:\wamp64\www\EnRouteImage_V2\app\vendor\illuminate\database\Query\Builder.php(2152): Illuminate\Database\Query\Processors\Processor->processInsertGetId(Object(Illuminate\Database\Query\Builder), 'insert into `us...', Array, 'id')
+#7 [internal function]: Illuminate\Database\Query\Builder->insertGetId(Array, 'id')
+#8 C:\wamp64\www\EnRouteImage_V2\app\vendor\illuminate\database\Eloquent\Builder.php(1462): call_user_func_array(Array, Array)
+#9 C:\wamp64\www\EnRouteImage_V2\app\vendor\illuminate\database\Eloquent\Model.php(1607): Illuminate\Database\Eloquent\Builder->__call('insertGetId', Array)
+#10 C:\wamp64\www\EnRouteImage_V2\app\vendor\illuminate\database\Eloquent\Model.php(1576): Illuminate\Database\Eloquent\Model->insertAndSetId(Object(Illuminate\Database\Eloquent\Builder), Array)
+#11 C:\wamp64\www\EnRouteImage_V2\app\vendor\illuminate\database\Eloquent\Model.php(1472): Illuminate\Database\Eloquent\Model->performInsert(Object(Illuminate\Database\Eloquent\Builder))
+#12 C:\wamp64\www\EnRouteImage_V2\app\sprinkles\account\src\Controller\AccountController.php(637): Illuminate\Database\Eloquent\Model->save()
+#13 C:\wamp64\www\EnRouteImage_V2\app\vendor\illuminate\database\Connection.php(569): UserFrosting\Sprinkle\Account\Controller\AccountController->UserFrosting\Sprinkle\Account\Controller\{closure}(Object(Illuminate\Database\MySqlConnection))
+#14 C:\wamp64\www\EnRouteImage_V2\app\vendor\illuminate\database\Capsule\Manager.php(199): Illuminate\Database\Connection->transaction(Object(Closure))
+#15 C:\wamp64\www\EnRouteImage_V2\app\sprinkles\account\src\Controller\AccountController.php(675): Illuminate\Database\Capsule\Manager::__callStatic('transaction', Array)
+#16 [internal function]: UserFrosting\Sprinkle\Account\Controller\AccountController->register(Object(Slim\Http\Request), Object(Slim\Http\Response), Array)
+#17 C:\wamp64\www\EnRouteImage_V2\app\vendor\slim\slim\Slim\Handlers\Strategies\RequestResponse.php(41): call_user_func(Array, Object(Slim\Http\Request), Object(Slim\Http\Response), Array)
+#18 C:\wamp64\www\EnRouteImage_V2\app\vendor\slim\slim\Slim\Route.php(344): Slim\Handlers\Strategies\RequestResponse->__invoke(Array, Object(Slim\Http\Request), Object(Slim\Http\Response), Array)
+#19 C:\wamp64\www\EnRouteImage_V2\app\vendor\slim\slim\Slim\MiddlewareAwareTrait.php(116): Slim\Route->__invoke(Object(Slim\Http\Request), Object(Slim\Http\Response))
+#20 C:\wamp64\www\EnRouteImage_V2\app\vendor\slim\slim\Slim\Route.php(316): Slim\Route->callMiddlewareStack(Object(Slim\Http\Request), Object(Slim\Http\Response))
+#21 C:\wamp64\www\EnRouteImage_V2\app\vendor\slim\slim\Slim\App.php(438): Slim\Route->run(Object(Slim\Http\Request), Object(Slim\Http\Response))
+#22 C:\wamp64\www\EnRouteImage_V2\app\vendor\slim\csrf\src\Guard.php(177): Slim\App->__invoke(Object(Slim\Http\Request), Object(Slim\Http\Response))
+#23 [internal function]: Slim\Csrf\Guard->__invoke(Object(Slim\Http\Request), Object(Slim\Http\Response), Object(Slim\App))
+#24 C:\wamp64\www\EnRouteImage_V2\app\vendor\slim\slim\Slim\DeferredCallable.php(43): call_user_func_array(Object(Slim\Csrf\Guard), Array)
+#25 [internal function]: Slim\DeferredCallable->__invoke(Object(Slim\Http\Request), Object(Slim\Http\Response), Object(Slim\App))
+#26 C:\wamp64\www\EnRouteImage_V2\app\vendor\slim\slim\Slim\MiddlewareAwareTrait.php(67): call_user_func(Object(Slim\DeferredCallable), Object(Slim\Http\Request), Object(Slim\Http\Response), Object(Slim\App))
+#27 C:\wamp64\www\EnRouteImage_V2\app\vendor\slim\slim\Slim\MiddlewareAwareTrait.php(116): Slim\App->Slim\{closure}(Object(Slim\Http\Request), Object(Slim\Http\Response))
+#28 C:\wamp64\www\EnRouteImage_V2\app\vendor\slim\slim\Slim\App.php(332): Slim\App->callMiddlewareStack(Object(Slim\Http\Request), Object(Slim\Http\Response))
+#29 C:\wamp64\www\EnRouteImage_V2\app\vendor\slim\slim\Slim\App.php(293): Slim\App->process(Object(Slim\Http\Request), Object(Slim\Http\Response))
+#30 C:\wamp64\www\EnRouteImage_V2\public\index.php(57): Slim\App->run()
+#31 {main}
+View in rendered output by enabling the "displayErrorDetails" setting.
+ [] []
