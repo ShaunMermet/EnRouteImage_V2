@@ -1,0 +1,96 @@
+{
+    "bundle": {
+        "js/export": {
+            "scripts": [
+                "local/core/js/export.js"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "scripts": "plain"
+                    }
+                }
+            }
+        },
+		"js/label": {
+            "scripts": [
+                "local/core/js/label.js"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "scripts": "plain"
+                    }
+                }
+            }
+        },
+		"js/validate": {
+            "scripts": [
+                "local/core/js/validate.js"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "scripts": "plain"
+                    }
+                }
+            }
+        },
+		"js/blueimp": {
+            "scripts": [
+                "local/core/js/blueimp/vendor/jquery.ui.widget.js",
+                "local/core/js/blueimp/cors/jquery.postmessage-transport.js",
+                "local/core/js/blueimp/cors/jquery.xdr-transport.js",
+				"local/core/js/blueimp/app.js",
+				"local/core/js/blueimp/jquery.fileupload.js",
+				"local/core/js/blueimp/jquery.fileupload-angular.js",
+				"local/core/js/blueimp/jquery.fileupload-audio.js",
+				"local/core/js/blueimp/jquery.fileupload-image.js",
+				"local/core/js/blueimp/jquery.fileupload-jquery-ui.js",
+				"local/core/js/blueimp/jquery.fileupload-process.js",
+				"local/core/js/blueimp/jquery.fileupload-ui.js",
+				"local/core/js/blueimp/jquery.fileupload-validate.js",
+				"local/core/js/blueimp/jquery.fileupload-video.js",
+				"local/core/js/blueimp/jquery.iframe-transport.js",
+				"local/core/js/blueimp/main.js"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "scripts": "plain"
+                    }
+                }
+            }
+        },
+        "css/site": {
+            "styles": [
+                "local/core/css/style.css"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "styles": "plain"
+                    }
+                }
+            }
+        },
+		"css/blueimp": {
+            "styles": [
+                "local/core/css/blueimp/style.css",
+				"local/core/css/blueimp/demo.css",
+				"local/core/css/blueimp/demo-ie8.css",
+				"local/core/css/blueimp/jquery.fileupload.css",
+				"local/core/css/blueimp/jquery.fileupload-noscript.css",
+				"local/core/css/blueimp/jquery.fileupload-ui.css",
+				"local/core/css/blueimp/jquery.fileupload-ui-noscript.css"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "styles": "plain"
+                    }
+                }
+            }
+        }
+    }
+}

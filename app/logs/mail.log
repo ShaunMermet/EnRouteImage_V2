@@ -1,0 +1,2183 @@
+[2017-02-01 01:13:27] mail.DEBUG: Connection: opening to host.example.com:587, timeout=15, options=array (
+) [] []
+[2017-02-01 01:13:27] mail.DEBUG: SMTP ERROR: Failed to connect to server: php_network_getaddresses: getaddrinfo failed: そのようなホストは不明です。  (0) [] []
+[2017-02-01 01:13:27] mail.DEBUG: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting [] []
+[2017-02-01 01:14:29] mail.DEBUG: Connection: opening to host.example.com:587, timeout=15, options=array (
+) [] []
+[2017-02-01 01:14:29] mail.DEBUG: SMTP ERROR: Failed to connect to server: php_network_getaddresses: getaddrinfo failed: そのようなホストは不明です。  (0) [] []
+[2017-02-01 01:14:29] mail.DEBUG: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting [] []
+[2017-02-01 01:27:51] mail.DEBUG: Connection: opening to host.example.com:587, timeout=15, options=array (
+) [] []
+[2017-02-01 01:27:51] mail.DEBUG: SMTP ERROR: Failed to connect to server: php_network_getaddresses: getaddrinfo failed: そのようなホストは不明です。  (0) [] []
+[2017-02-01 01:27:51] mail.DEBUG: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting [] []
+[2017-02-01 01:34:31] mail.DEBUG: Connection: opening to localhost:587, timeout=15, options=array (
+) [] []
+[2017-02-01 01:34:33] mail.DEBUG: SMTP ERROR: Failed to connect to server: 対象のコンピューターによって拒否されたため、接続できませんでした。
+ (10061) [] []
+[2017-02-01 01:34:33] mail.DEBUG: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting [] []
+[2017-02-01 01:41:47] mail.DEBUG: Connection: opening to localhost:587, timeout=15, options=array (
+) [] []
+[2017-02-01 01:41:49] mail.DEBUG: SMTP ERROR: Failed to connect to server: 対象のコンピューターによって拒否されたため、接続できませんでした。
+ (10061) [] []
+[2017-02-01 01:41:49] mail.DEBUG: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting [] []
+[2017-02-01 01:52:30] mail.DEBUG: Connection: opening to localhost:587, timeout=15, options=array (
+) [] []
+[2017-02-01 01:52:31] mail.DEBUG: Connection: opened [] []
+[2017-02-01 01:52:31] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 01:52:31] mail.DEBUG: SMTP -> get_lines(): $str is "220 SMTP server ready.
+" [] []
+[2017-02-01 01:52:31] mail.DEBUG: SMTP -> get_lines(): $data is "220 SMTP server ready.
+" [] []
+[2017-02-01 01:52:31] mail.DEBUG: SERVER -> CLIENT: 220 SMTP server ready.
+ [] []
+[2017-02-01 01:52:31] mail.DEBUG: CLIENT -> SERVER: EHLO userfrosting
+ [] []
+[2017-02-01 01:52:31] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 01:52:31] mail.DEBUG: SMTP -> get_lines(): $str is "250 OK
+" [] []
+[2017-02-01 01:52:31] mail.DEBUG: SMTP -> get_lines(): $data is "250 OK
+" [] []
+[2017-02-01 01:52:31] mail.DEBUG: SERVER -> CLIENT: 250 OK
+ [] []
+[2017-02-01 01:52:31] mail.DEBUG: CLIENT -> SERVER: STARTTLS
+ [] []
+[2017-02-01 01:52:31] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 01:52:31] mail.DEBUG: SMTP -> get_lines(): $str is "250 OK
+" [] []
+[2017-02-01 01:52:31] mail.DEBUG: SMTP -> get_lines(): $data is "250 OK
+" [] []
+[2017-02-01 01:52:31] mail.DEBUG: SERVER -> CLIENT: 250 OK
+ [] []
+[2017-02-01 01:52:31] mail.DEBUG: SMTP ERROR: STARTTLS command failed: 250 OK
+ [] []
+[2017-02-01 01:52:31] mail.DEBUG: SMTP Error: Could not connect to SMTP host. [] []
+[2017-02-01 01:52:31] mail.DEBUG: CLIENT -> SERVER: QUIT
+ [] []
+[2017-02-01 01:52:31] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 01:52:31] mail.DEBUG: SMTP -> get_lines(): $str is "221 OK
+" [] []
+[2017-02-01 01:52:31] mail.DEBUG: SMTP -> get_lines(): $data is "221 OK
+" [] []
+[2017-02-01 01:52:31] mail.DEBUG: SERVER -> CLIENT: 221 OK
+ [] []
+[2017-02-01 01:52:31] mail.DEBUG: Connection: closed [] []
+[2017-02-01 01:52:31] mail.DEBUG: SMTP Error: Could not connect to SMTP host. [] []
+[2017-02-01 03:00:58] mail.DEBUG: Connection: opening to smtp.gmail.com:587, timeout=15, options=array (
+) [] []
+[2017-02-01 03:00:58] mail.DEBUG: Connection: opened [] []
+[2017-02-01 03:00:59] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 03:00:59] mail.DEBUG: SMTP -> get_lines(): $str is "220 smtp.gmail.com ESMTP a2sm46790232pfc.72 - gsmtp
+" [] []
+[2017-02-01 03:00:59] mail.DEBUG: SMTP -> get_lines(): $data is "220 smtp.gmail.com ESMTP a2sm46790232pfc.72 - gsmtp
+" [] []
+[2017-02-01 03:00:59] mail.DEBUG: SERVER -> CLIENT: 220 smtp.gmail.com ESMTP a2sm46790232pfc.72 - gsmtp
+ [] []
+[2017-02-01 03:00:59] mail.DEBUG: CLIENT -> SERVER: EHLO userfrosting
+ [] []
+[2017-02-01 03:00:59] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 03:00:59] mail.DEBUG: SMTP -> get_lines(): $str is "250-smtp.gmail.com at your service, [122.30.194.174]
+" [] []
+[2017-02-01 03:00:59] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+" [] []
+[2017-02-01 03:00:59] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+" [] []
+[2017-02-01 03:00:59] mail.DEBUG: SMTP -> get_lines(): $str is "250-SIZE 35882577
+" [] []
+[2017-02-01 03:00:59] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+" [] []
+[2017-02-01 03:00:59] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+" [] []
+[2017-02-01 03:00:59] mail.DEBUG: SMTP -> get_lines(): $str is "250-8BITMIME
+" [] []
+[2017-02-01 03:00:59] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+" [] []
+[2017-02-01 03:00:59] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+" [] []
+[2017-02-01 03:00:59] mail.DEBUG: SMTP -> get_lines(): $str is "250-STARTTLS
+" [] []
+[2017-02-01 03:00:59] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+" [] []
+[2017-02-01 03:00:59] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+" [] []
+[2017-02-01 03:00:59] mail.DEBUG: SMTP -> get_lines(): $str is "250-ENHANCEDSTATUSCODES
+" [] []
+[2017-02-01 03:00:59] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+" [] []
+[2017-02-01 03:00:59] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+" [] []
+[2017-02-01 03:00:59] mail.DEBUG: SMTP -> get_lines(): $str is "250-PIPELINING
+" [] []
+[2017-02-01 03:00:59] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+" [] []
+[2017-02-01 03:00:59] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+" [] []
+[2017-02-01 03:00:59] mail.DEBUG: SMTP -> get_lines(): $str is "250-CHUNKING
+" [] []
+[2017-02-01 03:00:59] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+" [] []
+[2017-02-01 03:00:59] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+" [] []
+[2017-02-01 03:00:59] mail.DEBUG: SMTP -> get_lines(): $str is "250 SMTPUTF8
+" [] []
+[2017-02-01 03:00:59] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+250 SMTPUTF8
+" [] []
+[2017-02-01 03:00:59] mail.DEBUG: SERVER -> CLIENT: 250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+250 SMTPUTF8
+ [] []
+[2017-02-01 03:00:59] mail.DEBUG: CLIENT -> SERVER: STARTTLS
+ [] []
+[2017-02-01 03:01:00] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 03:01:00] mail.DEBUG: SMTP -> get_lines(): $str is "220 2.0.0 Ready to start TLS
+" [] []
+[2017-02-01 03:01:00] mail.DEBUG: SMTP -> get_lines(): $data is "220 2.0.0 Ready to start TLS
+" [] []
+[2017-02-01 03:01:00] mail.DEBUG: SERVER -> CLIENT: 220 2.0.0 Ready to start TLS
+ [] []
+[2017-02-01 03:01:01] mail.DEBUG: CLIENT -> SERVER: EHLO userfrosting
+ [] []
+[2017-02-01 03:01:01] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 03:01:01] mail.DEBUG: SMTP -> get_lines(): $str is "250-smtp.gmail.com at your service, [122.30.194.174]
+" [] []
+[2017-02-01 03:01:01] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+" [] []
+[2017-02-01 03:01:01] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+" [] []
+[2017-02-01 03:01:01] mail.DEBUG: SMTP -> get_lines(): $str is "250-SIZE 35882577
+" [] []
+[2017-02-01 03:01:01] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+" [] []
+[2017-02-01 03:01:01] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+" [] []
+[2017-02-01 03:01:01] mail.DEBUG: SMTP -> get_lines(): $str is "250-8BITMIME
+" [] []
+[2017-02-01 03:01:01] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+" [] []
+[2017-02-01 03:01:01] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+" [] []
+[2017-02-01 03:01:01] mail.DEBUG: SMTP -> get_lines(): $str is "250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+" [] []
+[2017-02-01 03:01:01] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+" [] []
+[2017-02-01 03:01:01] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+" [] []
+[2017-02-01 03:01:01] mail.DEBUG: SMTP -> get_lines(): $str is "250-ENHANCEDSTATUSCODES
+" [] []
+[2017-02-01 03:01:01] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+" [] []
+[2017-02-01 03:01:01] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+" [] []
+[2017-02-01 03:01:01] mail.DEBUG: SMTP -> get_lines(): $str is "250-PIPELINING
+" [] []
+[2017-02-01 03:01:01] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+" [] []
+[2017-02-01 03:01:01] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+" [] []
+[2017-02-01 03:01:01] mail.DEBUG: SMTP -> get_lines(): $str is "250-CHUNKING
+" [] []
+[2017-02-01 03:01:01] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+" [] []
+[2017-02-01 03:01:01] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+" [] []
+[2017-02-01 03:01:01] mail.DEBUG: SMTP -> get_lines(): $str is "250 SMTPUTF8
+" [] []
+[2017-02-01 03:01:01] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+250 SMTPUTF8
+" [] []
+[2017-02-01 03:01:01] mail.DEBUG: SERVER -> CLIENT: 250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+250 SMTPUTF8
+ [] []
+[2017-02-01 03:01:01] mail.DEBUG: Auth method requested: UNKNOWN [] []
+[2017-02-01 03:01:01] mail.DEBUG: Auth methods available on the server: LOGIN,PLAIN,XOAUTH2,PLAIN-CLIENTTOKEN,OAUTHBEARER,XOAUTH [] []
+[2017-02-01 03:01:01] mail.DEBUG: Auth method selected: LOGIN [] []
+[2017-02-01 03:01:01] mail.DEBUG: CLIENT -> SERVER: AUTH LOGIN
+ [] []
+[2017-02-01 03:01:01] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 03:01:01] mail.DEBUG: SMTP -> get_lines(): $str is "334 VXNlcm5hbWU6
+" [] []
+[2017-02-01 03:01:01] mail.DEBUG: SMTP -> get_lines(): $data is "334 VXNlcm5hbWU6
+" [] []
+[2017-02-01 03:01:01] mail.DEBUG: SERVER -> CLIENT: 334 VXNlcm5hbWU6
+ [] []
+[2017-02-01 03:01:01] mail.DEBUG: CLIENT -> SERVER: c2hhdW4ubWVybWV0QGxhYnJvbWFuY2UuY29t
+ [] []
+[2017-02-01 03:01:02] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 03:01:02] mail.DEBUG: SMTP -> get_lines(): $str is "334 UGFzc3dvcmQ6
+" [] []
+[2017-02-01 03:01:02] mail.DEBUG: SMTP -> get_lines(): $data is "334 UGFzc3dvcmQ6
+" [] []
+[2017-02-01 03:01:02] mail.DEBUG: SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+ [] []
+[2017-02-01 03:01:02] mail.DEBUG: CLIENT -> SERVER: 
+ [] []
+[2017-02-01 03:01:02] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 03:01:02] mail.DEBUG: SMTP -> get_lines(): $str is "535-5.7.8 Username and Password not accepted. Learn more at
+" [] []
+[2017-02-01 03:01:02] mail.DEBUG: SMTP -> get_lines(): $data is "535-5.7.8 Username and Password not accepted. Learn more at
+" [] []
+[2017-02-01 03:01:02] mail.DEBUG: SMTP -> get_lines(): $data was "535-5.7.8 Username and Password not accepted. Learn more at
+" [] []
+[2017-02-01 03:01:02] mail.DEBUG: SMTP -> get_lines(): $str is "535 5.7.8  https://support.google.com/mail/?p=BadCredentials a2sm46790232pfc.72 - gsmtp
+" [] []
+[2017-02-01 03:01:02] mail.DEBUG: SMTP -> get_lines(): $data is "535-5.7.8 Username and Password not accepted. Learn more at
+535 5.7.8  https://support.google.com/mail/?p=BadCredentials a2sm46790232pfc.72 - gsmtp
+" [] []
+[2017-02-01 03:01:02] mail.DEBUG: SERVER -> CLIENT: 535-5.7.8 Username and Password not accepted. Learn more at
+535 5.7.8  https://support.google.com/mail/?p=BadCredentials a2sm46790232pfc.72 - gsmtp
+ [] []
+[2017-02-01 03:01:02] mail.DEBUG: SMTP ERROR: Password command failed: 535-5.7.8 Username and Password not accepted. Learn more at
+535 5.7.8  https://support.google.com/mail/?p=BadCredentials a2sm46790232pfc.72 - gsmtp
+ [] []
+[2017-02-01 03:01:02] mail.DEBUG: SMTP Error: Could not authenticate. [] []
+[2017-02-01 03:01:02] mail.DEBUG: CLIENT -> SERVER: QUIT
+ [] []
+[2017-02-01 03:01:02] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 03:01:02] mail.DEBUG: SMTP -> get_lines(): $str is "221 2.0.0 closing connection a2sm46790232pfc.72 - gsmtp
+" [] []
+[2017-02-01 03:01:02] mail.DEBUG: SMTP -> get_lines(): $data is "221 2.0.0 closing connection a2sm46790232pfc.72 - gsmtp
+" [] []
+[2017-02-01 03:01:02] mail.DEBUG: SERVER -> CLIENT: 221 2.0.0 closing connection a2sm46790232pfc.72 - gsmtp
+ [] []
+[2017-02-01 03:01:02] mail.DEBUG: Connection: closed [] []
+[2017-02-01 03:01:02] mail.DEBUG: SMTP Error: Could not authenticate. [] []
+[2017-02-01 03:06:45] mail.DEBUG: Connection: opening to smtp.gmail.com:587, timeout=15, options=array (
+) [] []
+[2017-02-01 03:06:45] mail.DEBUG: Connection: opened [] []
+[2017-02-01 03:06:45] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 03:06:45] mail.DEBUG: SMTP -> get_lines(): $str is "220 smtp.gmail.com ESMTP c74sm46844576pfc.1 - gsmtp
+" [] []
+[2017-02-01 03:06:45] mail.DEBUG: SMTP -> get_lines(): $data is "220 smtp.gmail.com ESMTP c74sm46844576pfc.1 - gsmtp
+" [] []
+[2017-02-01 03:06:45] mail.DEBUG: SERVER -> CLIENT: 220 smtp.gmail.com ESMTP c74sm46844576pfc.1 - gsmtp
+ [] []
+[2017-02-01 03:06:45] mail.DEBUG: CLIENT -> SERVER: EHLO userfrosting
+ [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $str is "250-smtp.gmail.com at your service, [122.30.194.174]
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $str is "250-SIZE 35882577
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $str is "250-8BITMIME
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $str is "250-STARTTLS
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $str is "250-ENHANCEDSTATUSCODES
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $str is "250-PIPELINING
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $str is "250-CHUNKING
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $str is "250 SMTPUTF8
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+250 SMTPUTF8
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SERVER -> CLIENT: 250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+250 SMTPUTF8
+ [] []
+[2017-02-01 03:06:46] mail.DEBUG: CLIENT -> SERVER: STARTTLS
+ [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $str is "220 2.0.0 Ready to start TLS
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $data is "220 2.0.0 Ready to start TLS
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SERVER -> CLIENT: 220 2.0.0 Ready to start TLS
+ [] []
+[2017-02-01 03:06:46] mail.DEBUG: CLIENT -> SERVER: EHLO userfrosting
+ [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $str is "250-smtp.gmail.com at your service, [122.30.194.174]
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $str is "250-SIZE 35882577
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $str is "250-8BITMIME
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $str is "250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $str is "250-ENHANCEDSTATUSCODES
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $str is "250-PIPELINING
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $str is "250-CHUNKING
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $str is "250 SMTPUTF8
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+250 SMTPUTF8
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SERVER -> CLIENT: 250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+250 SMTPUTF8
+ [] []
+[2017-02-01 03:06:46] mail.DEBUG: Auth method requested: UNKNOWN [] []
+[2017-02-01 03:06:46] mail.DEBUG: Auth methods available on the server: LOGIN,PLAIN,XOAUTH2,PLAIN-CLIENTTOKEN,OAUTHBEARER,XOAUTH [] []
+[2017-02-01 03:06:46] mail.DEBUG: Auth method selected: LOGIN [] []
+[2017-02-01 03:06:46] mail.DEBUG: CLIENT -> SERVER: AUTH LOGIN
+ [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $str is "334 VXNlcm5hbWU6
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SMTP -> get_lines(): $data is "334 VXNlcm5hbWU6
+" [] []
+[2017-02-01 03:06:46] mail.DEBUG: SERVER -> CLIENT: 334 VXNlcm5hbWU6
+ [] []
+[2017-02-01 03:06:46] mail.DEBUG: CLIENT -> SERVER: c2hhdW4ubWVybWV0QGxhYnJvbWFuY2UuY29t
+ [] []
+[2017-02-01 03:06:47] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 03:06:47] mail.DEBUG: SMTP -> get_lines(): $str is "334 UGFzc3dvcmQ6
+" [] []
+[2017-02-01 03:06:47] mail.DEBUG: SMTP -> get_lines(): $data is "334 UGFzc3dvcmQ6
+" [] []
+[2017-02-01 03:06:47] mail.DEBUG: SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+ [] []
+[2017-02-01 03:06:47] mail.DEBUG: CLIENT -> SERVER: TFJHTXRlc3QxYSE=
+ [] []
+[2017-02-01 03:06:47] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 03:06:47] mail.DEBUG: SMTP -> get_lines(): $str is "235 2.7.0 Accepted
+" [] []
+[2017-02-01 03:06:47] mail.DEBUG: SMTP -> get_lines(): $data is "235 2.7.0 Accepted
+" [] []
+[2017-02-01 03:06:47] mail.DEBUG: SERVER -> CLIENT: 235 2.7.0 Accepted
+ [] []
+[2017-02-01 03:06:47] mail.DEBUG: CLIENT -> SERVER: MAIL FROM:<shaun.mermet@labromance.com>
+ [] []
+[2017-02-01 03:06:47] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 03:06:47] mail.DEBUG: SMTP -> get_lines(): $str is "250 2.1.0 OK c74sm46844576pfc.1 - gsmtp
+" [] []
+[2017-02-01 03:06:47] mail.DEBUG: SMTP -> get_lines(): $data is "250 2.1.0 OK c74sm46844576pfc.1 - gsmtp
+" [] []
+[2017-02-01 03:06:47] mail.DEBUG: SERVER -> CLIENT: 250 2.1.0 OK c74sm46844576pfc.1 - gsmtp
+ [] []
+[2017-02-01 03:06:47] mail.DEBUG: CLIENT -> SERVER: RCPT TO:<shaun.mermet@gmail.com>
+ [] []
+[2017-02-01 03:06:48] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 03:06:48] mail.DEBUG: SMTP -> get_lines(): $str is "250 2.1.5 OK c74sm46844576pfc.1 - gsmtp
+" [] []
+[2017-02-01 03:06:48] mail.DEBUG: SMTP -> get_lines(): $data is "250 2.1.5 OK c74sm46844576pfc.1 - gsmtp
+" [] []
+[2017-02-01 03:06:48] mail.DEBUG: SERVER -> CLIENT: 250 2.1.5 OK c74sm46844576pfc.1 - gsmtp
+ [] []
+[2017-02-01 03:06:48] mail.DEBUG: CLIENT -> SERVER: DATA
+ [] []
+[2017-02-01 03:06:48] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 03:06:48] mail.DEBUG: SMTP -> get_lines(): $str is "354  Go ahead c74sm46844576pfc.1 - gsmtp
+" [] []
+[2017-02-01 03:06:48] mail.DEBUG: SMTP -> get_lines(): $data is "354  Go ahead c74sm46844576pfc.1 - gsmtp
+" [] []
+[2017-02-01 03:06:48] mail.DEBUG: SERVER -> CLIENT: 354  Go ahead c74sm46844576pfc.1 - gsmtp
+ [] []
+[2017-02-01 03:06:48] mail.DEBUG: CLIENT -> SERVER: Date: Wed, 1 Feb 2017 03:06:45 -0500
+ [] []
+[2017-02-01 03:06:48] mail.DEBUG: CLIENT -> SERVER: To: user one <shaun.mermet@gmail.com>
+ [] []
+[2017-02-01 03:06:48] mail.DEBUG: CLIENT -> SERVER: From: Site Administrator <shaun.mermet@labromance.com>
+ [] []
+[2017-02-01 03:06:48] mail.DEBUG: CLIENT -> SERVER: Reply-To: Site Administrator <shaun.mermet@labromance.com>
+ [] []
+[2017-02-01 03:06:48] mail.DEBUG: CLIENT -> SERVER: Subject: Welcome to UserFrosting - please verify your account
+ [] []
+[2017-02-01 03:06:48] mail.DEBUG: CLIENT -> SERVER: Message-ID: <0951300399b52426c9669d55d6e5f883@userfrosting>
+ [] []
+[2017-02-01 03:06:48] mail.DEBUG: CLIENT -> SERVER: X-Priority: 3
+ [] []
+[2017-02-01 03:06:48] mail.DEBUG: CLIENT -> SERVER: X-Mailer: PHPMailer 5.2.10 (https://github.com/PHPMailer/PHPMailer/)
+ [] []
+[2017-02-01 03:06:48] mail.DEBUG: CLIENT -> SERVER: MIME-Version: 1.0
+ [] []
+[2017-02-01 03:06:48] mail.DEBUG: CLIENT -> SERVER: Content-Type: text/html; charset=iso-8859-1
+ [] []
+[2017-02-01 03:06:48] mail.DEBUG: CLIENT -> SERVER: Content-Transfer-Encoding: 8bit
+ [] []
+[2017-02-01 03:06:48] mail.DEBUG: CLIENT -> SERVER: 
+ [] []
+[2017-02-01 03:06:48] mail.DEBUG: CLIENT -> SERVER: <p>Dear user,
+ [] []
+[2017-02-01 03:06:48] mail.DEBUG: CLIENT -> SERVER: </p>
+ [] []
+[2017-02-01 03:06:48] mail.DEBUG: CLIENT -> SERVER: <p>
+ [] []
+[2017-02-01 03:06:48] mail.DEBUG: CLIENT -> SERVER: You are receiving this email because you registered with UserFrosting (http://userfrosting/public).
+ [] []
+[2017-02-01 03:06:48] mail.DEBUG: CLIENT -> SERVER: </p>
+ [] []
+[2017-02-01 03:06:48] mail.DEBUG: CLIENT -> SERVER: <p>
+ [] []
+[2017-02-01 03:06:48] mail.DEBUG: CLIENT -> SERVER: You will need to verify your account before you can login. Please follow the link below to verify your account.
+ [] []
+[2017-02-01 03:06:48] mail.DEBUG: CLIENT -> SERVER: </p>
+ [] []
+[2017-02-01 03:06:48] mail.DEBUG: CLIENT -> SERVER: <p>
+ [] []
+[2017-02-01 03:06:48] mail.DEBUG: CLIENT -> SERVER: <a href="http://userfrosting/public/account/verify?token=c087f0299e49b9941b2d3f16b039277d">http://userfrosting/public/account/verify?token=c087f0299e49b9941b2d3f16b039277d</a>
+ [] []
+[2017-02-01 03:06:48] mail.DEBUG: CLIENT -> SERVER: </p>
+ [] []
+[2017-02-01 03:06:48] mail.DEBUG: CLIENT -> SERVER: <p>
+ [] []
+[2017-02-01 03:06:48] mail.DEBUG: CLIENT -> SERVER: With regards,<br>
+ [] []
+[2017-02-01 03:06:48] mail.DEBUG: CLIENT -> SERVER: The UserFrosting Team
+ [] []
+[2017-02-01 03:06:48] mail.DEBUG: CLIENT -> SERVER: </p>
+ [] []
+[2017-02-01 03:06:48] mail.DEBUG: CLIENT -> SERVER: 
+ [] []
+[2017-02-01 03:06:48] mail.DEBUG: CLIENT -> SERVER: .
+ [] []
+[2017-02-01 03:06:49] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 03:06:49] mail.DEBUG: SMTP -> get_lines(): $str is "250 2.0.0 OK 1485936402 c74sm46844576pfc.1 - gsmtp
+" [] []
+[2017-02-01 03:06:49] mail.DEBUG: SMTP -> get_lines(): $data is "250 2.0.0 OK 1485936402 c74sm46844576pfc.1 - gsmtp
+" [] []
+[2017-02-01 03:06:49] mail.DEBUG: SERVER -> CLIENT: 250 2.0.0 OK 1485936402 c74sm46844576pfc.1 - gsmtp
+ [] []
+[2017-02-01 03:06:49] mail.DEBUG: CLIENT -> SERVER: QUIT
+ [] []
+[2017-02-01 03:06:49] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 03:06:49] mail.DEBUG: SMTP -> get_lines(): $str is "221 2.0.0 closing connection c74sm46844576pfc.1 - gsmtp
+" [] []
+[2017-02-01 03:06:49] mail.DEBUG: SMTP -> get_lines(): $data is "221 2.0.0 closing connection c74sm46844576pfc.1 - gsmtp
+" [] []
+[2017-02-01 03:06:49] mail.DEBUG: SERVER -> CLIENT: 221 2.0.0 closing connection c74sm46844576pfc.1 - gsmtp
+ [] []
+[2017-02-01 03:06:49] mail.DEBUG: Connection: closed [] []
+[2017-02-01 03:10:11] mail.DEBUG: Connection: opening to smtp.gmail.com:587, timeout=15, options=array (
+) [] []
+[2017-02-01 03:10:11] mail.DEBUG: Connection: opened [] []
+[2017-02-01 03:10:11] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 03:10:11] mail.DEBUG: SMTP -> get_lines(): $str is "220 smtp.gmail.com ESMTP s8sm46907502pfj.30 - gsmtp
+" [] []
+[2017-02-01 03:10:11] mail.DEBUG: SMTP -> get_lines(): $data is "220 smtp.gmail.com ESMTP s8sm46907502pfj.30 - gsmtp
+" [] []
+[2017-02-01 03:10:11] mail.DEBUG: SERVER -> CLIENT: 220 smtp.gmail.com ESMTP s8sm46907502pfj.30 - gsmtp
+ [] []
+[2017-02-01 03:10:11] mail.DEBUG: CLIENT -> SERVER: EHLO userfrosting
+ [] []
+[2017-02-01 03:10:11] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 03:10:11] mail.DEBUG: SMTP -> get_lines(): $str is "250-smtp.gmail.com at your service, [122.30.194.174]
+" [] []
+[2017-02-01 03:10:11] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+" [] []
+[2017-02-01 03:10:11] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+" [] []
+[2017-02-01 03:10:11] mail.DEBUG: SMTP -> get_lines(): $str is "250-SIZE 35882577
+" [] []
+[2017-02-01 03:10:11] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+" [] []
+[2017-02-01 03:10:11] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+" [] []
+[2017-02-01 03:10:11] mail.DEBUG: SMTP -> get_lines(): $str is "250-8BITMIME
+" [] []
+[2017-02-01 03:10:11] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+" [] []
+[2017-02-01 03:10:11] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+" [] []
+[2017-02-01 03:10:11] mail.DEBUG: SMTP -> get_lines(): $str is "250-STARTTLS
+" [] []
+[2017-02-01 03:10:11] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+" [] []
+[2017-02-01 03:10:11] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+" [] []
+[2017-02-01 03:10:11] mail.DEBUG: SMTP -> get_lines(): $str is "250-ENHANCEDSTATUSCODES
+" [] []
+[2017-02-01 03:10:11] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+" [] []
+[2017-02-01 03:10:11] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+" [] []
+[2017-02-01 03:10:11] mail.DEBUG: SMTP -> get_lines(): $str is "250-PIPELINING
+" [] []
+[2017-02-01 03:10:11] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+" [] []
+[2017-02-01 03:10:11] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+" [] []
+[2017-02-01 03:10:11] mail.DEBUG: SMTP -> get_lines(): $str is "250-CHUNKING
+" [] []
+[2017-02-01 03:10:11] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+" [] []
+[2017-02-01 03:10:11] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+" [] []
+[2017-02-01 03:10:11] mail.DEBUG: SMTP -> get_lines(): $str is "250 SMTPUTF8
+" [] []
+[2017-02-01 03:10:11] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+250 SMTPUTF8
+" [] []
+[2017-02-01 03:10:11] mail.DEBUG: SERVER -> CLIENT: 250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+250 SMTPUTF8
+ [] []
+[2017-02-01 03:10:11] mail.DEBUG: CLIENT -> SERVER: STARTTLS
+ [] []
+[2017-02-01 03:10:11] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 03:10:11] mail.DEBUG: SMTP -> get_lines(): $str is "220 2.0.0 Ready to start TLS
+" [] []
+[2017-02-01 03:10:11] mail.DEBUG: SMTP -> get_lines(): $data is "220 2.0.0 Ready to start TLS
+" [] []
+[2017-02-01 03:10:11] mail.DEBUG: SERVER -> CLIENT: 220 2.0.0 Ready to start TLS
+ [] []
+[2017-02-01 03:10:12] mail.DEBUG: CLIENT -> SERVER: EHLO userfrosting
+ [] []
+[2017-02-01 03:10:12] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 03:10:12] mail.DEBUG: SMTP -> get_lines(): $str is "250-smtp.gmail.com at your service, [122.30.194.174]
+" [] []
+[2017-02-01 03:10:12] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+" [] []
+[2017-02-01 03:10:12] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+" [] []
+[2017-02-01 03:10:12] mail.DEBUG: SMTP -> get_lines(): $str is "250-SIZE 35882577
+" [] []
+[2017-02-01 03:10:12] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+" [] []
+[2017-02-01 03:10:12] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+" [] []
+[2017-02-01 03:10:12] mail.DEBUG: SMTP -> get_lines(): $str is "250-8BITMIME
+" [] []
+[2017-02-01 03:10:12] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+" [] []
+[2017-02-01 03:10:12] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+" [] []
+[2017-02-01 03:10:12] mail.DEBUG: SMTP -> get_lines(): $str is "250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+" [] []
+[2017-02-01 03:10:12] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+" [] []
+[2017-02-01 03:10:12] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+" [] []
+[2017-02-01 03:10:12] mail.DEBUG: SMTP -> get_lines(): $str is "250-ENHANCEDSTATUSCODES
+" [] []
+[2017-02-01 03:10:12] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+" [] []
+[2017-02-01 03:10:12] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+" [] []
+[2017-02-01 03:10:12] mail.DEBUG: SMTP -> get_lines(): $str is "250-PIPELINING
+" [] []
+[2017-02-01 03:10:12] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+" [] []
+[2017-02-01 03:10:12] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+" [] []
+[2017-02-01 03:10:12] mail.DEBUG: SMTP -> get_lines(): $str is "250-CHUNKING
+" [] []
+[2017-02-01 03:10:12] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+" [] []
+[2017-02-01 03:10:12] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+" [] []
+[2017-02-01 03:10:12] mail.DEBUG: SMTP -> get_lines(): $str is "250 SMTPUTF8
+" [] []
+[2017-02-01 03:10:12] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+250 SMTPUTF8
+" [] []
+[2017-02-01 03:10:12] mail.DEBUG: SERVER -> CLIENT: 250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+250 SMTPUTF8
+ [] []
+[2017-02-01 03:10:12] mail.DEBUG: Auth method requested: UNKNOWN [] []
+[2017-02-01 03:10:12] mail.DEBUG: Auth methods available on the server: LOGIN,PLAIN,XOAUTH2,PLAIN-CLIENTTOKEN,OAUTHBEARER,XOAUTH [] []
+[2017-02-01 03:10:12] mail.DEBUG: Auth method selected: LOGIN [] []
+[2017-02-01 03:10:12] mail.DEBUG: CLIENT -> SERVER: AUTH LOGIN
+ [] []
+[2017-02-01 03:10:12] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 03:10:12] mail.DEBUG: SMTP -> get_lines(): $str is "334 VXNlcm5hbWU6
+" [] []
+[2017-02-01 03:10:12] mail.DEBUG: SMTP -> get_lines(): $data is "334 VXNlcm5hbWU6
+" [] []
+[2017-02-01 03:10:12] mail.DEBUG: SERVER -> CLIENT: 334 VXNlcm5hbWU6
+ [] []
+[2017-02-01 03:10:12] mail.DEBUG: CLIENT -> SERVER: c2hhdW4ubWVybWV0QGxhYnJvbWFuY2UuY29t
+ [] []
+[2017-02-01 03:10:13] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 03:10:13] mail.DEBUG: SMTP -> get_lines(): $str is "334 UGFzc3dvcmQ6
+" [] []
+[2017-02-01 03:10:13] mail.DEBUG: SMTP -> get_lines(): $data is "334 UGFzc3dvcmQ6
+" [] []
+[2017-02-01 03:10:13] mail.DEBUG: SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+ [] []
+[2017-02-01 03:10:13] mail.DEBUG: CLIENT -> SERVER: TFJHTXRlc3QxYSE=
+ [] []
+[2017-02-01 03:10:13] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 03:10:13] mail.DEBUG: SMTP -> get_lines(): $str is "235 2.7.0 Accepted
+" [] []
+[2017-02-01 03:10:13] mail.DEBUG: SMTP -> get_lines(): $data is "235 2.7.0 Accepted
+" [] []
+[2017-02-01 03:10:13] mail.DEBUG: SERVER -> CLIENT: 235 2.7.0 Accepted
+ [] []
+[2017-02-01 03:10:13] mail.DEBUG: CLIENT -> SERVER: MAIL FROM:<shaun.mermet@labromance.com>
+ [] []
+[2017-02-01 03:10:13] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 03:10:13] mail.DEBUG: SMTP -> get_lines(): $str is "250 2.1.0 OK s8sm46907502pfj.30 - gsmtp
+" [] []
+[2017-02-01 03:10:13] mail.DEBUG: SMTP -> get_lines(): $data is "250 2.1.0 OK s8sm46907502pfj.30 - gsmtp
+" [] []
+[2017-02-01 03:10:13] mail.DEBUG: SERVER -> CLIENT: 250 2.1.0 OK s8sm46907502pfj.30 - gsmtp
+ [] []
+[2017-02-01 03:10:13] mail.DEBUG: CLIENT -> SERVER: RCPT TO:<shaun.mermet@gmail.com>
+ [] []
+[2017-02-01 03:10:13] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 03:10:13] mail.DEBUG: SMTP -> get_lines(): $str is "250 2.1.5 OK s8sm46907502pfj.30 - gsmtp
+" [] []
+[2017-02-01 03:10:13] mail.DEBUG: SMTP -> get_lines(): $data is "250 2.1.5 OK s8sm46907502pfj.30 - gsmtp
+" [] []
+[2017-02-01 03:10:13] mail.DEBUG: SERVER -> CLIENT: 250 2.1.5 OK s8sm46907502pfj.30 - gsmtp
+ [] []
+[2017-02-01 03:10:13] mail.DEBUG: CLIENT -> SERVER: DATA
+ [] []
+[2017-02-01 03:10:14] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 03:10:14] mail.DEBUG: SMTP -> get_lines(): $str is "354  Go ahead s8sm46907502pfj.30 - gsmtp
+" [] []
+[2017-02-01 03:10:14] mail.DEBUG: SMTP -> get_lines(): $data is "354  Go ahead s8sm46907502pfj.30 - gsmtp
+" [] []
+[2017-02-01 03:10:14] mail.DEBUG: SERVER -> CLIENT: 354  Go ahead s8sm46907502pfj.30 - gsmtp
+ [] []
+[2017-02-01 03:10:14] mail.DEBUG: CLIENT -> SERVER: Date: Wed, 1 Feb 2017 03:10:11 -0500
+ [] []
+[2017-02-01 03:10:14] mail.DEBUG: CLIENT -> SERVER: To: user one <shaun.mermet@gmail.com>
+ [] []
+[2017-02-01 03:10:14] mail.DEBUG: CLIENT -> SERVER: From: Site Administrator <shaun.mermet@labromance.com>
+ [] []
+[2017-02-01 03:10:14] mail.DEBUG: CLIENT -> SERVER: Reply-To: Site Administrator <shaun.mermet@labromance.com>
+ [] []
+[2017-02-01 03:10:14] mail.DEBUG: CLIENT -> SERVER: Subject: UserFrosting - your password reset request
+ [] []
+[2017-02-01 03:10:14] mail.DEBUG: CLIENT -> SERVER: Message-ID: <45b81e3f82ec244719755cb940d162bb@userfrosting>
+ [] []
+[2017-02-01 03:10:14] mail.DEBUG: CLIENT -> SERVER: X-Priority: 3
+ [] []
+[2017-02-01 03:10:14] mail.DEBUG: CLIENT -> SERVER: X-Mailer: PHPMailer 5.2.10 (https://github.com/PHPMailer/PHPMailer/)
+ [] []
+[2017-02-01 03:10:14] mail.DEBUG: CLIENT -> SERVER: MIME-Version: 1.0
+ [] []
+[2017-02-01 03:10:14] mail.DEBUG: CLIENT -> SERVER: Content-Type: text/html; charset=iso-8859-1
+ [] []
+[2017-02-01 03:10:14] mail.DEBUG: CLIENT -> SERVER: Content-Transfer-Encoding: 8bit
+ [] []
+[2017-02-01 03:10:14] mail.DEBUG: CLIENT -> SERVER: 
+ [] []
+[2017-02-01 03:10:14] mail.DEBUG: CLIENT -> SERVER: <p>Dear user,
+ [] []
+[2017-02-01 03:10:14] mail.DEBUG: CLIENT -> SERVER: </p>
+ [] []
+[2017-02-01 03:10:14] mail.DEBUG: CLIENT -> SERVER: <p>
+ [] []
+[2017-02-01 03:10:14] mail.DEBUG: CLIENT -> SERVER: A lost password request has been submitted for your account with UserFrosting (http://userfrosting/public) on 02/01/2017 3:10 AM.
+ [] []
+[2017-02-01 03:10:14] mail.DEBUG: CLIENT -> SERVER: </p>
+ [] []
+[2017-02-01 03:10:14] mail.DEBUG: CLIENT -> SERVER: <p>
+ [] []
+[2017-02-01 03:10:14] mail.DEBUG: CLIENT -> SERVER: If you or someone you trust sent this request, and you wish to set a new password, please click this link: <a href="http://userfrosting/public/account/set-password/confirm?token=edd7becd161996bf26d6ee32806f39e2">http://userfrosting/public/account/set-password/confirm?token=edd7becd161996bf26d6ee32806f39e2</a>
+ [] []
+[2017-02-01 03:10:14] mail.DEBUG: CLIENT -> SERVER: </p>
+ [] []
+[2017-02-01 03:10:14] mail.DEBUG: CLIENT -> SERVER: 
+ [] []
+[2017-02-01 03:10:14] mail.DEBUG: CLIENT -> SERVER: <p>
+ [] []
+[2017-02-01 03:10:14] mail.DEBUG: CLIENT -> SERVER: If you did <b>not</b> expect this email, you may click this link to cancel the request: <a href="http://userfrosting/public/account/set-password/deny?token=edd7becd161996bf26d6ee32806f39e2">http://userfrosting/public/account/set-password/deny?token=edd7becd161996bf26d6ee32806f39e2</a>, or simply do nothing and the request will expire on its own.
+ [] []
+[2017-02-01 03:10:14] mail.DEBUG: CLIENT -> SERVER: </p>
+ [] []
+[2017-02-01 03:10:14] mail.DEBUG: CLIENT -> SERVER: <p>
+ [] []
+[2017-02-01 03:10:14] mail.DEBUG: CLIENT -> SERVER: With regards,<br>
+ [] []
+[2017-02-01 03:10:14] mail.DEBUG: CLIENT -> SERVER: The UserFrosting Team
+ [] []
+[2017-02-01 03:10:14] mail.DEBUG: CLIENT -> SERVER: </p>
+ [] []
+[2017-02-01 03:10:14] mail.DEBUG: CLIENT -> SERVER: 
+ [] []
+[2017-02-01 03:10:14] mail.DEBUG: CLIENT -> SERVER: .
+ [] []
+[2017-02-01 03:10:14] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 03:10:14] mail.DEBUG: SMTP -> get_lines(): $str is "250 2.0.0 OK 1485936607 s8sm46907502pfj.30 - gsmtp
+" [] []
+[2017-02-01 03:10:14] mail.DEBUG: SMTP -> get_lines(): $data is "250 2.0.0 OK 1485936607 s8sm46907502pfj.30 - gsmtp
+" [] []
+[2017-02-01 03:10:14] mail.DEBUG: SERVER -> CLIENT: 250 2.0.0 OK 1485936607 s8sm46907502pfj.30 - gsmtp
+ [] []
+[2017-02-01 03:10:14] mail.DEBUG: CLIENT -> SERVER: QUIT
+ [] []
+[2017-02-01 03:10:15] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 03:10:15] mail.DEBUG: SMTP -> get_lines(): $str is "221 2.0.0 closing connection s8sm46907502pfj.30 - gsmtp
+" [] []
+[2017-02-01 03:10:15] mail.DEBUG: SMTP -> get_lines(): $data is "221 2.0.0 closing connection s8sm46907502pfj.30 - gsmtp
+" [] []
+[2017-02-01 03:10:15] mail.DEBUG: SERVER -> CLIENT: 221 2.0.0 closing connection s8sm46907502pfj.30 - gsmtp
+ [] []
+[2017-02-01 03:10:15] mail.DEBUG: Connection: closed [] []
+[2017-02-01 03:28:31] mail.DEBUG: Connection: opening to smtp.gmail.com:587, timeout=15, options=array (
+) [] []
+[2017-02-01 03:28:31] mail.DEBUG: Connection: opened [] []
+[2017-02-01 03:28:31] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 03:28:31] mail.DEBUG: SMTP -> get_lines(): $str is "220 smtp.gmail.com ESMTP a24sm47114162pfh.33 - gsmtp
+" [] []
+[2017-02-01 03:28:31] mail.DEBUG: SMTP -> get_lines(): $data is "220 smtp.gmail.com ESMTP a24sm47114162pfh.33 - gsmtp
+" [] []
+[2017-02-01 03:28:31] mail.DEBUG: SERVER -> CLIENT: 220 smtp.gmail.com ESMTP a24sm47114162pfh.33 - gsmtp
+ [] []
+[2017-02-01 03:28:31] mail.DEBUG: CLIENT -> SERVER: EHLO myuserfrosting
+ [] []
+[2017-02-01 03:28:31] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 03:28:31] mail.DEBUG: SMTP -> get_lines(): $str is "250-smtp.gmail.com at your service, [122.30.194.174]
+" [] []
+[2017-02-01 03:28:31] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+" [] []
+[2017-02-01 03:28:31] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+" [] []
+[2017-02-01 03:28:31] mail.DEBUG: SMTP -> get_lines(): $str is "250-SIZE 35882577
+" [] []
+[2017-02-01 03:28:31] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+" [] []
+[2017-02-01 03:28:31] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+" [] []
+[2017-02-01 03:28:31] mail.DEBUG: SMTP -> get_lines(): $str is "250-8BITMIME
+" [] []
+[2017-02-01 03:28:31] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+" [] []
+[2017-02-01 03:28:31] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+" [] []
+[2017-02-01 03:28:31] mail.DEBUG: SMTP -> get_lines(): $str is "250-STARTTLS
+" [] []
+[2017-02-01 03:28:31] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+" [] []
+[2017-02-01 03:28:31] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+" [] []
+[2017-02-01 03:28:32] mail.DEBUG: SMTP -> get_lines(): $str is "250-ENHANCEDSTATUSCODES
+" [] []
+[2017-02-01 03:28:32] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+" [] []
+[2017-02-01 03:28:32] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+" [] []
+[2017-02-01 03:28:32] mail.DEBUG: SMTP -> get_lines(): $str is "250-PIPELINING
+" [] []
+[2017-02-01 03:28:32] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+" [] []
+[2017-02-01 03:28:32] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+" [] []
+[2017-02-01 03:28:32] mail.DEBUG: SMTP -> get_lines(): $str is "250-CHUNKING
+" [] []
+[2017-02-01 03:28:32] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+" [] []
+[2017-02-01 03:28:32] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+" [] []
+[2017-02-01 03:28:32] mail.DEBUG: SMTP -> get_lines(): $str is "250 SMTPUTF8
+" [] []
+[2017-02-01 03:28:32] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+250 SMTPUTF8
+" [] []
+[2017-02-01 03:28:32] mail.DEBUG: SERVER -> CLIENT: 250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+250 SMTPUTF8
+ [] []
+[2017-02-01 03:28:32] mail.DEBUG: CLIENT -> SERVER: STARTTLS
+ [] []
+[2017-02-01 03:28:32] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 03:28:32] mail.DEBUG: SMTP -> get_lines(): $str is "220 2.0.0 Ready to start TLS
+" [] []
+[2017-02-01 03:28:32] mail.DEBUG: SMTP -> get_lines(): $data is "220 2.0.0 Ready to start TLS
+" [] []
+[2017-02-01 03:28:32] mail.DEBUG: SERVER -> CLIENT: 220 2.0.0 Ready to start TLS
+ [] []
+[2017-02-01 03:28:33] mail.DEBUG: CLIENT -> SERVER: EHLO myuserfrosting
+ [] []
+[2017-02-01 03:28:33] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 03:28:33] mail.DEBUG: SMTP -> get_lines(): $str is "250-smtp.gmail.com at your service, [122.30.194.174]
+" [] []
+[2017-02-01 03:28:33] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+" [] []
+[2017-02-01 03:28:33] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+" [] []
+[2017-02-01 03:28:33] mail.DEBUG: SMTP -> get_lines(): $str is "250-SIZE 35882577
+" [] []
+[2017-02-01 03:28:33] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+" [] []
+[2017-02-01 03:28:33] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+" [] []
+[2017-02-01 03:28:33] mail.DEBUG: SMTP -> get_lines(): $str is "250-8BITMIME
+" [] []
+[2017-02-01 03:28:33] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+" [] []
+[2017-02-01 03:28:33] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+" [] []
+[2017-02-01 03:28:33] mail.DEBUG: SMTP -> get_lines(): $str is "250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+" [] []
+[2017-02-01 03:28:33] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+" [] []
+[2017-02-01 03:28:33] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+" [] []
+[2017-02-01 03:28:33] mail.DEBUG: SMTP -> get_lines(): $str is "250-ENHANCEDSTATUSCODES
+" [] []
+[2017-02-01 03:28:33] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+" [] []
+[2017-02-01 03:28:33] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+" [] []
+[2017-02-01 03:28:33] mail.DEBUG: SMTP -> get_lines(): $str is "250-PIPELINING
+" [] []
+[2017-02-01 03:28:33] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+" [] []
+[2017-02-01 03:28:33] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+" [] []
+[2017-02-01 03:28:33] mail.DEBUG: SMTP -> get_lines(): $str is "250-CHUNKING
+" [] []
+[2017-02-01 03:28:33] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+" [] []
+[2017-02-01 03:28:33] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+" [] []
+[2017-02-01 03:28:33] mail.DEBUG: SMTP -> get_lines(): $str is "250 SMTPUTF8
+" [] []
+[2017-02-01 03:28:33] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+250 SMTPUTF8
+" [] []
+[2017-02-01 03:28:33] mail.DEBUG: SERVER -> CLIENT: 250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+250 SMTPUTF8
+ [] []
+[2017-02-01 03:28:33] mail.DEBUG: Auth method requested: UNKNOWN [] []
+[2017-02-01 03:28:33] mail.DEBUG: Auth methods available on the server: LOGIN,PLAIN,XOAUTH2,PLAIN-CLIENTTOKEN,OAUTHBEARER,XOAUTH [] []
+[2017-02-01 03:28:33] mail.DEBUG: Auth method selected: LOGIN [] []
+[2017-02-01 03:28:33] mail.DEBUG: CLIENT -> SERVER: AUTH LOGIN
+ [] []
+[2017-02-01 03:28:33] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 03:28:33] mail.DEBUG: SMTP -> get_lines(): $str is "334 VXNlcm5hbWU6
+" [] []
+[2017-02-01 03:28:33] mail.DEBUG: SMTP -> get_lines(): $data is "334 VXNlcm5hbWU6
+" [] []
+[2017-02-01 03:28:33] mail.DEBUG: SERVER -> CLIENT: 334 VXNlcm5hbWU6
+ [] []
+[2017-02-01 03:28:33] mail.DEBUG: CLIENT -> SERVER: c2hhdW4ubWVybWV0QGxhYnJvbWFuY2UuY29t
+ [] []
+[2017-02-01 03:28:33] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 03:28:33] mail.DEBUG: SMTP -> get_lines(): $str is "334 UGFzc3dvcmQ6
+" [] []
+[2017-02-01 03:28:33] mail.DEBUG: SMTP -> get_lines(): $data is "334 UGFzc3dvcmQ6
+" [] []
+[2017-02-01 03:28:33] mail.DEBUG: SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+ [] []
+[2017-02-01 03:28:33] mail.DEBUG: CLIENT -> SERVER: TFJHTXRlc3QxYSE=
+ [] []
+[2017-02-01 03:28:34] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 03:28:34] mail.DEBUG: SMTP -> get_lines(): $str is "235 2.7.0 Accepted
+" [] []
+[2017-02-01 03:28:34] mail.DEBUG: SMTP -> get_lines(): $data is "235 2.7.0 Accepted
+" [] []
+[2017-02-01 03:28:34] mail.DEBUG: SERVER -> CLIENT: 235 2.7.0 Accepted
+ [] []
+[2017-02-01 03:28:34] mail.DEBUG: CLIENT -> SERVER: MAIL FROM:<shaun.mermet@labromance.com>
+ [] []
+[2017-02-01 03:28:34] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 03:28:34] mail.DEBUG: SMTP -> get_lines(): $str is "250 2.1.0 OK a24sm47114162pfh.33 - gsmtp
+" [] []
+[2017-02-01 03:28:34] mail.DEBUG: SMTP -> get_lines(): $data is "250 2.1.0 OK a24sm47114162pfh.33 - gsmtp
+" [] []
+[2017-02-01 03:28:34] mail.DEBUG: SERVER -> CLIENT: 250 2.1.0 OK a24sm47114162pfh.33 - gsmtp
+ [] []
+[2017-02-01 03:28:34] mail.DEBUG: CLIENT -> SERVER: RCPT TO:<shaun.mermet@gmail.com>
+ [] []
+[2017-02-01 03:28:34] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 03:28:34] mail.DEBUG: SMTP -> get_lines(): $str is "250 2.1.5 OK a24sm47114162pfh.33 - gsmtp
+" [] []
+[2017-02-01 03:28:34] mail.DEBUG: SMTP -> get_lines(): $data is "250 2.1.5 OK a24sm47114162pfh.33 - gsmtp
+" [] []
+[2017-02-01 03:28:34] mail.DEBUG: SERVER -> CLIENT: 250 2.1.5 OK a24sm47114162pfh.33 - gsmtp
+ [] []
+[2017-02-01 03:28:34] mail.DEBUG: CLIENT -> SERVER: DATA
+ [] []
+[2017-02-01 03:28:35] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 03:28:35] mail.DEBUG: SMTP -> get_lines(): $str is "354  Go ahead a24sm47114162pfh.33 - gsmtp
+" [] []
+[2017-02-01 03:28:35] mail.DEBUG: SMTP -> get_lines(): $data is "354  Go ahead a24sm47114162pfh.33 - gsmtp
+" [] []
+[2017-02-01 03:28:35] mail.DEBUG: SERVER -> CLIENT: 354  Go ahead a24sm47114162pfh.33 - gsmtp
+ [] []
+[2017-02-01 03:28:35] mail.DEBUG: CLIENT -> SERVER: Date: Wed, 1 Feb 2017 03:28:31 -0500
+ [] []
+[2017-02-01 03:28:35] mail.DEBUG: CLIENT -> SERVER: To: user one <shaun.mermet@gmail.com>
+ [] []
+[2017-02-01 03:28:35] mail.DEBUG: CLIENT -> SERVER: From: Site Administrator <shaun.mermet@labromance.com>
+ [] []
+[2017-02-01 03:28:35] mail.DEBUG: CLIENT -> SERVER: Reply-To: Site Administrator <shaun.mermet@labromance.com>
+ [] []
+[2017-02-01 03:28:35] mail.DEBUG: CLIENT -> SERVER: Subject: UserFrosting - your password reset request
+ [] []
+[2017-02-01 03:28:35] mail.DEBUG: CLIENT -> SERVER: Message-ID: <b4f7670085a27122ecc9723709428496@myuserfrosting>
+ [] []
+[2017-02-01 03:28:35] mail.DEBUG: CLIENT -> SERVER: X-Priority: 3
+ [] []
+[2017-02-01 03:28:35] mail.DEBUG: CLIENT -> SERVER: X-Mailer: PHPMailer 5.2.10 (https://github.com/PHPMailer/PHPMailer/)
+ [] []
+[2017-02-01 03:28:35] mail.DEBUG: CLIENT -> SERVER: MIME-Version: 1.0
+ [] []
+[2017-02-01 03:28:35] mail.DEBUG: CLIENT -> SERVER: Content-Type: text/html; charset=iso-8859-1
+ [] []
+[2017-02-01 03:28:35] mail.DEBUG: CLIENT -> SERVER: Content-Transfer-Encoding: 8bit
+ [] []
+[2017-02-01 03:28:35] mail.DEBUG: CLIENT -> SERVER: 
+ [] []
+[2017-02-01 03:28:35] mail.DEBUG: CLIENT -> SERVER: <p>Dear user,
+ [] []
+[2017-02-01 03:28:35] mail.DEBUG: CLIENT -> SERVER: </p>
+ [] []
+[2017-02-01 03:28:35] mail.DEBUG: CLIENT -> SERVER: <p>
+ [] []
+[2017-02-01 03:28:35] mail.DEBUG: CLIENT -> SERVER: A lost password request has been submitted for your account with UserFrosting (http://myuserfrosting/public) on 02/01/2017 3:28 AM.
+ [] []
+[2017-02-01 03:28:35] mail.DEBUG: CLIENT -> SERVER: </p>
+ [] []
+[2017-02-01 03:28:35] mail.DEBUG: CLIENT -> SERVER: <p>
+ [] []
+[2017-02-01 03:28:35] mail.DEBUG: CLIENT -> SERVER: If you or someone you trust sent this request, and you wish to set a new password, please click this link: <a href="http://myuserfrosting/public/account/set-password/confirm?token=97a268f8ca2c60906041cb8c7892a11e">http://myuserfrosting/public/account/set-password/confirm?token=97a268f8ca2c60906041cb8c7892a11e</a>
+ [] []
+[2017-02-01 03:28:35] mail.DEBUG: CLIENT -> SERVER: </p>
+ [] []
+[2017-02-01 03:28:35] mail.DEBUG: CLIENT -> SERVER: 
+ [] []
+[2017-02-01 03:28:35] mail.DEBUG: CLIENT -> SERVER: <p>
+ [] []
+[2017-02-01 03:28:35] mail.DEBUG: CLIENT -> SERVER: If you did <b>not</b> expect this email, you may click this link to cancel the request: <a href="http://myuserfrosting/public/account/set-password/deny?token=97a268f8ca2c60906041cb8c7892a11e">http://myuserfrosting/public/account/set-password/deny?token=97a268f8ca2c60906041cb8c7892a11e</a>, or simply do nothing and the request will expire on its own.
+ [] []
+[2017-02-01 03:28:35] mail.DEBUG: CLIENT -> SERVER: </p>
+ [] []
+[2017-02-01 03:28:35] mail.DEBUG: CLIENT -> SERVER: <p>
+ [] []
+[2017-02-01 03:28:35] mail.DEBUG: CLIENT -> SERVER: With regards,<br>
+ [] []
+[2017-02-01 03:28:35] mail.DEBUG: CLIENT -> SERVER: The UserFrosting Team
+ [] []
+[2017-02-01 03:28:35] mail.DEBUG: CLIENT -> SERVER: </p>
+ [] []
+[2017-02-01 03:28:35] mail.DEBUG: CLIENT -> SERVER: 
+ [] []
+[2017-02-01 03:28:35] mail.DEBUG: CLIENT -> SERVER: .
+ [] []
+[2017-02-01 03:28:36] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 03:28:36] mail.DEBUG: SMTP -> get_lines(): $str is "250 2.0.0 OK 1485937709 a24sm47114162pfh.33 - gsmtp
+" [] []
+[2017-02-01 03:28:36] mail.DEBUG: SMTP -> get_lines(): $data is "250 2.0.0 OK 1485937709 a24sm47114162pfh.33 - gsmtp
+" [] []
+[2017-02-01 03:28:36] mail.DEBUG: SERVER -> CLIENT: 250 2.0.0 OK 1485937709 a24sm47114162pfh.33 - gsmtp
+ [] []
+[2017-02-01 03:28:36] mail.DEBUG: CLIENT -> SERVER: QUIT
+ [] []
+[2017-02-01 03:28:36] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-01 03:28:36] mail.DEBUG: SMTP -> get_lines(): $str is "221 2.0.0 closing connection a24sm47114162pfh.33 - gsmtp
+" [] []
+[2017-02-01 03:28:36] mail.DEBUG: SMTP -> get_lines(): $data is "221 2.0.0 closing connection a24sm47114162pfh.33 - gsmtp
+" [] []
+[2017-02-01 03:28:36] mail.DEBUG: SERVER -> CLIENT: 221 2.0.0 closing connection a24sm47114162pfh.33 - gsmtp
+ [] []
+[2017-02-01 03:28:36] mail.DEBUG: Connection: closed [] []
+[2017-02-03 13:21:29] mail.DEBUG: Connection: opening to smtp.gmail.com:587, timeout=15, options=array (
+) [] []
+[2017-02-03 13:21:29] mail.DEBUG: Connection: opened [] []
+[2017-02-03 13:21:29] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-03 13:21:29] mail.DEBUG: SMTP -> get_lines(): $str is "220 smtp.gmail.com ESMTP n79sm62317433pfj.31 - gsmtp
+" [] []
+[2017-02-03 13:21:29] mail.DEBUG: SMTP -> get_lines(): $data is "220 smtp.gmail.com ESMTP n79sm62317433pfj.31 - gsmtp
+" [] []
+[2017-02-03 13:21:29] mail.DEBUG: SERVER -> CLIENT: 220 smtp.gmail.com ESMTP n79sm62317433pfj.31 - gsmtp
+ [] []
+[2017-02-03 13:21:29] mail.DEBUG: CLIENT -> SERVER: EHLO myuserfrosting
+ [] []
+[2017-02-03 13:21:30] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-03 13:21:30] mail.DEBUG: SMTP -> get_lines(): $str is "250-smtp.gmail.com at your service, [122.30.194.174]
+" [] []
+[2017-02-03 13:21:30] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+" [] []
+[2017-02-03 13:21:30] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+" [] []
+[2017-02-03 13:21:30] mail.DEBUG: SMTP -> get_lines(): $str is "250-SIZE 35882577
+" [] []
+[2017-02-03 13:21:30] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+" [] []
+[2017-02-03 13:21:30] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+" [] []
+[2017-02-03 13:21:30] mail.DEBUG: SMTP -> get_lines(): $str is "250-8BITMIME
+" [] []
+[2017-02-03 13:21:30] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+" [] []
+[2017-02-03 13:21:30] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+" [] []
+[2017-02-03 13:21:30] mail.DEBUG: SMTP -> get_lines(): $str is "250-STARTTLS
+" [] []
+[2017-02-03 13:21:30] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+" [] []
+[2017-02-03 13:21:30] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+" [] []
+[2017-02-03 13:21:30] mail.DEBUG: SMTP -> get_lines(): $str is "250-ENHANCEDSTATUSCODES
+" [] []
+[2017-02-03 13:21:30] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+" [] []
+[2017-02-03 13:21:30] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+" [] []
+[2017-02-03 13:21:30] mail.DEBUG: SMTP -> get_lines(): $str is "250-PIPELINING
+" [] []
+[2017-02-03 13:21:30] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+" [] []
+[2017-02-03 13:21:30] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+" [] []
+[2017-02-03 13:21:30] mail.DEBUG: SMTP -> get_lines(): $str is "250-CHUNKING
+" [] []
+[2017-02-03 13:21:30] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+" [] []
+[2017-02-03 13:21:30] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+" [] []
+[2017-02-03 13:21:30] mail.DEBUG: SMTP -> get_lines(): $str is "250 SMTPUTF8
+" [] []
+[2017-02-03 13:21:30] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+250 SMTPUTF8
+" [] []
+[2017-02-03 13:21:30] mail.DEBUG: SERVER -> CLIENT: 250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+250 SMTPUTF8
+ [] []
+[2017-02-03 13:21:30] mail.DEBUG: CLIENT -> SERVER: STARTTLS
+ [] []
+[2017-02-03 13:21:30] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-03 13:21:30] mail.DEBUG: SMTP -> get_lines(): $str is "220 2.0.0 Ready to start TLS
+" [] []
+[2017-02-03 13:21:30] mail.DEBUG: SMTP -> get_lines(): $data is "220 2.0.0 Ready to start TLS
+" [] []
+[2017-02-03 13:21:30] mail.DEBUG: SERVER -> CLIENT: 220 2.0.0 Ready to start TLS
+ [] []
+[2017-02-03 13:21:31] mail.DEBUG: CLIENT -> SERVER: EHLO myuserfrosting
+ [] []
+[2017-02-03 13:21:31] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-03 13:21:31] mail.DEBUG: SMTP -> get_lines(): $str is "250-smtp.gmail.com at your service, [122.30.194.174]
+" [] []
+[2017-02-03 13:21:31] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+" [] []
+[2017-02-03 13:21:31] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+" [] []
+[2017-02-03 13:21:31] mail.DEBUG: SMTP -> get_lines(): $str is "250-SIZE 35882577
+" [] []
+[2017-02-03 13:21:31] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+" [] []
+[2017-02-03 13:21:31] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+" [] []
+[2017-02-03 13:21:31] mail.DEBUG: SMTP -> get_lines(): $str is "250-8BITMIME
+" [] []
+[2017-02-03 13:21:31] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+" [] []
+[2017-02-03 13:21:31] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+" [] []
+[2017-02-03 13:21:31] mail.DEBUG: SMTP -> get_lines(): $str is "250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+" [] []
+[2017-02-03 13:21:31] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+" [] []
+[2017-02-03 13:21:31] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+" [] []
+[2017-02-03 13:21:31] mail.DEBUG: SMTP -> get_lines(): $str is "250-ENHANCEDSTATUSCODES
+" [] []
+[2017-02-03 13:21:31] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+" [] []
+[2017-02-03 13:21:31] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+" [] []
+[2017-02-03 13:21:31] mail.DEBUG: SMTP -> get_lines(): $str is "250-PIPELINING
+" [] []
+[2017-02-03 13:21:31] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+" [] []
+[2017-02-03 13:21:31] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+" [] []
+[2017-02-03 13:21:31] mail.DEBUG: SMTP -> get_lines(): $str is "250-CHUNKING
+" [] []
+[2017-02-03 13:21:31] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+" [] []
+[2017-02-03 13:21:31] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+" [] []
+[2017-02-03 13:21:31] mail.DEBUG: SMTP -> get_lines(): $str is "250 SMTPUTF8
+" [] []
+[2017-02-03 13:21:31] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+250 SMTPUTF8
+" [] []
+[2017-02-03 13:21:31] mail.DEBUG: SERVER -> CLIENT: 250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+250 SMTPUTF8
+ [] []
+[2017-02-03 13:21:31] mail.DEBUG: Auth method requested: UNKNOWN [] []
+[2017-02-03 13:21:31] mail.DEBUG: Auth methods available on the server: LOGIN,PLAIN,XOAUTH2,PLAIN-CLIENTTOKEN,OAUTHBEARER,XOAUTH [] []
+[2017-02-03 13:21:31] mail.DEBUG: Auth method selected: LOGIN [] []
+[2017-02-03 13:21:31] mail.DEBUG: CLIENT -> SERVER: AUTH LOGIN
+ [] []
+[2017-02-03 13:21:31] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-03 13:21:31] mail.DEBUG: SMTP -> get_lines(): $str is "334 VXNlcm5hbWU6
+" [] []
+[2017-02-03 13:21:31] mail.DEBUG: SMTP -> get_lines(): $data is "334 VXNlcm5hbWU6
+" [] []
+[2017-02-03 13:21:31] mail.DEBUG: SERVER -> CLIENT: 334 VXNlcm5hbWU6
+ [] []
+[2017-02-03 13:21:31] mail.DEBUG: CLIENT -> SERVER: c2hhdW4ubWVybWV0QGxhYnJvbWFuY2UuY29t
+ [] []
+[2017-02-03 13:21:31] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-03 13:21:31] mail.DEBUG: SMTP -> get_lines(): $str is "334 UGFzc3dvcmQ6
+" [] []
+[2017-02-03 13:21:31] mail.DEBUG: SMTP -> get_lines(): $data is "334 UGFzc3dvcmQ6
+" [] []
+[2017-02-03 13:21:31] mail.DEBUG: SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+ [] []
+[2017-02-03 13:21:31] mail.DEBUG: CLIENT -> SERVER: TFJHTXRlc3QxYSE=
+ [] []
+[2017-02-03 13:21:32] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-03 13:21:32] mail.DEBUG: SMTP -> get_lines(): $str is "235 2.7.0 Accepted
+" [] []
+[2017-02-03 13:21:32] mail.DEBUG: SMTP -> get_lines(): $data is "235 2.7.0 Accepted
+" [] []
+[2017-02-03 13:21:32] mail.DEBUG: SERVER -> CLIENT: 235 2.7.0 Accepted
+ [] []
+[2017-02-03 13:21:32] mail.DEBUG: CLIENT -> SERVER: MAIL FROM:<shaun.mermet@labromance.com>
+ [] []
+[2017-02-03 13:21:32] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-03 13:21:32] mail.DEBUG: SMTP -> get_lines(): $str is "250 2.1.0 OK n79sm62317433pfj.31 - gsmtp
+" [] []
+[2017-02-03 13:21:32] mail.DEBUG: SMTP -> get_lines(): $data is "250 2.1.0 OK n79sm62317433pfj.31 - gsmtp
+" [] []
+[2017-02-03 13:21:32] mail.DEBUG: SERVER -> CLIENT: 250 2.1.0 OK n79sm62317433pfj.31 - gsmtp
+ [] []
+[2017-02-03 13:21:32] mail.DEBUG: CLIENT -> SERVER: RCPT TO:<shaun.mermet@gmail.com>
+ [] []
+[2017-02-03 13:21:32] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-03 13:21:32] mail.DEBUG: SMTP -> get_lines(): $str is "250 2.1.5 OK n79sm62317433pfj.31 - gsmtp
+" [] []
+[2017-02-03 13:21:32] mail.DEBUG: SMTP -> get_lines(): $data is "250 2.1.5 OK n79sm62317433pfj.31 - gsmtp
+" [] []
+[2017-02-03 13:21:32] mail.DEBUG: SERVER -> CLIENT: 250 2.1.5 OK n79sm62317433pfj.31 - gsmtp
+ [] []
+[2017-02-03 13:21:32] mail.DEBUG: CLIENT -> SERVER: DATA
+ [] []
+[2017-02-03 13:21:32] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-03 13:21:32] mail.DEBUG: SMTP -> get_lines(): $str is "354  Go ahead n79sm62317433pfj.31 - gsmtp
+" [] []
+[2017-02-03 13:21:32] mail.DEBUG: SMTP -> get_lines(): $data is "354  Go ahead n79sm62317433pfj.31 - gsmtp
+" [] []
+[2017-02-03 13:21:32] mail.DEBUG: SERVER -> CLIENT: 354  Go ahead n79sm62317433pfj.31 - gsmtp
+ [] []
+[2017-02-03 13:21:32] mail.DEBUG: CLIENT -> SERVER: Date: Fri, 3 Feb 2017 13:21:29 +0900
+ [] []
+[2017-02-03 13:21:32] mail.DEBUG: CLIENT -> SERVER: To: user one <shaun.mermet@gmail.com>
+ [] []
+[2017-02-03 13:21:32] mail.DEBUG: CLIENT -> SERVER: From: enRAdmin <shaun.mermet@labromance.com>
+ [] []
+[2017-02-03 13:21:32] mail.DEBUG: CLIENT -> SERVER: Reply-To: enRAdmin <shaun.mermet@labromance.com>
+ [] []
+[2017-02-03 13:21:32] mail.DEBUG: CLIENT -> SERVER: Subject: labelImage - your password reset request
+ [] []
+[2017-02-03 13:21:32] mail.DEBUG: CLIENT -> SERVER: Message-ID: <b0cc003517d263a22b740e7a4f9a894e@myuserfrosting>
+ [] []
+[2017-02-03 13:21:32] mail.DEBUG: CLIENT -> SERVER: X-Priority: 3
+ [] []
+[2017-02-03 13:21:32] mail.DEBUG: CLIENT -> SERVER: X-Mailer: PHPMailer 5.2.10 (https://github.com/PHPMailer/PHPMailer/)
+ [] []
+[2017-02-03 13:21:32] mail.DEBUG: CLIENT -> SERVER: MIME-Version: 1.0
+ [] []
+[2017-02-03 13:21:32] mail.DEBUG: CLIENT -> SERVER: Content-Type: text/html; charset=iso-8859-1
+ [] []
+[2017-02-03 13:21:32] mail.DEBUG: CLIENT -> SERVER: Content-Transfer-Encoding: 8bit
+ [] []
+[2017-02-03 13:21:32] mail.DEBUG: CLIENT -> SERVER: 
+ [] []
+[2017-02-03 13:21:32] mail.DEBUG: CLIENT -> SERVER: <p>Dear user,
+ [] []
+[2017-02-03 13:21:32] mail.DEBUG: CLIENT -> SERVER: </p>
+ [] []
+[2017-02-03 13:21:32] mail.DEBUG: CLIENT -> SERVER: <p>
+ [] []
+[2017-02-03 13:21:32] mail.DEBUG: CLIENT -> SERVER: A lost password request has been submitted for your account with labelImage (http://myuserfrosting/public) on 02/03/2017 1:21 PM.
+ [] []
+[2017-02-03 13:21:32] mail.DEBUG: CLIENT -> SERVER: </p>
+ [] []
+[2017-02-03 13:21:32] mail.DEBUG: CLIENT -> SERVER: <p>
+ [] []
+[2017-02-03 13:21:32] mail.DEBUG: CLIENT -> SERVER: If you or someone you trust sent this request, and you wish to set a new password, please click this link: <a href="http://myuserfrosting/public/account/set-password/confirm?token=dada49db8c69e9130fd7e2bb80f210a6">http://myuserfrosting/public/account/set-password/confirm?token=dada49db8c69e9130fd7e2bb80f210a6</a>
+ [] []
+[2017-02-03 13:21:32] mail.DEBUG: CLIENT -> SERVER: </p>
+ [] []
+[2017-02-03 13:21:32] mail.DEBUG: CLIENT -> SERVER: 
+ [] []
+[2017-02-03 13:21:32] mail.DEBUG: CLIENT -> SERVER: <p>
+ [] []
+[2017-02-03 13:21:32] mail.DEBUG: CLIENT -> SERVER: If you did <b>not</b> expect this email, you may click this link to cancel the request: <a href="http://myuserfrosting/public/account/set-password/deny?token=dada49db8c69e9130fd7e2bb80f210a6">http://myuserfrosting/public/account/set-password/deny?token=dada49db8c69e9130fd7e2bb80f210a6</a>, or simply do nothing and the request will expire on its own.
+ [] []
+[2017-02-03 13:21:32] mail.DEBUG: CLIENT -> SERVER: </p>
+ [] []
+[2017-02-03 13:21:32] mail.DEBUG: CLIENT -> SERVER: <p>
+ [] []
+[2017-02-03 13:21:32] mail.DEBUG: CLIENT -> SERVER: With regards,<br>
+ [] []
+[2017-02-03 13:21:32] mail.DEBUG: CLIENT -> SERVER: The labelImage Team
+ [] []
+[2017-02-03 13:21:32] mail.DEBUG: CLIENT -> SERVER: </p>
+ [] []
+[2017-02-03 13:21:32] mail.DEBUG: CLIENT -> SERVER: 
+ [] []
+[2017-02-03 13:21:32] mail.DEBUG: CLIENT -> SERVER: .
+ [] []
+[2017-02-03 13:21:33] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-03 13:21:33] mail.DEBUG: SMTP -> get_lines(): $str is "250 2.0.0 OK 1486095692 n79sm62317433pfj.31 - gsmtp
+" [] []
+[2017-02-03 13:21:33] mail.DEBUG: SMTP -> get_lines(): $data is "250 2.0.0 OK 1486095692 n79sm62317433pfj.31 - gsmtp
+" [] []
+[2017-02-03 13:21:33] mail.DEBUG: SERVER -> CLIENT: 250 2.0.0 OK 1486095692 n79sm62317433pfj.31 - gsmtp
+ [] []
+[2017-02-03 13:21:33] mail.DEBUG: CLIENT -> SERVER: QUIT
+ [] []
+[2017-02-03 13:21:33] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-03 13:21:33] mail.DEBUG: SMTP -> get_lines(): $str is "221 2.0.0 closing connection n79sm62317433pfj.31 - gsmtp
+" [] []
+[2017-02-03 13:21:33] mail.DEBUG: SMTP -> get_lines(): $data is "221 2.0.0 closing connection n79sm62317433pfj.31 - gsmtp
+" [] []
+[2017-02-03 13:21:33] mail.DEBUG: SERVER -> CLIENT: 221 2.0.0 closing connection n79sm62317433pfj.31 - gsmtp
+ [] []
+[2017-02-03 13:21:33] mail.DEBUG: Connection: closed [] []
+[2017-02-03 13:45:59] mail.DEBUG: Connection: opening to smtp.gmail.com:587, timeout=15, options=array (
+) [] []
+[2017-02-03 13:45:59] mail.DEBUG: Connection: opened [] []
+[2017-02-03 13:45:59] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-03 13:45:59] mail.DEBUG: SMTP -> get_lines(): $str is "220 smtp.gmail.com ESMTP d29sm62473761pfk.83 - gsmtp
+" [] []
+[2017-02-03 13:45:59] mail.DEBUG: SMTP -> get_lines(): $data is "220 smtp.gmail.com ESMTP d29sm62473761pfk.83 - gsmtp
+" [] []
+[2017-02-03 13:45:59] mail.DEBUG: SERVER -> CLIENT: 220 smtp.gmail.com ESMTP d29sm62473761pfk.83 - gsmtp
+ [] []
+[2017-02-03 13:45:59] mail.DEBUG: CLIENT -> SERVER: EHLO myuserfrosting
+ [] []
+[2017-02-03 13:45:59] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-03 13:45:59] mail.DEBUG: SMTP -> get_lines(): $str is "250-smtp.gmail.com at your service, [122.30.194.174]
+" [] []
+[2017-02-03 13:45:59] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+" [] []
+[2017-02-03 13:45:59] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+" [] []
+[2017-02-03 13:45:59] mail.DEBUG: SMTP -> get_lines(): $str is "250-SIZE 35882577
+" [] []
+[2017-02-03 13:45:59] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+" [] []
+[2017-02-03 13:45:59] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+" [] []
+[2017-02-03 13:45:59] mail.DEBUG: SMTP -> get_lines(): $str is "250-8BITMIME
+" [] []
+[2017-02-03 13:45:59] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+" [] []
+[2017-02-03 13:45:59] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+" [] []
+[2017-02-03 13:45:59] mail.DEBUG: SMTP -> get_lines(): $str is "250-STARTTLS
+" [] []
+[2017-02-03 13:45:59] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+" [] []
+[2017-02-03 13:45:59] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+" [] []
+[2017-02-03 13:45:59] mail.DEBUG: SMTP -> get_lines(): $str is "250-ENHANCEDSTATUSCODES
+" [] []
+[2017-02-03 13:45:59] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+" [] []
+[2017-02-03 13:45:59] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+" [] []
+[2017-02-03 13:45:59] mail.DEBUG: SMTP -> get_lines(): $str is "250-PIPELINING
+" [] []
+[2017-02-03 13:45:59] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+" [] []
+[2017-02-03 13:45:59] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+" [] []
+[2017-02-03 13:45:59] mail.DEBUG: SMTP -> get_lines(): $str is "250-CHUNKING
+" [] []
+[2017-02-03 13:45:59] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+" [] []
+[2017-02-03 13:45:59] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+" [] []
+[2017-02-03 13:45:59] mail.DEBUG: SMTP -> get_lines(): $str is "250 SMTPUTF8
+" [] []
+[2017-02-03 13:45:59] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+250 SMTPUTF8
+" [] []
+[2017-02-03 13:45:59] mail.DEBUG: SERVER -> CLIENT: 250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+250 SMTPUTF8
+ [] []
+[2017-02-03 13:45:59] mail.DEBUG: CLIENT -> SERVER: STARTTLS
+ [] []
+[2017-02-03 13:45:59] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-03 13:45:59] mail.DEBUG: SMTP -> get_lines(): $str is "220 2.0.0 Ready to start TLS
+" [] []
+[2017-02-03 13:45:59] mail.DEBUG: SMTP -> get_lines(): $data is "220 2.0.0 Ready to start TLS
+" [] []
+[2017-02-03 13:45:59] mail.DEBUG: SERVER -> CLIENT: 220 2.0.0 Ready to start TLS
+ [] []
+[2017-02-03 13:46:01] mail.DEBUG: CLIENT -> SERVER: EHLO myuserfrosting
+ [] []
+[2017-02-03 13:46:01] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-03 13:46:01] mail.DEBUG: SMTP -> get_lines(): $str is "250-smtp.gmail.com at your service, [122.30.194.174]
+" [] []
+[2017-02-03 13:46:01] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+" [] []
+[2017-02-03 13:46:01] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+" [] []
+[2017-02-03 13:46:01] mail.DEBUG: SMTP -> get_lines(): $str is "250-SIZE 35882577
+" [] []
+[2017-02-03 13:46:01] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+" [] []
+[2017-02-03 13:46:01] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+" [] []
+[2017-02-03 13:46:01] mail.DEBUG: SMTP -> get_lines(): $str is "250-8BITMIME
+" [] []
+[2017-02-03 13:46:01] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+" [] []
+[2017-02-03 13:46:01] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+" [] []
+[2017-02-03 13:46:01] mail.DEBUG: SMTP -> get_lines(): $str is "250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+" [] []
+[2017-02-03 13:46:01] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+" [] []
+[2017-02-03 13:46:01] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+" [] []
+[2017-02-03 13:46:01] mail.DEBUG: SMTP -> get_lines(): $str is "250-ENHANCEDSTATUSCODES
+" [] []
+[2017-02-03 13:46:01] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+" [] []
+[2017-02-03 13:46:01] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+" [] []
+[2017-02-03 13:46:01] mail.DEBUG: SMTP -> get_lines(): $str is "250-PIPELINING
+" [] []
+[2017-02-03 13:46:01] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+" [] []
+[2017-02-03 13:46:01] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+" [] []
+[2017-02-03 13:46:01] mail.DEBUG: SMTP -> get_lines(): $str is "250-CHUNKING
+" [] []
+[2017-02-03 13:46:01] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+" [] []
+[2017-02-03 13:46:01] mail.DEBUG: SMTP -> get_lines(): $data was "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+" [] []
+[2017-02-03 13:46:01] mail.DEBUG: SMTP -> get_lines(): $str is "250 SMTPUTF8
+" [] []
+[2017-02-03 13:46:01] mail.DEBUG: SMTP -> get_lines(): $data is "250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+250 SMTPUTF8
+" [] []
+[2017-02-03 13:46:01] mail.DEBUG: SERVER -> CLIENT: 250-smtp.gmail.com at your service, [122.30.194.174]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+250 SMTPUTF8
+ [] []
+[2017-02-03 13:46:01] mail.DEBUG: Auth method requested: UNKNOWN [] []
+[2017-02-03 13:46:01] mail.DEBUG: Auth methods available on the server: LOGIN,PLAIN,XOAUTH2,PLAIN-CLIENTTOKEN,OAUTHBEARER,XOAUTH [] []
+[2017-02-03 13:46:01] mail.DEBUG: Auth method selected: LOGIN [] []
+[2017-02-03 13:46:01] mail.DEBUG: CLIENT -> SERVER: AUTH LOGIN
+ [] []
+[2017-02-03 13:46:01] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-03 13:46:01] mail.DEBUG: SMTP -> get_lines(): $str is "334 VXNlcm5hbWU6
+" [] []
+[2017-02-03 13:46:01] mail.DEBUG: SMTP -> get_lines(): $data is "334 VXNlcm5hbWU6
+" [] []
+[2017-02-03 13:46:01] mail.DEBUG: SERVER -> CLIENT: 334 VXNlcm5hbWU6
+ [] []
+[2017-02-03 13:46:01] mail.DEBUG: CLIENT -> SERVER: c2hhdW4ubWVybWV0QGxhYnJvbWFuY2UuY29t
+ [] []
+[2017-02-03 13:46:01] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-03 13:46:01] mail.DEBUG: SMTP -> get_lines(): $str is "334 UGFzc3dvcmQ6
+" [] []
+[2017-02-03 13:46:01] mail.DEBUG: SMTP -> get_lines(): $data is "334 UGFzc3dvcmQ6
+" [] []
+[2017-02-03 13:46:01] mail.DEBUG: SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+ [] []
+[2017-02-03 13:46:01] mail.DEBUG: CLIENT -> SERVER: TFJHTXRlc3QxYSE=
+ [] []
+[2017-02-03 13:46:01] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-03 13:46:01] mail.DEBUG: SMTP -> get_lines(): $str is "235 2.7.0 Accepted
+" [] []
+[2017-02-03 13:46:01] mail.DEBUG: SMTP -> get_lines(): $data is "235 2.7.0 Accepted
+" [] []
+[2017-02-03 13:46:01] mail.DEBUG: SERVER -> CLIENT: 235 2.7.0 Accepted
+ [] []
+[2017-02-03 13:46:01] mail.DEBUG: CLIENT -> SERVER: MAIL FROM:<shaun.mermet@labromance.com>
+ [] []
+[2017-02-03 13:46:02] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-03 13:46:02] mail.DEBUG: SMTP -> get_lines(): $str is "250 2.1.0 OK d29sm62473761pfk.83 - gsmtp
+" [] []
+[2017-02-03 13:46:02] mail.DEBUG: SMTP -> get_lines(): $data is "250 2.1.0 OK d29sm62473761pfk.83 - gsmtp
+" [] []
+[2017-02-03 13:46:02] mail.DEBUG: SERVER -> CLIENT: 250 2.1.0 OK d29sm62473761pfk.83 - gsmtp
+ [] []
+[2017-02-03 13:46:02] mail.DEBUG: CLIENT -> SERVER: RCPT TO:<shaun.mermet@gmail.com>
+ [] []
+[2017-02-03 13:46:02] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-03 13:46:02] mail.DEBUG: SMTP -> get_lines(): $str is "250 2.1.5 OK d29sm62473761pfk.83 - gsmtp
+" [] []
+[2017-02-03 13:46:02] mail.DEBUG: SMTP -> get_lines(): $data is "250 2.1.5 OK d29sm62473761pfk.83 - gsmtp
+" [] []
+[2017-02-03 13:46:02] mail.DEBUG: SERVER -> CLIENT: 250 2.1.5 OK d29sm62473761pfk.83 - gsmtp
+ [] []
+[2017-02-03 13:46:02] mail.DEBUG: CLIENT -> SERVER: DATA
+ [] []
+[2017-02-03 13:46:02] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-03 13:46:02] mail.DEBUG: SMTP -> get_lines(): $str is "354  Go ahead d29sm62473761pfk.83 - gsmtp
+" [] []
+[2017-02-03 13:46:02] mail.DEBUG: SMTP -> get_lines(): $data is "354  Go ahead d29sm62473761pfk.83 - gsmtp
+" [] []
+[2017-02-03 13:46:02] mail.DEBUG: SERVER -> CLIENT: 354  Go ahead d29sm62473761pfk.83 - gsmtp
+ [] []
+[2017-02-03 13:46:02] mail.DEBUG: CLIENT -> SERVER: Date: Fri, 3 Feb 2017 13:45:59 +0900
+ [] []
+[2017-02-03 13:46:02] mail.DEBUG: CLIENT -> SERVER: To: user one <shaun.mermet@gmail.com>
+ [] []
+[2017-02-03 13:46:02] mail.DEBUG: CLIENT -> SERVER: From: enRAdmin <shaun.mermet@labromance.com>
+ [] []
+[2017-02-03 13:46:02] mail.DEBUG: CLIENT -> SERVER: Reply-To: enRAdmin <shaun.mermet@labromance.com>
+ [] []
+[2017-02-03 13:46:02] mail.DEBUG: CLIENT -> SERVER: Subject: labelImage - your password reset request
+ [] []
+[2017-02-03 13:46:02] mail.DEBUG: CLIENT -> SERVER: Message-ID: <cf1c586ffbb94d4bbd2c41a78fc3752e@myuserfrosting>
+ [] []
+[2017-02-03 13:46:02] mail.DEBUG: CLIENT -> SERVER: X-Priority: 3
+ [] []
+[2017-02-03 13:46:02] mail.DEBUG: CLIENT -> SERVER: X-Mailer: PHPMailer 5.2.10 (https://github.com/PHPMailer/PHPMailer/)
+ [] []
+[2017-02-03 13:46:02] mail.DEBUG: CLIENT -> SERVER: MIME-Version: 1.0
+ [] []
+[2017-02-03 13:46:02] mail.DEBUG: CLIENT -> SERVER: Content-Type: text/html; charset=iso-8859-1
+ [] []
+[2017-02-03 13:46:02] mail.DEBUG: CLIENT -> SERVER: Content-Transfer-Encoding: 8bit
+ [] []
+[2017-02-03 13:46:02] mail.DEBUG: CLIENT -> SERVER: 
+ [] []
+[2017-02-03 13:46:02] mail.DEBUG: CLIENT -> SERVER: <p>Dear user,
+ [] []
+[2017-02-03 13:46:02] mail.DEBUG: CLIENT -> SERVER: </p>
+ [] []
+[2017-02-03 13:46:02] mail.DEBUG: CLIENT -> SERVER: <p>
+ [] []
+[2017-02-03 13:46:02] mail.DEBUG: CLIENT -> SERVER: A lost password request has been submitted for your account with labelImage (http://myuserfrosting/public) on 02/03/2017 1:45 PM.
+ [] []
+[2017-02-03 13:46:02] mail.DEBUG: CLIENT -> SERVER: </p>
+ [] []
+[2017-02-03 13:46:02] mail.DEBUG: CLIENT -> SERVER: <p>
+ [] []
+[2017-02-03 13:46:02] mail.DEBUG: CLIENT -> SERVER: If you or someone you trust sent this request, and you wish to set a new password, please click this link: <a href="http://myuserfrosting/public/account/set-password/confirm?token=1bbf8ebbc23f70028b4f81338cb2fe4c">http://myuserfrosting/public/account/set-password/confirm?token=1bbf8ebbc23f70028b4f81338cb2fe4c</a>
+ [] []
+[2017-02-03 13:46:02] mail.DEBUG: CLIENT -> SERVER: </p>
+ [] []
+[2017-02-03 13:46:02] mail.DEBUG: CLIENT -> SERVER: 
+ [] []
+[2017-02-03 13:46:02] mail.DEBUG: CLIENT -> SERVER: <p>
+ [] []
+[2017-02-03 13:46:02] mail.DEBUG: CLIENT -> SERVER: If you did <b>not</b> expect this email, you may click this link to cancel the request: <a href="http://myuserfrosting/public/account/set-password/deny?token=1bbf8ebbc23f70028b4f81338cb2fe4c">http://myuserfrosting/public/account/set-password/deny?token=1bbf8ebbc23f70028b4f81338cb2fe4c</a>, or simply do nothing and the request will expire on its own.
+ [] []
+[2017-02-03 13:46:02] mail.DEBUG: CLIENT -> SERVER: </p>
+ [] []
+[2017-02-03 13:46:02] mail.DEBUG: CLIENT -> SERVER: <p>
+ [] []
+[2017-02-03 13:46:02] mail.DEBUG: CLIENT -> SERVER: With regards,<br>
+ [] []
+[2017-02-03 13:46:02] mail.DEBUG: CLIENT -> SERVER: The labelImage Team
+ [] []
+[2017-02-03 13:46:02] mail.DEBUG: CLIENT -> SERVER: </p>
+ [] []
+[2017-02-03 13:46:02] mail.DEBUG: CLIENT -> SERVER: 
+ [] []
+[2017-02-03 13:46:02] mail.DEBUG: CLIENT -> SERVER: .
+ [] []
+[2017-02-03 13:46:03] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-03 13:46:03] mail.DEBUG: SMTP -> get_lines(): $str is "250 2.0.0 OK 1486097162 d29sm62473761pfk.83 - gsmtp
+" [] []
+[2017-02-03 13:46:03] mail.DEBUG: SMTP -> get_lines(): $data is "250 2.0.0 OK 1486097162 d29sm62473761pfk.83 - gsmtp
+" [] []
+[2017-02-03 13:46:03] mail.DEBUG: SERVER -> CLIENT: 250 2.0.0 OK 1486097162 d29sm62473761pfk.83 - gsmtp
+ [] []
+[2017-02-03 13:46:03] mail.DEBUG: CLIENT -> SERVER: QUIT
+ [] []
+[2017-02-03 13:46:03] mail.DEBUG: SMTP -> get_lines(): $data was "" [] []
+[2017-02-03 13:46:03] mail.DEBUG: SMTP -> get_lines(): $str is "221 2.0.0 closing connection d29sm62473761pfk.83 - gsmtp
+" [] []
+[2017-02-03 13:46:03] mail.DEBUG: SMTP -> get_lines(): $data is "221 2.0.0 closing connection d29sm62473761pfk.83 - gsmtp
+" [] []
+[2017-02-03 13:46:03] mail.DEBUG: SERVER -> CLIENT: 221 2.0.0 closing connection d29sm62473761pfk.83 - gsmtp
+ [] []
+[2017-02-03 13:46:03] mail.DEBUG: Connection: closed [] []

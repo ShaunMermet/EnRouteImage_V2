@@ -1,0 +1,17 @@
+{# This extend the same file from core to add links to the "home page" nav menu. #}
+{% extends "@account/components/default/main-nav.html.twig" %}
+
+{% block main_nav %}
+	{% if checkAuthenticated() %}
+        <li>
+			<a href="{{site.uri.public}}/label">{{translate("LABEL")}}</a>
+		</li>
+		<li>
+			<a href="{{site.uri.public}}/upload">{{translate("UPLOAD")}}</a>
+		</li>
+		<li>
+			<a href="{{site.uri.public}}/validate">{{translate("VALIDATE")}}</a>
+		</li>
+    {% endif %}
+	
+{% endblock %}

@@ -1,0 +1,33 @@
+{
+    "name": "userfrosting/i18n",
+    "type": "library",
+    "description": "Internationalization module for UserFrosting",
+    "keywords": ["userfrosting", "i18n", "translation", "localization"],
+    "homepage": "https://github.com/userfrosting/i18n",
+    "license" : "MIT",
+    "authors" : [
+        {
+            "name": "Alexander Weissman",
+            "homepage": "https://alexanderweissman.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "userfrosting/support": "1.0"
+    },
+	"require-dev": {
+        "phpunit/phpunit": "5.4.*",
+        "illuminate/config": "5.2.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "UserFrosting\\I18n\\": "I18n"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-dev": "1.0.x-dev"
+        }
+    },    
+    "minimum-stability" : "dev"
+}

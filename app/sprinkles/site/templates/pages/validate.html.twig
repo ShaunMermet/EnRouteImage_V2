@@ -1,0 +1,35 @@
+{% extends "layouts/default.html.twig" %}
+
+{% block stylesheets_page_group %}
+	{{ assets.css('css/site') | raw }}
+{% endblock %}
+
+{% set page_active = "validate" %}
+
+{# Overrides blocks in head of base template #}
+{% block page_title %}{{translate("VALIDATE")}}{% endblock %}
+
+{% block page_description %}Validation tool{% endblock %}
+
+{% block body_matter %}
+	<section>
+	<div class="labelimg-container">
+		<div class="column column-one">
+			<button id="ValidateButton"class="button-validate" type="button" onclick="validate_onValidateClicked()" onload="validate_onload()">Validate</button>
+			<button id="RejectButton"class="button-reject" type="button" onclick="validate_onRejectClicked()">Reject</button>
+			<button id="moreButton"class="button" type="button" onclick="validate_onMoreClicked()">More image</button>
+			<div id="imgCounter">No image</div>
+		</div>
+		<div class="column column-four">
+			<div id="preview" class="imgcontainer" ondragstart="return false;" ondrop="return false;">
+				<img id='image' unselectable='on' onresize='onImgResize()' src='' />
+			</div>
+			
+		</div>
+	</div>
+	</section>
+
+{% endblock %}
+{% block scripts_page_group %}
+	{{ assets.js('js/validate') | raw }}
+{% endblock %}

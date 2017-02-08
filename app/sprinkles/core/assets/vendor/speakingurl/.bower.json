@@ -1,0 +1,30 @@
+{
+  "name": "speakingurl",
+  "version": "11.0.0",
+  "description": "Generate a slug – transliteration with a lot of options",
+  "main": "speakingurl.min.js",
+  "homepage": "http://pid.github.io/speakingurl/",
+  "bugs": "https://github.com/pid/speakingurl/issues",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/pid/speakingurl.git"
+  },
+  "licenses": [
+    {
+      "type": "BSD",
+      "url": "https://raw.github.com/pid/speakingurl/master/LICENSE"
+    }
+  ],
+  "ignore": [
+    "node_modules"
+  ],
+  "_release": "11.0.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v11.0.0",
+    "commit": "352be558e73edf5791a591bb55b9ad17148b588f"
+  },
+  "_source": "https://github.com/pid/speakingurl.git",
+  "_target": "11.0.0",
+  "_originalSource": "speakingurl"
+}
