@@ -51,3 +51,5 @@ app/sessions
 app/logs/auth.log
 app/logs/errors.log
 app/sessions/jvvipn8hf1o9fobc62bia7oka5
+app/logs/auth.log
+app/logs/mail.log
