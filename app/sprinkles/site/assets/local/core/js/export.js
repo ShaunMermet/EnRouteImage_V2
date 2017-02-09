@@ -119,7 +119,7 @@ function export_onExportClicked(){
 function export_onDlClicked(){
 	document.getElementById("dlButton").disabled = true;
 	document.getElementById("dlButton").style.opacity = 0.5;
-	window.location.href = "../download.php?id="+export_token;
+	window.location.href = "../public/download.php?id="+export_token;
 	document.getElementById('imgCounter').innerHTML = "";
 }
 window.onbeforeunload = function(e) {

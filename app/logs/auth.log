@@ -27801,3 +27801,2296 @@ Array
 [2017-02-09 11:38:31] auth.DEBUG: Result: 1 [] []
 [2017-02-09 11:38:31] auth.DEBUG: Expression '1' evaluates to true [] []
 [2017-02-09 11:38:31] auth.DEBUG: User passed conditions 'always()' .  Access granted. [] []
+[2017-02-09 11:47:16] auth.DEBUG: Authorization check requested at:  [
+    {
+        "function": "pageDashboard",
+        "class": "UserFrosting\\Sprinkle\\Admin\\Controller\\AdminController",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\slim\\slim\\Slim\\Handlers\\Strategies\\RequestResponse.php",
+        "line": 41,
+        "function": "call_user_func"
+    }
+] []
+[2017-02-09 11:47:16] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_dashboard'... [] []
+[2017-02-09 11:47:16] auth.DEBUG: Found matching permissions: 
+Array
+(
+    [0] => stdClass Object
+        (
+            [id] => 12
+            [role_id] => 1
+            [slug] => uri_dashboard
+            [name] => Admin dashboard
+            [conditions] => always()
+            [description] => View the administrative dashboard.
+        )
+
+)
+ [] []
+[2017-02-09 11:47:16] auth.DEBUG: Evaluating access condition 'always()' with parameters: {
+    "self": {
+        "id": 11,
+        "user_name": "User2",
+        "email": "shaun.mermet@gmail.com",
+        "first_name": "shaun",
+        "last_name": "mermet",
+        "locale": "en_US",
+        "theme": null,
+        "group_id": 1,
+        "flag_verified": 1,
+        "flag_enabled": 1,
+        "last_activity_id": 60,
+        "password": "$2y$10$6PP1AbmFof1R3rh4p1RlhOy6GGhUgt5QRLM5sYuUTEoboP4b3yrfO",
+        "deleted_at": null,
+        "created_at": "2017-02-08 16:21:02",
+        "updated_at": "2017-02-09 10:26:03"
+    }
+} []
+[2017-02-09 11:47:16] auth.DEBUG: Evaluating callback 'always'... [] []
+[2017-02-09 11:47:16] auth.DEBUG: Result: 1 [] []
+[2017-02-09 11:47:16] auth.DEBUG: Expression '1' evaluates to true [] []
+[2017-02-09 11:47:16] auth.DEBUG: User passed conditions 'always()' .  Access granted. [] []
+[2017-02-09 11:47:16] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 32,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_userCard_menu",
+        "class": "__TwigTemplate_eb8c50e47742f55e6d8528b0171bbbf846b34969972f55bcf083ae7716afc408",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:47:16] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_dashboard'... [] []
+[2017-02-09 11:47:16] auth.DEBUG: Found matching permissions: 
+Array
+(
+    [0] => stdClass Object
+        (
+            [id] => 12
+            [role_id] => 1
+            [slug] => uri_dashboard
+            [name] => Admin dashboard
+            [conditions] => always()
+            [description] => View the administrative dashboard.
+        )
+
+)
+ [] []
+[2017-02-09 11:47:16] auth.DEBUG: Evaluating access condition 'always()' with parameters: {
+    "self": {
+        "id": 11,
+        "user_name": "User2",
+        "email": "shaun.mermet@gmail.com",
+        "first_name": "shaun",
+        "last_name": "mermet",
+        "locale": "en_US",
+        "theme": null,
+        "group_id": 1,
+        "flag_verified": 1,
+        "flag_enabled": 1,
+        "last_activity_id": 60,
+        "password": "$2y$10$6PP1AbmFof1R3rh4p1RlhOy6GGhUgt5QRLM5sYuUTEoboP4b3yrfO",
+        "deleted_at": null,
+        "created_at": "2017-02-08 16:21:02",
+        "updated_at": "2017-02-09 10:26:03"
+    }
+} []
+[2017-02-09 11:47:16] auth.DEBUG: Evaluating callback 'always'... [] []
+[2017-02-09 11:47:16] auth.DEBUG: Result: 1 [] []
+[2017-02-09 11:47:16] auth.DEBUG: Expression '1' evaluates to true [] []
+[2017-02-09 11:47:16] auth.DEBUG: User passed conditions 'always()' .  Access granted. [] []
+[2017-02-09 11:47:16] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 27,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_navigation",
+        "class": "__TwigTemplate_8bfa07b11b6a3f1bd1aa51b1cfd228794820a37bff36f78bbb6a169ea2f0f05f",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:47:16] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_dashboard'... [] []
+[2017-02-09 11:47:16] auth.DEBUG: Found matching permissions: 
+Array
+(
+    [0] => stdClass Object
+        (
+            [id] => 12
+            [role_id] => 1
+            [slug] => uri_dashboard
+            [name] => Admin dashboard
+            [conditions] => always()
+            [description] => View the administrative dashboard.
+        )
+
+)
+ [] []
+[2017-02-09 11:47:16] auth.DEBUG: Evaluating access condition 'always()' with parameters: {
+    "self": {
+        "id": 11,
+        "user_name": "User2",
+        "email": "shaun.mermet@gmail.com",
+        "first_name": "shaun",
+        "last_name": "mermet",
+        "locale": "en_US",
+        "theme": null,
+        "group_id": 1,
+        "flag_verified": 1,
+        "flag_enabled": 1,
+        "last_activity_id": 60,
+        "password": "$2y$10$6PP1AbmFof1R3rh4p1RlhOy6GGhUgt5QRLM5sYuUTEoboP4b3yrfO",
+        "deleted_at": null,
+        "created_at": "2017-02-08 16:21:02",
+        "updated_at": "2017-02-09 10:26:03",
+        "group": {
+            "id": 1,
+            "slug": "terran",
+            "name": "Terran",
+            "description": "The terrans are a young species with psionic potential. The terrans of the Koprulu sector descend from the survivors of a disastrous 23rd century colonization mission from Earth.",
+            "icon": "sc sc-terran",
+            "created_at": "2017-01-31 23:33:19",
+            "updated_at": "2017-01-31 23:33:19"
+        }
+    }
+} []
+[2017-02-09 11:47:16] auth.DEBUG: Evaluating callback 'always'... [] []
+[2017-02-09 11:47:16] auth.DEBUG: Result: 1 [] []
+[2017-02-09 11:47:16] auth.DEBUG: Expression '1' evaluates to true [] []
+[2017-02-09 11:47:16] auth.DEBUG: User passed conditions 'always()' .  Access granted. [] []
+[2017-02-09 11:47:16] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 41,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_navigation",
+        "class": "__TwigTemplate_8bfa07b11b6a3f1bd1aa51b1cfd228794820a37bff36f78bbb6a169ea2f0f05f",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:47:16] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_users'... [] []
+[2017-02-09 11:47:16] auth.DEBUG: No matching permissions found.  Access denied. [] []
+[2017-02-09 11:47:16] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 53,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_navigation",
+        "class": "__TwigTemplate_8bfa07b11b6a3f1bd1aa51b1cfd228794820a37bff36f78bbb6a169ea2f0f05f",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:47:16] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_group'... [] []
+[2017-02-09 11:47:16] auth.DEBUG: No matching permissions found.  Access denied. [] []
+[2017-02-09 11:47:16] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 69,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_navigation",
+        "class": "__TwigTemplate_8bfa07b11b6a3f1bd1aa51b1cfd228794820a37bff36f78bbb6a169ea2f0f05f",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:47:16] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_activities'... [] []
+[2017-02-09 11:47:16] auth.DEBUG: No matching permissions found.  Access denied. [] []
+[2017-02-09 11:47:16] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 83,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_navigation",
+        "class": "__TwigTemplate_8bfa07b11b6a3f1bd1aa51b1cfd228794820a37bff36f78bbb6a169ea2f0f05f",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:47:16] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_roles'... [] []
+[2017-02-09 11:47:16] auth.DEBUG: No matching permissions found.  Access denied. [] []
+[2017-02-09 11:47:16] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 97,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_navigation",
+        "class": "__TwigTemplate_8bfa07b11b6a3f1bd1aa51b1cfd228794820a37bff36f78bbb6a169ea2f0f05f",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:47:16] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_permissions'... [] []
+[2017-02-09 11:47:16] auth.DEBUG: No matching permissions found.  Access denied. [] []
+[2017-02-09 11:47:16] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 111,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_navigation",
+        "class": "__TwigTemplate_8bfa07b11b6a3f1bd1aa51b1cfd228794820a37bff36f78bbb6a169ea2f0f05f",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:47:16] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_groups'... [] []
+[2017-02-09 11:47:16] auth.DEBUG: No matching permissions found.  Access denied. [] []
+[2017-02-09 11:47:16] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 48,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_body_matter",
+        "class": "__TwigTemplate_f3ad218f5170b222285cf5be6dbc050d396a07014003dc74ab09c4f01902b929",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:47:16] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_users'... [] []
+[2017-02-09 11:47:16] auth.DEBUG: No matching permissions found.  Access denied. [] []
+[2017-02-09 11:47:16] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 112,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_body_matter",
+        "class": "__TwigTemplate_f3ad218f5170b222285cf5be6dbc050d396a07014003dc74ab09c4f01902b929",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:47:16] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_group'... [] []
+[2017-02-09 11:47:16] auth.DEBUG: No matching permissions found.  Access denied. [] []
+[2017-02-09 11:47:16] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 161,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_body_matter",
+        "class": "__TwigTemplate_f3ad218f5170b222285cf5be6dbc050d396a07014003dc74ab09c4f01902b929",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:47:16] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_users'... [] []
+[2017-02-09 11:47:16] auth.DEBUG: No matching permissions found.  Access denied. [] []
+[2017-02-09 11:47:16] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 233,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_body_matter",
+        "class": "__TwigTemplate_f3ad218f5170b222285cf5be6dbc050d396a07014003dc74ab09c4f01902b929",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:47:16] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'view_system_info'... [] []
+[2017-02-09 11:47:16] auth.DEBUG: No matching permissions found.  Access denied. [] []
+[2017-02-09 11:47:16] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 376,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_body_matter",
+        "class": "__TwigTemplate_f3ad218f5170b222285cf5be6dbc050d396a07014003dc74ab09c4f01902b929",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:47:16] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_activities'... [] []
+[2017-02-09 11:47:16] auth.DEBUG: No matching permissions found.  Access denied. [] []
+[2017-02-09 11:47:16] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 402,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_body_matter",
+        "class": "__TwigTemplate_f3ad218f5170b222285cf5be6dbc050d396a07014003dc74ab09c4f01902b929",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:47:16] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'view_group_field'... [] []
+[2017-02-09 11:47:16] auth.DEBUG: No matching permissions found.  Access denied. [] []
+[2017-02-09 11:47:22] auth.DEBUG: Authorization check requested at:  [
+    {
+        "function": "pageSettings",
+        "class": "UserFrosting\\Sprinkle\\Account\\Controller\\AccountController",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\slim\\slim\\Slim\\Handlers\\Strategies\\RequestResponse.php",
+        "line": 41,
+        "function": "call_user_func"
+    }
+] []
+[2017-02-09 11:47:22] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_account_settings'... [] []
+[2017-02-09 11:47:22] auth.DEBUG: Found matching permissions: 
+Array
+(
+    [0] => stdClass Object
+        (
+            [id] => 10
+            [role_id] => 1
+            [slug] => uri_account_settings
+            [name] => Account settings page
+            [conditions] => always()
+            [description] => View the account settings page.
+        )
+
+)
+ [] []
+[2017-02-09 11:47:22] auth.DEBUG: Evaluating access condition 'always()' with parameters: {
+    "self": {
+        "id": 11,
+        "user_name": "User2",
+        "email": "shaun.mermet@gmail.com",
+        "first_name": "shaun",
+        "last_name": "mermet",
+        "locale": "en_US",
+        "theme": null,
+        "group_id": 1,
+        "flag_verified": 1,
+        "flag_enabled": 1,
+        "last_activity_id": 60,
+        "password": "$2y$10$6PP1AbmFof1R3rh4p1RlhOy6GGhUgt5QRLM5sYuUTEoboP4b3yrfO",
+        "deleted_at": null,
+        "created_at": "2017-02-08 16:21:02",
+        "updated_at": "2017-02-09 10:26:03"
+    }
+} []
+[2017-02-09 11:47:22] auth.DEBUG: Evaluating callback 'always'... [] []
+[2017-02-09 11:47:22] auth.DEBUG: Result: 1 [] []
+[2017-02-09 11:47:22] auth.DEBUG: Expression '1' evaluates to true [] []
+[2017-02-09 11:47:22] auth.DEBUG: User passed conditions 'always()' .  Access granted. [] []
+[2017-02-09 11:47:22] auth.DEBUG: Authorization check requested at:  [
+    {
+        "function": "pageSettings",
+        "class": "UserFrosting\\Sprinkle\\Account\\Controller\\AccountController",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\slim\\slim\\Slim\\Handlers\\Strategies\\RequestResponse.php",
+        "line": 41,
+        "function": "call_user_func"
+    }
+] []
+[2017-02-09 11:47:22] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'update_account_settings'... [] []
+[2017-02-09 11:47:22] auth.DEBUG: Found matching permissions: 
+Array
+(
+    [0] => stdClass Object
+        (
+            [id] => 6
+            [role_id] => 1
+            [slug] => update_account_settings
+            [name] => Edit user
+            [conditions] => always()
+            [description] => Edit your own account settings.
+        )
+
+)
+ [] []
+[2017-02-09 11:47:22] auth.DEBUG: Evaluating access condition 'always()' with parameters: {
+    "self": {
+        "id": 11,
+        "user_name": "User2",
+        "email": "shaun.mermet@gmail.com",
+        "first_name": "shaun",
+        "last_name": "mermet",
+        "locale": "en_US",
+        "theme": null,
+        "group_id": 1,
+        "flag_verified": 1,
+        "flag_enabled": 1,
+        "last_activity_id": 60,
+        "password": "$2y$10$6PP1AbmFof1R3rh4p1RlhOy6GGhUgt5QRLM5sYuUTEoboP4b3yrfO",
+        "deleted_at": null,
+        "created_at": "2017-02-08 16:21:02",
+        "updated_at": "2017-02-09 10:26:03"
+    }
+} []
+[2017-02-09 11:47:22] auth.DEBUG: Evaluating callback 'always'... [] []
+[2017-02-09 11:47:22] auth.DEBUG: Result: 1 [] []
+[2017-02-09 11:47:22] auth.DEBUG: Expression '1' evaluates to true [] []
+[2017-02-09 11:47:22] auth.DEBUG: User passed conditions 'always()' .  Access granted. [] []
+[2017-02-09 11:47:22] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 32,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_userCard_menu",
+        "class": "__TwigTemplate_eb8c50e47742f55e6d8528b0171bbbf846b34969972f55bcf083ae7716afc408",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:47:22] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_dashboard'... [] []
+[2017-02-09 11:47:22] auth.DEBUG: Found matching permissions: 
+Array
+(
+    [0] => stdClass Object
+        (
+            [id] => 12
+            [role_id] => 1
+            [slug] => uri_dashboard
+            [name] => Admin dashboard
+            [conditions] => always()
+            [description] => View the administrative dashboard.
+        )
+
+)
+ [] []
+[2017-02-09 11:47:22] auth.DEBUG: Evaluating access condition 'always()' with parameters: {
+    "self": {
+        "id": 11,
+        "user_name": "User2",
+        "email": "shaun.mermet@gmail.com",
+        "first_name": "shaun",
+        "last_name": "mermet",
+        "locale": "en_US",
+        "theme": null,
+        "group_id": 1,
+        "flag_verified": 1,
+        "flag_enabled": 1,
+        "last_activity_id": 60,
+        "password": "$2y$10$6PP1AbmFof1R3rh4p1RlhOy6GGhUgt5QRLM5sYuUTEoboP4b3yrfO",
+        "deleted_at": null,
+        "created_at": "2017-02-08 16:21:02",
+        "updated_at": "2017-02-09 10:26:03"
+    }
+} []
+[2017-02-09 11:47:22] auth.DEBUG: Evaluating callback 'always'... [] []
+[2017-02-09 11:47:22] auth.DEBUG: Result: 1 [] []
+[2017-02-09 11:47:22] auth.DEBUG: Expression '1' evaluates to true [] []
+[2017-02-09 11:47:22] auth.DEBUG: User passed conditions 'always()' .  Access granted. [] []
+[2017-02-09 11:48:39] auth.DEBUG: Authorization check requested at:  [
+    {
+        "function": "settings",
+        "class": "UserFrosting\\Sprinkle\\Account\\Controller\\AccountController",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\slim\\slim\\Slim\\Handlers\\Strategies\\RequestResponse.php",
+        "line": 41,
+        "function": "call_user_func"
+    }
+] []
+[2017-02-09 11:48:39] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'update_account_settings'... [] []
+[2017-02-09 11:48:39] auth.DEBUG: Found matching permissions: 
+Array
+(
+    [0] => stdClass Object
+        (
+            [id] => 6
+            [role_id] => 1
+            [slug] => update_account_settings
+            [name] => Edit user
+            [conditions] => always()
+            [description] => Edit your own account settings.
+        )
+
+)
+ [] []
+[2017-02-09 11:48:39] auth.DEBUG: Evaluating access condition 'always()' with parameters: {
+    "self": {
+        "id": 11,
+        "user_name": "User2",
+        "email": "shaun.mermet@gmail.com",
+        "first_name": "shaun",
+        "last_name": "mermet",
+        "locale": "en_US",
+        "theme": null,
+        "group_id": 1,
+        "flag_verified": 1,
+        "flag_enabled": 1,
+        "last_activity_id": 60,
+        "password": "$2y$10$6PP1AbmFof1R3rh4p1RlhOy6GGhUgt5QRLM5sYuUTEoboP4b3yrfO",
+        "deleted_at": null,
+        "created_at": "2017-02-08 16:21:02",
+        "updated_at": "2017-02-09 10:26:03"
+    }
+} []
+[2017-02-09 11:48:39] auth.DEBUG: Evaluating callback 'always'... [] []
+[2017-02-09 11:48:39] auth.DEBUG: Result: 1 [] []
+[2017-02-09 11:48:39] auth.DEBUG: Expression '1' evaluates to true [] []
+[2017-02-09 11:48:39] auth.DEBUG: User passed conditions 'always()' .  Access granted. [] []
+[2017-02-09 11:48:39] auth.DEBUG: Authorization check requested at:  [
+    {
+        "function": "pageSettings",
+        "class": "UserFrosting\\Sprinkle\\Account\\Controller\\AccountController",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\slim\\slim\\Slim\\Handlers\\Strategies\\RequestResponse.php",
+        "line": 41,
+        "function": "call_user_func"
+    }
+] []
+[2017-02-09 11:48:39] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_account_settings'... [] []
+[2017-02-09 11:48:39] auth.DEBUG: Found matching permissions: 
+Array
+(
+    [0] => stdClass Object
+        (
+            [id] => 10
+            [role_id] => 1
+            [slug] => uri_account_settings
+            [name] => Account settings page
+            [conditions] => always()
+            [description] => View the account settings page.
+        )
+
+)
+ [] []
+[2017-02-09 11:48:39] auth.DEBUG: Evaluating access condition 'always()' with parameters: {
+    "self": {
+        "id": 11,
+        "user_name": "User2",
+        "email": "shaun.mermet@gmail.com",
+        "first_name": "user",
+        "last_name": "two",
+        "locale": "en_US",
+        "theme": null,
+        "group_id": 1,
+        "flag_verified": 1,
+        "flag_enabled": 1,
+        "last_activity_id": 61,
+        "password": "$2y$10$6PP1AbmFof1R3rh4p1RlhOy6GGhUgt5QRLM5sYuUTEoboP4b3yrfO",
+        "deleted_at": null,
+        "created_at": "2017-02-08 16:21:02",
+        "updated_at": "2017-02-09 11:48:39"
+    }
+} []
+[2017-02-09 11:48:39] auth.DEBUG: Evaluating callback 'always'... [] []
+[2017-02-09 11:48:39] auth.DEBUG: Result: 1 [] []
+[2017-02-09 11:48:39] auth.DEBUG: Expression '1' evaluates to true [] []
+[2017-02-09 11:48:39] auth.DEBUG: User passed conditions 'always()' .  Access granted. [] []
+[2017-02-09 11:48:39] auth.DEBUG: Authorization check requested at:  [
+    {
+        "function": "pageSettings",
+        "class": "UserFrosting\\Sprinkle\\Account\\Controller\\AccountController",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\slim\\slim\\Slim\\Handlers\\Strategies\\RequestResponse.php",
+        "line": 41,
+        "function": "call_user_func"
+    }
+] []
+[2017-02-09 11:48:39] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'update_account_settings'... [] []
+[2017-02-09 11:48:39] auth.DEBUG: Found matching permissions: 
+Array
+(
+    [0] => stdClass Object
+        (
+            [id] => 6
+            [role_id] => 1
+            [slug] => update_account_settings
+            [name] => Edit user
+            [conditions] => always()
+            [description] => Edit your own account settings.
+        )
+
+)
+ [] []
+[2017-02-09 11:48:39] auth.DEBUG: Evaluating access condition 'always()' with parameters: {
+    "self": {
+        "id": 11,
+        "user_name": "User2",
+        "email": "shaun.mermet@gmail.com",
+        "first_name": "user",
+        "last_name": "two",
+        "locale": "en_US",
+        "theme": null,
+        "group_id": 1,
+        "flag_verified": 1,
+        "flag_enabled": 1,
+        "last_activity_id": 61,
+        "password": "$2y$10$6PP1AbmFof1R3rh4p1RlhOy6GGhUgt5QRLM5sYuUTEoboP4b3yrfO",
+        "deleted_at": null,
+        "created_at": "2017-02-08 16:21:02",
+        "updated_at": "2017-02-09 11:48:39"
+    }
+} []
+[2017-02-09 11:48:39] auth.DEBUG: Evaluating callback 'always'... [] []
+[2017-02-09 11:48:39] auth.DEBUG: Result: 1 [] []
+[2017-02-09 11:48:39] auth.DEBUG: Expression '1' evaluates to true [] []
+[2017-02-09 11:48:39] auth.DEBUG: User passed conditions 'always()' .  Access granted. [] []
+[2017-02-09 11:48:39] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 32,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_userCard_menu",
+        "class": "__TwigTemplate_eb8c50e47742f55e6d8528b0171bbbf846b34969972f55bcf083ae7716afc408",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:48:39] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_dashboard'... [] []
+[2017-02-09 11:48:39] auth.DEBUG: Found matching permissions: 
+Array
+(
+    [0] => stdClass Object
+        (
+            [id] => 12
+            [role_id] => 1
+            [slug] => uri_dashboard
+            [name] => Admin dashboard
+            [conditions] => always()
+            [description] => View the administrative dashboard.
+        )
+
+)
+ [] []
+[2017-02-09 11:48:39] auth.DEBUG: Evaluating access condition 'always()' with parameters: {
+    "self": {
+        "id": 11,
+        "user_name": "User2",
+        "email": "shaun.mermet@gmail.com",
+        "first_name": "user",
+        "last_name": "two",
+        "locale": "en_US",
+        "theme": null,
+        "group_id": 1,
+        "flag_verified": 1,
+        "flag_enabled": 1,
+        "last_activity_id": 61,
+        "password": "$2y$10$6PP1AbmFof1R3rh4p1RlhOy6GGhUgt5QRLM5sYuUTEoboP4b3yrfO",
+        "deleted_at": null,
+        "created_at": "2017-02-08 16:21:02",
+        "updated_at": "2017-02-09 11:48:39"
+    }
+} []
+[2017-02-09 11:48:39] auth.DEBUG: Evaluating callback 'always'... [] []
+[2017-02-09 11:48:39] auth.DEBUG: Result: 1 [] []
+[2017-02-09 11:48:39] auth.DEBUG: Expression '1' evaluates to true [] []
+[2017-02-09 11:48:39] auth.DEBUG: User passed conditions 'always()' .  Access granted. [] []
+[2017-02-09 11:49:03] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 32,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_userCard_menu",
+        "class": "__TwigTemplate_eb8c50e47742f55e6d8528b0171bbbf846b34969972f55bcf083ae7716afc408",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:49:03] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_dashboard'... [] []
+[2017-02-09 11:49:03] auth.DEBUG: Found matching permissions: 
+Array
+(
+    [0] => stdClass Object
+        (
+            [id] => 12
+            [role_id] => 1
+            [slug] => uri_dashboard
+            [name] => Admin dashboard
+            [conditions] => always()
+            [description] => View the administrative dashboard.
+        )
+
+)
+ [] []
+[2017-02-09 11:49:03] auth.DEBUG: Evaluating access condition 'always()' with parameters: {
+    "self": {
+        "id": 11,
+        "user_name": "User2",
+        "email": "shaun.mermet@gmail.com",
+        "first_name": "user",
+        "last_name": "two",
+        "locale": "en_US",
+        "theme": null,
+        "group_id": 1,
+        "flag_verified": 1,
+        "flag_enabled": 1,
+        "last_activity_id": 61,
+        "password": "$2y$10$6PP1AbmFof1R3rh4p1RlhOy6GGhUgt5QRLM5sYuUTEoboP4b3yrfO",
+        "deleted_at": null,
+        "created_at": "2017-02-08 16:21:02",
+        "updated_at": "2017-02-09 11:48:39"
+    }
+} []
+[2017-02-09 11:49:03] auth.DEBUG: Evaluating callback 'always'... [] []
+[2017-02-09 11:49:03] auth.DEBUG: Result: 1 [] []
+[2017-02-09 11:49:03] auth.DEBUG: Expression '1' evaluates to true [] []
+[2017-02-09 11:49:03] auth.DEBUG: User passed conditions 'always()' .  Access granted. [] []
+[2017-02-09 11:49:08] auth.DEBUG: Authorization check requested at:  [
+    {
+        "function": "pageDashboard",
+        "class": "UserFrosting\\Sprinkle\\Admin\\Controller\\AdminController",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\slim\\slim\\Slim\\Handlers\\Strategies\\RequestResponse.php",
+        "line": 41,
+        "function": "call_user_func"
+    }
+] []
+[2017-02-09 11:49:08] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_dashboard'... [] []
+[2017-02-09 11:49:08] auth.DEBUG: Found matching permissions: 
+Array
+(
+    [0] => stdClass Object
+        (
+            [id] => 12
+            [role_id] => 1
+            [slug] => uri_dashboard
+            [name] => Admin dashboard
+            [conditions] => always()
+            [description] => View the administrative dashboard.
+        )
+
+)
+ [] []
+[2017-02-09 11:49:08] auth.DEBUG: Evaluating access condition 'always()' with parameters: {
+    "self": {
+        "id": 11,
+        "user_name": "User2",
+        "email": "shaun.mermet@gmail.com",
+        "first_name": "user",
+        "last_name": "two",
+        "locale": "en_US",
+        "theme": null,
+        "group_id": 1,
+        "flag_verified": 1,
+        "flag_enabled": 1,
+        "last_activity_id": 61,
+        "password": "$2y$10$6PP1AbmFof1R3rh4p1RlhOy6GGhUgt5QRLM5sYuUTEoboP4b3yrfO",
+        "deleted_at": null,
+        "created_at": "2017-02-08 16:21:02",
+        "updated_at": "2017-02-09 11:48:39"
+    }
+} []
+[2017-02-09 11:49:08] auth.DEBUG: Evaluating callback 'always'... [] []
+[2017-02-09 11:49:08] auth.DEBUG: Result: 1 [] []
+[2017-02-09 11:49:08] auth.DEBUG: Expression '1' evaluates to true [] []
+[2017-02-09 11:49:08] auth.DEBUG: User passed conditions 'always()' .  Access granted. [] []
+[2017-02-09 11:49:08] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 32,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_userCard_menu",
+        "class": "__TwigTemplate_eb8c50e47742f55e6d8528b0171bbbf846b34969972f55bcf083ae7716afc408",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:49:08] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_dashboard'... [] []
+[2017-02-09 11:49:08] auth.DEBUG: Found matching permissions: 
+Array
+(
+    [0] => stdClass Object
+        (
+            [id] => 12
+            [role_id] => 1
+            [slug] => uri_dashboard
+            [name] => Admin dashboard
+            [conditions] => always()
+            [description] => View the administrative dashboard.
+        )
+
+)
+ [] []
+[2017-02-09 11:49:08] auth.DEBUG: Evaluating access condition 'always()' with parameters: {
+    "self": {
+        "id": 11,
+        "user_name": "User2",
+        "email": "shaun.mermet@gmail.com",
+        "first_name": "user",
+        "last_name": "two",
+        "locale": "en_US",
+        "theme": null,
+        "group_id": 1,
+        "flag_verified": 1,
+        "flag_enabled": 1,
+        "last_activity_id": 61,
+        "password": "$2y$10$6PP1AbmFof1R3rh4p1RlhOy6GGhUgt5QRLM5sYuUTEoboP4b3yrfO",
+        "deleted_at": null,
+        "created_at": "2017-02-08 16:21:02",
+        "updated_at": "2017-02-09 11:48:39"
+    }
+} []
+[2017-02-09 11:49:08] auth.DEBUG: Evaluating callback 'always'... [] []
+[2017-02-09 11:49:08] auth.DEBUG: Result: 1 [] []
+[2017-02-09 11:49:08] auth.DEBUG: Expression '1' evaluates to true [] []
+[2017-02-09 11:49:08] auth.DEBUG: User passed conditions 'always()' .  Access granted. [] []
+[2017-02-09 11:49:08] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 27,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_navigation",
+        "class": "__TwigTemplate_8bfa07b11b6a3f1bd1aa51b1cfd228794820a37bff36f78bbb6a169ea2f0f05f",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:49:08] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_dashboard'... [] []
+[2017-02-09 11:49:08] auth.DEBUG: Found matching permissions: 
+Array
+(
+    [0] => stdClass Object
+        (
+            [id] => 12
+            [role_id] => 1
+            [slug] => uri_dashboard
+            [name] => Admin dashboard
+            [conditions] => always()
+            [description] => View the administrative dashboard.
+        )
+
+)
+ [] []
+[2017-02-09 11:49:08] auth.DEBUG: Evaluating access condition 'always()' with parameters: {
+    "self": {
+        "id": 11,
+        "user_name": "User2",
+        "email": "shaun.mermet@gmail.com",
+        "first_name": "user",
+        "last_name": "two",
+        "locale": "en_US",
+        "theme": null,
+        "group_id": 1,
+        "flag_verified": 1,
+        "flag_enabled": 1,
+        "last_activity_id": 61,
+        "password": "$2y$10$6PP1AbmFof1R3rh4p1RlhOy6GGhUgt5QRLM5sYuUTEoboP4b3yrfO",
+        "deleted_at": null,
+        "created_at": "2017-02-08 16:21:02",
+        "updated_at": "2017-02-09 11:48:39",
+        "group": {
+            "id": 1,
+            "slug": "terran",
+            "name": "Terran",
+            "description": "The terrans are a young species with psionic potential. The terrans of the Koprulu sector descend from the survivors of a disastrous 23rd century colonization mission from Earth.",
+            "icon": "sc sc-terran",
+            "created_at": "2017-01-31 23:33:19",
+            "updated_at": "2017-01-31 23:33:19"
+        }
+    }
+} []
+[2017-02-09 11:49:08] auth.DEBUG: Evaluating callback 'always'... [] []
+[2017-02-09 11:49:08] auth.DEBUG: Result: 1 [] []
+[2017-02-09 11:49:08] auth.DEBUG: Expression '1' evaluates to true [] []
+[2017-02-09 11:49:08] auth.DEBUG: User passed conditions 'always()' .  Access granted. [] []
+[2017-02-09 11:49:08] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 41,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_navigation",
+        "class": "__TwigTemplate_8bfa07b11b6a3f1bd1aa51b1cfd228794820a37bff36f78bbb6a169ea2f0f05f",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:49:08] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_users'... [] []
+[2017-02-09 11:49:08] auth.DEBUG: No matching permissions found.  Access denied. [] []
+[2017-02-09 11:49:08] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 53,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_navigation",
+        "class": "__TwigTemplate_8bfa07b11b6a3f1bd1aa51b1cfd228794820a37bff36f78bbb6a169ea2f0f05f",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:49:08] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_group'... [] []
+[2017-02-09 11:49:08] auth.DEBUG: No matching permissions found.  Access denied. [] []
+[2017-02-09 11:49:08] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 69,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_navigation",
+        "class": "__TwigTemplate_8bfa07b11b6a3f1bd1aa51b1cfd228794820a37bff36f78bbb6a169ea2f0f05f",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:49:08] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_activities'... [] []
+[2017-02-09 11:49:08] auth.DEBUG: No matching permissions found.  Access denied. [] []
+[2017-02-09 11:49:08] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 83,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_navigation",
+        "class": "__TwigTemplate_8bfa07b11b6a3f1bd1aa51b1cfd228794820a37bff36f78bbb6a169ea2f0f05f",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:49:08] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_roles'... [] []
+[2017-02-09 11:49:08] auth.DEBUG: No matching permissions found.  Access denied. [] []
+[2017-02-09 11:49:08] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 97,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_navigation",
+        "class": "__TwigTemplate_8bfa07b11b6a3f1bd1aa51b1cfd228794820a37bff36f78bbb6a169ea2f0f05f",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:49:08] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_permissions'... [] []
+[2017-02-09 11:49:08] auth.DEBUG: No matching permissions found.  Access denied. [] []
+[2017-02-09 11:49:08] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 111,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_navigation",
+        "class": "__TwigTemplate_8bfa07b11b6a3f1bd1aa51b1cfd228794820a37bff36f78bbb6a169ea2f0f05f",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:49:08] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_groups'... [] []
+[2017-02-09 11:49:08] auth.DEBUG: No matching permissions found.  Access denied. [] []
+[2017-02-09 11:49:08] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 48,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_body_matter",
+        "class": "__TwigTemplate_f3ad218f5170b222285cf5be6dbc050d396a07014003dc74ab09c4f01902b929",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:49:08] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_users'... [] []
+[2017-02-09 11:49:08] auth.DEBUG: No matching permissions found.  Access denied. [] []
+[2017-02-09 11:49:08] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 112,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_body_matter",
+        "class": "__TwigTemplate_f3ad218f5170b222285cf5be6dbc050d396a07014003dc74ab09c4f01902b929",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:49:08] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_group'... [] []
+[2017-02-09 11:49:08] auth.DEBUG: No matching permissions found.  Access denied. [] []
+[2017-02-09 11:49:08] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 161,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_body_matter",
+        "class": "__TwigTemplate_f3ad218f5170b222285cf5be6dbc050d396a07014003dc74ab09c4f01902b929",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:49:08] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_users'... [] []
+[2017-02-09 11:49:08] auth.DEBUG: No matching permissions found.  Access denied. [] []
+[2017-02-09 11:49:08] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 233,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_body_matter",
+        "class": "__TwigTemplate_f3ad218f5170b222285cf5be6dbc050d396a07014003dc74ab09c4f01902b929",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:49:08] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'view_system_info'... [] []
+[2017-02-09 11:49:08] auth.DEBUG: No matching permissions found.  Access denied. [] []
+[2017-02-09 11:49:08] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 376,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_body_matter",
+        "class": "__TwigTemplate_f3ad218f5170b222285cf5be6dbc050d396a07014003dc74ab09c4f01902b929",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:49:08] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_activities'... [] []
+[2017-02-09 11:49:08] auth.DEBUG: No matching permissions found.  Access denied. [] []
+[2017-02-09 11:49:08] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 402,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_body_matter",
+        "class": "__TwigTemplate_f3ad218f5170b222285cf5be6dbc050d396a07014003dc74ab09c4f01902b929",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:49:08] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'view_group_field'... [] []
+[2017-02-09 11:49:08] auth.DEBUG: No matching permissions found.  Access denied. [] []
+[2017-02-09 11:49:17] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 32,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_userCard_menu",
+        "class": "__TwigTemplate_eb8c50e47742f55e6d8528b0171bbbf846b34969972f55bcf083ae7716afc408",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:49:17] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_dashboard'... [] []
+[2017-02-09 11:49:17] auth.DEBUG: Found matching permissions: 
+Array
+(
+    [0] => stdClass Object
+        (
+            [id] => 12
+            [role_id] => 1
+            [slug] => uri_dashboard
+            [name] => Admin dashboard
+            [conditions] => always()
+            [description] => View the administrative dashboard.
+        )
+
+)
+ [] []
+[2017-02-09 11:49:17] auth.DEBUG: Evaluating access condition 'always()' with parameters: {
+    "self": {
+        "id": 11,
+        "user_name": "User2",
+        "email": "shaun.mermet@gmail.com",
+        "first_name": "user",
+        "last_name": "two",
+        "locale": "en_US",
+        "theme": null,
+        "group_id": 1,
+        "flag_verified": 1,
+        "flag_enabled": 1,
+        "last_activity_id": 61,
+        "password": "$2y$10$6PP1AbmFof1R3rh4p1RlhOy6GGhUgt5QRLM5sYuUTEoboP4b3yrfO",
+        "deleted_at": null,
+        "created_at": "2017-02-08 16:21:02",
+        "updated_at": "2017-02-09 11:48:39"
+    }
+} []
+[2017-02-09 11:49:17] auth.DEBUG: Evaluating callback 'always'... [] []
+[2017-02-09 11:49:17] auth.DEBUG: Result: 1 [] []
+[2017-02-09 11:49:17] auth.DEBUG: Expression '1' evaluates to true [] []
+[2017-02-09 11:49:17] auth.DEBUG: User passed conditions 'always()' .  Access granted. [] []
+[2017-02-09 11:49:21] auth.DEBUG: Authorization check requested at:  [
+    {
+        "function": "pageDashboard",
+        "class": "UserFrosting\\Sprinkle\\Admin\\Controller\\AdminController",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\slim\\slim\\Slim\\Handlers\\Strategies\\RequestResponse.php",
+        "line": 41,
+        "function": "call_user_func"
+    }
+] []
+[2017-02-09 11:49:21] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_dashboard'... [] []
+[2017-02-09 11:49:21] auth.DEBUG: Found matching permissions: 
+Array
+(
+    [0] => stdClass Object
+        (
+            [id] => 12
+            [role_id] => 1
+            [slug] => uri_dashboard
+            [name] => Admin dashboard
+            [conditions] => always()
+            [description] => View the administrative dashboard.
+        )
+
+)
+ [] []
+[2017-02-09 11:49:21] auth.DEBUG: Evaluating access condition 'always()' with parameters: {
+    "self": {
+        "id": 11,
+        "user_name": "User2",
+        "email": "shaun.mermet@gmail.com",
+        "first_name": "user",
+        "last_name": "two",
+        "locale": "en_US",
+        "theme": null,
+        "group_id": 1,
+        "flag_verified": 1,
+        "flag_enabled": 1,
+        "last_activity_id": 61,
+        "password": "$2y$10$6PP1AbmFof1R3rh4p1RlhOy6GGhUgt5QRLM5sYuUTEoboP4b3yrfO",
+        "deleted_at": null,
+        "created_at": "2017-02-08 16:21:02",
+        "updated_at": "2017-02-09 11:48:39"
+    }
+} []
+[2017-02-09 11:49:21] auth.DEBUG: Evaluating callback 'always'... [] []
+[2017-02-09 11:49:21] auth.DEBUG: Result: 1 [] []
+[2017-02-09 11:49:21] auth.DEBUG: Expression '1' evaluates to true [] []
+[2017-02-09 11:49:21] auth.DEBUG: User passed conditions 'always()' .  Access granted. [] []
+[2017-02-09 11:49:21] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 32,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_userCard_menu",
+        "class": "__TwigTemplate_eb8c50e47742f55e6d8528b0171bbbf846b34969972f55bcf083ae7716afc408",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:49:21] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_dashboard'... [] []
+[2017-02-09 11:49:21] auth.DEBUG: Found matching permissions: 
+Array
+(
+    [0] => stdClass Object
+        (
+            [id] => 12
+            [role_id] => 1
+            [slug] => uri_dashboard
+            [name] => Admin dashboard
+            [conditions] => always()
+            [description] => View the administrative dashboard.
+        )
+
+)
+ [] []
+[2017-02-09 11:49:21] auth.DEBUG: Evaluating access condition 'always()' with parameters: {
+    "self": {
+        "id": 11,
+        "user_name": "User2",
+        "email": "shaun.mermet@gmail.com",
+        "first_name": "user",
+        "last_name": "two",
+        "locale": "en_US",
+        "theme": null,
+        "group_id": 1,
+        "flag_verified": 1,
+        "flag_enabled": 1,
+        "last_activity_id": 61,
+        "password": "$2y$10$6PP1AbmFof1R3rh4p1RlhOy6GGhUgt5QRLM5sYuUTEoboP4b3yrfO",
+        "deleted_at": null,
+        "created_at": "2017-02-08 16:21:02",
+        "updated_at": "2017-02-09 11:48:39"
+    }
+} []
+[2017-02-09 11:49:21] auth.DEBUG: Evaluating callback 'always'... [] []
+[2017-02-09 11:49:21] auth.DEBUG: Result: 1 [] []
+[2017-02-09 11:49:21] auth.DEBUG: Expression '1' evaluates to true [] []
+[2017-02-09 11:49:21] auth.DEBUG: User passed conditions 'always()' .  Access granted. [] []
+[2017-02-09 11:49:21] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 27,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_navigation",
+        "class": "__TwigTemplate_8bfa07b11b6a3f1bd1aa51b1cfd228794820a37bff36f78bbb6a169ea2f0f05f",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:49:21] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_dashboard'... [] []
+[2017-02-09 11:49:21] auth.DEBUG: Found matching permissions: 
+Array
+(
+    [0] => stdClass Object
+        (
+            [id] => 12
+            [role_id] => 1
+            [slug] => uri_dashboard
+            [name] => Admin dashboard
+            [conditions] => always()
+            [description] => View the administrative dashboard.
+        )
+
+)
+ [] []
+[2017-02-09 11:49:21] auth.DEBUG: Evaluating access condition 'always()' with parameters: {
+    "self": {
+        "id": 11,
+        "user_name": "User2",
+        "email": "shaun.mermet@gmail.com",
+        "first_name": "user",
+        "last_name": "two",
+        "locale": "en_US",
+        "theme": null,
+        "group_id": 1,
+        "flag_verified": 1,
+        "flag_enabled": 1,
+        "last_activity_id": 61,
+        "password": "$2y$10$6PP1AbmFof1R3rh4p1RlhOy6GGhUgt5QRLM5sYuUTEoboP4b3yrfO",
+        "deleted_at": null,
+        "created_at": "2017-02-08 16:21:02",
+        "updated_at": "2017-02-09 11:48:39",
+        "group": {
+            "id": 1,
+            "slug": "terran",
+            "name": "Terran",
+            "description": "The terrans are a young species with psionic potential. The terrans of the Koprulu sector descend from the survivors of a disastrous 23rd century colonization mission from Earth.",
+            "icon": "sc sc-terran",
+            "created_at": "2017-01-31 23:33:19",
+            "updated_at": "2017-01-31 23:33:19"
+        }
+    }
+} []
+[2017-02-09 11:49:21] auth.DEBUG: Evaluating callback 'always'... [] []
+[2017-02-09 11:49:21] auth.DEBUG: Result: 1 [] []
+[2017-02-09 11:49:21] auth.DEBUG: Expression '1' evaluates to true [] []
+[2017-02-09 11:49:21] auth.DEBUG: User passed conditions 'always()' .  Access granted. [] []
+[2017-02-09 11:49:21] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 41,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_navigation",
+        "class": "__TwigTemplate_8bfa07b11b6a3f1bd1aa51b1cfd228794820a37bff36f78bbb6a169ea2f0f05f",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:49:21] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_users'... [] []
+[2017-02-09 11:49:21] auth.DEBUG: No matching permissions found.  Access denied. [] []
+[2017-02-09 11:49:21] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 53,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_navigation",
+        "class": "__TwigTemplate_8bfa07b11b6a3f1bd1aa51b1cfd228794820a37bff36f78bbb6a169ea2f0f05f",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:49:21] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_group'... [] []
+[2017-02-09 11:49:21] auth.DEBUG: No matching permissions found.  Access denied. [] []
+[2017-02-09 11:49:21] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 69,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_navigation",
+        "class": "__TwigTemplate_8bfa07b11b6a3f1bd1aa51b1cfd228794820a37bff36f78bbb6a169ea2f0f05f",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:49:21] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_activities'... [] []
+[2017-02-09 11:49:21] auth.DEBUG: No matching permissions found.  Access denied. [] []
+[2017-02-09 11:49:21] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 83,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_navigation",
+        "class": "__TwigTemplate_8bfa07b11b6a3f1bd1aa51b1cfd228794820a37bff36f78bbb6a169ea2f0f05f",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:49:21] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_roles'... [] []
+[2017-02-09 11:49:21] auth.DEBUG: No matching permissions found.  Access denied. [] []
+[2017-02-09 11:49:21] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 97,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_navigation",
+        "class": "__TwigTemplate_8bfa07b11b6a3f1bd1aa51b1cfd228794820a37bff36f78bbb6a169ea2f0f05f",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:49:21] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_permissions'... [] []
+[2017-02-09 11:49:21] auth.DEBUG: No matching permissions found.  Access denied. [] []
+[2017-02-09 11:49:21] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 111,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_navigation",
+        "class": "__TwigTemplate_8bfa07b11b6a3f1bd1aa51b1cfd228794820a37bff36f78bbb6a169ea2f0f05f",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:49:21] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_groups'... [] []
+[2017-02-09 11:49:21] auth.DEBUG: No matching permissions found.  Access denied. [] []
+[2017-02-09 11:49:21] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 48,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_body_matter",
+        "class": "__TwigTemplate_f3ad218f5170b222285cf5be6dbc050d396a07014003dc74ab09c4f01902b929",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:49:21] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_users'... [] []
+[2017-02-09 11:49:21] auth.DEBUG: No matching permissions found.  Access denied. [] []
+[2017-02-09 11:49:21] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 112,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_body_matter",
+        "class": "__TwigTemplate_f3ad218f5170b222285cf5be6dbc050d396a07014003dc74ab09c4f01902b929",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:49:21] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_group'... [] []
+[2017-02-09 11:49:21] auth.DEBUG: No matching permissions found.  Access denied. [] []
+[2017-02-09 11:49:21] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 161,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_body_matter",
+        "class": "__TwigTemplate_f3ad218f5170b222285cf5be6dbc050d396a07014003dc74ab09c4f01902b929",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:49:21] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_users'... [] []
+[2017-02-09 11:49:21] auth.DEBUG: No matching permissions found.  Access denied. [] []
+[2017-02-09 11:49:21] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 233,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_body_matter",
+        "class": "__TwigTemplate_f3ad218f5170b222285cf5be6dbc050d396a07014003dc74ab09c4f01902b929",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:49:21] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'view_system_info'... [] []
+[2017-02-09 11:49:21] auth.DEBUG: No matching permissions found.  Access denied. [] []
+[2017-02-09 11:49:21] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 376,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_body_matter",
+        "class": "__TwigTemplate_f3ad218f5170b222285cf5be6dbc050d396a07014003dc74ab09c4f01902b929",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:49:21] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_activities'... [] []
+[2017-02-09 11:49:21] auth.DEBUG: No matching permissions found.  Access denied. [] []
+[2017-02-09 11:49:21] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 402,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_body_matter",
+        "class": "__TwigTemplate_f3ad218f5170b222285cf5be6dbc050d396a07014003dc74ab09c4f01902b929",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:49:21] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'view_group_field'... [] []
+[2017-02-09 11:49:21] auth.DEBUG: No matching permissions found.  Access denied. [] []
+[2017-02-09 11:49:25] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 32,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_userCard_menu",
+        "class": "__TwigTemplate_eb8c50e47742f55e6d8528b0171bbbf846b34969972f55bcf083ae7716afc408",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:49:25] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_dashboard'... [] []
+[2017-02-09 11:49:25] auth.DEBUG: Found matching permissions: 
+Array
+(
+    [0] => stdClass Object
+        (
+            [id] => 12
+            [role_id] => 1
+            [slug] => uri_dashboard
+            [name] => Admin dashboard
+            [conditions] => always()
+            [description] => View the administrative dashboard.
+        )
+
+)
+ [] []
+[2017-02-09 11:49:25] auth.DEBUG: Evaluating access condition 'always()' with parameters: {
+    "self": {
+        "id": 11,
+        "user_name": "User2",
+        "email": "shaun.mermet@gmail.com",
+        "first_name": "user",
+        "last_name": "two",
+        "locale": "en_US",
+        "theme": null,
+        "group_id": 1,
+        "flag_verified": 1,
+        "flag_enabled": 1,
+        "last_activity_id": 61,
+        "password": "$2y$10$6PP1AbmFof1R3rh4p1RlhOy6GGhUgt5QRLM5sYuUTEoboP4b3yrfO",
+        "deleted_at": null,
+        "created_at": "2017-02-08 16:21:02",
+        "updated_at": "2017-02-09 11:48:39"
+    }
+} []
+[2017-02-09 11:49:25] auth.DEBUG: Evaluating callback 'always'... [] []
+[2017-02-09 11:49:25] auth.DEBUG: Result: 1 [] []
+[2017-02-09 11:49:25] auth.DEBUG: Expression '1' evaluates to true [] []
+[2017-02-09 11:49:25] auth.DEBUG: User passed conditions 'always()' .  Access granted. [] []
+[2017-02-09 11:50:59] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 32,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_userCard_menu",
+        "class": "__TwigTemplate_eb8c50e47742f55e6d8528b0171bbbf846b34969972f55bcf083ae7716afc408",
+        "type": "->"
+    }
+] []
+[2017-02-09 11:50:59] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_dashboard'... [] []
+[2017-02-09 11:50:59] auth.DEBUG: Found matching permissions: 
+Array
+(
+    [0] => stdClass Object
+        (
+            [id] => 12
+            [role_id] => 1
+            [slug] => uri_dashboard
+            [name] => Admin dashboard
+            [conditions] => always()
+            [description] => View the administrative dashboard.
+        )
+
+)
+ [] []
+[2017-02-09 11:50:59] auth.DEBUG: Evaluating access condition 'always()' with parameters: {
+    "self": {
+        "id": 11,
+        "user_name": "User2",
+        "email": "shaun.mermet@gmail.com",
+        "first_name": "user",
+        "last_name": "two",
+        "locale": "en_US",
+        "theme": null,
+        "group_id": 1,
+        "flag_verified": 1,
+        "flag_enabled": 1,
+        "last_activity_id": 61,
+        "password": "$2y$10$6PP1AbmFof1R3rh4p1RlhOy6GGhUgt5QRLM5sYuUTEoboP4b3yrfO",
+        "deleted_at": null,
+        "created_at": "2017-02-08 16:21:02",
+        "updated_at": "2017-02-09 11:48:39"
+    }
+} []
+[2017-02-09 11:51:00] auth.DEBUG: Evaluating callback 'always'... [] []
+[2017-02-09 11:51:00] auth.DEBUG: Result: 1 [] []
+[2017-02-09 11:51:00] auth.DEBUG: Expression '1' evaluates to true [] []
+[2017-02-09 11:51:00] auth.DEBUG: User passed conditions 'always()' .  Access granted. [] []
+[2017-02-09 12:11:14] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 32,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_userCard_menu",
+        "class": "__TwigTemplate_eb8c50e47742f55e6d8528b0171bbbf846b34969972f55bcf083ae7716afc408",
+        "type": "->"
+    }
+] []
+[2017-02-09 12:11:14] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_dashboard'... [] []
+[2017-02-09 12:11:14] auth.DEBUG: Found matching permissions: 
+Array
+(
+    [0] => stdClass Object
+        (
+            [id] => 12
+            [role_id] => 1
+            [slug] => uri_dashboard
+            [name] => Admin dashboard
+            [conditions] => always()
+            [description] => View the administrative dashboard.
+        )
+
+)
+ [] []
+[2017-02-09 12:11:14] auth.DEBUG: Evaluating access condition 'always()' with parameters: {
+    "self": {
+        "id": 11,
+        "user_name": "User2",
+        "email": "shaun.mermet@gmail.com",
+        "first_name": "user",
+        "last_name": "two",
+        "locale": "en_US",
+        "theme": null,
+        "group_id": 1,
+        "flag_verified": 1,
+        "flag_enabled": 1,
+        "last_activity_id": 61,
+        "password": "$2y$10$6PP1AbmFof1R3rh4p1RlhOy6GGhUgt5QRLM5sYuUTEoboP4b3yrfO",
+        "deleted_at": null,
+        "created_at": "2017-02-08 16:21:02",
+        "updated_at": "2017-02-09 11:48:39"
+    }
+} []
+[2017-02-09 12:11:14] auth.DEBUG: Evaluating callback 'always'... [] []
+[2017-02-09 12:11:14] auth.DEBUG: Result: 1 [] []
+[2017-02-09 12:11:14] auth.DEBUG: Expression '1' evaluates to true [] []
+[2017-02-09 12:11:14] auth.DEBUG: User passed conditions 'always()' .  Access granted. [] []
+[2017-02-09 12:13:41] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 32,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_userCard_menu",
+        "class": "__TwigTemplate_eb8c50e47742f55e6d8528b0171bbbf846b34969972f55bcf083ae7716afc408",
+        "type": "->"
+    }
+] []
+[2017-02-09 12:13:41] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_dashboard'... [] []
+[2017-02-09 12:13:41] auth.DEBUG: Found matching permissions: 
+Array
+(
+    [0] => stdClass Object
+        (
+            [id] => 12
+            [role_id] => 1
+            [slug] => uri_dashboard
+            [name] => Admin dashboard
+            [conditions] => always()
+            [description] => View the administrative dashboard.
+        )
+
+)
+ [] []
+[2017-02-09 12:13:41] auth.DEBUG: Evaluating access condition 'always()' with parameters: {
+    "self": {
+        "id": 11,
+        "user_name": "User2",
+        "email": "shaun.mermet@gmail.com",
+        "first_name": "user",
+        "last_name": "two",
+        "locale": "en_US",
+        "theme": null,
+        "group_id": 1,
+        "flag_verified": 1,
+        "flag_enabled": 1,
+        "last_activity_id": 61,
+        "password": "$2y$10$6PP1AbmFof1R3rh4p1RlhOy6GGhUgt5QRLM5sYuUTEoboP4b3yrfO",
+        "deleted_at": null,
+        "created_at": "2017-02-08 16:21:02",
+        "updated_at": "2017-02-09 11:48:39"
+    }
+} []
+[2017-02-09 12:13:41] auth.DEBUG: Evaluating callback 'always'... [] []
+[2017-02-09 12:13:41] auth.DEBUG: Result: 1 [] []
+[2017-02-09 12:13:41] auth.DEBUG: Expression '1' evaluates to true [] []
+[2017-02-09 12:13:41] auth.DEBUG: User passed conditions 'always()' .  Access granted. [] []
+[2017-02-09 12:22:59] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 32,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_userCard_menu",
+        "class": "__TwigTemplate_eb8c50e47742f55e6d8528b0171bbbf846b34969972f55bcf083ae7716afc408",
+        "type": "->"
+    }
+] []
+[2017-02-09 12:22:59] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_dashboard'... [] []
+[2017-02-09 12:22:59] auth.DEBUG: Found matching permissions: 
+Array
+(
+    [0] => stdClass Object
+        (
+            [id] => 12
+            [role_id] => 1
+            [slug] => uri_dashboard
+            [name] => Admin dashboard
+            [conditions] => always()
+            [description] => View the administrative dashboard.
+        )
+
+)
+ [] []
+[2017-02-09 12:22:59] auth.DEBUG: Evaluating access condition 'always()' with parameters: {
+    "self": {
+        "id": 11,
+        "user_name": "User2",
+        "email": "shaun.mermet@gmail.com",
+        "first_name": "user",
+        "last_name": "two",
+        "locale": "en_US",
+        "theme": null,
+        "group_id": 1,
+        "flag_verified": 1,
+        "flag_enabled": 1,
+        "last_activity_id": 61,
+        "password": "$2y$10$6PP1AbmFof1R3rh4p1RlhOy6GGhUgt5QRLM5sYuUTEoboP4b3yrfO",
+        "deleted_at": null,
+        "created_at": "2017-02-08 16:21:02",
+        "updated_at": "2017-02-09 11:48:39"
+    }
+} []
+[2017-02-09 12:22:59] auth.DEBUG: Evaluating callback 'always'... [] []
+[2017-02-09 12:22:59] auth.DEBUG: Result: 1 [] []
+[2017-02-09 12:22:59] auth.DEBUG: Expression '1' evaluates to true [] []
+[2017-02-09 12:22:59] auth.DEBUG: User passed conditions 'always()' .  Access granted. [] []
+[2017-02-09 12:23:02] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 32,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_userCard_menu",
+        "class": "__TwigTemplate_eb8c50e47742f55e6d8528b0171bbbf846b34969972f55bcf083ae7716afc408",
+        "type": "->"
+    }
+] []
+[2017-02-09 12:23:02] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_dashboard'... [] []
+[2017-02-09 12:23:02] auth.DEBUG: Found matching permissions: 
+Array
+(
+    [0] => stdClass Object
+        (
+            [id] => 12
+            [role_id] => 1
+            [slug] => uri_dashboard
+            [name] => Admin dashboard
+            [conditions] => always()
+            [description] => View the administrative dashboard.
+        )
+
+)
+ [] []
+[2017-02-09 12:23:02] auth.DEBUG: Evaluating access condition 'always()' with parameters: {
+    "self": {
+        "id": 11,
+        "user_name": "User2",
+        "email": "shaun.mermet@gmail.com",
+        "first_name": "user",
+        "last_name": "two",
+        "locale": "en_US",
+        "theme": null,
+        "group_id": 1,
+        "flag_verified": 1,
+        "flag_enabled": 1,
+        "last_activity_id": 61,
+        "password": "$2y$10$6PP1AbmFof1R3rh4p1RlhOy6GGhUgt5QRLM5sYuUTEoboP4b3yrfO",
+        "deleted_at": null,
+        "created_at": "2017-02-08 16:21:02",
+        "updated_at": "2017-02-09 11:48:39"
+    }
+} []
+[2017-02-09 12:23:02] auth.DEBUG: Evaluating callback 'always'... [] []
+[2017-02-09 12:23:02] auth.DEBUG: Result: 1 [] []
+[2017-02-09 12:23:02] auth.DEBUG: Expression '1' evaluates to true [] []
+[2017-02-09 12:23:02] auth.DEBUG: User passed conditions 'always()' .  Access granted. [] []
+[2017-02-09 12:24:39] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 32,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_userCard_menu",
+        "class": "__TwigTemplate_eb8c50e47742f55e6d8528b0171bbbf846b34969972f55bcf083ae7716afc408",
+        "type": "->"
+    }
+] []
+[2017-02-09 12:24:39] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_dashboard'... [] []
+[2017-02-09 12:24:39] auth.DEBUG: Found matching permissions: 
+Array
+(
+    [0] => stdClass Object
+        (
+            [id] => 12
+            [role_id] => 1
+            [slug] => uri_dashboard
+            [name] => Admin dashboard
+            [conditions] => always()
+            [description] => View the administrative dashboard.
+        )
+
+)
+ [] []
+[2017-02-09 12:24:39] auth.DEBUG: Evaluating access condition 'always()' with parameters: {
+    "self": {
+        "id": 11,
+        "user_name": "User2",
+        "email": "shaun.mermet@gmail.com",
+        "first_name": "user",
+        "last_name": "two",
+        "locale": "en_US",
+        "theme": null,
+        "group_id": 1,
+        "flag_verified": 1,
+        "flag_enabled": 1,
+        "last_activity_id": 61,
+        "password": "$2y$10$6PP1AbmFof1R3rh4p1RlhOy6GGhUgt5QRLM5sYuUTEoboP4b3yrfO",
+        "deleted_at": null,
+        "created_at": "2017-02-08 16:21:02",
+        "updated_at": "2017-02-09 11:48:39"
+    }
+} []
+[2017-02-09 12:24:39] auth.DEBUG: Evaluating callback 'always'... [] []
+[2017-02-09 12:24:39] auth.DEBUG: Result: 1 [] []
+[2017-02-09 12:24:39] auth.DEBUG: Expression '1' evaluates to true [] []
+[2017-02-09 12:24:39] auth.DEBUG: User passed conditions 'always()' .  Access granted. [] []
+[2017-02-09 12:24:39] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 32,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_userCard_menu",
+        "class": "__TwigTemplate_eb8c50e47742f55e6d8528b0171bbbf846b34969972f55bcf083ae7716afc408",
+        "type": "->"
+    }
+] []
+[2017-02-09 12:24:39] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_dashboard'... [] []
+[2017-02-09 12:24:39] auth.DEBUG: Found matching permissions: 
+Array
+(
+    [0] => stdClass Object
+        (
+            [id] => 12
+            [role_id] => 1
+            [slug] => uri_dashboard
+            [name] => Admin dashboard
+            [conditions] => always()
+            [description] => View the administrative dashboard.
+        )
+
+)
+ [] []
+[2017-02-09 12:24:39] auth.DEBUG: Evaluating access condition 'always()' with parameters: {
+    "self": {
+        "id": 11,
+        "user_name": "User2",
+        "email": "shaun.mermet@gmail.com",
+        "first_name": "user",
+        "last_name": "two",
+        "locale": "en_US",
+        "theme": null,
+        "group_id": 1,
+        "flag_verified": 1,
+        "flag_enabled": 1,
+        "last_activity_id": 61,
+        "password": "$2y$10$6PP1AbmFof1R3rh4p1RlhOy6GGhUgt5QRLM5sYuUTEoboP4b3yrfO",
+        "deleted_at": null,
+        "created_at": "2017-02-08 16:21:02",
+        "updated_at": "2017-02-09 11:48:39"
+    }
+} []
+[2017-02-09 12:24:39] auth.DEBUG: Evaluating callback 'always'... [] []
+[2017-02-09 12:24:39] auth.DEBUG: Result: 1 [] []
+[2017-02-09 12:24:39] auth.DEBUG: Expression '1' evaluates to true [] []
+[2017-02-09 12:24:39] auth.DEBUG: User passed conditions 'always()' .  Access granted. [] []
+[2017-02-09 12:24:41] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 32,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_userCard_menu",
+        "class": "__TwigTemplate_eb8c50e47742f55e6d8528b0171bbbf846b34969972f55bcf083ae7716afc408",
+        "type": "->"
+    }
+] []
+[2017-02-09 12:24:41] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_dashboard'... [] []
+[2017-02-09 12:24:42] auth.DEBUG: Found matching permissions: 
+Array
+(
+    [0] => stdClass Object
+        (
+            [id] => 12
+            [role_id] => 1
+            [slug] => uri_dashboard
+            [name] => Admin dashboard
+            [conditions] => always()
+            [description] => View the administrative dashboard.
+        )
+
+)
+ [] []
+[2017-02-09 12:24:42] auth.DEBUG: Evaluating access condition 'always()' with parameters: {
+    "self": {
+        "id": 11,
+        "user_name": "User2",
+        "email": "shaun.mermet@gmail.com",
+        "first_name": "user",
+        "last_name": "two",
+        "locale": "en_US",
+        "theme": null,
+        "group_id": 1,
+        "flag_verified": 1,
+        "flag_enabled": 1,
+        "last_activity_id": 61,
+        "password": "$2y$10$6PP1AbmFof1R3rh4p1RlhOy6GGhUgt5QRLM5sYuUTEoboP4b3yrfO",
+        "deleted_at": null,
+        "created_at": "2017-02-08 16:21:02",
+        "updated_at": "2017-02-09 11:48:39"
+    }
+} []
+[2017-02-09 12:24:42] auth.DEBUG: Evaluating callback 'always'... [] []
+[2017-02-09 12:24:42] auth.DEBUG: Result: 1 [] []
+[2017-02-09 12:24:42] auth.DEBUG: Expression '1' evaluates to true [] []
+[2017-02-09 12:24:42] auth.DEBUG: User passed conditions 'always()' .  Access granted. [] []
+[2017-02-09 12:27:22] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 32,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_userCard_menu",
+        "class": "__TwigTemplate_eb8c50e47742f55e6d8528b0171bbbf846b34969972f55bcf083ae7716afc408",
+        "type": "->"
+    }
+] []
+[2017-02-09 12:27:22] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_dashboard'... [] []
+[2017-02-09 12:27:22] auth.DEBUG: Found matching permissions: 
+Array
+(
+    [0] => stdClass Object
+        (
+            [id] => 12
+            [role_id] => 1
+            [slug] => uri_dashboard
+            [name] => Admin dashboard
+            [conditions] => always()
+            [description] => View the administrative dashboard.
+        )
+
+)
+ [] []
+[2017-02-09 12:27:22] auth.DEBUG: Evaluating access condition 'always()' with parameters: {
+    "self": {
+        "id": 11,
+        "user_name": "User2",
+        "email": "shaun.mermet@gmail.com",
+        "first_name": "user",
+        "last_name": "two",
+        "locale": "en_US",
+        "theme": null,
+        "group_id": 1,
+        "flag_verified": 1,
+        "flag_enabled": 1,
+        "last_activity_id": 61,
+        "password": "$2y$10$6PP1AbmFof1R3rh4p1RlhOy6GGhUgt5QRLM5sYuUTEoboP4b3yrfO",
+        "deleted_at": null,
+        "created_at": "2017-02-08 16:21:02",
+        "updated_at": "2017-02-09 11:48:39"
+    }
+} []
+[2017-02-09 12:27:22] auth.DEBUG: Evaluating callback 'always'... [] []
+[2017-02-09 12:27:22] auth.DEBUG: Result: 1 [] []
+[2017-02-09 12:27:22] auth.DEBUG: Expression '1' evaluates to true [] []
+[2017-02-09 12:27:22] auth.DEBUG: User passed conditions 'always()' .  Access granted. [] []
+[2017-02-09 12:27:22] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 32,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_userCard_menu",
+        "class": "__TwigTemplate_eb8c50e47742f55e6d8528b0171bbbf846b34969972f55bcf083ae7716afc408",
+        "type": "->"
+    }
+] []
+[2017-02-09 12:27:22] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_dashboard'... [] []
+[2017-02-09 12:27:22] auth.DEBUG: Found matching permissions: 
+Array
+(
+    [0] => stdClass Object
+        (
+            [id] => 12
+            [role_id] => 1
+            [slug] => uri_dashboard
+            [name] => Admin dashboard
+            [conditions] => always()
+            [description] => View the administrative dashboard.
+        )
+
+)
+ [] []
+[2017-02-09 12:27:22] auth.DEBUG: Evaluating access condition 'always()' with parameters: {
+    "self": {
+        "id": 11,
+        "user_name": "User2",
+        "email": "shaun.mermet@gmail.com",
+        "first_name": "user",
+        "last_name": "two",
+        "locale": "en_US",
+        "theme": null,
+        "group_id": 1,
+        "flag_verified": 1,
+        "flag_enabled": 1,
+        "last_activity_id": 61,
+        "password": "$2y$10$6PP1AbmFof1R3rh4p1RlhOy6GGhUgt5QRLM5sYuUTEoboP4b3yrfO",
+        "deleted_at": null,
+        "created_at": "2017-02-08 16:21:02",
+        "updated_at": "2017-02-09 11:48:39"
+    }
+} []
+[2017-02-09 12:27:22] auth.DEBUG: Evaluating callback 'always'... [] []
+[2017-02-09 12:27:22] auth.DEBUG: Result: 1 [] []
+[2017-02-09 12:27:22] auth.DEBUG: Expression '1' evaluates to true [] []
+[2017-02-09 12:27:22] auth.DEBUG: User passed conditions 'always()' .  Access granted. [] []
+[2017-02-09 12:27:27] auth.DEBUG: Authorization check requested at:  [
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Environment.php(462) : eval()'d code",
+        "line": 32,
+        "function": "UserFrosting\\Sprinkle\\Account\\Twig\\{closure}",
+        "class": "UserFrosting\\Sprinkle\\Account\\Twig\\AccountExtension",
+        "type": "->"
+    },
+    {
+        "file": "C:\\wamp64\\www\\EnRouteImage_V2\\app\\vendor\\twig\\twig\\lib\\Twig\\Template.php",
+        "line": 215,
+        "function": "block_userCard_menu",
+        "class": "__TwigTemplate_eb8c50e47742f55e6d8528b0171bbbf846b34969972f55bcf083ae7716afc408",
+        "type": "->"
+    }
+] []
+[2017-02-09 12:27:27] auth.DEBUG: Checking authorization for user 11 ('User2') on permission 'uri_dashboard'... [] []
+[2017-02-09 12:27:27] auth.DEBUG: Found matching permissions: 
+Array
+(
+    [0] => stdClass Object
+        (
+            [id] => 12
+            [role_id] => 1
+            [slug] => uri_dashboard
+            [name] => Admin dashboard
+            [conditions] => always()
+            [description] => View the administrative dashboard.
+        )
+
+)
+ [] []
+[2017-02-09 12:27:27] auth.DEBUG: Evaluating access condition 'always()' with parameters: {
+    "self": {
+        "id": 11,
+        "user_name": "User2",
+        "email": "shaun.mermet@gmail.com",
+        "first_name": "user",
+        "last_name": "two",
+        "locale": "en_US",
+        "theme": null,
+        "group_id": 1,
+        "flag_verified": 1,
+        "flag_enabled": 1,
+        "last_activity_id": 61,
+        "password": "$2y$10$6PP1AbmFof1R3rh4p1RlhOy6GGhUgt5QRLM5sYuUTEoboP4b3yrfO",
+        "deleted_at": null,
+        "created_at": "2017-02-08 16:21:02",
+        "updated_at": "2017-02-09 11:48:39"
+    }
+} []
+[2017-02-09 12:27:27] auth.DEBUG: Evaluating callback 'always'... [] []
+[2017-02-09 12:27:27] auth.DEBUG: Result: 1 [] []
+[2017-02-09 12:27:27] auth.DEBUG: Expression '1' evaluates to true [] []
+[2017-02-09 12:27:27] auth.DEBUG: User passed conditions 'always()' .  Access granted. [] []
