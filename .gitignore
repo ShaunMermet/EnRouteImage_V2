@@ -45,7 +45,4 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
-app/sessions
-app/logs
-tmp/*.txt
 *.zip
