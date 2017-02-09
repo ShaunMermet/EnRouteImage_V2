@@ -54,6 +54,7 @@ app/sessions/jvvipn8hf1o9fobc62bia7oka5
 app/logs/auth.log
 app/logs/mail.log
 app/logs/auth.log
+tmp/*.txt
 *.zip
 *.log
 *.log
