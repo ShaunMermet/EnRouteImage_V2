@@ -58,7 +58,7 @@ class SiteController extends SimpleController
             $loginPage = $this->ci->router->pathFor('login');
             return $response->withRedirect($loginPage, 400);
         }
-        return $this->ci->view->render($response, 'index.html.twig');
+        return $this->ci->view->render($response, 'pages/upload.html.twig');
     }
 	/**
      * Renders a simple "upload" page for Users.
