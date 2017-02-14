@@ -1,3 +1,8 @@
+# Refuse direct access to all files
+Order deny,allow
+Deny from all
+Allow from 127.0.0.1
+
 # The `resources` directory should not be made publicly accessible (i.e., in the public document directory) at all.
 # But just in case you're an idiot, this should at least give you protection from exposing passwords and other sensitive info in your .env files.
 

@@ -11,25 +11,28 @@ var export_token = "";
 
 export_loadCategories();
 function export_loadCategories(){
-	var http_req = new XMLHttpRequest();
-	var url = export_phpPath+"get_category.php";
-
-	http_req.open("GET", url, true);
-
-	http_req.onreadystatechange = function() {
-		if (http_req.readyState == 4 && http_req.status == 200) {
-			if(http_req.responseText == "session_closed")
-				window.location.replace("http://"+location.hostname+"/login.php?location="+location.pathname);
-			var res = JSON.parse(http_req.responseText);
-			for(i = 0; i < res.length; i++){
-				export_catId[i] = parseInt(res[i].id);
-				export_catText[i] = res[i].Category;
-				export_catColor[i] = res[i].Color;
-			}
-			export_initCombo();
-		}
-	};
-	http_req.send();
+	// Fetch and render the categories
+	var url = site.uri.public + '/category/all';
+	$.ajax({
+	  type: "GET",
+	  url: url
+	})
+	.then(
+	    // Fetch successful
+	    function (data) {
+	        var res = JSON.parse(data);
+				for(i = 0; i < res.length; i++){
+					export_catId[i] = parseInt(res[i].id);
+					export_catText[i] = res[i].Category;
+					export_catColor[i] = res[i].Color;
+				}
+				export_initCombo();
+	    },
+	    // Fetch failed
+	    function (data) {
+	        
+	    }
+	);
 }
 
 function export_initCombo(){
@@ -44,7 +47,7 @@ function export_initCombo(){
 	}
 
 
-	$(".js-basic-single").select2({ width: '100px' });
+	//$(".js-basic-single").select2({ width: '100px' });
 	
 	$('#combo').select2({placeholder: 'Select a category'});
 

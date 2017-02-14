@@ -56,6 +56,36 @@
         </div>
     </div>
 </div>
+<div class="container">Categories editor</div>
+<div class="labelimg-container">
+    <div class="column column-one">
+        <select class="js-basic-single" id="comboEdit" style="max-width:90%;" style="width: 150px;" onchange="onComboEditChanged()"></select>
+        <br/>
+        <div id="comboFeedback"></div>
+    </div>
+    <div class="column column-two">
+        <button id="editButton"class="btn-mode" type="button" onclick="catEdit_onEditClicked()">Edit</button>
+    </div>
+    <div class="column column-three">
+        <button id="addButton"class="btn-mode" type="button" onclick="catEdit_onAddClicked()">Add</button>
+    </div>
+    
+</div>
+<div class="labelimg-container" id="editCatPanel">
+    <div class="column column-one">
+        <!-- Textfield -->
+        <input type="text" name="Category name" id="catEditText">
+    </div>
+    <div class="column column-two">
+        <!-- ColorPicker -->
+        <input class="jscolor" id="colorPicker">
+    </div>
+    <div class="column column-three">
+        <button id="saveCatButton"class="btn-mode" type="button" onclick="catEdit_onSaveCatClicked()">Save</button>
+        <button id="deleteCatButton"class="btn-mode" type="button" onclick="catEdit_onDeleteClicked()">Delete</button>
+        <button id="closeCatEditButton"class="btn-mode" type="button" onclick="catEdit_onCloseCatEditClicked()">Close</button>
+    </div>
+</div>
 <!-- The file upload form used as target for the file upload widget -->
 <form id="fileupload" action="//jquery-file-upload.appspot.com/" method="POST" enctype="multipart/form-data">
 	<!-- Redirect browsers with JavaScript disabled to the origin page -->
@@ -196,6 +226,9 @@
 </body>
 
 {% endblock %}
+{% block scripts_page_group %}
+    {{ assets.js('js/tools') | raw }}
+{% endblock %}
 {% block scripts_page %}
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
@@ -231,4 +264,6 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
     {{ assets.js('js/export') | raw }}
+    {{ assets.js('js/jscolor') | raw }}
+    {{ assets.js('js/categoriesEditor') | raw }}
 {% endblock %}

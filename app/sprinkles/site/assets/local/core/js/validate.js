@@ -26,52 +26,53 @@ function validate_handlerLoadsDone(){
 	}
 }
 function validate_loadRects(){
-	var http_req = new XMLHttpRequest();
-	var url = validate_phpPath+"get_rects_tobeVerified.php";
-
-	http_req.open("GET", url, true);
-
-	http_req.onreadystatechange = function() {
-		if (http_req.readyState == 4 && http_req.status == 200) {
-			if(http_req.responseText == "session_closed")
-				window.location.replace("http://"+location.hostname+"/login.php?location="+location.pathname);
-			console.log("reponse rect done");
-			console.log(http_req.responseText);
-			if(http_req.responseText!=""){
-				var res = JSON.parse(http_req.responseText);
+	// Fetch and render the categories
+	var url = site.uri.public + '/areas/all';
+	$.ajax({
+	  type: "GET",
+	  url: url
+	})
+	.then(
+	    // Fetch successful
+	    function (data) {
+	    	if(data!=""){
+				var res = JSON.parse(data);
 				validate_rectanglesList = res;
 			}
 			else validate_rectanglesList = [];
 			validate_rectanglesLoaded = true;
 			validate_handlerLoadsDone();
-		}
-	};
-	http_req.send();
+	    },
+	    // Fetch failed
+	    function (data) {
+	        
+	    }
+	);
 }
 function validate_loadImages(){
-	var http_req = new XMLHttpRequest();
-	var url = validate_phpPath+"get_img_tobeVerified.php";
-
-	http_req.open("GET", url, true);
-
-	http_req.onreadystatechange = function() {
-		if (http_req.readyState == 4 && http_req.status == 200) {
-			if(http_req.responseText == "session_closed")
-				window.location.replace("http://"+location.hostname+"/login.php?location="+location.pathname);
-			// Action to be performed when the document is read;
-			console.log("select img done");
-			console.log(http_req.responseText);
-			if(http_req.responseText!=""){
-				var res = JSON.parse(http_req.responseText);
+	// Fetch and render the categories
+	var url = site.uri.public + '/images/annotated';
+	$.ajax({
+	  type: "GET",
+	  url: url
+	})
+	.then(
+	    // Fetch successful
+	    function (data) {
+	    	if(data!=""){
+				var res = JSON.parse(data);
 				validate_imgPathList = res;
 			}
 			else validate_imgPathList = [];
 			validate_imgPathListIndex = 0;
 			validate_imageLoaded = true;
-			validate_handlerLoadsDone();//addImage();
-		}
-	};
-	http_req.send();
+			validate_handlerLoadsDone();
+	    },
+	    // Fetch failed
+	    function (data) {
+	        
+	    }
+	);
 }
 
 function validate_addImage(){
@@ -184,7 +185,7 @@ function validate_nextImage(){
 	if(validate_imgPathList.length>0){
 		validate_wipeRectangle();
 		validate_removeImage();
-		validate_freeImage(validate_imgPathList[validate_imgPathListIndex].id);
+		tools_freeImage(validate_imgPathList[validate_imgPathListIndex].id);
 		validate_imgPathListIndex++;
 		if(validate_imgPathListIndex<validate_imgPathList.length)
 			validate_addImage();
@@ -217,67 +218,42 @@ function validate_wipeRectangle(){
 function validate_onValidateClicked(){
 	console.log("Validate");
 	//validate_nextImage();
-	validate_sendData(true);
+	validate_sendData(1);
 }
 
 function validate_onRejectClicked(){
 	console.log("Reject");
 	//validate_nextImage();
-	validate_sendData(false);
+	validate_sendData(0);
 }
 
 function validate_sendData(validated){
+
 	var data= {};
 	data["dataSrc"]=validate_srcId;
 	data["validated"]=validated;
+	data[site.csrf.keys.name] = site.csrf.name;
+	data[site.csrf.keys.value] = site.csrf.value;
 	console.log(data);
-	
-	////////////////////// POST  //////////////
-	var http_req = new XMLHttpRequest();
-	var url = validate_phpPath+"post_check.php";
-
-	http_req.open("POST", url, true);
-
-	//Send the proper header information along with the request
-	http_req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-	
-	http_req.onreadystatechange = function() {//Call a function when the state changes.
-		if(http_req.readyState == 4 && http_req.status == 200) {
-			//alert(http_req.responseText);
-			if(http_req.responseText == "session_closed")
-				window.location.replace("http://"+location.hostname+"/login.php?location="+location.pathname);
-			console.log(http_req.responseText);
-			validate_nextImage();
-		}
-	}
-	var json = JSON.stringify(data);
-	http_req.send("data=" +json);
-	//////////////////////////////////////////////
+	// Validate or reject areas
+	var url = site.uri.public + '/validate/evaluate';
+	$.ajax({
+	  type: "PUT",
+	  url: url,
+	  data: data
+	})
+	.then(
+	    // Fetch successful
+	    function (data) {
+	    	validate_nextImage();
+	    },
+	    // Fetch failed
+	    function (data) {
+	        
+	    }
+	);
 }
-function validate_freeImage (idImage){
-		var data= {};
-		data["dataSrc"]=idImage;
-		////////////////////// POST  //////////////
-		var http_req = new XMLHttpRequest();
-		var url = validate_phpPath+"post_freeImage.php";
 
-		http_req.open("POST", url, true);
-
-		//Send the proper header information along with the request
-		http_req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-		
-		http_req.onreadystatechange = function() {//Call a function when the state changes.
-			if(http_req.readyState == 4 && http_req.status == 200) {
-				//alert(http_req.responseText);
-				if(http_req.responseText == "session_closed")
-					window.location.replace("http://"+location.hostname+"/login.php?location="+location.pathname);
-				console.log(http_req.responseText);
-			}
-		}
-		var json = JSON.stringify(data);
-		http_req.send("data=" +json);
-		//////////////////////////////////////////////
-}
 function validate_onMoreClicked(){
 	validate_loadImages();
 	validate_loadRects();
@@ -285,7 +261,7 @@ function validate_onMoreClicked(){
 }
 window.onbeforeunload = function(e) {
 	for(var i = validate_imgPathListIndex; i < validate_imgPathList.length; ++i){
-		validate_freeImage (validate_imgPathList[i].id);
+		tools_freeImage (validate_imgPathList[i].id);
 		console.log("Free " +validate_imgPathList[i].id);
 	}
 };

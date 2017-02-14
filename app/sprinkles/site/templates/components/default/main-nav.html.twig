@@ -3,15 +3,20 @@
 
 {% block main_nav %}
 	{% if checkAuthenticated() %}
-        <li>
-			<a href="{{site.uri.public}}/label">{{translate("LABEL")}}</a>
-		</li>
-		<li>
-			<a href="{{site.uri.public}}/upload">{{translate("UPLOAD")}}</a>
-		</li>
-		<li>
-			<a href="{{site.uri.public}}/validate">{{translate("VALIDATE")}}</a>
-		</li>
+		{% if checkAccess('uri_label') %}
+			<li>
+				<a href="{{site.uri.public}}/label">{{translate("LABEL")}}</a>
+			</li>
+		{% endif %}	
+		{% if checkAccess('uri_validate') %}
+			<li>
+				<a href="{{site.uri.public}}/validate">{{translate("VALIDATE")}}</a>
+			</li>
+		{% endif %}	
+		{% if checkAccess('uri_upload') %}
+			<li>
+				<a href="{{site.uri.public}}/upload">{{translate("UPLOAD")}}</a>
+			</li>
+		{% endif %}	
     {% endif %}
-	
 {% endblock %}

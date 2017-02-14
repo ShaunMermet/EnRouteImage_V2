@@ -1,8 +1,44 @@
 {
     "bundle": {
+        "js/tools": {
+            "scripts": [
+                "local/core/js/group/tools.js"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "scripts": "plain"
+                    }
+                }
+            }
+        },
         "js/export": {
             "scripts": [
                 "local/core/js/export.js"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "scripts": "plain"
+                    }
+                }
+            }
+        },
+        "js/categoriesEditor": {
+            "scripts": [
+                "local/core/js/categoriesEditor.js"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "scripts": "plain"
+                    }
+                }
+            }
+        },
+        "js/jscolor": {
+            "scripts": [
+                "local/core/js/jscolor.js"
             ],
             "options": {
                 "result": {

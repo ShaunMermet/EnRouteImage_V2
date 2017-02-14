@@ -30,17 +30,15 @@ class SiteController extends SimpleController
             return $response->withRedirect($loginPage, 400);
         }
 
-        #error_log("check rights")
-        #/** @var UserFrosting\Sprinkle\Account\Authorize\AuthorizationManager */
-        #$authorizer = $this->ci->authorizer;
-        #/** @var UserFrosting\Sprinkle\Account\Model\User $currentUser */
-        #$currentUser = $this->ci->currentUser;
-        #// Access-controlled page
-        #if (!$authorizer->checkAccess($currentUser, 'user_label')) {
-        #    $loginPage = $this->ci->router->pathFor('login');
-        #   return $response->withRedirect($loginPage, 400);
-        #}
-
+        /** @var UserFrosting\Sprinkle\Account\Authorize\AuthorizationManager */
+        $authorizer = $this->ci->authorizer;
+        /** @var UserFrosting\Sprinkle\Account\Model\User $currentUser */
+        $currentUser = $this->ci->currentUser;
+        // Access-controlled page
+        if (!$authorizer->checkAccess($currentUser, 'uri_label')) {
+            $loginPage = $this->ci->router->pathFor('login');
+           return $response->withRedirect($loginPage, 400);
+        }
 
         return $this->ci->view->render($response, 'pages/label.html.twig');
     }
@@ -58,6 +56,17 @@ class SiteController extends SimpleController
             $loginPage = $this->ci->router->pathFor('login');
             return $response->withRedirect($loginPage, 400);
         }
+
+        /** @var UserFrosting\Sprinkle\Account\Authorize\AuthorizationManager */
+        $authorizer = $this->ci->authorizer;
+        /** @var UserFrosting\Sprinkle\Account\Model\User $currentUser */
+        $currentUser = $this->ci->currentUser;
+        // Access-controlled page
+        if (!$authorizer->checkAccess($currentUser, 'uri_upload')) {
+            $loginPage = $this->ci->router->pathFor('login');
+           return $response->withRedirect($loginPage, 400);
+        }
+
         return $this->ci->view->render($response, 'pages/upload.html.twig');
     }
 	/**
@@ -73,6 +82,18 @@ class SiteController extends SimpleController
             $loginPage = $this->ci->router->pathFor('login');
             return $response->withRedirect($loginPage, 400);
         }
+        
+
+        /** @var UserFrosting\Sprinkle\Account\Authorize\AuthorizationManager */
+        $authorizer = $this->ci->authorizer;
+        /** @var UserFrosting\Sprinkle\Account\Model\User $currentUser */
+        $currentUser = $this->ci->currentUser;
+        // Access-controlled page
+        if (!$authorizer->checkAccess($currentUser, 'uri_validate')) {
+            $loginPage = $this->ci->router->pathFor('login');
+           return $response->withRedirect($loginPage, 400);
+        }
+
         return $this->ci->view->render($response, 'pages/validate.html.twig');
     }
 }

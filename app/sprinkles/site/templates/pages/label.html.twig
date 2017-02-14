@@ -42,6 +42,9 @@
 </section>
 {% endblock %}
 {% block scripts_page_group %}
+	{{ assets.js('js/tools') | raw }}
+{% endblock %}
+{% block scripts_page %}
 	{{ assets.js('js/label') | raw }}
 {% endblock %}
 	

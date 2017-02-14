@@ -11,28 +11,28 @@ if(document.getElementById("openButton"))
 ////////////GET IMG FROM SERVER//////
 label_loadImages();
 function label_loadImages(){
-	var http_req = new XMLHttpRequest();
-	var url = label_phpPath+"get_img_clean.php";
-
-	http_req.open("GET", url, true);
-
-	http_req.onreadystatechange = function() {
-		if (http_req.readyState == 4 && http_req.status == 200) {
-			// Action to be performed when the document is read;
-			if(http_req.responseText == "session_closed")
-				window.location.replace("http://"+location.hostname+"/login.php?location="+location.pathname);
-			//console.log("select img done");
-			//console.log(http_req.responseText);
-			if(http_req.responseText!=""){
-				var res = JSON.parse(http_req.responseText);
+	// Fetch and render the images
+	var url = site.uri.public + '/images/clean';
+	$.ajax({
+	  type: "GET",
+	  url: url
+	})
+	.then(
+	    // Fetch successful
+	    function (data) {
+	    	if(data!=""){
+				var res = JSON.parse(data);
 				label_imgPathList = res;
 			}
 			else label_imgPathList = [];
 			label_imgPathListIndex = 0;
 			label_addImage();
-		}
-	};
-	http_req.send();
+	    },
+	    // Fetch failed
+	    function (data) {
+	        
+	    }
+	);
 }
 
 function label_addImage(){
@@ -89,7 +89,7 @@ function label_nextImage(){
 	if(label_imgPathList.length>0){
 		label_wipeRectangle();
 		label_removeImage();
-		label_freeImage(label_imgPathList[label_imgPathListIndex].id);
+		tools_freeImage(label_imgPathList[label_imgPathListIndex].id);
 		label_imgPathListIndex++;
 		if(label_imgPathListIndex<label_imgPathList.length)
 			label_addImage();
@@ -128,28 +128,31 @@ var label_catText=[];
 var label_catColor= [];
 
 
+
 label_loadCategories();
 function label_loadCategories(){
-	var http_req = new XMLHttpRequest();
-	var url = label_phpPath+"get_category.php";
-
-	http_req.open("GET", url, true);
-
-	http_req.onreadystatechange = function() {
-		if (http_req.readyState == 4 && http_req.status == 200) {
-			// Action to be performed when the document is read;
-			if(http_req.responseText == "session_closed")
-				window.location.replace("http://"+location.hostname+"/login.php?location="+location.pathname);
-			var res = JSON.parse(http_req.responseText);
-			for(i = 0; i < res.length; i++){
-				label_catId[i] = parseInt(res[i].id);
-				label_catText[i] = res[i].Category;
-				label_catColor[i] = res[i].Color;
-			}
-			label_initCombo();
-		}
-	};
-	http_req.send();
+	// Fetch and render the categories
+	var url = site.uri.public + '/category/all';
+	$.ajax({
+	  type: "GET",
+	  url: url
+	})
+	.then(
+	    // Fetch successful
+	    function (data) {
+	        var res = JSON.parse(data);
+				for(i = 0; i < res.length; i++){
+					label_catId[i] = parseInt(res[i].id);
+					label_catText[i] = res[i].Category;
+					label_catColor[i] = res[i].Color;
+				}
+				label_initCombo();
+	    },
+	    // Fetch failed
+	    function (data) {
+	        
+	    }
+	);
 }
 
 function label_initCombo(){
@@ -485,64 +488,39 @@ function label_onNextClicked(){
 		}
 		data["dataSrc"]=label_srcName;
 		console.log(data);
-		
-		////////////////////// POST  //////////////
-		var http_req = new XMLHttpRequest();
-		var url = label_phpPath+"post_data.php";
+		data[site.csrf.keys.name] = site.csrf.name;
+		data[site.csrf.keys.value] = site.csrf.value;
 
-		http_req.open("POST", url, true);
-
-		//Send the proper header information along with the request
-		http_req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-		
-		http_req.onreadystatechange = function() {//Call a function when the state changes.
-			if(http_req.readyState == 4 && http_req.status == 200) {
-				//alert(http_req.responseText);
-				if(http_req.responseText == "session_closed")
-					window.location.replace("http://"+location.hostname+"/login.php?location="+location.pathname);
-				console.log(http_req.responseText);
+		// submit rects
+		var url = site.uri.public + '/label/annotate';
+		$.ajax({
+		  type: "POST",
+		  url: url,
+		  data: data
+		})
+		.then(
+		    // Fetch successful
+		    function (data) {
 				label_nextImage();
-			}
-		}
-		var json = JSON.stringify(data);
-		http_req.send("data=" +json);
-		//////////////////////////////////////////////
+		    },
+		    // Fetch failed
+		    function (data) {
+		        
+		    }
+		);
 	}
 	else{
 		label_nextImage();
 	}
 }
-function label_freeImage (idImage){
-		var data= {};
-		data["dataSrc"]=idImage;
-		////////////////////// POST  //////////////
-		var http_req = new XMLHttpRequest();
-		var url = label_phpPath+"post_freeImage.php";
 
-		http_req.open("POST", url, true);
-
-		//Send the proper header information along with the request
-		http_req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-		
-		http_req.onreadystatechange = function() {//Call a function when the state changes.
-			if(http_req.readyState == 4 && http_req.status == 200) {
-				//alert(http_req.responseText);
-				if(http_req.responseText == "session_closed")
-					window.location.replace("http://"+location.hostname+"/login.php?location="+location.pathname);
-				console.log(http_req.responseText);
-			}
-		}
-		var json = JSON.stringify(data);
-		http_req.send("data=" +json);
-		//////////////////////////////////////////////
-}
 function label_onMoreClicked(){
 	label_loadImages();
 	console.log("Load more");
 }
 window.onbeforeunload = function(e) {
 	for(var i = label_imgPathListIndex; i < label_imgPathList.length; ++i){
-		label_freeImage (label_imgPathList[i].id);
+		tools_freeImage (label_imgPathList[i].id);
 		console.log("Free " +label_imgPathList[i].id);
 	}
 };
