@@ -41,6 +41,7 @@ SetEnv SERVER_TYPE Apache
     
 # Deny access to any php.ini files
 <Files php.ini>
+    Order allow,deny
         Deny from all
 </Files>
 
