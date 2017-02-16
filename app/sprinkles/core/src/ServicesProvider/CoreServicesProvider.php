@@ -257,6 +257,14 @@ class CoreServicesProvider
             $onFailure = function ($request, $response, $next) {
                 $e = new BadRequestException("The CSRF code was invalid or not provided.");
                 $e->addUserMessage('CSRF_MISSING');
+                //$e->addUserMessage($request);
+                error_log("coreServiceProvider request2");
+                error_log( print_r($request, TRUE) );
+                //error_log("coreServiceProvider response");
+                //error_log( print_r($response, TRUE) );
+                //error_log("coreServiceProvider next");
+                //error_log( print_r($next, TRUE) );
+
                 throw $e;
 
                 return $next($request, $response);

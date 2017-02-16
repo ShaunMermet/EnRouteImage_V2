@@ -49,7 +49,10 @@ class AreaController extends SimpleController
            return $response->withRedirect($loginPage, 400);
         }
 
-        include('config.php');
+        /** @var UserFrosting\Config\Config $config */
+        $config = $this->ci->config['db.default'];
+        $db = mysqli_connect($config['host'],$config['username'],$config['password'],$config['database']);
+
         /////////////SELECT ////////////////
 
         $sql = "SELECT are.source,are.rectType,cat.Category,cat.Color,are.rectLeft,are.rectTop,are.rectRight,are.rectBottom
@@ -87,6 +90,8 @@ class AreaController extends SimpleController
      */
     public function saveAreas($request, $response, $args)
     {
+        error_log("saveAreas request3");
+               // error_log( print_r($request, TRUE) );
         /** @var UserFrosting\Sprinkle\Account\Authenticate\Authenticator $authenticator */
         $authenticator = $this->ci->authenticator;
         if (!$authenticator->check()) {
@@ -106,11 +111,14 @@ class AreaController extends SimpleController
            return $response->withRedirect($loginPage, 400);
         }
 
-        // Get PUT parameters: (name, slug, icon, description)
+        // Get parameters
         $params = $request->getParsedBody();
         $data = json_decode(json_encode($params), FALSE);
 
-        include('config.php');
+        /** @var UserFrosting\Config\Config $config */
+        $config = $this->ci->config['db.default'];
+        $db = mysqli_connect($config['host'],$config['username'],$config['password'],$config['database']);
+
         if (!empty($data))
         {
             echo "Data sended to server\n";
@@ -187,7 +195,10 @@ class AreaController extends SimpleController
         $params = $request->getParsedBody();
         $data = json_decode(json_encode($params), FALSE);
 
-        include('config.php');
+        /** @var UserFrosting\Config\Config $config */
+        $config = $this->ci->config['db.default'];
+        $db = mysqli_connect($config['host'],$config['username'],$config['password'],$config['database']);
+        
         if (!empty($data))
         {
             

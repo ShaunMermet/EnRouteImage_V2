@@ -1,0 +1,6 @@
+test
+vendor
+composer.lock
+*.komodoproject
+
+.DS_Store

@@ -33,11 +33,24 @@ $app->group('/upload', function () {
 
 	$this->put('/catedit', 'UserFrosting\Sprinkle\Site\Controller\CategoryController:editCategory');
 
-})->add('authGuard');
+	$this->get('/upload', 'UserFrosting\Sprinkle\Site\Controller\SiteController:uploadHandler');
 
+	$this->post('/upload', 'UserFrosting\Sprinkle\Site\Controller\SiteController:uploadHandler');
+
+	$this->delete('/upload', 'UserFrosting\Sprinkle\Site\Controller\SiteController:uploadHandler');
+
+})->add('authGuard');
 
 //Data
 //GET
+
+$app->group('/export', function () {
+	$this->post('', 'UserFrosting\Sprinkle\Site\Controller\SiteController:prepareZip');
+
+	$this->get('/dl/{dl_id}', 'UserFrosting\Sprinkle\Site\Controller\SiteController:returnDownload');
+
+})->add('authGuard');
+
 $app->group('/category', function () {
 	$this->get('/all', 'UserFrosting\Sprinkle\Site\Controller\CategoryController:getAllCategory');
 
@@ -50,6 +63,8 @@ $app->group('/images', function () {
     $this->get('/annotated', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getImagesA');
 
     $this->get('/validated', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getImagesV');
+
+     $this->put('/nbrBYcategory', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getNbrImagesByCat');
 
 })->add('authGuard');
 

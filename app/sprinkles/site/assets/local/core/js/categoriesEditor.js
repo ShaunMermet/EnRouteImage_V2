@@ -172,23 +172,4 @@ function catEdit_sendServerEdit(mode,catId,catText = "",catColor = ""){
 	        
 	    }
 	);
-	
-	
-	var http_req = new XMLHttpRequest();
-	var url = catEdit_phpPath+"post_editCategory.php";
-	http_req.open("POST", url, true);
-	//Send the proper header information along with the request
-	http_req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-	http_req.onreadystatechange = function() {//Call a function when the state changes.
-		if(http_req.readyState == 4 && http_req.status == 200) {
-			if(http_req.responseText == "session_closed")
-				window.location.replace("http://"+location.hostname+"/login.php?location="+location.pathname);
-			else if (http_req.responseText == "SUCCESS"){
-				catEdit_loadCategories();
-			}
-			console.log(http_req.responseText);
-		}
-	}
-	var json = JSON.stringify(data);
-	//http_req.send("data=" +json);
 }

@@ -50,7 +50,10 @@ class CategoryController extends SimpleController
            return $response->withRedirect($loginPage, 400);
         }
 
-        include('config.php');
+        /** @var UserFrosting\Config\Config $config */
+        $config = $this->ci->config['db.default'];
+        $db = mysqli_connect($config['host'],$config['username'],$config['password'],$config['database']);
+
         /////////////SELECT ////////////////
         $sql = "SELECT id,Category,Color FROM `labelImgCategories` WHERE 1";
         $result = $db->query($sql);
@@ -102,7 +105,10 @@ class CategoryController extends SimpleController
         $params = $request->getParsedBody();
         $data = json_decode(json_encode($params), FALSE);
 
-        include('config.php');
+        /** @var UserFrosting\Config\Config $config */
+        $config = $this->ci->config['db.default'];
+        $db = mysqli_connect($config['host'],$config['username'],$config['password'],$config['database']);
+        
         if (!empty($data))
         {
             error_log("Data sended to server\n");

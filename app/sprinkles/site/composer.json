@@ -10,6 +10,9 @@
         }
     ],
     "version": "1.0.0",
+	"require": {
+        "alchemy/zippy": "*"
+    },
     "autoload": {
         "psr-4": {
             "UserFrosting\\Sprinkle\\Site\\": "src/"

@@ -69,7 +69,7 @@ class MessageTranslatorTest extends TestCase
         $this->assertEquals($translator->translate("MY_CAR_MAKE", ["car_make" => "Toyota", "year" => 2014]), "My car is a Toyota");
 
         // Test missing placeholder (`car_make` nor defined)
-        $this->assertEquals($translator->translate("MY_CAR_MAKE"), "My car is a {{car_make}}");
+        $this->assertEquals($translator->translate("MY_CAR_MAKE"), "My car is a ");
 
         // Example of a complex translation
         $this->assertEquals($translator->translate('MY_CAR_STRING', [
@@ -170,7 +170,7 @@ class MessageTranslatorTest extends TestCase
         $this->assertEquals($translator->translate("MY_CAR_MAKE", ["car_make" => "Toyota", "year" => 2014]), "Ma voiture est une Toyota");
 
         // Test missing placeholder (`car_make` nor defined)
-        $this->assertEquals($translator->translate("MY_CAR_MAKE"), "Ma voiture est une {{car_make}}");
+        $this->assertEquals($translator->translate("MY_CAR_MAKE"), "Ma voiture est une ");
 
         // Example of a complex translation
         $this->assertEquals($translator->translate('MY_CAR_STRING', [
@@ -251,5 +251,49 @@ class MessageTranslatorTest extends TestCase
     public function testWithoutKeys() {
         $translator = new MessageTranslator();
         $this->assertEquals($translator->translate("You are {{status}}", ['status' => 'dumb']), "You are dumb");
+    }
+
+    public function testTwigFilters() {
+        // Create the $translator object
+        $translator = new MessageTranslator();
+
+        // Add search paths for the test locale files relative to this file. We won't test setPaths with this test (yet)
+        $translator->setPaths([dirname(__FILE__)."/locale"]);
+
+        // Load the en_US locale files, no user locale
+        $translator->loadLocaleFiles('en_US');
+
+        //ESCAPE : http://twig.sensiolabs.org/doc/2.x/filters/escape.html
+        //RAW : http://twig.sensiolabs.org/doc/2.x/filters/raw.html
+        $this->assertEquals($translator->translate("TWIG.ESCAPE", ["foo" => "<strong>bar</strong>"]), "Placeholder should be escaped : &lt;strong&gt;bar&lt;/strong&gt;");
+        $this->assertEquals($translator->translate("TWIG.ESCAPE_DEFAULT", ["foo" => "<strong>bar</strong>"]), "Placeholder should be escaped : &lt;strong&gt;bar&lt;/strong&gt;");
+        $this->assertEquals($translator->translate("TWIG.ESCAPE_NOT", ["foo" => "<strong>bar</strong>"]), "Placeholder should NOT be escaped : <strong>bar</strong>");
+
+        //DEFAULT: http://twig.sensiolabs.org/doc/2.x/filters/default.html
+        $this->assertEquals($translator->translate("TWIG.DEFAULT"), "Using default: bar");
+        $this->assertEquals($translator->translate("TWIG.DEFAULT", ["foo" => "cat"]), "Using default: cat");
+        $this->assertEquals($translator->translate("TWIG.DEFAULT_NOT"), "Not using default: ");
+
+        //ABS : http://twig.sensiolabs.org/doc/2.x/filters/abs.html
+        $this->assertEquals($translator->translate("TWIG.ABS", ["number" => "-5"]), "5");
+        $this->assertEquals($translator->translate("TWIG.ABS_NOT", ["number" => "-5"]), "-5");
+
+        //DATE : http://twig.sensiolabs.org/doc/2.x/filters/date.html
+        $this->assertEquals($translator->translate("TWIG.DATE", ["when" => "10 September 2000"]), "09/10/2000");
+
+        //FIRST : http://twig.sensiolabs.org/doc/2.x/filters/first.html
+        //LAST: http://twig.sensiolabs.org/doc/2.x/filters/last.html
+        $this->assertEquals($translator->translate("TWIG.FIRST", ["numbers" => [1, 3, 5]]), "1");
+        $this->assertEquals($translator->translate("TWIG.LAST", ["numbers" => [1, 3, 5]]), "5");
+
+        //NUMBER_FORMAT: http://twig.sensiolabs.org/doc/2.x/filters/number_format.html
+        $this->assertEquals($translator->translate("TWIG.NUMBER_FORMAT", ["number" => 9800.333]), "9 800.33");
+
+        //LOWER: http://twig.sensiolabs.org/doc/2.x/filters/lower.html
+        //UPPER: http://twig.sensiolabs.org/doc/2.x/filters/upper.html
+        //CAPITALIZE: http://twig.sensiolabs.org/doc/2.x/filters/capitalize.html
+        $this->assertEquals($translator->translate("TWIG.LOWER", ["string" => "WeLcOmE"]), "welcome");
+        $this->assertEquals($translator->translate("TWIG.UPPER", ["string" => "WeLcOmE"]), "WELCOME");
+        $this->assertEquals($translator->translate("TWIG.CAPITALIZE", ["string" => "WeLcOmE"]), "Welcome");
     }
 }

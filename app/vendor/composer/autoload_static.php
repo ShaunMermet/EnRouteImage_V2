@@ -45,8 +45,10 @@ class ComposerStaticInit4d718bbaf928a94749f470d677ecea9a
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Component\\Yaml\\' => 23,
             'Symfony\\Component\\Translation\\' => 30,
+            'Symfony\\Component\\Process\\' => 26,
             'Symfony\\Component\\HttpFoundation\\' => 33,
             'Symfony\\Component\\Finder\\' => 25,
+            'Symfony\\Component\\Filesystem\\' => 29,
             'Symfony\\Component\\EventDispatcher\\' => 34,
             'Slim\\Views\\' => 11,
             'Slim\\Csrf\\' => 10,
@@ -67,6 +69,7 @@ class ComposerStaticInit4d718bbaf928a94749f470d677ecea9a
         array (
             'Psr\\Log\\' => 8,
             'Psr\\Http\\Message\\' => 17,
+            'Psr\\Container\\' => 14,
         ),
         'M' => 
         array (
@@ -106,6 +109,10 @@ class ComposerStaticInit4d718bbaf928a94749f470d677ecea9a
         'B' => 
         array (
             'Birke\\' => 6,
+        ),
+        'A' => 
+        array (
+            'Alchemy\\Zippy\\' => 14,
         ),
     );
 
@@ -176,6 +183,10 @@ class ComposerStaticInit4d718bbaf928a94749f470d677ecea9a
         array (
             0 => __DIR__ . '/..' . '/symfony/translation',
         ),
+        'Symfony\\Component\\Process\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/process',
+        ),
         'Symfony\\Component\\HttpFoundation\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/http-foundation',
@@ -183,6 +194,10 @@ class ComposerStaticInit4d718bbaf928a94749f470d677ecea9a
         'Symfony\\Component\\Finder\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/finder',
+        ),
+        'Symfony\\Component\\Filesystem\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/filesystem',
         ),
         'Symfony\\Component\\EventDispatcher\\' => 
         array (
@@ -239,6 +254,10 @@ class ComposerStaticInit4d718bbaf928a94749f470d677ecea9a
         'Psr\\Http\\Message\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/http-message/src',
+        ),
+        'Psr\\Container\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/container/src',
         ),
         'Monolog\\' => 
         array (
@@ -312,6 +331,10 @@ class ComposerStaticInit4d718bbaf928a94749f470d677ecea9a
         array (
             0 => __DIR__ . '/..' . '/birke/rememberme/src',
         ),
+        'Alchemy\\Zippy\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/alchemy/zippy/src',
+        ),
     );
 
     public static $prefixesPsr0 = array (
@@ -352,6 +375,17 @@ class ComposerStaticInit4d718bbaf928a94749f470d677ecea9a
             'Doctrine\\Common\\Inflector\\' => 
             array (
                 0 => __DIR__ . '/..' . '/doctrine/inflector/lib',
+            ),
+            'Doctrine\\Common\\Collections\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/doctrine/collections/lib',
+            ),
+        ),
+        'C' => 
+        array (
+            'Chumper\\Zipper' => 
+            array (
+                0 => __DIR__ . '/..' . '/chumper/zipper/src',
             ),
         ),
     );

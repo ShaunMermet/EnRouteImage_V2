@@ -542,10 +542,14 @@
 
         _deleteHandler: function (e) {
             e.preventDefault();
+            var data= {};
+            data[site.csrf.keys.name] = site.csrf.name;
+            data[site.csrf.keys.value] = site.csrf.value;
             var button = $(e.currentTarget);
             this._trigger('destroy', e, $.extend({
                 context: button.closest('.template-download'),
-                type: 'DELETE'
+                type: 'DELETE',
+                data: data
             }, button.data()));
         },
 

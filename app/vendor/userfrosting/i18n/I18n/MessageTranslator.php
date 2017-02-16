@@ -23,9 +23,22 @@ class MessageTranslator extends Repository {
     protected $paths = [];
 
     /**
+     * @var Twig_Environment A Twig envrionnement used to replace placeholders.
+     */
+    protected $twig;
+
+    /**
      * @var array an array of paths to search for locale files.
      */
     protected $_defaultPluralKey = 'plural';
+
+    public function __construct(array $items = [])
+    {
+        $this->items = $items;
+
+        $loader = new \Twig_Loader_Filesystem();
+        $this->twig = new \Twig_Environment($loader);
+    }
 
     /**
      * Add a path to search for locale files.
@@ -276,30 +289,39 @@ class MessageTranslator extends Repository {
             return $message;
         }
 
-        // Interpolate placeholders
+        // Interpolate translatable placeholders values. This allows to
+        // pre-translate placeholder which value starts with the `&` caracter
         foreach ($placeholders as $name => $value){
 
             //We don't allow nested placeholders. They will return errors on the next lines
             if (is_array($value)) { continue; }
 
-            // First, we test if the placeholder value starts the "&" caracter.
+            // We test if the placeholder value starts the "&" caracter.
             // That means we need to translate that placeholder value
             if (substr($value, 0, 1) === '&') {
-                //We won't translate it here, otherwise we end up in an infinite loop
-                //Simply add the brackets so it will picked up later by the preg_replace
-                $value = "{{".$value."}}";
-            }
 
-            // All good! We replace the placeholder with the remplacement
-            $find = '{{' . trim($name) . '}}';
-            $message = str_replace($find, $value, $message);
+                // Remove the current placeholder from the master $placeholder
+                // array, otherwise we end up in an infinite loop
+                $data = array_diff($placeholders, [$name => $value]);
+
+                // Translate placeholders value and place it in the main $placeholder array
+                $placeholders[$name] = $this->translate(ltrim($value, '&'), $data);
+            }
         }
 
         // We check for {{&...}} strings in the resulting message.
-        // Those are directly translated. We do this some regex magic !
+        // While the previous loop pre-translated placeholder value, this one
+        // pre-translate the message string vars
+        // We use some regex magic to detect them !
         $message = preg_replace_callback("/{{&(([^}]+[^a-z]))}}/", function ($matches) use ($placeholders) {
             return $this->translate($matches[1], $placeholders);
         }, $message);
+
+        // Now it's time to replace the remaining placeholder. We use Twig do to this.
+        // It's a bit slower, but allows to use the many Twig filters
+        // See: http://twig.sensiolabs.org/doc/2.x/
+        $template = $this->twig->createTemplate($message);
+        $message = $template->render($placeholders);
 
         // Done !
         return $message;

@@ -24,6 +24,8 @@ use UserFrosting\Fortress\RequestSchema;
  */
 class ImageController extends SimpleController
 {
+    //$db = mysqli_connect(getenv('DB_HOST'),getenv('DB_USER'),getenv('DB_PASSWORD'),getenv('DB_NAME'));
+
     /**
      * Returns all images that are neither validated nor annotated.
      *
@@ -52,7 +54,9 @@ class ImageController extends SimpleController
            return $response->withRedirect($loginPage, 400);
         }
 
-        include('config.php');
+        /** @var UserFrosting\Config\Config $config */
+        $config = $this->ci->config['db.default'];
+        $db = mysqli_connect($config['host'],$config['username'],$config['password'],$config['database']);
 
         // Set autocommit to off
         mysqli_autocommit($db,FALSE);
@@ -138,7 +142,10 @@ class ImageController extends SimpleController
             $loginPage = $this->ci->router->pathFor('login');
            return $response->withRedirect($loginPage, 400);
         }
-        include('config.php');
+        
+        /** @var UserFrosting\Config\Config $config */
+        $config = $this->ci->config['db.default'];
+        $db = mysqli_connect($config['host'],$config['username'],$config['password'],$config['database']);
 
         // Set autocommit to off
         mysqli_autocommit($db,FALSE);
@@ -246,12 +253,15 @@ class ImageController extends SimpleController
            return $response->withRedirect($loginPage, 400);
         }
 
-        // Get PUT parameters: (name, slug, icon, description)
+        // Get PUT parameters: 
         $params = $request->getParsedBody();
         $data = json_decode(json_encode($params), FALSE);
         //error_log( print_r($data, TRUE) );
 
-        include('config.php');
+        /** @var UserFrosting\Config\Config $config */
+        $config = $this->ci->config['db.default'];
+        $db = mysqli_connect($config['host'],$config['username'],$config['password'],$config['database']);
+
         if (!empty($data))
         {
             error_log("in freeImage\n") ;
@@ -274,4 +284,65 @@ class ImageController extends SimpleController
         }
 
     }
+    /**
+     * Get the number of images corresponding to one category.
+     *
+     * This page requires authentication.
+     * Request type: GET
+     */
+    public function getNbrImagesByCat($request, $response, $args)
+    {
+        /** @var UserFrosting\Sprinkle\Account\Authenticate\Authenticator $authenticator */
+        $authenticator = $this->ci->authenticator;
+        if (!$authenticator->check()) {
+            $loginPage = $this->ci->router->pathFor('login');
+            return $response->withRedirect($loginPage, 400);
+        }
+
+        /** @var UserFrosting\Sprinkle\Account\Authorize\AuthorizationManager */
+        $authorizer = $this->ci->authorizer;
+
+        /** @var UserFrosting\Sprinkle\Account\Model\User $currentUser */
+        $currentUser = $this->ci->currentUser;
+
+        // Access-controlled page
+        if (!$authorizer->checkAccess($currentUser, 'uri_export')) {
+            $loginPage = $this->ci->router->pathFor('login');
+           return $response->withRedirect($loginPage, 400);
+        }
+
+        // Get PUT parameters: 
+        $params = $request->getParsedBody();
+        $data = json_decode(json_encode($params), FALSE);
+
+        /** @var UserFrosting\Config\Config $config */
+        $config = $this->ci->config['db.default'];
+        $db = mysqli_connect($config['host'],$config['username'],$config['password'],$config['database']);
+        
+        if (!empty($data))
+        {
+            $category = mysqli_real_escape_string($db,($data->category));
+            
+            /////////////SELECT ////////////////
+            $sql = "SELECT lnk.id,are.rectType
+                    FROM labelimglinks lnk LEFT JOIN labelimgarea are ON lnk.id =are.source
+                    WHERE are.source IS NOT NULL AND lnk.validated = 1 AND are.rectType = '$category'
+                    GROUP BY lnk.id";
+
+            $result = $db->query($sql);
+            header('Content-type: application/json');
+            $res=array();
+            array_push($res,$result->num_rows);
+            echo json_encode($res);
+            $result->close();
+            ///////////////
+            $db->close();
+            
+        }
+        else // $_POST is empty.
+        {
+            echo "No data";
+        }
+    }
+    
 }
