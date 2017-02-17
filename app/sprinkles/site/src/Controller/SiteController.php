@@ -137,8 +137,8 @@ class SiteController extends SimpleController
             $category = mysqli_real_escape_string($db,($data->category));
             /////////////SELECT ////////////////
             $sql = "SELECT lnk.path
-                    FROM labelimglinks lnk LEFT JOIN labelimgarea are ON lnk.id =are.source
-                    WHERE are.source IS NOT NULL AND lnk.validated = 1 AND are.rectType = '$category'
+                    FROM labelimglinks lnk LEFT JOIN labelimgarea are ON lnk.id =are.source AND are.alive = 1
+                    WHERE are.alive = 1 AND lnk.validated = 1 AND are.rectType = '$category'
                     GROUP BY lnk.id";
 
             $result = $db->query($sql);
@@ -172,8 +172,8 @@ class SiteController extends SimpleController
                     //error_log("Fill file ".$path_parts['filename'].".txt");
                     $txtfile = fopen("../tmp/".$tmpFolder."/".$path_parts['filename'].".txt", "w") or die("Unable to open file!");
                     $sql = "SELECT cat.Category,are.rectLeft,are.rectTop,are.rectRight,are.rectBottom
-        FROM labelimglinks lnk LEFT JOIN labelimgarea are ON lnk.id =are.source LEFT JOIN labelimgcategories cat ON cat.id=are.rectType
-        WHERE are.source IS NOT NULL AND lnk.validated = 1 AND are.rectType = '$category' AND lnk.path = '$obj->path'"; 
+        FROM labelimglinks lnk LEFT JOIN labelimgarea are ON lnk.id =are.source AND are.alive = 1 LEFT JOIN labelimgcategories cat ON cat.id=are.rectType
+        WHERE are.alive = 1 AND lnk.validated = 1 AND are.rectType = '$category' AND lnk.path = '$obj->path'"; 
                     $rows = $db->query($sql);
                     $curImg = 0;
                     while ($rect = $rows->fetch_object()) {

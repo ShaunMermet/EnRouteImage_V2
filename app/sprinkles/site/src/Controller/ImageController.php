@@ -57,18 +57,18 @@ class ImageController extends SimpleController
         /** @var UserFrosting\Config\Config $config */
         $config = $this->ci->config['db.default'];
         $db = mysqli_connect($config['host'],$config['username'],$config['password'],$config['database']);
-
+        $maxImageRequested = getenv('MAX_IMAGE_REQUESTED');
         // Set autocommit to off
         mysqli_autocommit($db,FALSE);
 
         /////////////SELECT ////////////////
 
         $sql = "SELECT lnk.id,lnk.path
-        FROM labelimglinks lnk LEFT JOIN labelimgarea are ON lnk.id =are.source
-        WHERE are.source IS NULL AND lnk.available = 1
+        FROM labelimglinks lnk LEFT JOIN labelimgarea are ON lnk.id =are.source AND are.alive = 1
+        WHERE (are.alive = 0 OR are.alive IS NULL) AND lnk.available = 1
         GROUP BY lnk.id
         ORDER BY RAND()
-        LIMIT 20";
+        LIMIT $maxImageRequested";
         $result = $db->query($sql);
         header('Content-type: application/json');
         $res=array();
@@ -146,17 +146,18 @@ class ImageController extends SimpleController
         /** @var UserFrosting\Config\Config $config */
         $config = $this->ci->config['db.default'];
         $db = mysqli_connect($config['host'],$config['username'],$config['password'],$config['database']);
+        $maxImageRequested = getenv('MAX_IMAGE_REQUESTED');
 
         // Set autocommit to off
         mysqli_autocommit($db,FALSE);
         /////////////SELECT ////////////////
 
         $sql = "SELECT lnk.id,lnk.path
-        FROM labelimglinks lnk LEFT JOIN labelimgarea are ON lnk.id =are.source
-        WHERE are.source IS NOT NULL AND lnk.validated = 0 AND lnk.available = 1
+        FROM labelimglinks lnk LEFT JOIN labelimgarea are ON lnk.id =are.source AND are.alive = 1
+        WHERE are.alive = 1 AND lnk.validated = 0 AND lnk.available = 1
         GROUP BY lnk.id
         ORDER BY RAND()
-        LIMIT 20";
+        LIMIT $maxImageRequested";
         $result = $db->query($sql);
         header('Content-type: application/json');
         if ($result->num_rows > 0) {
@@ -325,8 +326,8 @@ class ImageController extends SimpleController
             
             /////////////SELECT ////////////////
             $sql = "SELECT lnk.id,are.rectType
-                    FROM labelimglinks lnk LEFT JOIN labelimgarea are ON lnk.id =are.source
-                    WHERE are.source IS NOT NULL AND lnk.validated = 1 AND are.rectType = '$category'
+                    FROM labelimglinks lnk LEFT JOIN labelimgarea are ON lnk.id =are.source AND are.alive = 1
+                    WHERE are.alive = 1 AND lnk.validated = 1 AND are.rectType = '$category'
                     GROUP BY lnk.id";
 
             $result = $db->query($sql);

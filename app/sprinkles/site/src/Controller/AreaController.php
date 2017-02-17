@@ -23,7 +23,7 @@ use UserFrosting\Sprinkle\Account\Authenticate\Authenticator;
 class AreaController extends SimpleController
 {
     /**
-     * Returns all areas of all images.
+     * Returns all (alive) areas of all images.
      *
      * This page requires authentication.
      * Request type: GET
@@ -57,9 +57,9 @@ class AreaController extends SimpleController
 
         $sql = "SELECT are.source,are.rectType,cat.Category,cat.Color,are.rectLeft,are.rectTop,are.rectRight,are.rectBottom
         FROM labelimglinks lnk 
-        LEFT JOIN labelimgarea are ON lnk.id =are.source
+        LEFT JOIN labelimgarea are ON lnk.id =are.source AND are.alive = 1
         LEFT JOIN labelimgcategories cat ON are.rectType = cat.id
-        WHERE are.source IS NOT NULL AND lnk.validated = 0";
+        WHERE are.alive = 1 AND lnk.validated = 0";
         $result = $db->query($sql);
         header('Content-type: application/json');
         if ($result->num_rows > 0) {
@@ -121,7 +121,7 @@ class AreaController extends SimpleController
 
         if (!empty($data))
         {
-            echo "Data sended to server\n";
+            error_log("Data sended to server\n") ;
             
             $source = mysqli_real_escape_string($db,($data->dataSrc));
             
@@ -133,6 +133,7 @@ class AreaController extends SimpleController
                 $rectTop = mysqli_real_escape_string($db,($rect->rectTop));
                 $rectRight = mysqli_real_escape_string($db,($rect->rectRight));
                 $rectBottom = mysqli_real_escape_string($db,($rect->rectBottom));
+                $rectUSer = $currentUser->id;
                 $sql = "SELECT * FROM 
                 `labelimgarea` lia WHERE 
                 lia.source='$source' AND 
@@ -146,8 +147,8 @@ class AreaController extends SimpleController
                     echo "row was already created";
                 } else {
                     $sql = "
-                    INSERT INTO labelimgarea (source, rectType, rectLeft,rectTop,rectRight,rectBottom)
-                    VALUES ('$source','$rectType','$rectLeft','$rectTop','$rectRight','$rectBottom')";
+                    INSERT INTO labelimgarea (source, rectType, rectLeft,rectTop,rectRight,rectBottom,user)
+                    VALUES ('$source','$rectType','$rectLeft','$rectTop','$rectRight','$rectBottom','$rectUSer')";
                     if ($db->query($sql) === TRUE) {
                         echo "New record created successfully";
                     } else {
@@ -159,7 +160,7 @@ class AreaController extends SimpleController
         }
         else // $_POST is empty.
         {
-            echo "No data";
+            error_log("No data") ;
         }
     }
 
@@ -227,7 +228,8 @@ class AreaController extends SimpleController
     private function deleteArea($source = NULL,$db){
         if(!is_null($source)){
             error_log("in deleteArea ".$source);
-            $sql = "DELETE FROM `labelimgarea` WHERE `source`= '$source'";
+            //$sql = "DELETE FROM `labelimgarea` WHERE `source`= '$source'";
+            $sql = "UPDATE `labelimgarea` SET `alive` = 0 WHERE `source`= '$source'";
             if ($db->query($sql) === TRUE) {
                 error_log("delete done") ;
             } else {
