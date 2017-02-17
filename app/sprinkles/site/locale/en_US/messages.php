@@ -12,5 +12,9 @@
 
 return [
     
-    "LABEL"             => "Label"
+    "LABEL"            	 => "Label",
+    "VALIDATE"           => "Validate",
+    "UPLOAD"             => "Upload",
+
+    "LABEL_description"  => "Choose a category and start to tag images !"
 ];

@@ -1,1 +1,0 @@
-ALTER TABLE `labelimgarea` ADD `user` INT(4) NOT NULL DEFAULT '0' COMMENT 'id of the user that submitted the area' AFTER `rectBottom`, ADD `alive` TINYINT(1) NOT NULL DEFAULT '1' COMMENT 'when 0 considered area as deleted' AFTER `user`;

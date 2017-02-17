@@ -19,6 +19,11 @@
             // URLs
             'uri' => [
                 'author' => 'http://enroute1.com/'
+            ],
+            'registration' => [
+                'user_defaults' => [
+                    'group' => 'groupuser'
+                ]
             ]
         ],   
         'timezone' => 'Asia/Tokyo'        
