@@ -66,3 +66,15 @@ function upl_initCombo(comboElem){
 		}
 	}
 }
+function onCatAssignAllChanged(){
+	var x = document.getElementsByClassName("js-basic-single");
+	for (i = 0; i < x.length; i++) {
+	   upl_syncCatAssignUp(x[i]);
+	}
+}
+function upl_syncCatAssignUp(comboElem){
+	var masterCombo = document.getElementById("catAssignAll");
+	if(comboElem.id == "catAssignUp"){
+		$(comboElem).val(masterCombo.value).trigger("change");
+	}
+}
