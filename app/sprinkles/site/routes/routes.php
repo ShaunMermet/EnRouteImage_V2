@@ -41,6 +41,11 @@ $app->group('/upload', function () {
 
 })->add('authGuard');
 
+$app->group('/validated', function () {
+	$this->get('', 'UserFrosting\Sprinkle\Site\Controller\SiteController:pageValidated');
+
+})->add('authGuard');
+
 //Data
 //GET
 

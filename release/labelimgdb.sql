@@ -607,3 +607,10 @@ DELIMITER ;
 --Change for Alpha 0.2.1
 
 ALTER TABLE `labelimglinks` ADD `category` INT(1) NULL DEFAULT NULL COMMENT 'category tag on image ref : labelimgcategories' AFTER `requested`;
+
+
+
+--Change for Alpha 0.2.2
+
+INSERT INTO `permissions` (`id`, `slug`, `name`, `conditions`, `description`, `created_at`, `updated_at`) VALUES (NULL, 'uri_validated', 'view validated page', 'has_role(self.id,2)', 'View the page to check validated images.', NULL, NULL)
+INSERT INTO `permission_roles` (`permission_id`, `role_id`, `created_at`, `updated_at`) VALUES ('29', '2', NULL, NULL)

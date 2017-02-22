@@ -18,5 +18,10 @@
 				<a href="{{site.uri.public}}/upload">{{translate("UPLOAD")}}</a>
 			</li>
 		{% endif %}	
+		{% if checkAccess('uri_validated') %}
+			<li>
+				<a href="{{site.uri.public}}/validated">{{translate("VALIDATED")}}</a>
+			</li>
+		{% endif %}	
     {% endif %}
 {% endblock %}

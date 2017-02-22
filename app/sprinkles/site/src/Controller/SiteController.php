@@ -73,7 +73,7 @@ class SiteController extends SimpleController
         return $this->ci->view->render($response, 'pages/upload.html.twig');
     }
 	/**
-     * Renders a simple "upload" page for Users.
+     * Renders a simple "validate" page for Users.
      *
      * Request type: GET
      */
@@ -98,6 +98,33 @@ class SiteController extends SimpleController
         }
 
         return $this->ci->view->render($response, 'pages/validate.html.twig');
+    }
+    /**
+     * Renders a simple "validated" page for Users.
+     *
+     * Request type: GET
+     */
+    public function pageValidated($request, $response, $args)
+    {
+        /** @var UserFrosting\Sprinkle\Account\Authenticate\Authenticator $authenticator */
+        $authenticator = $this->ci->authenticator;
+        if (!$authenticator->check()) {
+            $loginPage = $this->ci->router->pathFor('login');
+            return $response->withRedirect($loginPage, 400);
+        }
+        
+
+        /** @var UserFrosting\Sprinkle\Account\Authorize\AuthorizationManager */
+        $authorizer = $this->ci->authorizer;
+        /** @var UserFrosting\Sprinkle\Account\Model\User $currentUser */
+        $currentUser = $this->ci->currentUser;
+        // Access-controlled page
+        if (!$authorizer->checkAccess($currentUser, 'uri_validated')) {
+            $loginPage = $this->ci->router->pathFor('login');
+           return $response->withRedirect($loginPage, 400);
+        }
+
+        return $this->ci->view->render($response, 'pages/validated.html.twig');
     }
     /**
      * Prepare a Zip file to be download.

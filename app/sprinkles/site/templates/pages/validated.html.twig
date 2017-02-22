@@ -1,0 +1,23 @@
+{% extends "layouts/default.html.twig" %}
+
+{% block stylesheets_page_group %}
+	{{ assets.css('css/site') | raw }}
+{% endblock %}
+
+{% set page_active = "validated" %}
+
+{# Overrides blocks in head of base template #}
+{% block page_title %}{{translate("VALIDATED")}}{% endblock %}
+
+{% block page_description %}Images that have been validated{% endblock %}
+
+{% block body_matter %}
+
+
+{% endblock %}
+{% block scripts_page_group %}
+	{{ assets.js('js/tools') | raw }}
+{% endblock %}
+{% block scripts_page %}
+	
+{% endblock %}
