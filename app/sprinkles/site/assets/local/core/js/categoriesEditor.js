@@ -38,7 +38,6 @@ function catEdit_loadCategories(){
 }
 
 function catEdit_initCombo(){
-	console.log("initCombo");
 	emptyCombo();
 	$("#comboEdit").append("<option></option>");
 	for (i = 0; i < catEdit_catId.length; i++) {
@@ -51,7 +50,6 @@ function catEdit_initCombo(){
 	}
 
 
-	//$(".js-basic-single").select2({ width: '100px' });
 	
 	$('#comboEdit').select2({placeholder: 'Select a category'});
 	
@@ -116,26 +114,21 @@ function hideEditRow(){
 	document.getElementById("editCatPanel").style = "DISPLAY: none;";
 }
 function onComboEditChanged(){
-	console.log("New cat");
 	catEdit_fillCateditPanel();
 }
 
 function catEdit_onSaveCatClicked(){
 		if(catEditText.catType == -1){//Create
 			catEdit_sendServerEdit("CREATE",catEditText.catType,catEditText.value,colorPicker.value);
-			console.log("Create : "+catEditText.value+" Color : "+colorPicker.value);
 		}else{//Edit
 		catEdit_sendServerEdit("EDIT",catEditText.catType,catEditText.value,colorPicker.value);
-			console.log("Edit type "+catEditText.catType+" : "+catEditText.value+" Color : "+colorPicker.value);
 		}
 		hideEditRow();
 }
 function catEdit_onDeleteClicked(){
 		if(catEditText.catType == -1){
-			console.log("Nothing");
 		}else{
 			catEdit_sendServerEdit("DELETE",catEditText.catType,"","");
-			console.log("Delete type "+catEditText.catType+" : "+catEdit_catText[catEditText.catType-1]);
 		}
 		hideEditRow();
 }
@@ -148,7 +141,6 @@ function catEdit_sendServerEdit(mode,catId,catText = "",catColor = ""){
 		data["catText"] = catText;
 		data["catColor"] = catColor;
 	}else{
-		console.log("Wrong mode");
 		exit;
 	}
 		
@@ -166,6 +158,8 @@ function catEdit_sendServerEdit(mode,catId,catText = "",catColor = ""){
 	    // Fetch successful
 	    function (data) {
 	    	catEdit_loadCategories();
+	    	upl_loadCategories();
+	    	export_loadCategories();
 	    },
 	    // Fetch failed
 	    function (data) {

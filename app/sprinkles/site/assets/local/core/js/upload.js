@@ -14,6 +14,9 @@ function upl_loadCategories(){
 	    // Fetch successful
 	    function (data) {
 	        var res = JSON.parse(data);
+	        	upl_catId = [];
+				upl_catText = [];
+				upl_catColor = [];
 				for(i = 0; i < res.length; i++){
 					upl_catId[i] = parseInt(res[i].id);
 					upl_catText[i] = res[i].Category;
@@ -36,9 +39,6 @@ function upl_initCombos(){
 	}
 }
 function upl_initCombo(comboElem){
-	if(comboElem.length > 0){
-		return;
-	}
 	if(upl_catText.length == 0 ){
 		return;
 	}
@@ -60,6 +60,9 @@ function upl_initCombo(comboElem){
 	function emptyCombo(){
 		while (comboElem.childElementCount != 0){
 			comboElem.removeChild(comboElem.firstChild);
+		}
+		if(comboElem.id == "catAssignUp"){
+			comboElem.parentElement.parentElement.children[0].value = "";
 		}
 	}
 }

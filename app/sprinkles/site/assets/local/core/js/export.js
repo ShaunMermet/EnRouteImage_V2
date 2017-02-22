@@ -21,6 +21,9 @@ function export_loadCategories(){
 	    // Fetch successful
 	    function (data) {
 	        var res = JSON.parse(data);
+	        	export_catId = [];
+				export_catText = [];
+				export_catColor = [];
 				for(i = 0; i < res.length; i++){
 					export_catId[i] = parseInt(res[i].id);
 					export_catText[i] = res[i].Category;
@@ -36,6 +39,7 @@ function export_loadCategories(){
 }
 
 function export_initCombo(){
+	emptyCombo();
 	$("#combo").append("<option></option>");
 	for (i = 0; i < export_catId.length; i++) {
 		appendToCombo(export_catText[i],export_catId[i]);
@@ -47,9 +51,14 @@ function export_initCombo(){
 	}
 
 
-	//$(".js-basic-single").select2({ width: '100px' });
 	
 	$('#combo').select2({placeholder: 'Select a category'});
+
+	function emptyCombo(){
+		while (combo.childElementCount != 0){
+			combo.removeChild(combo.firstChild);
+		}
+	}
 
 }
 function export_onComboChanged(){

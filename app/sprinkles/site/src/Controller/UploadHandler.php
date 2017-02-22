@@ -1163,6 +1163,7 @@ class UploadHandler
 		} 
         $DBfilename = mysqli_real_escape_string($db,$filename);
         $DBcategory = mysqli_real_escape_string($db,$category);
+        if ($DBcategory == '') $DBcategory = 0;
 		$sql = "
 			INSERT INTO labelimglinks (path,category)
 			VALUES ('$DBfilename','$DBcategory')";
