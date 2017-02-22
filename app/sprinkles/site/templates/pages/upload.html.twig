@@ -104,6 +104,7 @@
 				<i class="glyphicon glyphicon-upload"></i>
 				<span>Start upload</span>
 			</button>
+            <select class="js-basic-single" id="catAssignAll" style="max-width:90%;" style="width: 150px;" onchange="onCatAssignAllChanged()"></select>
 			<!-- The global file processing state -->
 			<span class="fileupload-process"></span>
 		</div>
@@ -136,14 +137,20 @@
 
 <!-- The template to display files available for upload -->
 <script id="template-upload" type="text/x-tmpl">
-{% verbatim %}{% for (var i=0, file; file=o.files[i]; i++) { %}
+{% verbatim %}{% for (var i=0, file; file=o.files[i]; i++) { %} 
+
     <tr class="template-upload fade">
+        <input type="hidden" name="category[]">
+        <input type="hidden" name="name[]" value="{%=file.name%}">
         <td>
             <span class="preview"></span>
         </td>
         <td>
-            <p class="name">{%=file.name%}</p>
+            <p class="name">  {%=file.name%} </p>
             <strong class="error text-danger"></strong>
+        </td>
+        <td>
+        <select class="js-basic-single" id="catAssignUp" style="max-width:90%;" style="width: 150px;" onchange="onCatAssignUpChanged(event)"></select>
         </td>
         <td>
             <p class="size">Processing...</p>
@@ -158,6 +165,7 @@
 
             {% } %}
         </td>
+
     </tr>
 {% } %}{% endverbatim %}
 
@@ -176,9 +184,9 @@
         <td>
             <p class="name">
                 {% if (file.url) { %}
-                    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" {%=file.thumbnailUrl?'data-gallery':''%}>{%=file.name%}</a>
+                    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" {%=file.thumbnailUrl?'data-gallery':''%}> {%=file.name%} </a>
                 {% } else { %}
-                    <span>{%=file.name%}</span>
+                    <span> {%=file.name%}</span>
                 {% } %}
             </p>
             {% if (file.error) { %}
@@ -186,11 +194,14 @@
             {% } %}
         </td>
         <td>
-            <span class="size">{%=o.formatFileSize(file.size)%}</span>
+            <span> {%=file.category%}</span>
+        </td>
+        <td>
+            <span class="size"> {%=o.formatFileSize(file.size)%}</span>
         </td>
 		<td>
             {% if (file.deleteUrl) { %}
-                <button class="btn btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
+                <button class="btn btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}" {% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
                     <i class="glyphicon glyphicon-trash"></i>
                     <span>Delete</span>
                 </button>
@@ -255,7 +266,9 @@
     <script src="js/main.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+    
     {{ assets.js('js/export') | raw }}
     {{ assets.js('js/jscolor') | raw }}
     {{ assets.js('js/categoriesEditor') | raw }}
+    {{ assets.js('js/upload') | raw }}
 {% endblock %}

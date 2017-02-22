@@ -70,6 +70,7 @@ $(function () {
         }).done(function (result) {
             $(this).fileupload('option', 'done')
                 .call(this, $.Event('done'), {result: result});
+             upl_initCombos();
         });
     }
 

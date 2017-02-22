@@ -15,6 +15,8 @@ class UploadHandler
 {
     protected $options;
 
+    protected $ci;
+
     // PHP File Upload error message codes:
     // http://php.net/manual/en/features.file-upload.errors.php
     protected $error_messages = array(
@@ -42,7 +44,7 @@ class UploadHandler
 
     protected $image_objects = array();
 
-    public function __construct($options = null, $initialize = true, $error_messages = null) {
+    public function __construct($ci = null,$options = null, $initialize = true, $error_messages = null) {
         $this->response = array();
         $this->options = array(
             'script_url' => $this->get_full_url().'/upload/upload'/*.$this->basename($this->get_server_var('SCRIPT_NAME'))*/,
@@ -162,6 +164,9 @@ class UploadHandler
             ),
             'print_response' => true
         );
+        if ($ci) {
+            $this->ci = $ci;
+        }
         if ($options) {
             $this->options = $options + $this->options;
         }
@@ -285,7 +290,23 @@ class UploadHandler
         }
         return $size;
     }
+    protected function get_file_category($file_name){
+        /** @var UserFrosting\Config\Config $config */
+        $config = $this->ci->config['db.default'];
+        $db = mysqli_connect($config['host'],$config['username'],$config['password'],$config['database']);
 
+        if ($db->connect_error) {
+            die("Connection failed: " . $db->connect_error);
+        }
+        $filename = mysqli_real_escape_string($db,$file_name);
+        $sql = "SELECT cat.category FROM labelimgcategories cat LEFT JOIN labelimglinks lnk ON lnk.category =cat.id
+                WHERE lnk.path = '$filename'";
+        $cat = $db->query($sql);
+        $catRes = $cat->fetch_object();
+        if($catRes)
+            return $catRes->category;
+        else return "";
+    }
     protected function get_file_size($file_path, $clear_stat_cache = false) {
         if ($clear_stat_cache) {
             if (version_compare(PHP_VERSION, '5.3.0') >= 0) {
@@ -309,6 +330,7 @@ class UploadHandler
         if ($this->is_valid_file_object($file_name)) {
             $file = new \stdClass();
             $file->name = $file_name;
+            $file->category = $this->get_file_category($file_name);
             $file->size = $this->get_file_size(
                 $this->get_upload_path($file_name)
             );
@@ -1062,6 +1084,10 @@ class UploadHandler
             $index, $content_range);
 		error_log('in before insert func '.$uploaded_file.' name '.$name );
 		
+        $addData = $this->handle_form_data($name, $index);
+        $file->categoryValue = $addData['category'];
+
+        error_log('in before insert func cat '.$file->categoryValue);
 		$tmpHashName = sha1_file($uploaded_file);
 		$file->name = $this->fix_file_extension($uploaded_file, $tmpHashName, $size, $type, $error,
             $index, $content_range);
@@ -1070,9 +1096,10 @@ class UploadHandler
         $file->type = $type;
 		
 		if ($this->validate($uploaded_file, $file, $error, $index)) {
-			$returnMsg = $this->insertInDB($file->name);
+            
+			$returnMsg = $this->insertInDB($file->name,$file->categoryValue);
 			if($returnMsg == "OK"){
-				$this->handle_form_data($file, $index);
+                $file->category = $this->get_file_category($file->name);
 				$upload_dir = $this->get_upload_path();
 				if (!is_dir($upload_dir)) {
 					mkdir($upload_dir, $this->options['mkdir_mode'], true);
@@ -1119,7 +1146,6 @@ class UploadHandler
 				}else{
 					$file->error = $this->get_error_message('insert_db_failed');//insert_db_failed
 				}
-				//$this->set_additional_file_properties($file);
 				return $file;
 			}
 		}
@@ -1127,14 +1153,19 @@ class UploadHandler
 		
         
     }
-	protected function insertInDB($filename){
-		$db = mysqli_connect(getenv('DB_HOST'),getenv('DB_USER'),getenv('DB_PASSWORD'),getenv('DB_NAME'));
+	protected function insertInDB($filename,$category){
+        /** @var UserFrosting\Config\Config $config */
+        $config = $this->ci->config['db.default'];
+        $db = mysqli_connect($config['host'],$config['username'],$config['password'],$config['database']);
+
 		if ($db->connect_error) {
 			die("Connection failed: " . $db->connect_error);
 		} 
+        $DBfilename = mysqli_real_escape_string($db,$filename);
+        $DBcategory = mysqli_real_escape_string($db,$category);
 		$sql = "
-			INSERT INTO labelimglinks (path,available)
-			VALUES ('$filename','1')";
+			INSERT INTO labelimglinks (path,category)
+			VALUES ('$DBfilename','$DBcategory')";
 
 		if ($db->query($sql) === TRUE) {
 			$db->close();
@@ -1188,6 +1219,11 @@ class UploadHandler
 
     protected function handle_form_data($file, $index) {
         // Handle form data, e.g. $_POST['description'][$index]
+        $result = [];
+        foreach ($_POST['name'] as $key => $value) {
+            $result[$_POST['name'][$key]]['category'] = $_POST['category'][$key];
+        }
+        return $result[$file];
     }
 
     protected function get_version_param() {
@@ -1367,6 +1403,8 @@ class UploadHandler
         $size =  $content_range ? $content_range[3] : null;
         $files = array();
         if ($upload) {
+            //error_log("Upload_123");
+            //error_log( print_r($upload, TRUE) );
             if (is_array($upload['tmp_name'])) {
                 // param_name is an array identifier like "files[]",
                 // $upload is a multi-dimensional array:
@@ -1427,8 +1465,11 @@ class UploadHandler
         return $this->generate_response($response, $print_response);
     }
 	protected function deleteInDB($filename){
-		$db = mysqli_connect(getenv('DB_HOST'),getenv('DB_USER'),getenv('DB_PASSWORD'),getenv('DB_NAME'));
-		if ($db->connect_error) {
+        /** @var UserFrosting\Config\Config $config */
+        $config = $this->ci->config['db.default'];
+        $db = mysqli_connect($config['host'],$config['username'],$config['password'],$config['database']);
+
+        if ($db->connect_error) {
 			die("Connection failed: " . $db->connect_error);
 		} 
 		

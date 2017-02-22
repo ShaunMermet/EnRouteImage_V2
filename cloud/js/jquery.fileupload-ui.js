@@ -137,6 +137,7 @@
                         });
                     }
                 });
+                upl_initCombos();
             },
             // Callback for the start of each file upload request:
             send: function (e, data) {
@@ -187,6 +188,7 @@
                                 that._forceReflow(template);
                                 that._transition(template).done(
                                     function () {
+                                        upl_initCombos();
                                         data.context = $(this);
                                         that._trigger('completed', e, data);
                                         that._trigger('finished', e, data);
@@ -204,6 +206,7 @@
                     deferred = that._addFinishedDeferreds();
                     that._transition(template).done(
                         function () {
+                            upl_initCombos();
                             data.context = $(this);
                             that._trigger('completed', e, data);
                             that._trigger('finished', e, data);
@@ -276,6 +279,7 @@
                     that._trigger('finished', e, data);
                     that._addFinishedDeferreds().resolve();
                 }
+                upl_initCombos();
             },
             // Callback for upload progress events:
             progress: function (e, data) {

@@ -283,9 +283,7 @@ class SiteController extends SimpleController
            return $response->withRedirect($loginPage, 400);
         }
 
-        error_log("returnDownload args");
-        error_log(print_r($args,true));
-
+        
         /** @var UserFrosting\Config\Config $config */
         $config = $this->ci->config['db.default'];
         $db = mysqli_connect($config['host'],$config['username'],$config['password'],$config['database']);
@@ -373,13 +371,9 @@ class SiteController extends SimpleController
            return $response->withRedirect($loginPage, 400);
         }
 
-        /** @var UserFrosting\Config\Config $config */
-        $config = $this->ci->config['db.default'];
-        $db = mysqli_connect($config['host'],$config['username'],$config['password'],$config['database']);
-
         //include('UploadHandler.php');
         error_reporting(E_ALL | E_STRICT);
-        $upload_handler = new UploadHandler();
+        $upload_handler = new UploadHandler($this->ci);
 
     }
 
