@@ -56,6 +56,17 @@
 	max-width: 100%;
 }
 
+.imgcontainerVD {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+}
+.imgcontainerVD img{
+  height: 150px;
+  //margin-top: 10px;
+  margin : 10px;
+}
+
 .btn-upload {
     position: relative;
     overflow: hidden;
@@ -288,7 +299,32 @@
 }
 
 
+.btn-mode2 {
+  width: 100px;
+  background: #9eacb5;
+  background-image: -webkit-linear-gradient(top, #9eacb5, #333638);
+  background-image: -moz-linear-gradient(top, #9eacb5, #333638);
+  background-image: -ms-linear-gradient(top, #9eacb5, #333638);
+  background-image: -o-linear-gradient(top, #9eacb5, #333638);
+  background-image: linear-gradient(to bottom, #9eacb5, #333638);
+  -webkit-border-radius: 8;
+  -moz-border-radius: 8;
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 15px;
+  padding: 10px 20px 10px 20px;
+  text-decoration: none;
+}
 
+.btn-mode2:hover {
+  background: #bbc3c9;
+  background-image: -webkit-linear-gradient(top, #bbc3c9, #929aa1);
+  background-image: -moz-linear-gradient(top, #bbc3c9, #929aa1);
+  background-image: -ms-linear-gradient(top, #bbc3c9, #929aa1);
+  background-image: -o-linear-gradient(top, #bbc3c9, #929aa1);
+  background-image: linear-gradient(to bottom, #bbc3c9, #929aa1);
+  text-decoration: none;
+}
 
 
 .js-basic-single{
@@ -329,4 +365,57 @@
 	position:relative;
 }
 
+.rectangleView {
+  -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  position: absolute;
+  pointer-events:none;
+}
 
+.context-menu {
+  display: none;
+  position: absolute;
+  z-index: 10;
+  //padding: 12px 0;
+  width: 240px;
+  background-color: #fff;
+  border: solid 1px #dfdfdf;
+  box-shadow: 1px 1px 2px #cfcfcf;
+}
+
+.context-menu--active {
+  display: block;
+}
+.context-menu__items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.context-menu__title{
+  display: block;
+  padding: 6px 0px 0px 6px;
+}
+.context-menu__item {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.context-menu__item:last-child {
+  margin-bottom: 0;
+}
+
+.context-menu__link {
+  display: block;
+  padding: 4px 12px;
+  color: #0066aa;
+  text-decoration: none;
+}
+
+.context-menu__link:hover {
+  color: #fff;
+  background-color: #0066aa;
+}

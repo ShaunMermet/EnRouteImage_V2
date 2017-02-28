@@ -19,7 +19,7 @@ use UserFrosting\Sprinkle\Core\Model\UFModel;
  * @property string Category
  * @property string Color
  */
-class Category extends UFModel
+class ImgCategories extends UFModel
 {
     /**
      * @var string The name of the table for the current model.

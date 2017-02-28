@@ -12,6 +12,18 @@
                 }
             }
         },
+        "js/simplePagination": {
+            "scripts": [
+                "local/core/js/jquery.simplePagination.js"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "scripts": "plain"
+                    }
+                }
+            }
+        },
         "js/export": {
             "scripts": [
                 "local/core/js/export.js"
@@ -27,6 +39,18 @@
         "js/upload": {
             "scripts": [
                 "local/core/js/upload.js"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "scripts": "plain"
+                    }
+                }
+            }
+        },
+        "js/validated": {
+            "scripts": [
+                "local/core/js/validated.js"
             ],
             "options": {
                 "result": {
@@ -113,6 +137,18 @@
         "css/site": {
             "styles": [
                 "local/core/css/style.css"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "styles": "plain"
+                    }
+                }
+            }
+        },
+        "css/simplePagination": {
+            "styles": [
+                "local/core/css/simplePagination.css"
             ],
             "options": {
                 "result": {

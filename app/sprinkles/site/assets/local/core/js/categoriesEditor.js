@@ -148,7 +148,7 @@ function catEdit_sendServerEdit(mode,catId,catText = "",catColor = ""){
 	data[site.csrf.keys.name] = site.csrf.name;
 	data[site.csrf.keys.value] = site.csrf.value;
 
-	var url = site.uri.public + '/upload/catedit';
+	var url = site.uri.public + '/admin/upload/catedit';
 	$.ajax({
 	  type: "PUT",
 	  url: url,

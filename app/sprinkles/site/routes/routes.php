@@ -28,7 +28,7 @@ $app->group('/label', function () {
 
 })->add('authGuard');
 
-$app->group('/upload', function () {
+/*$app->group('/upload', function () {
 	$this->get('', 'UserFrosting\Sprinkle\Site\Controller\SiteController:pageUpload');
 
 	$this->put('/catedit', 'UserFrosting\Sprinkle\Site\Controller\CategoryController:editCategory');
@@ -39,10 +39,20 @@ $app->group('/upload', function () {
 
 	$this->delete('/upload', 'UserFrosting\Sprinkle\Site\Controller\SiteController:uploadHandler');
 
-})->add('authGuard');
+})->add('authGuard');*/
 
-$app->group('/validated', function () {
-	$this->get('', 'UserFrosting\Sprinkle\Site\Controller\SiteController:pageValidated');
+$app->group('/admin', function () {
+	$this->get('/overview', 'UserFrosting\Sprinkle\Site\Controller\SiteController:pageValidated');
+
+	$this->get('/upload', 'UserFrosting\Sprinkle\Site\Controller\SiteController:pageUpload');
+
+	$this->put('/upload/catedit', 'UserFrosting\Sprinkle\Site\Controller\CategoryController:editCategory');
+
+	$this->get('/upload/upload', 'UserFrosting\Sprinkle\Site\Controller\SiteController:uploadHandler');
+
+	$this->post('/upload/upload', 'UserFrosting\Sprinkle\Site\Controller\SiteController:uploadHandler');
+
+	$this->delete('/upload/upload', 'UserFrosting\Sprinkle\Site\Controller\SiteController:uploadHandler');
 
 })->add('authGuard');
 
@@ -59,6 +69,8 @@ $app->group('/export', function () {
 $app->group('/category', function () {
 	$this->get('/all', 'UserFrosting\Sprinkle\Site\Controller\CategoryController:getAllCategory');
 
+	$this->get('/all2', 'UserFrosting\Sprinkle\Site\Controller\CategoryController:getAllCategory2');
+
 })->add('authGuard');
 
 $app->group('/images', function () {
@@ -69,12 +81,16 @@ $app->group('/images', function () {
 
     $this->get('/validated', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getImagesV');
 
-     $this->put('/nbrBYcategory', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getNbrImagesByCat');
+ 	$this->put('/nbrBYcategory', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getNbrImagesByCat');
+
+ 	$this->get('/imgSprunje', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getImageSprunje');
 
 })->add('authGuard');
 
 $app->group('/areas', function () {
 	$this->get('/all', 'UserFrosting\Sprinkle\Site\Controller\AreaController:getAllAreas');
+
+	$this->get('/areaSprunje', 'UserFrosting\Sprinkle\Site\Controller\AreaController:getAreaSprunje');
 
 })->add('authGuard');
 

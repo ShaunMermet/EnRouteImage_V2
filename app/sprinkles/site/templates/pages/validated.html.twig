@@ -1,23 +1,72 @@
-{% extends "layouts/default.html.twig" %}
+{% extends "layouts/dashboard.html.twig" %}
 
 {% block stylesheets_page_group %}
 	{{ assets.css('css/site') | raw }}
+	{{ assets.css('css/simplePagination') | raw }}
 {% endblock %}
 
 {% set page_active = "validated" %}
 
 {# Overrides blocks in head of base template #}
-{% block page_title %}{{translate("VALIDATED")}}{% endblock %}
+{% block page_title %}{{translate("OVERVIEW")}}{% endblock %}
 
-{% block page_description %}Images that have been validated{% endblock %}
+{% block page_description %}Overview page{% endblock %}
 
 {% block body_matter %}
+<section>
+	<div style="text-align: center;">
+	<table style="border-collapse: separate;border-spacing: 10px;" align="center">
+	  	<tr>
+	    	<th>Category</th>
+	    	<th>Validated</th>
+	    	<th>Results per page</th>
+	  	</tr>
+	  	<tr>
+		    <td><select class="js-basic-single" id="comboValidatedCategory" style="max-width:90%;" style="width: 150px;"></select></td>
+		    <td><select class="js-basic-single" id="comboValidatedValidated" style="max-width:90%;" style="width: 150px;"></select></td>
+		    <td><select class="js-basic-single" id="comboValidatedNbrResult" style="max-width:90%;" style="width: 150px;"></select></td>
+	  	</tr>
+	</table>
+		<button id="searchButton"class="btn-mode2" type="button" onclick="validated_onSearchClicked()">Search</button>
+	</div>
+	<div id="imgFound" align="center"></div>
+	<div id="page-nav" style="display: table;margin: auto;">
+	</div>
+	<div id="vdContainer" class="labelimg-container">
+		<div id="preview" class="imgcontainerVD" ondragstart="return false;" ondrop="return false;">
+		</div>
+	</div>
+	<div id="page-nav2" style="display: table;margin: auto;"></div>
 
+	<nav id="context-menu" class="context-menu">
+	  <ul class="context-menu__items">
+	  	<li class="context-menu__item">
+	        <b id = "context_menu_title" class = "context-menu__title"><i class="fa fa-align-justify"></i> Title</b>
+	    </li>
+	    <!--<li class="context-menu__item">
+	      <a href="#" class="context-menu__link" data-action="View">
+	        <i class="fa fa-eye"></i> View Task
+	      </a>
+	    </li>-->
+	    <!--<li class="context-menu__item">
+	      <a href="#" class="context-menu__link" data-action="Edit">
+	        <i class="fa fa-edit"></i> Edit Task
+	      </a>
+	    </li>-->
+	    <li class="context-menu__item">
+	      <a href="#" class="context-menu__link" data-action="Delete">
+	        <i class="fa fa-times"></i> Delete area(s)
+	      </a>
+	    </li>
+	  </ul>
+</nav>
+</section>
 
 {% endblock %}
 {% block scripts_page_group %}
 	{{ assets.js('js/tools') | raw }}
 {% endblock %}
 {% block scripts_page %}
-	
+	{{ assets.js('js/validated') | raw }}
+	{{ assets.js('js/simplePagination') | raw }}
 {% endblock %}

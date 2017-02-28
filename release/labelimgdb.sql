@@ -612,5 +612,21 @@ ALTER TABLE `labelimglinks` ADD `category` INT(1) NULL DEFAULT NULL COMMENT 'cat
 
 --Change for Alpha 0.2.2
 
-INSERT INTO `permissions` (`id`, `slug`, `name`, `conditions`, `description`, `created_at`, `updated_at`) VALUES (NULL, 'uri_validated', 'view validated page', 'has_role(self.id,2)', 'View the page to check validated images.', NULL, NULL)
-INSERT INTO `permission_roles` (`permission_id`, `role_id`, `created_at`, `updated_at`) VALUES ('29', '2', NULL, NULL)
+INSERT INTO `permissions` (`id`, `slug`, `name`, `conditions`, `description`, `created_at`, `updated_at`) VALUES (NULL, 'uri_validated', 'view validated page', 'has_role(self.id,2)', 'View the page to check validated images.', NULL, NULL);
+INSERT INTO `permission_roles` (`permission_id`, `role_id`, `created_at`, `updated_at`) VALUES ('29', '2', NULL, NULL);
+UPDATE `permissions` SET `name` = 'edit category' WHERE `permissions`.`id` = 28;
+INSERT INTO `permissions` (`id`, `slug`, `name`, `conditions`, `description`, `created_at`, `updated_at`) VALUES (NULL, 'get_area', 'Get area', 'always()', 'Grant access to request areas', NULL, NULL);
+INSERT INTO `permission_roles` (`permission_id`, `role_id`, `created_at`, `updated_at`) VALUES ('30', '2', NULL, NULL);
+INSERT INTO `permission_roles` (`permission_id`, `role_id`, `created_at`, `updated_at`) VALUES ('30', '3', NULL, NULL);
+INSERT INTO `permissions` (`id`, `slug`, `name`, `conditions`, `description`, `created_at`, `updated_at`) VALUES (NULL, 'create_area', 'Create area', 'always()', 'Grant access to create areas', NULL, NULL);
+INSERT INTO `permission_roles` (`permission_id`, `role_id`, `created_at`, `updated_at`) VALUES ('31', '1', NULL, NULL);
+INSERT INTO `permission_roles` (`permission_id`, `role_id`, `created_at`, `updated_at`) VALUES ('31', '2', NULL, NULL);
+INSERT INTO `permission_roles` (`permission_id`, `role_id`, `created_at`, `updated_at`) VALUES ('31', '3', NULL, NULL);
+INSERT INTO `permissions` (`id`, `slug`, `name`, `conditions`, `description`, `created_at`, `updated_at`) VALUES (NULL, 'update_area', 'Update area', 'always()', 'Grant access to update areas', NULL, NULL);
+INSERT INTO `permission_roles` (`permission_id`, `role_id`, `created_at`, `updated_at`) VALUES ('32', '2', NULL, NULL);
+INSERT INTO `permission_roles` (`permission_id`, `role_id`, `created_at`, `updated_at`) VALUES ('32', '3', NULL, NULL);
+INSERT INTO `permissions` (`id`, `slug`, `name`, `conditions`, `description`, `created_at`, `updated_at`) VALUES (NULL, 'delete_area', 'Delete area', 'always()', 'Grant access to delete areas', NULL, NULL);
+INSERT INTO `permission_roles` (`permission_id`, `role_id`, `created_at`, `updated_at`) VALUES ('33', '2', NULL, NULL);
+INSERT INTO `permission_roles` (`permission_id`, `role_id`, `created_at`, `updated_at`) VALUES ('33', '3', NULL, NULL);
+
+ALTER TABLE `labelimglinks` ADD `validated_at` DATETIME NULL DEFAULT NULL AFTER `category`;
