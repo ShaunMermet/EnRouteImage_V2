@@ -14,6 +14,8 @@ use UserFrosting\Sprinkle\Core\Controller\SimpleController;
 use UserFrosting\Support\Exception\ForbiddenException;
 use UserFrosting\Sprinkle\Account\Authenticate\Authenticator;
 use UserFrosting\Sprinkle\Site\Sprunje\ImgAreaSprunje;
+use UserFrosting\Sprinkle\Site\Model\ImgArea;
+use UserFrosting\Sprinkle\Site\Model\ImgLinks;
 
 /**
  * Controller class for category-related requests.
@@ -61,6 +63,63 @@ class AreaController extends SimpleController
         // Be careful how you consume this data - it has not been escaped and contains untrusted user-supplied content.
         // For example, if you plan to insert it into an HTML DOM, you must escape it on the client side (or use client-side templating).
         return $sprunje->toResponse($response);
+    }
+
+    /**
+     * Get the areas corresponding to user given
+     *
+     * This page requires authentication.
+     * Request type: GET
+     */
+    public function getAreaUserStats($request, $response, $args)
+    {
+        // GET parameters
+        $params = $request->getQueryParams();
+
+        /** @var UserFrosting\Sprinkle\Account\Authenticate\Authenticator $authenticator */
+        $authenticator = $this->ci->authenticator;
+        if (!$authenticator->check()) {
+            $loginPage = $this->ci->router->pathFor('login');
+            return $response->withRedirect($loginPage, 400);
+        }
+
+        /** @var UserFrosting\Sprinkle\Account\Authorize\AuthorizationManager */
+        $authorizer = $this->ci->authorizer;
+
+        /** @var UserFrosting\Sprinkle\Account\Model\User $currentUser */
+        $currentUser = $this->ci->currentUser;
+
+        // Access-controlled page
+        if (!$authorizer->checkAccess($currentUser, 'uri_account_settings')) {
+            $loginPage = $this->ci->router->pathFor('login');
+           return $response->withRedirect($loginPage, 400);
+        }
+
+        /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
+        $classMapper = $this->ci->classMapper;
+
+        $count = [];
+        
+        $count['deletedArea'] = ImgArea::where('user', '=', $currentUser->id)
+                                ->where('alive', '=',0)
+                                ->count();
+        
+        $count['validatedArea'] = ImgArea::where('user', '=', $currentUser->id)
+                                ->joinImglinks()
+                                ->where('alive', '=',1)
+                                ->where('validated', '=',1)
+                                ->count();
+
+        $count['pendingArea'] = ImgArea::where('user', '=', $currentUser->id)
+                                ->joinImglinks()
+                                ->where('alive', '=',1)
+                                ->where('validated', '=',0)
+                                ->count();
+
+
+        // Be careful how you consume this data - it has not been escaped and contains untrusted user-supplied content.
+        // For example, if you plan to insert it into an HTML DOM, you must escape it on the client side (or use client-side templating).
+        return $response->withJson($count, 200, JSON_PRETTY_PRINT);
     }
 
     /**

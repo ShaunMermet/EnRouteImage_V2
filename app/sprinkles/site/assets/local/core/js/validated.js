@@ -2,12 +2,7 @@ var validated_imgPath = "../../img/";
 
 var dataHandler = {};
 
-validated_context();
-function validated_context(){
-  "use strict";
 
-  
-}
 validated_loadCategories();
 function validated_loadCategories(){
 	// Fetch and render the categories
@@ -96,13 +91,7 @@ function validated_loadImages(categories,filter){
 	var url = site.uri.public + '/images/imgSprunje';
 	$.ajax({
 		type: "GET",
-		data: filter //{ 
-		    //size: 5, 
-		    //page: 0,
-		    //sorts: {path : 'asc'},
-		    
-	  	//}
-	  	,
+		data: filter,
 		url: url
 	})
 	.then(

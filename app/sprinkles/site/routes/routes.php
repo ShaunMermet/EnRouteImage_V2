@@ -28,19 +28,6 @@ $app->group('/label', function () {
 
 })->add('authGuard');
 
-/*$app->group('/upload', function () {
-	$this->get('', 'UserFrosting\Sprinkle\Site\Controller\SiteController:pageUpload');
-
-	$this->put('/catedit', 'UserFrosting\Sprinkle\Site\Controller\CategoryController:editCategory');
-
-	$this->get('/upload', 'UserFrosting\Sprinkle\Site\Controller\SiteController:uploadHandler');
-
-	$this->post('/upload', 'UserFrosting\Sprinkle\Site\Controller\SiteController:uploadHandler');
-
-	$this->delete('/upload', 'UserFrosting\Sprinkle\Site\Controller\SiteController:uploadHandler');
-
-})->add('authGuard');*/
-
 $app->group('/admin', function () {
 	$this->get('/overview', 'UserFrosting\Sprinkle\Site\Controller\SiteController:pageValidated');
 
@@ -91,6 +78,8 @@ $app->group('/areas', function () {
 	$this->get('/all', 'UserFrosting\Sprinkle\Site\Controller\AreaController:getAllAreas');
 
 	$this->get('/areaSprunje', 'UserFrosting\Sprinkle\Site\Controller\AreaController:getAreaSprunje');
+
+	$this->get('/areauserstats', 'UserFrosting\Sprinkle\Site\Controller\AreaController:getAreaUserStats');
 
 })->add('authGuard');
 

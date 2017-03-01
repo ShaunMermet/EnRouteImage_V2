@@ -44,5 +44,24 @@ class ImgArea extends UFModel
     ];
 
 
+    /**
+     * Get the image that owns the area.
+     */
+    public function imglinks()
+    {
+        return $this->belongsTo('UserFrosting\Sprinkle\Site\Model\ImgLinks', 'source');
+    }
+
+    /**
+     * Joins the user's most recent activity directly, so we can do things like sort, search, paginate, etc.
+     */
+    public function scopeJoinImglinks($query)
+    {
+        $query = $query->select('labelimgarea.*');
+//error_log(print_r($query,true));
+        $query = $query->leftJoin('labelimglinks', 'labelimglinks.id', '=', 'labelimgarea.source');
+//error_log(print_r($query,true));
+        return $query;
+    }
     
 }

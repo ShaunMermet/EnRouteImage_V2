@@ -419,3 +419,7 @@
   color: #fff;
   background-color: #0066aa;
 }
+
+.info-box-text{
+  font-size: -webkit-xxx-large;
+}

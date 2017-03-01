@@ -36,6 +36,18 @@
                 }
             }
         },
+        "js/account_settings": {
+            "scripts": [
+                "local/core/js/account_settings.js"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "scripts": "plain"
+                    }
+                }
+            }
+        },
         "js/upload": {
             "scripts": [
                 "local/core/js/upload.js"
