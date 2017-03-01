@@ -58,9 +58,9 @@ class ImgArea extends UFModel
     public function scopeJoinImglinks($query)
     {
         $query = $query->select('labelimgarea.*');
-//error_log(print_r($query,true));
+
         $query = $query->leftJoin('labelimglinks', 'labelimglinks.id', '=', 'labelimgarea.source');
-//error_log(print_r($query,true));
+
         return $query;
     }
     

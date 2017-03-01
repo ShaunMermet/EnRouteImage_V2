@@ -9,8 +9,6 @@ function accountSettings_getAreasValidated(){
 	    // Fetch successful
 	    function (data) {
 	    	if(data!=""){
-	    		console.log("Areas validated");
-	    		console.log(data);
 	    		document.getElementById("account_submitted_textBox").textContent = data['pendingArea']+data['deletedArea']+data['validatedArea'];
 	    		document.getElementById("account_submitted_textBox").title = data['pendingArea']+data['deletedArea']+data['validatedArea'];
 
