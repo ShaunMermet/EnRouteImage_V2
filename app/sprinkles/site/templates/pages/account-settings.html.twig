@@ -21,13 +21,13 @@
         <div class="col-lg-12">
             <div class="box box-primary">
                 <div class="box-header">
-                    <h3 class="box-title"><i class="fa fa-user-circle-o"></i> {{translate("ACCOUNT.PROFILE")}}</h3>
+                    <h3 class="box-title"><i class="fa fa-user-circle-o"></i> {{translate("ACCOUNT.SETTINGS.STATS")}}</h3>
                 </div>
 {% if checkAccess('uri_account_settings') %}
     <div class="row">
         <div class="col-md-3 col-sm-6 col-xs-12">
           <div class="info-box">
-            <span class="info-box-icon bg-yellow"  title={{ translate("SUBMITTED", 2) }}><i class="fa fa-object-ungroup"></i></span>
+            <span class="info-box-icon bg-yellow"  title="{{ translate("ACCOUNT.SETTINGS.STATS.SUBMITTED") }}"><i class="fa fa-object-ungroup"></i></span>
             <div class="info-box-content">
               <span class="info-box-text" id="account_submitted_textBox"></span>
             </div>
@@ -39,7 +39,7 @@
 
         <div class="col-md-3 col-sm-6 col-xs-12">
           <div class="info-box">
-            <span class="info-box-icon bg-red" title={{ translate("REJECTED", 2) }}><i class="fa fa-window-close-o"></i></span>
+            <span class="info-box-icon bg-red" title="{{ translate("ACCOUNT.SETTINGS.STATS.REJECTED") }}"><i class="fa fa-window-close-o"></i></span>
             <div class="info-box-content">
               <span class="info-box-text" id="account_rejected_textBox"></span>
             </div>
@@ -52,7 +52,7 @@
 
         <div class="col-md-3 col-sm-6 col-xs-12">
           <div class="info-box">
-            <span class="info-box-icon bg-green" title={{ translate("VALIDATED", 2) }}><i class="fa fa-check-square-o"></i></span>
+            <span class="info-box-icon bg-green" title="{{ translate("ACCOUNT.SETTINGS.STATS.VALIDATED") }}"><i class="fa fa-check-square-o"></i></span>
             <div class="info-box-content">
               <span class="info-box-text" id="account_validated_textBox"></span>
             </div>
@@ -64,7 +64,7 @@
 
         <div class="col-md-3 col-sm-6 col-xs-12">
           <div class="info-box">
-            <span class="info-box-icon" style="background-color : #FFFFFF;" title={{ translate("SUCCESS_RATE", 2) }}><i id="account_successRate_icone"></i></span>
+            <span class="info-box-icon" style="background-color : #FFFFFF;" title="{{ translate("ACCOUNT.SETTINGS.STATS.SUCCESS_RATE") }}"><i id="account_successRate_icone"></i></span>
             <div class="info-box-content">
               <span class="info-box-text" id="account_successRate_textBox"></span>
             </div>

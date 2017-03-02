@@ -14,7 +14,29 @@ return [
     
     "LABEL"            	 => "Label",
     "VALIDATE"           => "Validate",
-    "UPLOAD"             => "Upload",
+    
+    "LABEL_description"  => "Choose a category and start to tag images !",
 
-    "LABEL_description"  => "Choose a category and start to tag images !"
+    "ACCOUNT" => [
+
+        "SETTINGS" => [
+            "STATS" => [
+	            "@TRANSLATION"     => "Account statistics",
+	            "SUBMITTED"        => "Tags submitted",
+	            "REJECTED"         => "Tags rejected",
+	            "VALIDATED"        => "Tags validated",
+	            "SUCCESS_RATE"     =>"Success rate"
+        	],
+        ]
+    ],
+
+    "GALLERY"				=>"Gallery",
+    "UPLOAD" =>[
+        "@TRANSLATION" => "Upload",
+        "TITLE" => [
+        "EXPORT"        =>"Export",
+        "CATEGORY"      =>"Categories editor",
+        "UPLOAD"        =>"Images uploader",
+        ]
+    ]
 ];
