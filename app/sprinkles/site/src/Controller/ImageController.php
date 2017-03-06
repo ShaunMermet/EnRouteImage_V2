@@ -25,8 +25,6 @@ use UserFrosting\Sprinkle\Site\Sprunje\ImgLinksSprunje;
  */
 class ImageController extends SimpleController
 {
-    //$db = mysqli_connect(getenv('DB_HOST'),getenv('DB_USER'),getenv('DB_PASSWORD'),getenv('DB_NAME'));
-
     /**
      * Returns all images that are neither validated nor annotated.
      *

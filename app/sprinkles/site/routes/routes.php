@@ -19,14 +19,14 @@ $app->group('/validate', function () {
 
 	$this->put('/evaluate', 'UserFrosting\Sprinkle\Site\Controller\AreaController:areaEvaluate');
 
-})->add('authGuard');
+});//->add('authGuard');
 
 $app->group('/label', function () {
 	$this->get('', 'UserFrosting\Sprinkle\Site\Controller\SiteController:pageLabel');
 
 	$this->post('/annotate', 'UserFrosting\Sprinkle\Site\Controller\AreaController:saveAreas');
 
-})->add('authGuard');
+});//->add('authGuard');
 
 $app->group('/admin', function () {
 	$this->get('/overview', 'UserFrosting\Sprinkle\Site\Controller\SiteController:pageValidated');
@@ -41,7 +41,7 @@ $app->group('/admin', function () {
 
 	$this->delete('/upload/upload', 'UserFrosting\Sprinkle\Site\Controller\SiteController:uploadHandler');
 
-})->add('authGuard');
+});//->add('authGuard');
 
 //Data
 //GET
@@ -51,14 +51,14 @@ $app->group('/export', function () {
 
 	$this->get('/dl/{dl_id}', 'UserFrosting\Sprinkle\Site\Controller\SiteController:returnDownload');
 
-})->add('authGuard');
+});//->add('authGuard');
 
 $app->group('/category', function () {
 	$this->get('/all', 'UserFrosting\Sprinkle\Site\Controller\CategoryController:getAllCategory');
 
 	$this->get('/all2', 'UserFrosting\Sprinkle\Site\Controller\CategoryController:getAllCategory2');
 
-})->add('authGuard');
+});//->add('authGuard');
 
 $app->group('/images', function () {
 
@@ -72,7 +72,7 @@ $app->group('/images', function () {
 
  	$this->get('/imgSprunje', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getImageSprunje');
 
-})->add('authGuard');
+});//->add('authGuard');
 
 $app->group('/areas', function () {
 	$this->get('/all', 'UserFrosting\Sprinkle\Site\Controller\AreaController:getAllAreas');
@@ -81,10 +81,10 @@ $app->group('/areas', function () {
 
 	$this->get('/areauserstats', 'UserFrosting\Sprinkle\Site\Controller\AreaController:getAreaUserStats');
 
-})->add('authGuard');
+});//->add('authGuard');
 
 //PUT
 $app->group('/freeimage', function () {
 	$this->put('/{img_id}', 'UserFrosting\Sprinkle\Site\Controller\ImageController:freeImage');
 
-})->add('authGuard');
+});//->add('authGuard');
