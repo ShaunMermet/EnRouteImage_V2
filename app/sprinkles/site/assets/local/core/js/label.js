@@ -435,37 +435,34 @@ function label_initDraw(canvas) {
 	
 	/////  TOUCH  ////////////////////////////
 	
-	image.addEventListener("touchstart", handleStart, false);
-	image.addEventListener("touchend", handleEnd, false);
-	image.addEventListener("touchcancel", handleCancel, false);
-	image.addEventListener("touchmove", handleMove, false);
-	
-	
-	function handleStart(e) {
-		if(!moveMode)
-			e.preventDefault();
-		console.log("touchstart");
-		onClickHandler(e);
-		onDownHandler(e);
-	}
-	function handleEnd(e) {
-		if(!moveMode)
-			e.preventDefault();
-		console.log("touchend");
-		onUpHandler(e);
-	}
-	function handleCancel(e) {
-		e.preventDefault();
-		console.log("touchcancel");
-	}
-	function handleMove(e) {
-		if(!moveMode)
-			e.preventDefault();
-		onMoveHandler(e);
-		console.log("touchmove");
-	}
-	///////////////////////////////////////////
 
+	var refImage = document.getElementById('image');
+
+	
+	refImage.ontouchstart = function handleStart(e) {
+								if(!moveMode)
+									e.preventDefault();
+								console.log("touchstart");
+								onClickHandler(e);
+								onDownHandler(e);
+							}
+	refImage.ontouchend = function handleEnd(e) {
+								if(!moveMode)
+									e.preventDefault();
+								console.log("touchend");
+								onUpHandler(e);
+							}
+	refImage.ontouchcancel = function handleCancel(e) {
+								e.preventDefault();
+								console.log("touchcancel");
+							}
+	refImage.ontouchmove = 	function handleMove(e) {
+								if(!moveMode)
+									e.preventDefault();
+								onMoveHandler(e);
+								console.log("touchmove");
+							}		
+	///////////////////////////////////////////
 }
 
 
