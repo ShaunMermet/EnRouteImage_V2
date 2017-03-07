@@ -16,6 +16,7 @@ use UserFrosting\Sprinkle\Account\Authenticate\Authenticator;
 use UserFrosting\Fortress\RequestDataTransformer;
 use UserFrosting\Fortress\RequestSchema;
 use UserFrosting\Sprinkle\Site\Sprunje\ImgLinksSprunje;
+use UserFrosting\Sprinkle\Site\Model\ImgLinks;
 
 /**
  * Controller class for category-related requests.
@@ -53,66 +54,66 @@ class ImageController extends SimpleController
            return $response->withRedirect($loginPage, 400);
         }
 
-        /** @var UserFrosting\Config\Config $config */
-        $config = $this->ci->config['db.default'];
-        $db = mysqli_connect($config['host'],$config['username'],$config['password'],$config['database']);
+
         $maxImageRequested = getenv('MAX_IMAGE_REQUESTED');
-        // Set autocommit to off
-        mysqli_autocommit($db,FALSE);
 
-        /////////////SELECT ////////////////
+        /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
+        $classMapper = $this->ci->classMapper;
 
-        $sql = "SELECT lnk.id,lnk.path
-        FROM labelimglinks lnk LEFT JOIN labelimgarea are ON lnk.id =are.source AND are.alive = 1
-        WHERE (are.alive = 0 OR are.alive IS NULL) AND lnk.available = 1
-        GROUP BY lnk.id
-        ORDER BY RAND()
-        LIMIT $maxImageRequested";
-        $result = $db->query($sql);
-        header('Content-type: application/json');
-        $res=array();
-        // Commit transaction
-        mysqli_commit($db);
-        if ($result->num_rows > 0) {
-            
-            
-            /* fetch object array */
-            while ($obj = $result->fetch_object()) {
-                $sql = "UPDATE `labelimglinks` SET `available` = 0,`requested`= NOW() WHERE `labelimglinks`.`id` = '$obj->id'";
-                    
-                if ($db->query($sql) === TRUE) {
-                } else {
-                    echo "Error: " . $sql . "<br>" . $db->error;
-                }
-                
-                array_push($res,$obj);
-                error_log("label : found row");
-            }
-            error_log("label : ".count($res));
-            echo json_encode($res);
-            
-            
-            // Commit transaction
-            mysqli_commit($db);
-
-            /* free result set */
-            $result->close();
-            
-        } else {
-            
+        $imgLinks = ImgLinks::joinImgArea()
+                            ->where('alive', '=', 0)
+                            ->orWhereNull('alive')
+                            ->where ('available', '=', 1)
+                            ->groupBy('id')
+                            ->inRandomOrder()
+                            ->limit($maxImageRequested)
+                            ->get();
+        //Reserve Images
+        foreach ($imgLinks as $img) {
+            $img->available = 0;
+            $img->save();
         }
 
-        foreach($res as $img){
-            $sql = "UPDATE `labelimglinks` SET `available` = 0 WHERE `labelimglinks`.`id` = '$img->id'";
-            if ($db->query($sql) === TRUE) {
-                error_log("label : set 0 ".$img->id);
-            } else {
-                echo "Error: " . $sql . "<br>" . $db->error;
-            }
-        }
-        ///////////////
+        $result = $imgLinks->toArray();
 
-        $db->close();
+        // Be careful how you consume this data - it has not been escaped and contains untrusted user-supplied content.
+        // For example, if you plan to insert it into an HTML DOM, you must escape it on the client side (or use client-side templating).
+        return $response->withJson($result, 200, JSON_PRETTY_PRINT);
+
+    }
+
+    /**
+     * Returns all images that are neither validated nor annotated.
+     *
+     * 
+     * Request type: GET
+     */
+    public function getImagesCNoAuth($request, $response, $args)
+    {
+        $maxImageRequested = getenv('MAX_IMAGE_REQUESTED');
+
+        /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
+        $classMapper = $this->ci->classMapper;
+
+        $imgLinks = ImgLinks::joinImgArea()
+                            ->where('alive', '=', 0)
+                            ->orWhereNull('alive')
+                            ->where ('available', '=', 1)
+                            ->groupBy('id')
+                            ->inRandomOrder()
+                            ->limit($maxImageRequested)
+                            ->get();
+        //Reserve Images
+        foreach ($imgLinks as $img) {
+            $img->available = 0;
+            $img->save();
+        }
+
+        $result = $imgLinks->toArray();
+
+        // Be careful how you consume this data - it has not been escaped and contains untrusted user-supplied content.
+        // For example, if you plan to insert it into an HTML DOM, you must escape it on the client side (or use client-side templating).
+        return $response->withJson($result, 200, JSON_PRETTY_PRINT);
     }
 
     /**
@@ -258,30 +259,28 @@ class ImageController extends SimpleController
         $data = json_decode(json_encode($params), FALSE);
         //error_log( print_r($data, TRUE) );
 
-        /** @var UserFrosting\Config\Config $config */
-        $config = $this->ci->config['db.default'];
-        $db = mysqli_connect($config['host'],$config['username'],$config['password'],$config['database']);
+        $img = ImgLinks::where('id', $data->dataSrc)->first();
+        $img->available = 1;
+        $img->save();
+    }
 
-        if (!empty($data))
-        {
-            error_log("in freeImage\n") ;
-            
+    /**
+     * Say that image is no longer in use and so can be requested again.
+     *
+     * 
+     * Request type: PUT
+     */
+    public function freeImageNoAuth($request, $response, $args)
+    {
 
-            $source = mysqli_real_escape_string($db,($data->dataSrc));
-            $sql = "UPDATE `labelimglinks` SET `available` = 1 WHERE `labelimglinks`.`id` = '$source'"; 
-            if ($db->query($sql) === TRUE) {
-                error_log("img ".$source." set to 1");
-            } else {
-                echo "Error: " . $sql . "<br>" . $db->error;
-            }
-            
-            $db->close();
-            
-        }
-        else // $_POST is empty.
-        {
-            error_log("freeImage - No data") ;
-        }
+        // Get PUT parameters: 
+        $params = $request->getParsedBody();
+        $data = json_decode(json_encode($params), FALSE);
+        //error_log( print_r($data, TRUE) );
+
+        $img = ImgLinks::where('id', $data->dataSrc)->first();
+        $img->available = 1;
+        $img->save();
 
     }
     /**

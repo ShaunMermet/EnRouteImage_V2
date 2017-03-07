@@ -593,7 +593,7 @@ DELIMITER $$
 --
 -- Events
 --
-CREATE DEFINER=`labelImgManager`@`localhost` EVENT `free images` ON SCHEDULE EVERY '5:0' MINUTE_SECOND STARTS '2017-01-29 00:00:00' ENDS '2018-02-01 00:00:00' ON COMPLETION NOT PRESERVE ENABLE DO UPDATE labelimglinks SET available = 1 WHERE available = 0 AND requested < DATE_SUB(NOW(), INTERVAL 1 MINUTE)$$
+CREATE DEFINER=`labelImgManager`@`localhost` EVENT `free images` ON SCHEDULE EVERY '60:0' MINUTE_SECOND STARTS '2017-01-29 00:00:00' ENDS '2018-02-01 00:00:00' ON COMPLETION NOT PRESERVE ENABLE DO UPDATE labelimglinks SET available = 1 WHERE available = 0 AND requested < DATE_SUB(NOW(), INTERVAL 1 MINUTE)$$
 
 CREATE DEFINER=`labelImgManager`@`localhost` EVENT `Clean download links` ON SCHEDULE EVERY '0 6' DAY_HOUR STARTS '2017-01-29 00:00:00' ENDS '2018-01-29 00:00:00' ON COMPLETION NOT PRESERVE ENABLE DO DELETE FROM `labelimgexportlinks` WHERE `labelimgexportlinks`.`expires`< NOW()$$
 
@@ -630,3 +630,27 @@ INSERT INTO `permission_roles` (`permission_id`, `role_id`, `created_at`, `updat
 INSERT INTO `permission_roles` (`permission_id`, `role_id`, `created_at`, `updated_at`) VALUES ('33', '3', NULL, NULL);
 
 ALTER TABLE `labelimglinks` ADD `validated_at` DATETIME NULL DEFAULT NULL AFTER `category`;
+
+
+
+
+
+--------------------------------
+--- Changes for Alpha 0.2.3 -----
+--------------------------------
+
+--HOTFIXES (May have already been performed)
+--(Optionnal) Hotfix for event triggering too often
+DROP EVENT `free images`; CREATE DEFINER=`labelImgManager`@`localhost` EVENT `free images` ON SCHEDULE EVERY 3600 MINUTE_SECOND STARTS '2017-01-29 00:00:00' ENDS '2018-02-01 00:00:00' ON COMPLETION NOT PRESERVEENABLE DO UPDATE labelimglinks SET available = 1 WHERE available = 0 AND requested < DATE_SUB(NOW(), INTERVAL 1 MINUTE)
+-- Hotfix AdminSh user rights
+INSERT INTO `role_users` (`user_id`, `role_id`, `created_at`, `updated_at`) VALUES ('2', '1', NOW(), NOW()), ('2', '2', NOW(), NOW()), ('2', '3', NOW(), NOW())
+
+--CHANGES
+alter table `labelimgarea`
+ADD CONSTRAINT UNIQUE(`source`,
+                      `rectType`,
+                      `rectLeft`,
+                      `rectTop`,
+                      `rectRight`,
+                      `rectBottom`,
+                      `alive`);

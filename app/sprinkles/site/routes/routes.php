@@ -26,6 +26,8 @@ $app->group('/label', function () {
 
 	$this->post('/annotate', 'UserFrosting\Sprinkle\Site\Controller\AreaController:saveAreas');
 
+	$this->post('/annotateNA', 'UserFrosting\Sprinkle\Site\Controller\AreaController:saveAreasNoAuth');
+
 });//->add('authGuard');
 
 $app->group('/admin', function () {
@@ -58,11 +60,15 @@ $app->group('/category', function () {
 
 	$this->get('/all2', 'UserFrosting\Sprinkle\Site\Controller\CategoryController:getAllCategory2');
 
+	$this->get('/allNA', 'UserFrosting\Sprinkle\Site\Controller\CategoryController:getAllCategoryNoAuth');
+
 });//->add('authGuard');
 
 $app->group('/images', function () {
 
     $this->get('/clean', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getImagesC');
+
+    $this->get('/cleanNA', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getImagesCNoAuth');
 
     $this->get('/annotated', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getImagesA');
 
@@ -86,5 +92,9 @@ $app->group('/areas', function () {
 //PUT
 $app->group('/freeimage', function () {
 	$this->put('/{img_id}', 'UserFrosting\Sprinkle\Site\Controller\ImageController:freeImage');
+
+});//->add('authGuard');
+$app->group('/freeimageNA', function () {
+	$this->put('/{img_id}', 'UserFrosting\Sprinkle\Site\Controller\ImageController:freeImageNoAuth');
 
 });//->add('authGuard');

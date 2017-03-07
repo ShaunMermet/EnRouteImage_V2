@@ -114,6 +114,24 @@ class CategoryController extends SimpleController
         // For example, if you plan to insert it into an HTML DOM, you must escape it on the client side (or use client-side templating).
         return $sprunje->toResponse($response);
     }
+    /**
+     * Returns all categories.
+     *
+     * This page requires authentication.
+     * Request type: GET
+     */
+    public function getAllCategoryNoAuth($request, $response, $args)
+    {
+
+        /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
+        $classMapper = $this->ci->classMapper;
+
+        $sprunje = new ImgCategoriesSprunje($classMapper);
+
+        // Be careful how you consume this data - it has not been escaped and contains untrusted user-supplied content.
+        // For example, if you plan to insert it into an HTML DOM, you must escape it on the client side (or use client-side templating).
+        return $sprunje->toResponse($response);
+    }
     
     /**
      * Edit a category.

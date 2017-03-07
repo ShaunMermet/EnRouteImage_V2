@@ -108,6 +108,18 @@
                 }
             }
         },
+        "js/homepage": {
+            "scripts": [
+                "local/core/js/homepage.js"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "scripts": "plain"
+                    }
+                }
+            }
+        },
 		"js/validate": {
             "scripts": [
                 "local/core/js/validate.js"

@@ -53,7 +53,7 @@ class ImgArea extends UFModel
     }
 
     /**
-     * Joins the user's most recent activity directly, so we can do things like sort, search, paginate, etc.
+     * Joins the img related to directly, so we can do things like sort, search, paginate, etc.
      */
     public function scopeJoinImglinks($query)
     {

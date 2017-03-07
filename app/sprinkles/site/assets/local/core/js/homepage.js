@@ -1,18 +1,18 @@
-var label_imgPathList=[];
-var label_imgPathListIndex = 0;
-var label_imgPath = "../img/";
-var label_phpPath = "../../php/";
-var label_srcName = 0;
+var homepage_imgPathList=[];
+var homepage_imgPathListIndex = 0;
+var homepage_imgPath = "../img/";
+var homepage_phpPath = "../../php/";
+var homepage_srcName = 0;
 //if(document.getElementById("openButton"))
 //	document.getElementById("openButton").style = "DISPLAY: none;";
 
 
 
 ////////////GET IMG FROM SERVER//////
-label_loadImages();
-function label_loadImages(){
+homepage_loadImages();
+function homepage_loadImages(){
 	// Fetch and render the images
-	var url = site.uri.public + '/images/clean';
+	var url = site.uri.public + '/images/cleanNA';
 	$.ajax({
 	  type: "GET",
 	  url: url
@@ -21,12 +21,11 @@ function label_loadImages(){
 	    // Fetch successful
 	    function (data) {
 	    	if(data!=""){
-				//var res = JSON.parse(data);
-				label_imgPathList = data;//res;
+				homepage_imgPathList = data;
 			}
-			else label_imgPathList = [];
-			label_imgPathListIndex = 0;
-			label_addImage();
+			else homepage_imgPathList = [];
+			homepage_imgPathListIndex = 0;
+			homepage_addImage();
 	    },
 	    // Fetch failed
 	    function (data) {
@@ -35,20 +34,20 @@ function label_loadImages(){
 	);
 }
 
-function label_addImage(){
-	if(label_imgPathList.length>0){
-		label_srcName = label_imgPathList[label_imgPathListIndex].id;
-		var imgName = label_imgPathList[label_imgPathListIndex].path;
-		var imgToAdd = label_imgPath+imgName;
-		document.getElementById('image').src = imgToAdd;//$('#preview').html("<img id='image' unselectable='on' onresize='"label_onImgResize()"' src='"+imgToAdd+"' />")
-		label_initSelection();
-		document.getElementById('imgCounter').innerHTML = "Image "+(label_imgPathListIndex+1)+" of "+label_imgPathList.length;
+function homepage_addImage(){
+	if(homepage_imgPathList.length>0){
+		homepage_srcName = homepage_imgPathList[homepage_imgPathListIndex].id;
+		var imgName = homepage_imgPathList[homepage_imgPathListIndex].path;
+		var imgToAdd = homepage_imgPath+imgName;
+		document.getElementById('image').src = imgToAdd;//$('#preview').html("<img id='image' unselectable='on' onresize='"homepage_onImgResize()"' src='"+imgToAdd+"' />")
+		homepage_initSelection();
+		document.getElementById('imgCounter').innerHTML = "Image "+(homepage_imgPathListIndex+1)+" of "+homepage_imgPathList.length;
 		document.getElementById("moreButton").style = "DISPLAY: none;";
 		document.getElementById("nextButton").style = "DISPLAY: initial;";
 	}
 }
 
-function label_onImgResize(){
+function homepage_onImgResize(){
 	console.log("resize");
 }
 window.addEventListener("resize", function(){
@@ -57,7 +56,7 @@ window.addEventListener("resize", function(){
 	//document.getElementById('value1').innerHTML = "left "+refPreview.parentElement.offsetLeft+" top "+refPreview.parentElement.offsetTop;
 	//document.getElementById('value3').innerHTML = "left "+refPreview.offsetLeft+" top "+refPreview.offsetTop;
 	var elements = document.getElementsByClassName("rectangle");
-	var ratio = label_getImgRatio();
+	var ratio = homepage_getImgRatio();
 	if(elements.length>0){
 		for (var i = 0; i < elements.length; ++i) {
 			console.log("Resize rect ratio :"+ratio);
@@ -78,38 +77,38 @@ window.addEventListener("resize", function(){
    }
 });
 
-function label_getImgRatio(){
+function homepage_getImgRatio(){
 	var refImage = document.getElementById('image');
 	return refImage.clientWidth/refImage.naturalWidth;
 	//document.getElementById('value2').innerHTML = "ratio "+refImage.clientWidth/refImage.naturalWidth;
 	//document.getElementById('value3').innerHTML = "ratio "+refImage.clientHeight/refImage.naturalHeight;
 }
 
-function label_nextImage(){
-	if(label_imgPathList.length>0){
-		label_wipeRectangle();
-		label_removeImage();
-		tools_freeImage(label_imgPathList[label_imgPathListIndex].id);
-		label_imgPathListIndex++;
-		if(label_imgPathListIndex<label_imgPathList.length)
-			label_addImage();
+function homepage_nextImage(){
+	if(homepage_imgPathList.length>0){
+		homepage_wipeRectangle();
+		homepage_removeImage();
+		tools_freeImageNA(homepage_imgPathList[homepage_imgPathListIndex].id);
+		homepage_imgPathListIndex++;
+		if(homepage_imgPathListIndex<homepage_imgPathList.length)
+			homepage_addImage();
 		else{
 			console.log("no more img");
 			document.getElementById("moreButton").style = "DISPLAY: initial;";
 			document.getElementById("nextButton").style = "DISPLAY: none;";
-			//label_loadImages();
+			//homepage_loadImages();
 		}
 	}
 }
 
-function label_removeImage(){
+function homepage_removeImage(){
 	var refImage = document.getElementById('image');
 	if(refImage){
 		//refImage.remove();
 		refImage.src = "";
 	}
 }
-function label_wipeRectangle(){
+function homepage_wipeRectangle(){
 	var elements = document.getElementsByClassName("rectangle");
 	while(elements.length>0){
 		elements[0].remove();
@@ -123,16 +122,16 @@ function label_wipeRectangle(){
 ////  COMBO    //////////////////
 //creating categories 
 
-var label_catId = [];
-var label_catText=[];
-var label_catColor= [];
+var homepage_catId = [];
+var homepage_catText=[];
+var homepage_catColor= [];
 
 
 
-label_loadCategories();
-function label_loadCategories(){
+homepage_loadCategories();
+function homepage_loadCategories(){
 	// Fetch and render the categories
-	var url = site.uri.public + '/category/all';
+	var url = site.uri.public + '/category/allNA';
 	$.ajax({
 	  type: "GET",
 	  url: url
@@ -140,13 +139,14 @@ function label_loadCategories(){
 	.then(
 	    // Fetch successful
 	    function (data) {
-	        var res = JSON.parse(data);
+	    	console.log(data);
+	        var res = data.rows;// JSON.parse(data);
 				for(i = 0; i < res.length; i++){
-					label_catId[i] = parseInt(res[i].id);
-					label_catText[i] = res[i].Category;
-					label_catColor[i] = res[i].Color;
+					homepage_catId[i] = parseInt(res[i].id);
+					homepage_catText[i] = res[i].Category;
+					homepage_catColor[i] = res[i].Color;
 				}
-				label_initCombo();
+				homepage_initCombo();
 	    },
 	    // Fetch failed
 	    function (data) {
@@ -155,9 +155,9 @@ function label_loadCategories(){
 	);
 }
 
-function label_initCombo(){
-	for (i = 0; i < label_catId.length; i++) {
-		appendToCombo(label_catText[i],label_catId[i]);
+function homepage_initCombo(){
+	for (i = 0; i < homepage_catId.length; i++) {
+		appendToCombo(homepage_catText[i],homepage_catId[i]);
 	}
 
 
@@ -178,31 +178,31 @@ function label_initCombo(){
 var drawMode =true;
 var eraseMode = false;
 var moveMode = false;
-label_updateButtons();
+homepage_updateButtons();
 
 if(document.getElementById("moveButton"))
 	document.getElementById("moveButton").style = "DISPLAY: none;";
 
-function label_onEraseClicked(){
+function homepage_onEraseClicked(){
 		drawMode =false;
 		eraseMode = true;
 		moveMode = false;
-		label_updateButtons();
+		homepage_updateButtons();
 };
-function label_onDrawClicked(){
+function homepage_onDrawClicked(){
 		drawMode =true;
 		eraseMode = false;
 		moveMode = false;
-		label_updateButtons();
+		homepage_updateButtons();
 };
-function label_onMoveClicked(){
+function homepage_onMoveClicked(){
 		drawMode =false;
 		eraseMode = false;
 		moveMode = true;
-		label_updateButtons();
+		homepage_updateButtons();
 };
 
-function label_updateButtons(){
+function homepage_updateButtons(){
 	if(drawMode)
 		$("#drawButton").toggleClass("selected", true);
 	else
@@ -225,11 +225,11 @@ function label_updateButtons(){
 
 ////  Draw square management  /////////////////////////////////////////////////
 
-function label_initSelection(){
-	label_initDraw(document.getElementById('preview'));
+function homepage_initSelection(){
+	homepage_initDraw(document.getElementById('preview'));
 };
 	
-function label_initDraw(canvas) {
+function homepage_initDraw(canvas) {
 	var mouse = {
 		x: 0,
 		y: 0,
@@ -356,7 +356,7 @@ function label_initDraw(canvas) {
 			var combo = document.getElementById("combo");
 			var str = combo.options[combo.selectedIndex].text;
 			var type = combo.options[combo.selectedIndex].value;
-			var color = label_catColor[label_catId.indexOf(parseInt(type))]
+			var color = homepage_catColor[homepage_catId.indexOf(parseInt(type))]
 			element.rectType = type;
 			//Don't use it as we do not display rect when too small (it's a dot at the start)
 			//element.style.left = pageX + 'px';
@@ -390,7 +390,7 @@ function label_initDraw(canvas) {
 				element.rectSetTop = element.offsetTop;
 				element.rectSetWidth = element.offsetWidth;
 				element.rectSetHeight = element.offsetHeight;
-				element.rectSetRatio = label_getImgRatio();
+				element.rectSetRatio = homepage_getImgRatio();
 				element = null;
 			}
 			canvas.style.cursor = "default";
@@ -469,7 +469,7 @@ function label_initDraw(canvas) {
 
 
 
-function label_onNextClicked(){
+function homepage_onNextClicked(){
 	var elements = document.getElementsByClassName("rectangle");
 	if(elements.length>0){
 		console.log("prepare request");
@@ -483,13 +483,13 @@ function label_onNextClicked(){
 			var rectType = elements[i].rectType;
 			data["rects"][i]={type:rectType,rectLeft:rectLeft,rectTop:rectTop,rectRight:rectRight,rectBottom:rectBottom}
 		}
-		data["dataSrc"]=label_srcName;
+		data["dataSrc"]=homepage_srcName;
 		console.log(data);
 		data[site.csrf.keys.name] = site.csrf.name;
 		data[site.csrf.keys.value] = site.csrf.value;
 
 		// submit rects
-		var url = site.uri.public + '/label/annotate';
+		var url = site.uri.public + '/label/annotateNA';
 		$.ajax({
 		  type: "POST",
 		  url: url,
@@ -498,7 +498,7 @@ function label_onNextClicked(){
 		.then(
 		    // Fetch successful
 		    function (data) {
-				label_nextImage();
+				homepage_nextImage();
 		    },
 		    // Fetch failed
 		    function (data) {
@@ -507,18 +507,18 @@ function label_onNextClicked(){
 		);
 	}
 	else{
-		label_nextImage();
+		homepage_nextImage();
 	}
 }
 
-function label_onMoreClicked(){
-	label_loadImages();
+function homepage_onMoreClicked(){
+	homepage_loadImages();
 	console.log("Load more");
 }
 window.onbeforeunload = function(e) {
-	for(var i = label_imgPathListIndex; i < label_imgPathList.length; ++i){
-		tools_freeImage (label_imgPathList[i].id);
-		console.log("Free " +label_imgPathList[i].id);
+	for(var i = homepage_imgPathListIndex; i < homepage_imgPathList.length; ++i){
+		tools_freeImageNA(homepage_imgPathList[i].id);
+		console.log("Free " +homepage_imgPathList[i].id);
 	}
 };
 ////////////////////////////////////////////

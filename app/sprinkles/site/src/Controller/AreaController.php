@@ -183,7 +183,7 @@ class AreaController extends SimpleController
     }
 
     /**
-     * Returns all areas of all images.
+     * Saves areas given.
      *
      * This page requires authentication.
      * Request type: PUT
@@ -257,6 +257,46 @@ class AreaController extends SimpleController
                 }
             }
             $db->close();
+        }
+        else // $_POST is empty.
+        {
+            error_log("No data") ;
+        }
+    }
+
+    /**
+     * Saves areas given.
+     *
+     * 
+     * Request type: PUT
+     */
+    public function saveAreasNoAuth($request, $response, $args)
+    {
+        // Get parameters
+        $params = $request->getParsedBody();
+        $data = json_decode(json_encode($params), FALSE);
+
+        /** @var UserFrosting\Sprinkle\Account\Model\User $currentUser */
+        $currentUser = $this->ci->currentUser;
+
+        if (!empty($data))
+        {
+           $rects= $data->rects;
+            foreach ($rects as $num => $rect) {//for each rectangle
+                $area = new ImgArea;
+                $area->source = $data->dataSrc;
+                $area->rectType = $rect->type;
+                $area->rectLeft = $rect->rectLeft;
+                $area->rectTop = $rect->rectTop;
+                $area->rectRight = $rect->rectRight;
+                $area->rectBottom = $rect->rectBottom;
+                if($currentUser){
+                    $area->user = $currentUser->id;
+                }else{
+                    $area->user = 0;
+                }
+                $area->save();
+            }
         }
         else // $_POST is empty.
         {
