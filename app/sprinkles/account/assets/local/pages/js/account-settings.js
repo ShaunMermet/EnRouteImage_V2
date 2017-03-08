@@ -8,13 +8,19 @@
  */
 $(document).ready(function() {
 
-    // Fetch and render any alerts
-    // This is needed, for example, when we refresh the page after the page is updated
-    $("#alerts-page").ufAlerts();
-    $("#alerts-page").ufAlerts('fetch').ufAlerts('render');
+    // Apply select2 to locale field
+    $('.js-select2').select2();
 
     $("#account-settings").ufForm({
         validators: page.validators.account_settings,
+        msgTarget: $("#alerts-page")
+    }).on("submitSuccess.ufForm", function() {
+        // Reload the page on success
+        window.location.reload();
+    });
+
+    $("#profile-settings").ufForm({
+        validators: page.validators.profile_settings,
         msgTarget: $("#alerts-page")
     }).on("submitSuccess.ufForm", function() {
         // Reload the page on success

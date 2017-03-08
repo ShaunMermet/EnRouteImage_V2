@@ -22,12 +22,14 @@ use UserFrosting\Sprinkle\Account\Controller\Exception\SpammyRequestException;
 use UserFrosting\Sprinkle\Account\Model\Group;
 use UserFrosting\Sprinkle\Account\Model\User;
 use UserFrosting\Sprinkle\Account\Util\Password;
+use UserFrosting\Sprinkle\Account\Util\Util as AccountUtil;
 use UserFrosting\Sprinkle\Core\Controller\SimpleController;
 use UserFrosting\Sprinkle\Core\Facades\Debug;
 use UserFrosting\Sprinkle\Core\Mail\EmailRecipient;
 use UserFrosting\Sprinkle\Core\Mail\TwigMailMessage;
 use UserFrosting\Sprinkle\Core\Throttle\Throttler;
 use UserFrosting\Sprinkle\Core\Util\Captcha;
+use UserFrosting\Sprinkle\Core\Util\Util;
 use UserFrosting\Support\Exception\BadRequestException;
 use UserFrosting\Support\Exception\ForbiddenException;
 use UserFrosting\Support\Exception\HttpException;
@@ -40,6 +42,66 @@ use UserFrosting\Support\Exception\HttpException;
  */
 class AccountController extends SimpleController
 {
+    /**
+     * Check a username for availability.
+     *
+     * This route is throttled by default, to discourage abusing it for account enumeration.
+     * This route is "public access".
+     * Request type: GET
+     */
+    public function checkUsername($request, $response, $args)
+    {
+        /** @var UserFrosting\Sprinkle\Core\MessageStream $ms */
+        $ms = $this->ci->alerts;
+
+        // GET parameters
+        $params = $request->getQueryParams();
+
+        // Load request schema
+        $schema = new RequestSchema("schema://check-username.json");
+
+        // Whitelist and set parameter defaults
+        $transformer = new RequestDataTransformer($schema);
+        $data = $transformer->transform($params);
+
+        // Validate, and halt on validation errors.
+        $validator = new ServerSideValidator($schema, $this->ci->translator);
+        if (!$validator->validate($data)) {
+            // TODO: encapsulate the communication of error messages from ServerSideValidator to the BadRequestException
+            $e = new BadRequestException("Missing or malformed request data!");
+            foreach ($validator->errors() as $idx => $field) {
+                foreach($field as $eidx => $error) {
+                    $e->addUserMessage($error);
+                }
+            }
+            throw $e;
+        }
+
+        /** @var UserFrosting\Sprinkle\Core\Throttle\Throttler $throttler */
+        $throttler = $this->ci->throttler;
+        $delay = $throttler->getDelay('check_username_request');
+
+        // Throttle requests
+        if ($delay > 0) {
+            return $response->withStatus(429);
+        }
+
+        /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
+        $classMapper = $this->ci->classMapper;
+
+        $translator = $this->ci->translator;
+
+        // Log throttleable event
+        $throttler->logEvent('check_username_request');
+
+        if ($classMapper->staticMethod('user', 'exists', $data['user_name'], 'user_name')) {
+            $message = $translator->translate('USERNAME.NOT_AVAILABLE', $data);
+            return $response->write($message)->withStatus(200);
+        } else {
+            return $response->write('true')->withStatus(200);
+        }
+    }
+
     /**
      * Processes a request to cancel a password reset request.
      *
@@ -265,15 +327,11 @@ class AccountController extends SimpleController
         /** @var UserFrosting\Sprinkle\Core\Throttle\Throttler $throttler */
         $throttler = $this->ci->throttler;
 
-        if ($isEmail) {
-            $throttleData = [
-                'email' => $data['email']
-            ];
-        } else {
-            $throttleData = [
-                'user_name' => $data['user_name']
-            ];
-        }
+        $userIdentifier = $data['user_name'];
+
+        $throttleData = [
+            'user_identifier' => $userIdentifier
+        ];
 
         $delay = $throttler->getDelay('sign_in_attempt', $throttleData);
         if ($delay > 0) {
@@ -297,11 +355,7 @@ class AccountController extends SimpleController
         /** @var UserFrosting\Sprinkle\Account\Authenticate\Authenticator $authenticator */
         $authenticator = $this->ci->authenticator;
 
-        if($isEmail) {
-            $currentUser = $authenticator->attempt('email', $data['email'], $data['password'], $data['rememberme']);
-        } else {
-            $currentUser = $authenticator->attempt('user_name', $data['user_name'], $data['password'], $data['rememberme']);
-        }
+        $currentUser = $authenticator->attempt(($isEmail ? 'email' : 'user_name'), $userIdentifier, $data['password'], $data['rememberme']);
 
         $ms->addMessageTranslated("success", "WELCOME", $currentUser->export());
 
@@ -445,7 +499,10 @@ class AccountController extends SimpleController
 
         // Load validation rules
         $schema = new RequestSchema("schema://account-settings.json");
-        $validator = new JqueryValidationAdapter($schema, $this->ci->translator);
+        $validatorAccountSettings = new JqueryValidationAdapter($schema, $this->ci->translator);
+
+        $schema = new RequestSchema("schema://profile-settings.json");
+        $validatorProfileSettings = new JqueryValidationAdapter($schema, $this->ci->translator);
 
         /** @var Config $config */
         $config = $this->ci->config;
@@ -457,7 +514,8 @@ class AccountController extends SimpleController
             "locales" => $locales,
             "page" => [
                 "validators" => [
-                    "account_settings"    => $validator->rules('json', false)
+                    "account_settings"    => $validatorAccountSettings->rules('json', false),
+                    "profile_settings"    => $validatorProfileSettings->rules('json', false)
                 ],
                 "visibility" => ($authorizer->checkAccess($currentUser, "update_account_settings") ? "" : "disabled")
             ]
@@ -502,8 +560,87 @@ class AccountController extends SimpleController
     }
 
     /**
+     * Processes a request to update a user's profile information.
+     *
+     * Processes the request from the user profile settings form, checking that:
+     * 1. They have the necessary permissions to update the posted field(s);
+     * 2. The submitted data is valid.
+     * This route requires authentication.
+     * Request type: POST
+     */
+    public function profile($request, $response, $args)
+    {
+        /** @var UserFrosting\Sprinkle\Core\MessageStream $ms */
+        $ms = $this->ci->alerts;
+
+        /** @var UserFrosting\Sprinkle\Account\Authorize\AuthorizationManager */
+        $authorizer = $this->ci->authorizer;
+
+        /** @var UserFrosting\Sprinkle\Account\Model\User $currentUser */
+        $currentUser = $this->ci->currentUser;
+
+        // Access control for entire resource - check that the current user has permission to modify themselves
+        // See recipe "per-field access control" for dynamic fine-grained control over which properties a user can modify.
+        if (!$authorizer->checkAccess($currentUser, 'update_account_settings')) {
+            $ms->addMessageTranslated("danger", "ACCOUNT.ACCESS_DENIED");
+            return $response->withStatus(403);
+        }
+
+        /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
+        $classMapper = $this->ci->classMapper;
+
+        /** @var UserFrosting\Config\Config $config */
+        $config = $this->ci->config;
+
+        // POST parameters
+        $params = $request->getParsedBody();
+
+        // Load the request schema
+        $schema = new RequestSchema("schema://profile-settings.json");
+
+        // Whitelist and set parameter defaults
+        $transformer = new RequestDataTransformer($schema);
+        $data = $transformer->transform($params);
+
+        $error = false;
+
+        // Validate, and halt on validation errors.
+        $validator = new ServerSideValidator($schema, $this->ci->translator);
+        if (!$validator->validate($data)) {
+            $ms->addValidationErrors($validator);
+            $error = true;
+        }
+
+        // Check that locale is valid
+        $locales = $config['site.locales.available'];
+        if (!array_key_exists($data['locale'], $locales)) {
+            $ms->addMessageTranslated("danger", "LOCALE.INVALID", $data);
+            $error = true;
+        }
+
+        if ($error) {
+            return $response->withStatus(400);
+        }
+
+        // Looks good, let's update with new values!
+        // Note that only fields listed in `profile-settings.json` will be permitted in $data, so this prevents the user from updating all columns in the DB
+        $currentUser->fill($data);
+
+        $currentUser->save();
+
+        // Create activity record
+        $this->ci->userActivityLogger->info("User {$currentUser->user_name} updated their profile settings.", [
+            'type' => 'update_profile_settings'
+        ]);
+
+        $ms->addMessageTranslated("success", "PROFILE.UPDATED");
+        return $response->withStatus(200);
+    }
+
+    /**
      * Processes an new account registration request.
      *
+     * This is throttled to prevent account enumeration, since it needs to divulge when a username/email has been used.
      * Processes the request from the form on the registration page, checking that:
      * 1. The honeypot was not modified;
      * 2. The master account has already been created (during installation);
@@ -516,7 +653,6 @@ class AccountController extends SimpleController
      * This route is "public access".
      * Request type: POST
      * Returns the User Object for the user record that was created.
-     * @todo we should probably throttle this as well to prevent account enumeration, especially since it needs to divulge when a username/email has been used.
      */
     public function register(Request $request, Response $response, $args)
     {
@@ -574,13 +710,22 @@ class AccountController extends SimpleController
             $error = true;
         }
 
+        /** @var UserFrosting\Sprinkle\Core\Throttle\Throttler $throttler */
+        $throttler = $this->ci->throttler;
+        $delay = $throttler->getDelay('registration_attempt');
+
+        // Throttle requests
+        if ($delay > 0) {
+            return $response->withStatus(429);
+        }
+
         // Check if username or email already exists
-        if ($classMapper->staticMethod('user', 'where', 'user_name', $data['user_name'])->first()) {
+        if ($classMapper->staticMethod('user', 'exists', $data['user_name'], 'user_name')) {
             $ms->addMessageTranslated("danger", "USERNAME.IN_USE", $data);
             $error = true;
         }
 
-        if ($classMapper->staticMethod('user', 'where', 'email', $data['email'])->first()) {
+        if ($classMapper->staticMethod('user', 'exists', $data['email'], 'email')) {
             $ms->addMessageTranslated("danger", "EMAIL.IN_USE", $data);
             $error = true;
         }
@@ -629,7 +774,10 @@ class AccountController extends SimpleController
 
         // All checks passed!  log events/activities, create user, and send verification email (if required)
         // Begin transaction - DB will be rolled back if an exception occurs
-        Capsule::transaction( function() use ($classMapper, $data, $ms, $config) {
+        Capsule::transaction( function() use ($classMapper, $data, $ms, $config, $throttler) {
+            // Log throttleable event
+            $throttler->logEvent('registration_attempt');
+        
             // Create the user
             $user = $classMapper->createInstance('user', $data);
 
@@ -667,7 +815,7 @@ class AccountController extends SimpleController
 
                 $this->ci->mailer->send($message);
 
-                $ms->addMessageTranslated("success", "REGISTRATION.COMPLETE_TYPE2");
+                $ms->addMessageTranslated("success", "REGISTRATION.COMPLETE_TYPE2", $user->toArray());
             } else {
                 // No verification required
                 $ms->addMessageTranslated("success", "REGISTRATION.COMPLETE_TYPE1");
@@ -902,12 +1050,10 @@ class AccountController extends SimpleController
         unset($data['passwordc']);
 
         // If new email was submitted, check that the email address is not in use
-        if (isset($data['email']) && $data['email'] != $currentUser->email && $classMapper->staticMethod('user', 'where', 'email', $data['email'])->first()) {
-            $ms->addMessageTranslated("danger", "EMAIL.IN_USE", $post);
+        if (isset($data['email']) && $data['email'] != $currentUser->email && $classMapper->staticMethod('user', 'exists', $data['email'], 'email')) {
+            $ms->addMessageTranslated("danger", "EMAIL.IN_USE", $data);
             $error = true;
         }
-
-        // TODO: check that new locale exists
 
         if ($error) {
             return $response->withStatus(400);
@@ -934,6 +1080,30 @@ class AccountController extends SimpleController
 
         $ms->addMessageTranslated("success", "ACCOUNT.SETTINGS.UPDATED");
         return $response->withStatus(200);
+    }
+
+    /**
+     * Suggest an available username for a specified first/last name.
+     *
+     * This route is "public access".
+     * Request type: GET
+     * @todo Can this route be abused for account enumeration?  If so we should throttle it as well.
+     */
+    public function suggestUsername($request, $response, $args)
+    {
+        /** @var UserFrosting\Sprinkle\Core\MessageStream $ms */
+        $ms = $this->ci->alerts;
+
+        /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
+        $classMapper = $this->ci->classMapper;
+
+        $suggestion = AccountUtil::randomUniqueUsername($classMapper, 50, 10);
+
+        // Be careful how you consume this data - it has not been escaped and contains untrusted user-supplied content.
+        // For example, if you plan to insert it into an HTML DOM, you must escape it on the client side (or use client-side templating).
+        return $response->withJson([
+            'user_name' => $suggestion
+        ], 200, JSON_PRETTY_PRINT);
     }
 
     /**

@@ -42,16 +42,44 @@
         this.options= $.extend(
             true,               // deep extend
             {
-                dataUrl         : "",
-                dropdownTemplate: "",
-                ajaxDelay       : 250,
-                rowTemplate     : "",
-                dropdownTheme   : "bootstrap",
-                placeholder     : "Item",
+                dropdown: {
+                    ajax: {
+                        url: "",
+                        dataType: "json",
+                        ajaxDelay: 250,
+                        data: function (params) {
+                            return {
+                                filters: {
+                                    info : params.term
+                                }
+                            };
+                        },
+                        processResults: function (data, params) {
+                            var suggestions = [];
+                            // Process the data into dropdown options
+                            if (data && data['rows']) {
+                                jQuery.each(data['rows'], function(idx, row) {
+                                    //if (jQuery.inArray(row.id, base._addedIds)) {
+                                        row.text = row.name;
+                                        suggestions.push(row);
+                                    //}
+                                });
+                            }
+                            return {
+                                results: suggestions
+                            };
+                        },
+                        cache: true
+                    },
+                    placeholder     : "Item",
+                    selectOnClose   : false,  // Make a selection when they click out of the box/press the next button
+                    theme: "default",
+                    width: "100%",
+                },
                 dropdownControl : this.$T.find('.js-select-new'),
+                dropdownTemplate: "",
                 rowContainer    : this.$T.find('tbody').first(),
-                selectOnClose   : false,  // Make a selection when they click out of the box/press the next button
-                width           : '100%',
+                rowTemplate     : "",
                 DEBUG: false
             },
             options
@@ -82,7 +110,7 @@
         $el.toggleClass("uf-collection", true);
 
         base._initDropdownField(base.options.dropdownControl);
-        
+
         base.options.dropdownControl.on("select2:select", function () {
            var item = $(this).select2("data");
            base.addRow(item);
@@ -99,7 +127,7 @@
             rownum: base._rownum
         };
         $.extend(true, params, options[0]);
-        
+
         var newRowTemplate = base._rowTemplateCompiled(params);
         var newRow = $(newRowTemplate).appendTo(base.options.rowContainer);
 
@@ -124,46 +152,35 @@
     /** #### PRIVATE METHODS #### */
     Plugin.prototype._initDropdownField = function (field) {
         var base = this;
+        var options = base.options.dropdown;
 
-        return field.select2({
-            // Fetch data source options and construct the dropdown options
-            ajax: {
-                url: base.options.dataUrl,
-                dataType: 'json',
-                ajaxDelay: base.options.ajaxDelay,
-                data: function (params) {
-                    return {
-                        filters: {
-                            info : params.term
-                        }
-                    };
-                },
-                processResults: function (data, params) {
-                    var suggestions = [];
-                    // Process the data into dropdown options
-                    if (data && data['rows']) {
-                        jQuery.each(data['rows'], function(idx, row) {
-                            //if (jQuery.inArray(row.id, base._addedIds)) {
-                                row.text = row.name;
-                                suggestions.push(row);
-                            //}
-                        });
-                    }
-                    return {
-                        results: suggestions
-                    };
-                },
-                cache: true
-            },
-            selectOnClose: base.options.selectOnClose,
-            width: base.options.width,
-            theme: base.options.dropdownTheme,
-            placeholder: base.options.placeholder,
-            templateResult: function(item) {
+        if (!("templateResult" in options)) {
+            options.templateResult = function(item) {
                 // Must wrap this in a jQuery selector to render as HTML
                 return $(base._dropdownTemplateCompiled(item));
-            }
-        });
+            };
+        }
+        // Legacy options (<= v4.0.9)
+        if ("dataUrl" in base.options) {
+            options.ajax.url = base.options.dataUrl;
+        }
+        if ("ajaxDelay" in base.options) {
+            options.ajax.ajaxDelay = base.options.ajaxDelay;
+        }
+        if ("dropdownTheme" in base.options) {
+            options.theme = base.options.dropdownTheme;
+        }
+        if ("placeholder" in base.options) {
+            options.placeholder = base.options.placeholder;
+        }
+        if ("selectOnClose" in base.options) {
+            options.selectOnClose = base.options.selectOnClose;
+        }
+        if ("width" in base.options) {
+            options.width = base.options.width;
+        }
+
+        return field.select2(options);
     };
 
     /**

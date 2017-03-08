@@ -36,6 +36,7 @@ class Throttler
     public function __construct(ClassMapper $classMapper)
     {
         $this->classMapper = $classMapper;
+        $this->throttleRules = [];
     }
 
     /**
@@ -46,8 +47,8 @@ class Throttler
      */
     public function addThrottleRule($type, $rule)
     {
-        if (!($rule instanceof ThrottleRule)) {
-            throw new ThrottlerException('$rule must be of type ThrottleRule.');
+        if (!($rule instanceof ThrottleRule || ($rule === null))) {
+            throw new ThrottlerException('$rule must be of type ThrottleRule (or null).');
         }
 
         $this->throttleRules[$type] = $rule;
@@ -64,11 +65,11 @@ class Throttler
      */
     public function getDelay($type, $requestData = [])
     {
-        if (!isset($this->throttleRules[$type])) {
-            throw new ThrottlerException("The throttling rule for '$type' could not be found.");
-        }
+        $throttleRule = $this->getRule($type);
 
-        $throttleRule = $this->throttleRules[$type];
+        if (is_null($throttleRule)) {
+            return 0;
+        }
 
         // Get earliest time to start looking for throttleable events
         $startTime = Carbon::now()
@@ -86,13 +87,13 @@ class Throttler
                 ->get();
 
             // Filter out only events that match the required JSON data
-            $events = $events->filter(function ($key, $item) use ($requestData) {
+            $events = $events->filter(function ($item, $key) use ($requestData) {
                 $data = json_decode($item->request_data);
 
                 // If a field is not specified in the logged data, or it doesn't match the value we're searching for,
                 // then filter out this event from the collection.
                 foreach ($requestData as $name => $value) {
-                    if (!isset($data[$name]) || $data[$name] != $value) {
+                    if (!isset($data->$name) || ($data->$name != $value)) {
                         return false;
                     }
                 }
@@ -103,6 +104,22 @@ class Throttler
 
         // Check the collection of events against the specified throttle rule.
         return $this->computeDelay($events, $throttleRule);
+    }
+
+    /**
+     * Get a registered rule of a particular type.
+     *
+     * @param string $type
+     * @throws ThrottlerException
+     * @return ThrottleRule[]
+     */
+    public function getRule($type)
+    {
+        if (!array_key_exists($type, $this->throttleRules)) {
+            throw new ThrottlerException("The throttling rule for '$type' could not be found.");
+        }
+
+        return $this->throttleRules[$type];
     }
 
     /**
@@ -123,6 +140,13 @@ class Throttler
      */
     public function logEvent($type, $requestData = [])
     {
+        // Just a check to make sure the rule exists
+        $throttleRule = $this->getRule($type);
+
+        if (is_null($throttleRule)) {
+            return $this;
+        }
+
         $event = $this->classMapper->createInstance('throttle', [
             'type' => $type,
             'ip' => $_SERVER['REMOTE_ADDR'],

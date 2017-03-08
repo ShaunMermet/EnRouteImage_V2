@@ -41,7 +41,9 @@ return [
 
     "LEGAL" => "Politique légale",
 
-    "LOCALE" => "Langue",
+    "LOCALE" => [
+        "@TRANSLATION" => "Langue"
+    ],
 
     "MAIL_ERROR" => "Erreur fatale lors de l'envoie du courriel. Contactez votre administrateur. Si vous être administrateur, consultez les logs.",
 
@@ -58,11 +60,11 @@ return [
     "SLUG_CONDITION" => "Slug/Conditions",
     "STATUS" => "Statut",
 
-    "UNKNOWN" => "Inconu",
+    "UNKNOWN" => "Inconnu",
 
     // Actions words
-    "ACTIONS" => "Autoriser",
-    "ACTIVATE" => "Autorisé",
+    "ACTIONS" => "Actions",
+    "ACTIVATE" => "Autoriser",
     "ACTIVE" => "Activé",
     "ADD" => "Ajouter",
     "CANCEL" => "Annuler",
@@ -81,7 +83,7 @@ return [
     "EDIT" => "Modifier",
     "ENABLE" => "Activer",
     "ENABLED" => "Activé",
-    "OVERWRITE" => "Forcer",
+    "OVERRIDE" => "Forcer",
     "RESET" => "Réinitialiser",
     "SAVE" => "Sauvegarder",
     "SEARCH" => "Rechercher",

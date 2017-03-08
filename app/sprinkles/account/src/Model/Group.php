@@ -25,8 +25,8 @@ use UserFrosting\Sprinkle\Core\Model\UFModel;
  * @property string description
  * @property string icon
  */
-class Group extends UFModel {
-
+class Group extends UFModel
+{
     /**
      * @var string The name of the table for the current model.
      */
@@ -51,13 +51,6 @@ class Group extends UFModel {
      */
     public function delete()
     {
-        /*
-        // Reassign any primary users to the current default primary group
-        $default_primary_group = Group::where('is_default', GROUP_DEFAULT_PRIMARY)->first();
-
-        Capsule::table('user')->where('primary_group_id', $this->id)->update(["primary_group_id" => $default_primary_group->id]);
-        */
-
         // Delete the group
         $result = parent::delete();
 
@@ -72,6 +65,6 @@ class Group extends UFModel {
         /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
         $classMapper = static::$ci->classMapper;
 
-        return $this->hasMany($classMapper->getClassMapping('user'));
+        return $this->hasMany($classMapper->getClassMapping('user'), 'group_id');
     }
 }

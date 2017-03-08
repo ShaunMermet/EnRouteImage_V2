@@ -10,6 +10,8 @@
 $app->group('/account', function () {
     $this->get('/captcha', 'UserFrosting\Sprinkle\Account\Controller\AccountController:imageCaptcha');
 
+    $this->get('/check-username', 'UserFrosting\Sprinkle\Account\Controller\AccountController:checkUsername');
+
     $this->get('/forgot-password', 'UserFrosting\Sprinkle\Account\Controller\AccountController:pageForgotPassword')
         ->setName('forgot-password');
 
@@ -29,6 +31,8 @@ $app->group('/account', function () {
         ->add('checkEnvironment')
         ->setName('login');
 
+    $this->get('/suggest-username', 'UserFrosting\Sprinkle\Account\Controller\AccountController:suggestUsername');
+
     $this->get('/verify', 'UserFrosting\Sprinkle\Account\Controller\AccountController:verify');
 
     $this->post('/forgot-password', 'UserFrosting\Sprinkle\Account\Controller\AccountController:forgotPassword');
@@ -44,6 +48,9 @@ $app->group('/account', function () {
     $this->post('/settings', 'UserFrosting\Sprinkle\Account\Controller\AccountController:settings')
         ->add('authGuard')
         ->setName('settings');
+
+    $this->post('/settings/profile', 'UserFrosting\Sprinkle\Account\Controller\AccountController:profile')
+        ->add('authGuard');
 });
 
 $app->get('/modals/account/tos', 'UserFrosting\Sprinkle\Account\Controller\AccountController:getModalAccountTos');

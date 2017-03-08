@@ -41,7 +41,9 @@ return [
 
     "LEGAL" => "Legal Policy",
 
-    "LOCALE" => "Locale",
+    "LOCALE" => [
+        "@TRANSLATION" => "Locale"
+    ],
 
     "MAIL_ERROR" => "Fatal error attempting mail, contact your server administrator.  If you are the admin, please check the UF mail log.",
 
@@ -57,6 +59,7 @@ return [
     "SLUG" => "Slug",
     "SLUG_CONDITION" => "Slug/Conditions",
     "STATUS" => "Status",
+    "SUGGEST" => "Suggest",
 
     "UNKNOWN" => "Unknown",
 
@@ -81,7 +84,7 @@ return [
     "EDIT" => "Edit",
     "ENABLE" => "Enable",
     "ENABLED" => "Enabled",
-    "OVERWRITE" => "Overwrite",
+    "OVERRIDE" => "Override",
     "RESET" => "Reset",
     "SAVE" => "Save",
     "SEARCH" => "Search",

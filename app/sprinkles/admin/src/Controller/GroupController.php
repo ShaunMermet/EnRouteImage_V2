@@ -20,8 +20,6 @@ use UserFrosting\Fortress\ServerSideValidator;
 use UserFrosting\Fortress\Adapter\JqueryValidationAdapter;
 use UserFrosting\Sprinkle\Account\Model\Group;
 use UserFrosting\Sprinkle\Account\Model\User;
-use UserFrosting\Sprinkle\Admin\Sprunje\GroupSprunje;
-use UserFrosting\Sprinkle\Admin\Sprunje\UserSprunje;
 use UserFrosting\Sprinkle\Core\Controller\SimpleController;
 use UserFrosting\Sprinkle\Core\Facades\Debug;
 use UserFrosting\Support\Exception\BadRequestException;
@@ -164,7 +162,7 @@ class GroupController extends SimpleController
         // Need to use loose comparison for now, because some DBs return `id` as a string
         if ($group->slug == $config['site.registration.user_defaults.group']) {
             $e = new BadRequestException();
-            $e->addUserMessage('GROUP.DELETE_DEFAULT');
+            $e->addUserMessage('GROUP.DELETE_DEFAULT', $group->toArray());
             throw $e;
         }
 
@@ -175,14 +173,23 @@ class GroupController extends SimpleController
         $countGroupUsers = $classMapper->staticMethod('user', 'where', 'group_id', $group->id)->count();
         if ($countGroupUsers > 0) {
             $e = new BadRequestException();
-            $e->addUserMessage('GROUP.NOT_EMPTY');
+            $e->addUserMessage('GROUP.NOT_EMPTY', $group->toArray());
             throw $e;
         }
 
         $groupName = $group->name;
 
-        $group->delete();
-        unset($group);
+        // Begin transaction - DB will be rolled back if an exception occurs
+        Capsule::transaction( function() use ($group, $groupName, $currentUser) {
+            $group->delete();
+            unset($group);
+
+            // Create activity record
+            $this->ci->userActivityLogger->info("User {$currentUser->user_name} deleted group {$groupName}.", [
+                'type' => 'group_delete',
+                'user_id' => $currentUser->id
+            ]);
+        });
 
         /** @var MessageStream $ms */
         $ms = $this->ci->alerts;
@@ -220,7 +227,7 @@ class GroupController extends SimpleController
         /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
         $classMapper = $this->ci->classMapper;
 
-        $sprunje = new GroupSprunje($classMapper, $params);
+        $sprunje = $classMapper->createInstance('group_sprunje', $classMapper, $params);
 
         // Be careful how you consume this data - it has not been escaped and contains untrusted user-supplied content.
         // For example, if you plan to insert it into an HTML DOM, you must escape it on the client side (or use client-side templating).
@@ -259,7 +266,7 @@ class GroupController extends SimpleController
         $countGroupUsers = $classMapper->staticMethod('user', 'where', 'group_id', $group->id)->count();
         if ($countGroupUsers > 0) {
             $e = new BadRequestException();
-            $e->addUserMessage('GROUP.NOT_EMPTY');
+            $e->addUserMessage('GROUP.NOT_EMPTY', $group->toArray());
             throw $e;
         }
 
@@ -418,7 +425,7 @@ class GroupController extends SimpleController
         /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
         $classMapper = $this->ci->classMapper;
 
-        $sprunje = new UserSprunje($classMapper, $params);
+        $sprunje = $classMapper->createInstance('user_sprunje', $classMapper, $params);
         $sprunje->extendQuery(function ($query) use ($group) {
             return $query->where('group_id', $group->id);
         });
@@ -622,14 +629,23 @@ class GroupController extends SimpleController
             return $response->withStatus(400);
         }
 
-        // Update the group and generate success messages
-        foreach ($data as $name => $value) {
-            if ($value != $group->$name){
-                $group->$name = $value;
+        // Begin transaction - DB will be rolled back if an exception occurs
+        Capsule::transaction( function() use ($data, $group, $currentUser) {
+            // Update the group and generate success messages
+            foreach ($data as $name => $value) {
+                if ($value != $group->$name) {
+                    $group->$name = $value;
+                }
             }
-        }
 
-        $group->save();
+            $group->save();
+
+            // Create activity record
+            $this->ci->userActivityLogger->info("User {$currentUser->user_name} updated details for group {$group->name}.", [
+                'type' => 'group_update_info',
+                'user_id' => $currentUser->id
+            ]);
+        });
 
         $ms->addMessageTranslated('success', 'GROUP.UPDATE', [
             'name' => $group->name

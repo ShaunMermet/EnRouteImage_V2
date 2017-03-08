@@ -14,6 +14,7 @@ use Illuminate\Cache\CacheManager;
 use Illuminate\Cache\MemcachedConnector;
 use Illuminate\Container\Container;
 use Illuminate\Database\Capsule\Manager as Capsule;
+use Illuminate\Events\Dispatcher;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Session\DatabaseSessionHandler;
 use Illuminate\Session\FileSessionHandler;
@@ -257,14 +258,6 @@ class CoreServicesProvider
             $onFailure = function ($request, $response, $next) {
                 $e = new BadRequestException("The CSRF code was invalid or not provided.");
                 $e->addUserMessage('CSRF_MISSING');
-                //$e->addUserMessage($request);
-                error_log("coreServiceProvider request2");
-                error_log( print_r($request, TRUE) );
-                //error_log("coreServiceProvider response");
-                //error_log( print_r($response, TRUE) );
-                //error_log("coreServiceProvider next");
-                //error_log( print_r($next, TRUE) );
-
                 throw $e;
 
                 return $next($request, $response);
@@ -286,6 +279,8 @@ class CoreServicesProvider
             foreach ($config['db'] as $name => $dbConfig) {
                 $capsule->addConnection($dbConfig, $name);
             }
+
+            $capsule->setEventDispatcher(new Dispatcher(new Container));
 
             // Register as global connection
             $capsule->setAsGlobal();
@@ -383,6 +378,7 @@ class CoreServicesProvider
                 'assets' => '\\RocketTheme\\Toolbox\\StreamWrapper\\ReadOnlyStream',
                 'schema' => '\\RocketTheme\\Toolbox\\StreamWrapper\\ReadOnlyStream',
                 'templates' => '\\RocketTheme\\Toolbox\\StreamWrapper\\ReadOnlyStream',
+                'extra' => '\\RocketTheme\\Toolbox\\StreamWrapper\\ReadOnlyStream',
                 'locale' => '\\RocketTheme\\Toolbox\\StreamWrapper\\ReadOnlyStream',
                 'config' => '\\RocketTheme\\Toolbox\\StreamWrapper\\ReadOnlyStream',
                 'routes' => '\\RocketTheme\\Toolbox\\StreamWrapper\\ReadOnlyStream'
@@ -505,11 +501,13 @@ class CoreServicesProvider
 
             $config = $c->config;
 
-            if ($config->has('throttles')) {
+            if ($config->has('throttles') && ($config['throttles'] !== null)) {
                 foreach ($config['throttles'] as $type => $rule) {
                     if ($rule) {
                         $throttleRule = new ThrottleRule($rule['method'], $rule['interval'], $rule['delays']);
                         $throttler->addThrottleRule($type, $throttleRule);
+                    } else {
+                        $throttler->addThrottleRule($type, null);
                     }
                 }
             }

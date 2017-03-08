@@ -124,7 +124,7 @@ class User extends UFModel
         /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
         $classMapper = static::$ci->classMapper;
 
-        return $this->hasMany($classMapper->getClassMapping('activity'));
+        return $this->hasMany($classMapper->getClassMapping('activity'), 'user_id');
     }
 
     /**
@@ -159,6 +159,28 @@ class User extends UFModel
         }
 
         return $result;
+    }
+
+    /**
+     * Determines whether a user exists, including checking soft-deleted records
+     *
+     * @param mixed $value
+     * @param string $identifier
+     * @param bool $checkDeleted set to true to include soft-deleted records
+     * @return User|null
+     */
+    public static function exists($value, $identifier = 'user_name', $checkDeleted = true)
+    {
+        /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
+        $classMapper = static::$ci->classMapper;
+
+        $query = $classMapper->staticMethod('user', 'where', $identifier, $value);
+
+        if ($checkDeleted) {
+            $query = $query->withTrashed();
+        }
+
+        return $query->first();
     }
 
     /**
@@ -301,7 +323,7 @@ class User extends UFModel
         /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
         $classMapper = static::$ci->classMapper;
 
-        return $this->hasMany($classMapper->getClassMapping('password_reset'));
+        return $this->hasMany($classMapper->getClassMapping('password_reset'), 'user_id');
     }
 
     /**
@@ -341,7 +363,7 @@ class User extends UFModel
         /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
         $classMapper = static::$ci->classMapper;
 
-        return $this->belongsToMany($classMapper->getClassMapping('role'), 'role_users')->withTimestamps();
+        return $this->belongsToMany($classMapper->getClassMapping('role'), 'role_users', 'user_id', 'role_id')->withTimestamps();
     }
 
     /**
