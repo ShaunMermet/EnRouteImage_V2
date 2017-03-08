@@ -12,24 +12,37 @@
 {% block page_description %}Welcome !{% endblock %}
 
 {% block body_matter %}
-<section>
-<div class="labelimg-container">
-  <div class="column column-one">
-    <select class="js-basic-single" id="combo" style="max-width:90%;" style="width: 150px;"></select>
-    <button id="nextButton"class="button" type="button" onclick="homepage_onNextClicked()">Next image</button>
-    <button id="moreButton"class="button" type="button" onclick="homepage_onMoreClicked()">More image</button>
-    <button id="drawButton" class="btn-mode" type="button"onclick="homepage_onDrawClicked()">Draw</button>
-    <button id="eraseButton"class="btn-mode" type="button" onclick="homepage_onEraseClicked()">Delete</button>
-    <div id="imgCounter">No image</div>
-  </div>
-  <div class="column column-four">
-    <div id="preview" class="imgcontainer" ondragstart="return false;" ondrop="return false;">
-      <img id='image' unselectable='on' src='' />
+
+  {% include 'components/tutorial.html.twig' %}
+<div class="container">
+  <section>
+  <div class="labelimg-container">
+    <div class="column column-one">
+      <select class="js-basic-single" id="combo" style="max-width:90%;" style="width: 150px;"></select>
+      <button id="nextButton"class="button" type="button" onclick="homepage_onNextClicked()">Next image</button>
+      <button id="moreButton"class="button" type="button" onclick="homepage_onMoreClicked()">More image</button>
+      <button id="drawButton" class="btn-mode" type="button"onclick="homepage_onDrawClicked()">Draw</button>
+      <button id="eraseButton"class="btn-mode" type="button" onclick="homepage_onEraseClicked()">Delete</button>
+      <div id="imgCounter">No image</div>
     </div>
-    
-  </div>
-</div>  
-</section>
+    <div class="column column-four">
+      <div id="preview" class="imgcontainer" ondragstart="return false;" ondrop="return false;">
+        <img id='image' unselectable='on' src='' />
+      </div>
+      
+    </div>
+  </div>  
+  </section>
+</div> 
+
+{% include 'components/tutorial2.html.twig' %}
+
+<div class="container">
+    <button class="btn-signup" type="button" style="display: block; margin: 0 auto;" onclick=location.href="account/sign-in-or-register">Sign up</button>
+</div>
+<br>
+<br>
+<br>
     
 {% endblock %}
 

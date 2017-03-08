@@ -42,7 +42,7 @@ function label_addImage(){
 		var imgToAdd = label_imgPath+imgName;
 		document.getElementById('image').src = imgToAdd;//$('#preview').html("<img id='image' unselectable='on' onresize='"label_onImgResize()"' src='"+imgToAdd+"' />")
 		label_initSelection();
-		document.getElementById('imgCounter').innerHTML = "Image "+(label_imgPathListIndex+1)+" of "+label_imgPathList.length;
+		document.getElementById('imgCounter').innerHTML = "Image "+(label_imgPathListIndex+1)+" / "+label_imgPathList.length;
 		document.getElementById("moreButton").style = "DISPLAY: none;";
 		document.getElementById("nextButton").style = "DISPLAY: initial;";
 	}

@@ -17,7 +17,7 @@
 
   <!-- Full Width Column -->
   <div class="content-wrapper">
-    <div class="container" style="width: 100%;padding-left: 0px;padding-right: 0px;">
+    <div class="container">
         <!-- Content Header (Page header) -->
         {% block content_header %}
         <section class="content-header">
@@ -29,10 +29,10 @@
           <div id="alerts-main"></div>
         </section>
         {% endblock %}
-        <section class="content" style="padding : 0;">
-            {% block body_matter %}{% endblock %}
-        </section>
     </div>
+    <section class="content" style="padding : 0;">
+        {% block body_matter %}{% endblock %}
+    </section>
   </div>
   <!-- /.content-wrapper -->
 
