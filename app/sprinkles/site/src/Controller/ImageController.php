@@ -71,6 +71,7 @@ class ImageController extends SimpleController
         //Reserve Images
         foreach ($imgLinks as $img) {
             $img->available = 0;
+            $img->requested = date("Y-m-d H:i:s");
             $img->save();
         }
 
@@ -106,6 +107,7 @@ class ImageController extends SimpleController
         //Reserve Images
         foreach ($imgLinks as $img) {
             $img->available = 0;
+            $img->requested = date("Y-m-d H:i:s");
             $img->save();
         }
 
