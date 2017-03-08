@@ -632,11 +632,13 @@ INSERT INTO `permission_roles` (`permission_id`, `role_id`, `created_at`, `updat
 ALTER TABLE `labelimglinks` ADD `validated_at` DATETIME NULL DEFAULT NULL AFTER `category`;
 
 
-
+--------------------------------
+--- Changes for Alpha 0.2.3 ----
+--------------------------------
 
 
 --------------------------------
---- Changes for Alpha 0.2.3 -----
+--- Changes for Alpha 0.2.4 ----
 --------------------------------
 
 DROP EVENT `free images`; CREATE DEFINER=`labelImgManager`@`localhost` EVENT `free images` ON SCHEDULE EVERY 3600 MINUTE_SECOND STARTS '2017-01-29 00:00:00' ENDS '2018-02-01 00:00:00' ON COMPLETION NOT PRESERVEENABLE DO UPDATE labelimglinks SET available = 1 WHERE available = 0 AND requested < DATE_SUB(NOW(), INTERVAL 1 HOUR);
