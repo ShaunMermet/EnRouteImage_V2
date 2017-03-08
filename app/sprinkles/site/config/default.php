@@ -15,7 +15,7 @@
         ],
         'site' => [
             'author'    =>      'enRoute',
-            'title'     =>      'labelImage',
+            'title'     =>      'Labelligent',
             // URLs
             'uri' => [
                 'author' => 'http://enroute1.com/'
