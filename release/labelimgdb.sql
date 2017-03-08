@@ -655,3 +655,6 @@ ADD CONSTRAINT UNIQUE(`source`,
                       `rectBottom`,
                       `alive`);
 
+--------------------------------
+--- Changes for Alpha 0.2.5 ----
+--------------------------------
