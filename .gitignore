@@ -48,4 +48,3 @@ Temporary Items
 *.zip
 app/.env
 app/.env.old
-.htaccess

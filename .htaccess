@@ -186,11 +186,11 @@ SetEnv SERVER_TYPE Apache
 
 
 SetEnv UF_MODE
-SetEnv DB_HOST localhost
-SetEnv DB_NAME labelimgdb
-SetEnv DB_USER labelImgManager
-SetEnv DB_PASSWORD Y8iRL0yA8zCLbAaV
-SetEnv SMTP_HOST smtp.gmail.com
-SetEnv SMTP_USER labelimage.manager@gmail.com
-SetEnv SMTP_PASSWORD c9a29111ea292a8eb7f9"
+SetEnv DB_HOST hostexemple
+SetEnv DB_NAME nameexemple
+SetEnv DB_USER userexemple
+SetEnv DB_PASSWORD passwdexemple
+SetEnv SMTP_HOST 
+SetEnv SMTP_USER 
+SetEnv SMTP_PASSWORD 
 SetEnv MAX_IMAGE_REQUESTED 20
