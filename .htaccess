@@ -183,3 +183,14 @@ SetEnv SERVER_TYPE Apache
 #    ExpiresByType text/x-cross-domain-policy            "access plus 1 week"
 #
 #</IfModule>
+
+
+SetEnv UF_MODE
+SetEnv DB_HOST hostexemple
+SetEnv DB_NAME nameexemple
+SetEnv DB_USER userexemple
+SetEnv DB_PASSWORD passwdexemple
+SetEnv SMTP_HOST 
+SetEnv SMTP_USER 
+SetEnv SMTP_PASSWORD 
+SetEnv MAX_IMAGE_REQUESTED 20

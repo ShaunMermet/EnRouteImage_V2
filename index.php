@@ -1,3 +1,5 @@
 <?php
-header("Location: cloud")
+header("Location: cloud");
+//phpinfo();
+
 ?>
