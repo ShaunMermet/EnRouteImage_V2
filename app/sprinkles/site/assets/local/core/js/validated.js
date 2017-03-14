@@ -14,9 +14,7 @@ function validated_loadCategories(){
 	.then(
 	    // Fetch successful
 	    function (data) {
-	        
-				console.log(data);
-				validated_initCombos(data.rows);
+	        validated_initCombos(data.rows);
 	    },
 	    // Fetch failed
 	    function (data) {
@@ -99,7 +97,6 @@ function validated_loadImages(categories,filter){
 	    function (data) {
 	    	if(data!=""){
 	    		emptyPreview();
-	    		console.log(data);
 	    		document.getElementById('imgFound').innerHTML = "<b>"+data.count_filtered+" image(s) found</b>";
 	    		$("#page-nav").pagination({
 			        items: data.count_filtered,
@@ -157,14 +154,13 @@ function validated_loadImages(categories,filter){
 					$.ajax({
 						type: "GET",
 						data: { 
-						    filters: {source : img.id, alive : 1},
+						    filters: {source : img.id},
 					  	},
 						url: url
 					})
 					.then(
 					    // Fetch successful
 					    function (data) {
-					    	console.log(data);
 					    	if (data.rows[0]){
 					    		var imgElem = document.getElementById("img"+data.rows[0].source);
 					    		drawRects(imgElem,data.rows,categories);

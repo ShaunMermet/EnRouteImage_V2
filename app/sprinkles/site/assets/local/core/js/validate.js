@@ -36,8 +36,7 @@ function validate_loadRects(){
 	    // Fetch successful
 	    function (data) {
 	    	if(data!=""){
-				var res = JSON.parse(data);
-				validate_rectanglesList = res;
+				validate_rectanglesList = data;
 			}
 			else validate_rectanglesList = [];
 			validate_rectanglesLoaded = true;
@@ -60,8 +59,7 @@ function validate_loadImages(){
 	    // Fetch successful
 	    function (data) {
 	    	if(data!=""){
-				var res = JSON.parse(data);
-				validate_imgPathList = res;
+	    		validate_imgPathList = data;//res;
 			}
 			else validate_imgPathList = [];
 			validate_imgPathListIndex = 0;
@@ -115,9 +113,9 @@ function validate_drawRects(idImage){
 			//console.log("matched rect found");
 			validate_currentRectangle = document.createElement('div');
 			validate_currentRectangle.className = 'rectangle';
-			var str = reviewedRect.Category;
+			var str = reviewedRect.category.Category;
 			var type = reviewedRect.rectType;
-			var color = reviewedRect.Color;
+			var color = reviewedRect.category.Color;
 			validate_currentRectangle.rectType = type;
 			validate_currentRectangle.rectSetRatio = 1;
 			validate_currentRectangle.rectSetLeft = parseInt(reviewedRect.rectLeft);
@@ -234,7 +232,6 @@ function validate_sendData(validated){
 	data["validated"]=validated;
 	data[site.csrf.keys.name] = site.csrf.name;
 	data[site.csrf.keys.value] = site.csrf.value;
-	console.log(data);
 	// Validate or reject areas
 	var url = site.uri.public + '/validate/evaluate';
 	$.ajax({

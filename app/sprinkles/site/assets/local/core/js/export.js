@@ -84,8 +84,9 @@ function export_getNbrInCat(){
 	.then(
 	    // Fetch successful
 	    function (data) {
-	    	var res = JSON.parse(data);
-			document.getElementById('imgCounter').innerHTML = res[0]+" Image(s) found";
+	    	console.log(data);
+	    	var res = data;
+			document.getElementById('imgCounter').innerHTML = res['countByCat']+" Image(s) found";
 	    },
 	    // Fetch failed
 	    function (data) {
@@ -133,6 +134,6 @@ function export_onExportClicked(){
 function export_onDlClicked(){
 	document.getElementById("dlButton").disabled = true;
 	document.getElementById("dlButton").style.opacity = 0.5;
-	window.location.href = "../cloud/export/dl/"+export_token;
+	window.location.href = "../export/dl/"+export_token;
 	document.getElementById('imgCounter').innerHTML = "";
 }

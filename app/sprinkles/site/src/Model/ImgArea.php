@@ -9,7 +9,9 @@
 namespace UserFrosting\Sprinkle\Site\Model;
 
 
+
 use UserFrosting\Sprinkle\Core\Model\UFModel;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Verification Class
@@ -23,10 +25,14 @@ use UserFrosting\Sprinkle\Core\Model\UFModel;
  * @property string rectRight
  * @property string rectBottom
  * @property string user
- * @property string alive
  */
 class ImgArea extends UFModel
 {
+
+    use SoftDeletes;
+
+
+    protected $dates = ['deleted_at'];
     /**
      * @var string The name of the table for the current model.
      */
@@ -39,8 +45,7 @@ class ImgArea extends UFModel
         "rectTop",
         "rectRight",
         "rectBottom",
-        "user",
-        "alive"
+        "user"
     ];
 
 
@@ -64,4 +69,11 @@ class ImgArea extends UFModel
         return $query;
     }
     
+    /**
+     * Get the category associated with the area.
+     */
+    public function category()
+    {
+        return $this->belongsTo('UserFrosting\Sprinkle\Site\Model\ImgCategories','rectType');
+    }
 }

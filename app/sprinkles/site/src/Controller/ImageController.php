@@ -57,17 +57,11 @@ class ImageController extends SimpleController
 
         $maxImageRequested = getenv('MAX_IMAGE_REQUESTED');
 
-        /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
-        $classMapper = $this->ci->classMapper;
-
-        $imgLinks = ImgLinks::joinImgArea()
-                            ->where('alive', '=', 0)
-                            ->orWhereNull('alive')
-                            ->where ('available', '=', 1)
-                            ->groupBy('id')
-                            ->inRandomOrder()
-                            ->limit($maxImageRequested)
-                            ->get();
+        $imgLinks = ImgLinks::whereDoesntHave('areas')
+                    ->where ('available', '=', 1)
+                    ->inRandomOrder()
+                    ->limit($maxImageRequested)
+                    ->get();
         //Reserve Images
         foreach ($imgLinks as $img) {
             $img->available = 0;
@@ -93,17 +87,11 @@ class ImageController extends SimpleController
     {
         $maxImageRequested = getenv('MAX_IMAGE_REQUESTED');
 
-        /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
-        $classMapper = $this->ci->classMapper;
-
-        $imgLinks = ImgLinks::joinImgArea()
-                            ->where('alive', '=', 0)
-                            ->orWhereNull('alive')
-                            ->where ('available', '=', 1)
-                            ->groupBy('id')
-                            ->inRandomOrder()
-                            ->limit($maxImageRequested)
-                            ->get();
+        $imgLinks = ImgLinks::whereDoesntHave('areas')
+                    ->where ('available', '=', 1)
+                    ->inRandomOrder()
+                    ->limit($maxImageRequested)
+                    ->get();
         //Reserve Images
         foreach ($imgLinks as $img) {
             $img->available = 0;
@@ -144,61 +132,29 @@ class ImageController extends SimpleController
             $loginPage = $this->ci->router->pathFor('login');
            return $response->withRedirect($loginPage, 400);
         }
-        
-        /** @var UserFrosting\Config\Config $config */
-        $config = $this->ci->config['db.default'];
-        $db = mysqli_connect($config['host'],$config['username'],$config['password'],$config['database']);
+
+
+
         $maxImageRequested = getenv('MAX_IMAGE_REQUESTED');
 
-        // Set autocommit to off
-        mysqli_autocommit($db,FALSE);
-        /////////////SELECT ////////////////
-
-        $sql = "SELECT lnk.id,lnk.path
-        FROM labelimglinks lnk LEFT JOIN labelimgarea are ON lnk.id =are.source AND are.alive = 1
-        WHERE are.alive = 1 AND lnk.validated = 0 AND lnk.available = 1
-        GROUP BY lnk.id
-        ORDER BY RAND()
-        LIMIT $maxImageRequested";
-        $result = $db->query($sql);
-        header('Content-type: application/json');
-        if ($result->num_rows > 0) {
-            
-            $res=array();
-            /* fetch object array */
-            while ($obj = $result->fetch_object()) {
-                /*if ($db->query($sql) === TRUE) {
-                } else {
-                    echo "Error: " . $sql . "<br>" . $db->error;
-                }*/
-                array_push($res,$obj);
-                error_log("validate : found row");
-            }
-            error_log("validate : ".count($res));
-            echo json_encode($res);
-            // Commit transaction
-            mysqli_commit($db);
-            
-            foreach($res as $img){
-                $sql2 = "UPDATE `labelimglinks` SET `available` = 0,`requested`= NOW() WHERE `labelimglinks`.`id` = '$img->id'";
-                if ($db->query($sql2) === TRUE) {
-                    error_log("validate : set 0 to ".$img->id);
-                } else {
-                    echo "Error: " . $sql2 . "<br>" . $db->error;
-                }
-            }
-            // Commit transaction
-            mysqli_commit($db);
-
-            /* free result set */
-            $result->close();
-            
-        } else {
-            
+        $imgLinks = ImgLinks::has('areas')
+                    ->where ('available', '=', 1)
+                    ->where ('validated', '=', 0)
+                    ->inRandomOrder()
+                    ->limit($maxImageRequested)
+                    ->get();
+        //Reserve Images
+        foreach ($imgLinks as $img) {
+            $img->available = 0;
+            $img->requested = date("Y-m-d H:i:s");
+            $img->save();
         }
-        ///////////////
 
-        $db->close();
+        $result = $imgLinks->toArray();
+
+        // Be careful how you consume this data - it has not been escaped and contains untrusted user-supplied content.
+        // For example, if you plan to insert it into an HTML DOM, you must escape it on the client side (or use client-side templating).
+        return $response->withJson($result, 200, JSON_PRETTY_PRINT);
     }
 
     /**
@@ -315,35 +271,18 @@ class ImageController extends SimpleController
         // Get PUT parameters: 
         $params = $request->getParsedBody();
         $data = json_decode(json_encode($params), FALSE);
+        //$category = $data->category;
+        error_log($data->category);
 
-        /** @var UserFrosting\Config\Config $config */
-        $config = $this->ci->config['db.default'];
-        $db = mysqli_connect($config['host'],$config['username'],$config['password'],$config['database']);
-        
-        if (!empty($data))
-        {
-            $category = mysqli_real_escape_string($db,($data->category));
-            
-            /////////////SELECT ////////////////
-            $sql = "SELECT lnk.id,are.rectType
-                    FROM labelimglinks lnk LEFT JOIN labelimgarea are ON lnk.id =are.source AND are.alive = 1
-                    WHERE are.alive = 1 AND lnk.validated = 1 AND are.rectType = '$category'
-                    GROUP BY lnk.id";
+        $count['countByCat'] = ImgLinks::whereHas('areas', function ($query) use($data) {
+                                    $query->where('rectType', '=', $data->category);
+                                })
+                                ->where ('validated', '=', 1)
+                                ->count();
 
-            $result = $db->query($sql);
-            header('Content-type: application/json');
-            $res=array();
-            array_push($res,$result->num_rows);
-            echo json_encode($res);
-            $result->close();
-            ///////////////
-            $db->close();
-            
-        }
-        else // $_POST is empty.
-        {
-            echo "No data";
-        }
+        // Be careful how you consume this data - it has not been escaped and contains untrusted user-supplied content.
+        // For example, if you plan to insert it into an HTML DOM, you must escape it on the client side (or use client-side templating).
+        return $response->withJson($count, 200, JSON_PRETTY_PRINT);
     }
     /**
      * Get the images corresponding to sprunje filter.

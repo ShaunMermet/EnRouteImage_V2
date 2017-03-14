@@ -100,19 +100,17 @@ class AreaController extends SimpleController
 
         $count = [];
         
-        $count['deletedArea'] = ImgArea::where('user', '=', $currentUser->id)
-                                ->where('alive', '=',0)
+        $count['deletedArea'] = ImgArea::onlyTrashed()
+                                ->where('user', '=', $currentUser->id)
                                 ->count();
         
         $count['validatedArea'] = ImgArea::where('user', '=', $currentUser->id)
                                 ->joinImglinks()
-                                ->where('alive', '=',1)
                                 ->where('validated', '=',1)
                                 ->count();
 
         $count['pendingArea'] = ImgArea::where('user', '=', $currentUser->id)
                                 ->joinImglinks()
-                                ->where('alive', '=',1)
                                 ->where('validated', '=',0)
                                 ->count();
 
@@ -123,7 +121,7 @@ class AreaController extends SimpleController
     }
 
     /**
-     * Returns all (alive) areas of all images.
+     * Returns all (not deleted) areas of all images.
      *
      * This page requires authentication.
      * Request type: GET
@@ -149,37 +147,16 @@ class AreaController extends SimpleController
            return $response->withRedirect($loginPage, 400);
         }
 
-        /** @var UserFrosting\Config\Config $config */
-        $config = $this->ci->config['db.default'];
-        $db = mysqli_connect($config['host'],$config['username'],$config['password'],$config['database']);
 
-        /////////////SELECT ////////////////
+        $imgAreas = ImgArea::with('category')
+                            ->get();
+        
 
-        $sql = "SELECT are.source,are.rectType,cat.Category,cat.Color,are.rectLeft,are.rectTop,are.rectRight,are.rectBottom
-        FROM labelimglinks lnk 
-        LEFT JOIN labelimgarea are ON lnk.id =are.source AND are.alive = 1
-        LEFT JOIN labelimgcategories cat ON are.rectType = cat.id
-        WHERE are.alive = 1 AND lnk.validated = 0";
-        $result = $db->query($sql);
-        header('Content-type: application/json');
-        if ($result->num_rows > 0) {
-            
-            $res=array();
-            /* fetch object array */
-            while ($obj = $result->fetch_object()) {
-                array_push($res,$obj);
-            }
-            echo json_encode($res);
+        $result = $imgAreas->toArray();
 
-            /* free result set */
-            $result->close();
-            
-        } else {
-            
-        }
-        ///////////////
-
-        $db->close();
+        // Be careful how you consume this data - it has not been escaped and contains untrusted user-supplied content.
+        // For example, if you plan to insert it into an HTML DOM, you must escape it on the client side (or use client-side templating).
+        return $response->withJson($result, 200, JSON_PRETTY_PRINT);
     }
 
     /**
@@ -367,14 +344,7 @@ class AreaController extends SimpleController
 
     private function deleteArea($source = NULL,$db){
         if(!is_null($source)){
-            error_log("in deleteArea ".$source);
-            //$sql = "DELETE FROM `labelimgarea` WHERE `source`= '$source'";
-            $sql = "UPDATE `labelimgarea` SET `alive` = 0 WHERE `source`= '$source'";
-            if ($db->query($sql) === TRUE) {
-                error_log("delete done") ;
-            } else {
-                error_log("Error: " . $sql . "<br>" . $db->error) ;
-            }
+            $rowsToDelete = ImgArea::where('source', '=', $source)->delete();
         }
     }
 }

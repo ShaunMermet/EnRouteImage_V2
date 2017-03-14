@@ -662,3 +662,16 @@ ADD CONSTRAINT UNIQUE(`source`,
 --------------------------------
 --- Changes for Alpha 0.2.6 ----
 --------------------------------
+
+ALTER TABLE `labelimgarea` ADD `deleted_at` DATETIME NULL DEFAULT NULL AFTER `alive`;
+UPDATE `labelimgarea` SET `deleted_at`= NOW() WHERE `alive` = 0;
+ALTER TABLE `labelimgarea`
+  DROP `alive`;
+alter table `labelimgarea`
+ADD CONSTRAINT UNIQUE(`source`,
+                      `rectType`,
+                      `rectLeft`,
+                      `rectTop`,
+                      `rectRight`,
+                      `rectBottom`,
+                      `deleted_at`);

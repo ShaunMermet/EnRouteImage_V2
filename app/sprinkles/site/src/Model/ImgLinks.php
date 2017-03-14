@@ -37,24 +37,13 @@ class ImgLinks extends UFModel
         "category"
     ];
 
+
     /**
-     * Joins the area linked to the img, so we can do things like sort, search, paginate, etc.
+     * Get all of the areas of the image.
      */
-    public function scopeJoinImgArea($query)
+    public function areas()
     {
-        $query = $query->select('labelimglinks.*');
-
-        $query = $query->leftJoin('labelimgarea', function($join)
-                        {
-                            $join->on('labelimglinks.id', '=', 'labelimgarea.source')
-                            //->on('labelimgarea.alive', '=', "1");
-                            ->where('labelimgarea.alive', '=', "1");
-                        });
-
-        //->leftJoin('labelimgarea', 'labelimglinks.id', '=', 'labelimgarea.source');
-        
-
-        return $query;
+        return $this->hasMany('UserFrosting\Sprinkle\Site\Model\ImgArea','source');
     }
     
 }
