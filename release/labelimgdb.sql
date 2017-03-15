@@ -675,3 +675,7 @@ ADD CONSTRAINT UNIQUE(`source`,
                       `rectRight`,
                       `rectBottom`,
                       `deleted_at`);
+
+--------------------------------
+--- Changes for Alpha 0.2.7 ----
+--------------------------------
