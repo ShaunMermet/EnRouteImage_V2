@@ -5,7 +5,7 @@ var upl_comboInitialized = [];
 upl_loadCategories();
 function upl_loadCategories(){
 	// Fetch and render the categories
-	var url = site.uri.public + '/category/all';
+	var url = site.uri.public + '/category/all2';
 	$.ajax({
 	  type: "GET",
 	  url: url
@@ -13,7 +13,7 @@ function upl_loadCategories(){
 	.then(
 	    // Fetch successful
 	    function (data) {
-	        var res = JSON.parse(data);
+	         var res = data.rows;
 	        	upl_catId = [];
 				upl_catText = [];
 				upl_catColor = [];
@@ -39,10 +39,10 @@ function upl_initCombos(){
 	}
 }
 function upl_initCombo(comboElem){
+	emptyCombo();
 	if(upl_catText.length == 0 ){
 		return;
 	}
-	emptyCombo();
 	$(comboElem).append("<option></option>");
 	for (i = 0; i < upl_catId.length; i++) {
 		appendToCombo(upl_catText[i],upl_catId[i]);

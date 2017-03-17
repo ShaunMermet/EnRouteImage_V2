@@ -11,7 +11,7 @@ if(document.getElementById("editCatPanel")){
 catEdit_loadCategories();
 function catEdit_loadCategories(){
 	// Fetch and render the categories
-	var url = site.uri.public + '/category/all';
+	var url = site.uri.public + '/category/all2';
 	$.ajax({
 	  type: "GET",
 	  url: url
@@ -19,7 +19,8 @@ function catEdit_loadCategories(){
 	.then(
 	    // Fetch successful
 	    function (data) {
-	        var res = JSON.parse(data);
+	    	console.log(data);
+	        var res = data.rows;
 				catEdit_catId = [];
 				catEdit_catText=[];
 				catEdit_catColor= [];
@@ -92,9 +93,6 @@ function catEdit_fillCateditPanel(){
 
 function catEdit_onAddClicked(){
 	var combo = document.getElementById("comboEdit");
-	var str = combo.options[combo.selectedIndex].text;
-	var type = combo.options[combo.selectedIndex].value;
-	var color = catEdit_catColor[catEdit_catId.indexOf(parseInt(type))];
 	
 	catEditText.value = "";
 	type = -1;//New category

@@ -12,7 +12,7 @@ var export_token = "";
 export_loadCategories();
 function export_loadCategories(){
 	// Fetch and render the categories
-	var url = site.uri.public + '/category/all';
+	var url = site.uri.public + '/category/all2';
 	$.ajax({
 	  type: "GET",
 	  url: url
@@ -20,7 +20,7 @@ function export_loadCategories(){
 	.then(
 	    // Fetch successful
 	    function (data) {
-	        var res = JSON.parse(data);
+	         var res = data.rows;
 	        	export_catId = [];
 				export_catText = [];
 				export_catColor = [];
