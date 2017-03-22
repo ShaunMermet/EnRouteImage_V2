@@ -47,7 +47,7 @@ class UploadHandler
     public function __construct($ci = null,$options = null, $initialize = true, $error_messages = null) {
         $this->response = array();
         $this->options = array(
-            'script_url' => $this->get_full_url().'/upload/upload'/*.$this->basename($this->get_server_var('SCRIPT_NAME'))*/,
+            'script_url' => $this->get_full_url().'/admin/upload/upload'/*.$this->basename($this->get_server_var('SCRIPT_NAME'))*/,
             'upload_dir' => dirname($this->get_server_var('SCRIPT_FILENAME')).'/../img/',
             'upload_url' => $this->get_full_url().'/../img/',
             'input_stream' => 'php://input',
@@ -1128,12 +1128,16 @@ class UploadHandler
 				}
 				$file_size = $this->get_file_size($file_path, $append_file);
 				if ($file_size === $file->size) {
+                    error_log($file->size);
+                    error_log($file_size);
+                    error_log("upload handler non abort size test");
 					$file->url = $this->get_download_url($file->name);
 					if ($this->is_valid_image_file($file_path)) {
 						$this->handle_image_file($file_path, $file);
 					}
 				} else {
 					$file->size = $file_size;
+                    error_log("upload handler abort");
 					if (!$content_range && $this->options['discard_aborted_uploads']) {
 						unlink($file_path);
 						$file->error = $this->get_error_message('abort');
