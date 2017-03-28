@@ -56,8 +56,6 @@ $app->group('/export', function () {
 });//->add('authGuard');
 
 $app->group('/category', function () {
-	$this->get('/all', 'UserFrosting\Sprinkle\Site\Controller\CategoryController:getAllCategory');
-
 	$this->get('/all2', 'UserFrosting\Sprinkle\Site\Controller\CategoryController:getAllCategory2');
 
 	$this->get('/allNA', 'UserFrosting\Sprinkle\Site\Controller\CategoryController:getAllCategoryNoAuth');

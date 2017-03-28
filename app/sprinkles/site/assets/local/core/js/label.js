@@ -132,7 +132,7 @@ var label_catColor= [];
 label_loadCategories();
 function label_loadCategories(){
 	// Fetch and render the categories
-	var url = site.uri.public + '/category/all';
+	var url = site.uri.public + '/category/all2';
 	$.ajax({
 	  type: "GET",
 	  url: url
@@ -140,7 +140,8 @@ function label_loadCategories(){
 	.then(
 	    // Fetch successful
 	    function (data) {
-	        var res = JSON.parse(data);
+	        //var res = JSON.parse(data);
+	        var res = data.rows;
 				for(i = 0; i < res.length; i++){
 					label_catId[i] = parseInt(res[i].id);
 					label_catText[i] = res[i].Category;

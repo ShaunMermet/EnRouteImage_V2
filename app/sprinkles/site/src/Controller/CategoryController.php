@@ -23,57 +23,6 @@ use UserFrosting\Sprinkle\Site\Sprunje\ImgCategoriesSprunje;
  */
 class CategoryController extends SimpleController
 {
-    /**
-     * Returns all categories.
-     *
-     * This page requires authentication.
-     * Request type: GET
-     */
-    public function getAllCategory($request, $response, $args)
-    {
-        error_log("In getAllCategory");
-        /** @var UserFrosting\Sprinkle\Account\Authenticate\Authenticator $authenticator */
-        $authenticator = $this->ci->authenticator;
-        if (!$authenticator->check()) {
-            $loginPage = $this->ci->router->pathFor('login');
-            return $response->withRedirect($loginPage, 400);
-        }
-
-        /** @var UserFrosting\Sprinkle\Account\Authorize\AuthorizationManager */
-        $authorizer = $this->ci->authorizer;
-
-        /** @var UserFrosting\Sprinkle\Account\Model\User $currentUser */
-        $currentUser = $this->ci->currentUser;
-
-        // Access-controlled page
-        if (!$authorizer->checkAccess($currentUser, 'uri_label')) {
-            $loginPage = $this->ci->router->pathFor('login');
-           return $response->withRedirect($loginPage, 400);
-        }
-
-        /** @var UserFrosting\Config\Config $config */
-        $config = $this->ci->config['db.default'];
-        $db = mysqli_connect($config['host'],$config['username'],$config['password'],$config['database']);
-
-        /////////////SELECT ////////////////
-        $sql = "SELECT id,Category,Color FROM `labelImgCategories` WHERE 1";
-        $result = $db->query($sql);
-        header('Content-type: application/json');
-        if ($result->num_rows > 0) {  
-            $res=array();
-            /* fetch object array */
-            while ($obj = $result->fetch_object()) {
-                array_push($res,$obj);
-            }
-            echo json_encode($res);
-
-            /* free result set */
-            $result->close();
-        } else {
-        }
-        ///////////////
-        $db->close();
-    }
 
     /**
      * Returns all categories.
