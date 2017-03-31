@@ -11,6 +11,10 @@
  */
 namespace UserFrosting\Sprinkle\Site\Controller;
 
+use UserFrosting\Sprinkle\Site\Model\ImgCategories;
+use UserFrosting\Sprinkle\Site\Model\ImgArea;
+use UserFrosting\Sprinkle\Site\Model\ImgLinks;
+
 class UploadHandler
 {
     protected $options;
@@ -190,6 +194,7 @@ class UploadHandler
             case 'PATCH':
             case 'PUT':
             case 'POST':
+                error_log("upload as post");
                 $this->post($this->options['print_response']);
                 break;
             case 'DELETE':
@@ -1086,6 +1091,7 @@ class UploadHandler
 		
         $addData = $this->handle_form_data($name, $index);
         $file->categoryValue = $addData['category'];
+        $file->areaData = $addData['data'];
 
         error_log('in before insert func cat '.$file->categoryValue);
 		$tmpHashName = sha1_file($uploaded_file);
@@ -1097,7 +1103,7 @@ class UploadHandler
 		
 		if ($this->validate($uploaded_file, $file, $error, $index)) {
             
-			$returnMsg = $this->insertInDB($file->name,$file->categoryValue);
+			$returnMsg = $this->insertInDB($file->name,$file->categoryValue,$file->areaData);
 			if($returnMsg == "OK"){
                 $file->category = $this->get_file_category($file->name);
 				$upload_dir = $this->get_upload_path();
@@ -1157,10 +1163,11 @@ class UploadHandler
 		
         
     }
-	protected function insertInDB($filename,$category){
+	protected function insertInDB($filename,$category,$area){
         /** @var UserFrosting\Config\Config $config */
         $config = $this->ci->config['db.default'];
         $db = mysqli_connect($config['host'],$config['username'],$config['password'],$config['database']);
+        $areas = explode(",",$area);
 
 		if ($db->connect_error) {
 			die("Connection failed: " . $db->connect_error);
@@ -1173,15 +1180,64 @@ class UploadHandler
 			VALUES ('$DBfilename','$DBcategory')";
 
 		if ($db->query($sql) === TRUE) {
-			$db->close();
-			return "OK";
+            $imgID = $db->insert_id;
+            $db->close();
 		} else {
 			$error = $db->error;
 			$db->close();
 			error_log($error);
 			return $error;
 		}
+        if ($area) {
+            foreach ($areas as $key => $value) {
+                $farea = explode(" ", $value);
+                //Get Values
+                $rectCategory = $farea[0];
+                $rectLeft = $farea[4];
+                $rectTop = $farea[5];
+                $rectRight = $farea[6];
+                $rectBottom = $farea[7];
+                //Check category
+                $checkCat = ImgCategories::where('Category',  $rectCategory)
+                   ->first();
+                //error_log($checkCat);
+                if($checkCat){
+                    $rectType = $checkCat->id;
+                }
+
+
+                //Creation cat if doesn't exist
+                if(!$checkCat){
+                    $catColor = $this->rand_color();
+                    $CatToInsert = new ImgCategories;
+                    $CatToInsert->Category = $rectCategory;
+                    $CatToInsert->Color = $catColor;
+                    $CatToInsert->save();
+                    $rectType = $CatToInsert->id;
+                }
+                //insert areas
+                $areaToInsert = new ImgArea;
+                $areaToInsert->source = $imgID;
+                $areaToInsert->rectType = $rectType;
+                $areaToInsert->rectLeft = $rectLeft;
+                $areaToInsert->rectTop = $rectTop;
+                $areaToInsert->rectRight = $rectRight;
+                $areaToInsert->rectBottom = $rectBottom;
+                $areaToInsert->user = 0;
+                $areaToInsert->save();
+            }
+            //Valid img
+            $imgToValid = ImgLinks::where('id',  $imgID)
+               ->first();
+            $imgToValid->validated = 1;
+            $imgToValid->category = $rectType;
+            $imgToValid->save();
+        }
+        return "OK";
 	}
+    protected function rand_color() {
+        return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
+    }
     protected function readfile($file_path) {
         $file_size = $this->get_file_size($file_path);
         $chunk_size = $this->options['readfile_chunk_size'];
@@ -1227,7 +1283,10 @@ class UploadHandler
         $result = [];
         foreach ($_POST['name'] as $key => $value) {
             $result[$_POST['name'][$key]]['category'] = $_POST['category'][$key];
+            $result[$_POST['name'][$key]]['data'] = $_POST['data'][$key];
         }
+        error_log(print_r($_POST,true));
+        error_log(print_r($result,true));
         return $result[$file];
     }
 
@@ -1388,10 +1447,14 @@ class UploadHandler
     }
 
     public function post($print_response = true) {
+        error_log("In post func");
         if ($this->get_query_param('_method') === 'DELETE') {
             return $this->delete($print_response);
         }
         $upload = $this->get_upload_data($this->options['param_name']);
+        error_log("upload created");
+        //error_log($upload);
+        error_log(print_r($upload, true));
         // Parse the Content-Disposition header, if available:
         $content_disposition_header = $this->get_server_var('HTTP_CONTENT_DISPOSITION');
         $file_name = $content_disposition_header ?
@@ -1442,6 +1505,7 @@ class UploadHandler
             }
         }
         $response = array($this->options['param_name'] => $files);
+        error_log("Response");
         return $this->generate_response($response, $print_response);
     }
 
@@ -1470,29 +1534,16 @@ class UploadHandler
         return $this->generate_response($response, $print_response);
     }
 	protected function deleteInDB($filename){
-        /** @var UserFrosting\Config\Config $config */
-        $config = $this->ci->config['db.default'];
-        $db = mysqli_connect($config['host'],$config['username'],$config['password'],$config['database']);
+        
+		$imgToDel = ImgLinks::where('path',  $filename)
+               ->first();
 
-        if ($db->connect_error) {
-			die("Connection failed: " . $db->connect_error);
-		} 
-		
-		$sql = "DELETE are FROM `labelimglinks`  lnk 
-				JOIN labelimgarea are 
-				ON are.source = lnk.id 
-				WHERE lnk.path = '$filename'";
-		$db->query($sql);
-		
-		$sql = "DELETE FROM `labelimglinks` WHERE `path`='$filename'";
-
-		if ($db->query($sql) === TRUE) {
-			$db->close();
-			return true;
-		} else {
-			$db->close();
-			return false;
-		}
+        $areaToDel = ImgArea::where('source',  $imgToDel->id)
+               ->get();
+        foreach ($areaToDel as $area) {
+            $area->delete();
+        }
+        $imgToDel->delete();
 	}
 
     protected function basename($filepath, $suffix = null) {
