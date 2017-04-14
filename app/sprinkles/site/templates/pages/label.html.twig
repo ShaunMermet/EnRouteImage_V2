@@ -7,7 +7,7 @@
 {% set page_active = "label" %}
 
 {# Overrides blocks in head of base template #}
-{% block page_title %}{{translate("LABEL")}}{% endblock %}
+{% block page_title %}{{translate("BB_LABEL_FULL")}}{% endblock %}
 
 {% block page_description %}{{translate("LABEL_description")}}{% endblock %}
 
@@ -34,7 +34,8 @@
 	</div>
 	<div class="column column-four">
 		<div id="preview" class="imgcontainer" ondragstart="return false;" ondrop="return false;">
-			<img id='image' unselectable='on' onresize='onImgResize()' src='' />
+			<img id='image' unselectable='on' onresize='onImgResize()' src='' ontouchstart="label_onTouchStart(event)" ontouchend="label_onTouchEnd(event)"
+			ontouchcancel="label_onTouchCancel(event)" ontouchmove="label_onTouchMove(event)"/>
 		</div>
 		
 	</div>

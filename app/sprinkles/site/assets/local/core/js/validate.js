@@ -233,7 +233,7 @@ function validate_sendData(validated){
 	data[site.csrf.keys.name] = site.csrf.name;
 	data[site.csrf.keys.value] = site.csrf.value;
 	// Validate or reject areas
-	var url = site.uri.public + '/validate/evaluate';
+	var url = site.uri.public + '/bbox/validate/evaluate';
 	$.ajax({
 	  type: "PUT",
 	  url: url,

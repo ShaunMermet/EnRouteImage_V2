@@ -685,5 +685,73 @@ ADD CONSTRAINT UNIQUE(`source`,
 --------------------------------
 
 --------------------------------
---- Changes for Alpha 0.3.0 ----
+--- Changes for Beta 0.3.0 ----
 --------------------------------
+
+--------------------------------
+--- Changes for Beta 0.3.1 ----
+--------------------------------
+CREATE TABLE `segCategories` (
+  `id` int(4) NOT NULL,
+  `Category` char(25) NOT NULL,
+  `Color` char(7) NOT NULL DEFAULT '#FFFFFF' COMMENT 'Color associated with the category'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Indexes for table `segCategories`
+--
+ALTER TABLE `segCategories`
+  ADD PRIMARY KEY (`id`);
+ALTER TABLE `segcategories` 
+  ADD UNIQUE(` Color `);
+
+--
+-- AUTO_INCREMENT for table `segCategories`
+--
+ALTER TABLE `segCategories`
+  MODIFY `id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+
+
+  --
+-- Table structure for table `labelimglinks`
+--
+
+--DROP TABLE IF EXISTS `segImages`;
+CREATE TABLE IF NOT EXISTS `segImages` (
+  `id` int(4) NOT NULL AUTO_INCREMENT,
+  `path` char(250) NOT NULL,
+  `validated` tinyint(1) NOT NULL DEFAULT '0',
+  `requested` datetime DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `category` int(1) DEFAULT NULL COMMENT 'category tag on image ref : segCategories',
+  `validated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `path` (`path`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
+
+--
+-- Table structure for table `segAreas`
+--
+
+CREATE TABLE `segAreas` (
+  `id` int(4) NOT NULL,
+  `source` int(4) NOT NULL,
+  `areaType` int(4) NOT NULL,
+  `data` mediumtext CHARACTER SET utf8 COLLATE utf8_unicode_ci,
+  `user` int(4) NOT NULL DEFAULT '0' COMMENT 'id of the user that submitted the area',
+  `deleted_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Indexes for table `segAreas`
+--
+ALTER TABLE `segAreas`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for table `segAreas`
+--
+ALTER TABLE `segAreas`
+  MODIFY `id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;

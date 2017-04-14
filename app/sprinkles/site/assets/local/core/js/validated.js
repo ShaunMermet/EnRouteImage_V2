@@ -390,7 +390,7 @@ function validated_loadImages(categories,filter){
 			data["validated"]=0;
 			data[site.csrf.keys.name] = site.csrf.name;
 			data[site.csrf.keys.value] = site.csrf.value;
-			var url = site.uri.public + '/validate/evaluate';
+			var url = site.uri.public + '/bbox/validate/evaluate';
 			$.ajax({
 			  type: "PUT",
 			  url: url,

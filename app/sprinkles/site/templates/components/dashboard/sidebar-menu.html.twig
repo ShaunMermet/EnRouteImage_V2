@@ -35,14 +35,20 @@
         <a href="{{site.uri.public}}/admin/groups"><i class="fa fa-users fa-fw"></i> <span>{{ translate("GROUP", 2) }}</span></a>
     </li>
     {% endif %}
-    {% if checkAccess('uri_upload') %}
-    <li>
-        <a href="{{site.uri.public}}/admin/upload"><i class="fa fa-arrow-circle-o-up" style="font-size:20px"; ></i><span>{{translate("UPLOAD", 2)}}</span></a>
-    </li>
-    {% endif %} 
+    
     {% if checkAccess('uri_validated') %}
     <li>
         <a href="{{site.uri.public}}/admin/overview"><i class="fa fa-image"></i><span>{{translate("GALLERY", 2)}}</span></a>
+    </li>
+    {% endif %}
+    {% if checkAccess('uri_upload') %}
+    <li>
+        <a href="{{site.uri.public}}/admin/upload"><i class="fa fa-arrow-circle-o-up" style="font-size:20px"; ></i><span>{{translate("BB_UPLOAD", 2)}}</span></a>
+    </li>
+    {% endif %} 
+    {% if checkAccess('uri_upload') %}
+    <li>
+        <a href="{{site.uri.public}}/admin/segUpload"><i class="fa fa-arrow-circle-o-up" style="font-size:20px"></i><span>{{translate("SEG_UPLOAD", 2)}}</span></a>
     </li>
     {% endif %} 
 {% endblock %}

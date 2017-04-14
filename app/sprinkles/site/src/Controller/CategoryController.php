@@ -14,6 +14,8 @@ use UserFrosting\Sprinkle\Core\Controller\SimpleController;
 use UserFrosting\Support\Exception\ForbiddenException;
 use UserFrosting\Sprinkle\Account\Authenticate\Authenticator;
 use UserFrosting\Sprinkle\Site\Sprunje\ImgCategoriesSprunje;
+use UserFrosting\Sprinkle\Site\Sprunje\SegCategorySprunje;
+use UserFrosting\Sprinkle\Site\Model\SegCategory;
 
 /**
  * Controller class for category-related requests.
@@ -83,7 +85,46 @@ class CategoryController extends SimpleController
         // For example, if you plan to insert it into an HTML DOM, you must escape it on the client side (or use client-side templating).
         return $sprunje->toResponse($response);
     }
-    
+    /**
+     * Returns all segmetation categories.
+     *
+     * This page requires authentication.
+     * Request type: GET
+     */
+    public function getAllSegCategory($request, $response, $args)
+    {
+        // GET parameters
+        $params = $request->getQueryParams();
+
+        /** @var UserFrosting\Sprinkle\Account\Authenticate\Authenticator $authenticator */
+        $authenticator = $this->ci->authenticator;
+        if (!$authenticator->check()) {
+            $loginPage = $this->ci->router->pathFor('login');
+            return $response->withRedirect($loginPage, 400);
+        }
+
+        /** @var UserFrosting\Sprinkle\Account\Authorize\AuthorizationManager */
+        $authorizer = $this->ci->authorizer;
+
+        /** @var UserFrosting\Sprinkle\Account\Model\User $currentUser */
+        $currentUser = $this->ci->currentUser;
+
+        // Access-controlled page
+        if (!$authorizer->checkAccess($currentUser, 'uri_label')) {
+            $loginPage = $this->ci->router->pathFor('login');
+           return $response->withRedirect($loginPage, 400);
+        }
+
+        /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
+        $classMapper = $this->ci->classMapper;
+
+        $sprunje = new SegCategorySprunje($classMapper, $params);
+
+        // Be careful how you consume this data - it has not been escaped and contains untrusted user-supplied content.
+        // For example, if you plan to insert it into an HTML DOM, you must escape it on the client side (or use client-side templating).
+        return $sprunje->toResponse($response);
+    }
+
     /**
      * Edit a category.
      *
@@ -121,9 +162,6 @@ class CategoryController extends SimpleController
         
         if (!empty($data))
         {
-            error_log("Data sended to server\n");
-            
-            
             // Set autocommit to off
             mysqli_autocommit($db,FALSE);
 
@@ -176,5 +214,81 @@ class CategoryController extends SimpleController
             error_log ("No data");
             echo "FAIL";
         }
+    }
+
+    /**
+     * Edit a segCategory.
+     *
+     * This page requires authentication.
+     * Request type: PUT
+     */
+    public function editSegCategory($request, $response, $args)
+    {
+        /** @var UserFrosting\Sprinkle\Account\Authenticate\Authenticator $authenticator */
+        $authenticator = $this->ci->authenticator;
+        if (!$authenticator->check()) {
+            $loginPage = $this->ci->router->pathFor('login');
+            return $response->withRedirect($loginPage, 400);
+        }
+
+        /** @var UserFrosting\Sprinkle\Account\Authorize\AuthorizationManager */
+        $authorizer = $this->ci->authorizer;
+
+        /** @var UserFrosting\Sprinkle\Account\Model\User $currentUser */
+        $currentUser = $this->ci->currentUser;
+
+        // Access-controlled page
+        if (!$authorizer->checkAccess($currentUser, 'uri_upload')) {
+            $loginPage = $this->ci->router->pathFor('login');
+           return $response->withRedirect($loginPage, 400);
+        }
+
+        // Get PUT parameters: (name, slug, icon, description)
+        $params = $request->getParsedBody();
+        $data = json_decode(json_encode($params), FALSE);
+
+        $mode = $data->mode;
+        $catId = $data->catId;
+        $catText = $data->catText;
+        $catColor = "#".$data->catColor;
+
+        if ($mode == "CREATE"){
+            if ($data->catText == ""){
+                error_log ("no label");
+                echo "FAIL";
+                exit;
+                
+            }
+            
+            //TODO Insert
+            $cat = new SegCategory;
+            $cat->Category = $catText;
+            $cat->Color = $catColor;
+            $cat->save();
+            
+        }else if ($mode == "EDIT"){
+            if(intval($catId) < 1){
+                error_log ("wrong ID");
+                echo "FAIL";
+                exit;
+            }
+            $cat = SegCategory::where('id', $catId)->first();
+            $cat->Category = $catText;
+            $cat->Color = $catColor;
+            $cat->save();
+        }else if ($mode == "DELETE"){
+            if(intval($catId) < 1){
+                error_log ("wrong ID");
+                echo "FAIL";
+                exit;
+            }
+            $cat = SegCategory::where('id', $catId)->first();
+            $cat->delete();
+            
+        }else{
+            error_log ("wrong mode");
+            echo "FAIL";
+        }
+        
     }
 }

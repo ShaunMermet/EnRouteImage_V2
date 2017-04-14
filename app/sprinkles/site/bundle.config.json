@@ -36,9 +36,33 @@
                 }
             }
         },
+        "js/segExport": {
+            "scripts": [
+                "local/core/js/segExport.js"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "scripts": "plain"
+                    }
+                }
+            }
+        },
         "js/import": {
             "scripts": [
                 "local/core/js/import.js"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "scripts": "plain"
+                    }
+                }
+            }
+        },
+        "js/segImport": {
+            "scripts": [
+                "local/core/js/segImport.js"
             ],
             "options": {
                 "result": {
@@ -72,6 +96,18 @@
                 }
             }
         },
+        "js/segUpload": {
+            "scripts": [
+                "local/core/js/segUpload.js"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "scripts": "plain"
+                    }
+                }
+            }
+        },
         "js/validated": {
             "scripts": [
                 "local/core/js/validated.js"
@@ -87,6 +123,18 @@
         "js/categoriesEditor": {
             "scripts": [
                 "local/core/js/categoriesEditor.js"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "scripts": "plain"
+                    }
+                }
+            }
+        },
+        "js/segCategoriesEditor": {
+            "scripts": [
+                "local/core/js/segCategoriesEditor.js"
             ],
             "options": {
                 "result": {
@@ -120,6 +168,18 @@
                 }
             }
         },
+        "js/seglabel": {
+            "scripts": [
+                "local/core/js/seglabel.js"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "scripts": "plain"
+                    }
+                }
+            }
+        },
         "js/homepage": {
             "scripts": [
                 "local/core/js/homepage.js"
@@ -135,6 +195,18 @@
 		"js/validate": {
             "scripts": [
                 "local/core/js/validate.js"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "scripts": "plain"
+                    }
+                }
+            }
+        },
+        "js/segValidate": {
+            "scripts": [
+                "local/core/js/segValidate.js"
             ],
             "options": {
                 "result": {

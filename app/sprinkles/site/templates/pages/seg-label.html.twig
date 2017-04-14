@@ -1,0 +1,55 @@
+{% extends "layouts/default.html.twig" %}
+
+{% block stylesheets_page_group %}
+	{{ assets.css('css/site') | raw }}
+{% endblock %}
+
+{% set page_active = "seg-label" %}
+
+{# Overrides blocks in head of base template #}
+{% block page_title %}{{translate("SEG_LABEL")}}{% endblock %}
+
+{% block page_description %}{{translate("SEG_LABEL_description")}}{% endblock %}
+
+{% block body_matter %}
+<section>
+<div class="labelimg-container">
+	<div class="column column-one">
+		<select class="js-basic-single" id="combo" style="max-width:90%;" style="width: 150px;"></select>
+		<button id="nextButton"class="button" type="button" onclick="label_onNextClicked()">Next image</button>
+		<button id="moreButton"class="button" type="button" onclick="label_onMoreClicked()">More image</button>
+		<button id="drawButton" class="btn-mode" type="button"onclick="label_onDrawClicked()">Draw</button>
+		<button id="eraseButton"class="btn-mode" type="button" onclick="label_onEraseClicked()" style = "DISPLAY: none;">Delete</button>
+		<button id="eraseButton"class="btn-mode" type="button" onclick="label_onResetClicked()">Reset</button>
+		<div id="imgCounter">No image</div>
+		<div id="value1" max-width= "100px">Areas : 0</div>
+	</div>
+	<div class="column column-four">
+			<div id="preview" class="imgcontainer" ondragstart="return false;" ondrop="return false;" style="position: relative;">
+				<img id='image' unselectable='on' src='' onload="label_onImgLoaded()" />
+				<canvas id="lineCanvas" style="position:absolute;top: 0px;left: 0px;width:100%;height:100%;"></canvas>
+				<canvas id="areaCanvas" style="position:absolute;top: 0px;left: 0px;width:100%;height:100%;" ontouchstart="label_onTouchStart(event)" ontouchend="label_onTouchEnd(event)"
+			ontouchcancel="label_onTouchCancel(event)" ontouchmove="label_onTouchMove(event)"></canvas>
+			</div>
+	</div>
+</div>	
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <p>Sorry the image is outdated, you will be forward to the next one.</p>
+    <button class="btn btn-primary js-submit" onclick="label_onModalClicked()">{{translate('OK')}}</button>
+  </div>
+
+</div>
+</section>
+{% endblock %}
+{% block scripts_page_group %}
+	{{ assets.js('js/tools') | raw }}
+{% endblock %}
+{% block scripts_page %}
+	{{ assets.js('js/seglabel') | raw }}
+{% endblock %}
+	

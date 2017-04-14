@@ -489,7 +489,7 @@ function homepage_onNextClicked(){
 		data[site.csrf.keys.value] = site.csrf.value;
 
 		// submit rects
-		var url = site.uri.public + '/label/annotateNA';
+		var url = site.uri.public + '/bbox/annotateNA';
 		$.ajax({
 		  type: "POST",
 		  url: url,

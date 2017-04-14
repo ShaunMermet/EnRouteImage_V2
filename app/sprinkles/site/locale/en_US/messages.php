@@ -38,5 +38,13 @@ return [
         "CATEGORY"      =>"Categories editor",
         "UPLOAD"        =>"Images uploader",
         ]
-    ]
+    ],
+    "BB_UPLOAD"               =>"Bbox",
+    "SEG_UPLOAD"               =>"Segmentation",
+    "BB_LABEL"               =>"Bbox",
+    "BB_LABEL_FULL"               =>"Bounding box",
+    "BB_VALIDATE"               =>"BboxValidation",
+    "SEG_LABEL"               =>"Segmentation",
+    "SEG_VALIDATE"               =>"SegValidation",
+    "SEG_LABEL_description" =>"Choose a category and start to tag images !",
 ];

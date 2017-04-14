@@ -327,6 +327,33 @@
   text-decoration: none;
 }
 
+.small-btn {
+  width: 45px;
+  background: #9eacb5;
+  background-image: -webkit-linear-gradient(top, #9eacb5, #333638);
+  background-image: -moz-linear-gradient(top, #9eacb5, #333638);
+  background-image: -ms-linear-gradient(top, #9eacb5, #333638);
+  background-image: -o-linear-gradient(top, #9eacb5, #333638);
+  background-image: linear-gradient(to bottom, #9eacb5, #333638);
+  -webkit-border-radius: 8;
+  -moz-border-radius: 8;
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 15px;
+  //padding: 10px 20px 10px 20px;
+  text-decoration: none;
+}
+
+.small-btn:hover {
+  background: #bbc3c9;
+  background-image: -webkit-linear-gradient(top, #bbc3c9, #929aa1);
+  background-image: -moz-linear-gradient(top, #bbc3c9, #929aa1);
+  background-image: -ms-linear-gradient(top, #bbc3c9, #929aa1);
+  background-image: -o-linear-gradient(top, #bbc3c9, #929aa1);
+  background-image: linear-gradient(to bottom, #bbc3c9, #929aa1);
+  text-decoration: none;
+}
+
 
 .js-basic-single{
 	width:100px;
@@ -450,4 +477,44 @@
   background-image: -o-linear-gradient(top, #3cfa9e, #34d94f);
   background-image: linear-gradient(to bottom, #3cfa9e, #34d94f);
   text-decoration: none;
+}
+
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+    text-align: -webkit-center;
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
 }

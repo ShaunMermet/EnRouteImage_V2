@@ -7,14 +7,14 @@
     return [
         'address_book' => [
             'admin' => [
-                'name'  => 'enRAdmin'
+                'name'  => 'Labelligent'
             ]
         ],    
         'debug' => [
             'auth' => true
         ],
         'site' => [
-            'author'    =>      'enRoute',
+            'author'    =>      'Labelligent',
             'title'     =>      'Labelligent',
             // URLs
             'uri' => [

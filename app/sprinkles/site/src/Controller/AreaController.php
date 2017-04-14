@@ -16,6 +16,8 @@ use UserFrosting\Sprinkle\Account\Authenticate\Authenticator;
 use UserFrosting\Sprinkle\Site\Sprunje\ImgAreaSprunje;
 use UserFrosting\Sprinkle\Site\Model\ImgArea;
 use UserFrosting\Sprinkle\Site\Model\ImgLinks;
+use UserFrosting\Sprinkle\Site\Model\SegArea;
+use UserFrosting\Sprinkle\Site\Model\SegImage;
 
 /**
  * Controller class for category-related requests.
@@ -160,6 +162,50 @@ class AreaController extends SimpleController
     }
 
     /**
+     * Returns all (not deleted) seg areas of images on provided ids.
+     *
+     * This page requires authentication.
+     * Request type: GET
+     */
+    public function getSegAreasByIds($request, $response, $args)
+    {
+        /** @var UserFrosting\Sprinkle\Account\Authenticate\Authenticator $authenticator */
+        $authenticator = $this->ci->authenticator;
+        if (!$authenticator->check()) {
+            $loginPage = $this->ci->router->pathFor('login');
+            return $response->withRedirect($loginPage, 400);
+        }
+
+        /** @var UserFrosting\Sprinkle\Account\Authorize\AuthorizationManager */
+        $authorizer = $this->ci->authorizer;
+
+        /** @var UserFrosting\Sprinkle\Account\Model\User $currentUser */
+        $currentUser = $this->ci->currentUser;
+
+        // Access-controlled page
+        if (!$authorizer->checkAccess($currentUser, 'uri_validate')) {
+            $loginPage = $this->ci->router->pathFor('login');
+           return $response->withRedirect($loginPage, 400);
+        }
+
+        // GET parameters
+        $params = $request->getQueryParams();
+
+       $imgAreas = SegArea::with('category')
+                            ->whereIn('source', $params["ids"])
+                            ->get();
+        
+        foreach ($imgAreas as $imgArea) {
+            $imgArea->data = unserialize($imgArea->data);
+        }
+        $result = $imgAreas->toArray();
+
+        // Be careful how you consume this data - it has not been escaped and contains untrusted user-supplied content.
+        // For example, if you plan to insert it into an HTML DOM, you must escape it on the client side (or use client-side templating).
+        return $response->withJson($result, 200, JSON_PRETTY_PRINT);
+    }
+
+    /**
      * Saves areas given.
      *
      * This page requires authentication.
@@ -167,9 +213,7 @@ class AreaController extends SimpleController
      */
     public function saveAreas($request, $response, $args)
     {
-        error_log("saveAreas request3");
-               // error_log( print_r($request, TRUE) );
-        /** @var UserFrosting\Sprinkle\Account\Authenticate\Authenticator $authenticator */
+       /** @var UserFrosting\Sprinkle\Account\Authenticate\Authenticator $authenticator */
         $authenticator = $this->ci->authenticator;
         if (!$authenticator->check()) {
             $loginPage = $this->ci->router->pathFor('login');
@@ -192,53 +236,91 @@ class AreaController extends SimpleController
         $params = $request->getParsedBody();
         $data = json_decode(json_encode($params), FALSE);
 
-        /** @var UserFrosting\Config\Config $config */
-        $config = $this->ci->config['db.default'];
-        $db = mysqli_connect($config['host'],$config['username'],$config['password'],$config['database']);
-
         if (!empty($data))
         {
-            error_log("Data sended to server\n") ;
-            
-            $source = mysqli_real_escape_string($db,($data->dataSrc));
-            
             $rects= $data->rects;
             foreach ($rects as $num => $rect) {//for each rectangle
-                
-                $rectType = mysqli_real_escape_string($db,($rect->type));
-                $rectLeft = mysqli_real_escape_string($db,($rect->rectLeft));
-                $rectTop = mysqli_real_escape_string($db,($rect->rectTop));
-                $rectRight = mysqli_real_escape_string($db,($rect->rectRight));
-                $rectBottom = mysqli_real_escape_string($db,($rect->rectBottom));
-                $rectUSer = $currentUser->id;
-                $sql = "SELECT * FROM 
-                `labelimgarea` lia WHERE 
-                lia.source='$source' AND 
-                lia.rectType='$rectType' AND 
-                lia.rectLeft='$rectLeft' AND 
-                lia.rectTop='$rectTop' AND 
-                lia.rectRight='$rectRight' AND 
-                lia.rectBottom='$rectBottom';";
-                $result = $db->query($sql);
-                if ($result->num_rows > 0) {
-                    echo "row was already created";
-                } else {
-                    $sql = "
-                    INSERT INTO labelimgarea (source, rectType, rectLeft,rectTop,rectRight,rectBottom,user)
-                    VALUES ('$source','$rectType','$rectLeft','$rectTop','$rectRight','$rectBottom','$rectUSer')";
-                    if ($db->query($sql) === TRUE) {
-                        echo "New record created successfully";
-                    } else {
-                        echo "Error: " . $sql . "<br>" . $db->error;
-                    }
+                $area = new ImgArea;
+                $area->source = $data->dataSrc;
+                $area->rectType = $rect->type;
+                $area->rectLeft = $rect->rectLeft;
+                $area->rectTop = $rect->rectTop;
+                $area->rectRight = $rect->rectRight;
+                $area->rectBottom = $rect->rectBottom;
+                if($currentUser){
+                    $area->user = $currentUser->id;
+                }else{
+                    $area->user = 0;
                 }
+                $area->save();
             }
-            $db->close();
         }
         else // $_POST is empty.
         {
             error_log("No data") ;
         }
+    }
+
+    /**
+     * Saves segAreas given.
+     *
+     * This page requires authentication.
+     * Request type: PUT
+     */
+    public function saveSegAreas($request, $response, $args)
+    {
+        /** @var UserFrosting\Sprinkle\Account\Authenticate\Authenticator $authenticator */
+        $authenticator = $this->ci->authenticator;
+        if (!$authenticator->check()) {
+            $loginPage = $this->ci->router->pathFor('login');
+            return $response->withRedirect($loginPage, 400);
+        }
+
+        /** @var UserFrosting\Sprinkle\Account\Authorize\AuthorizationManager */
+        $authorizer = $this->ci->authorizer;
+
+        /** @var UserFrosting\Sprinkle\Account\Model\User $currentUser */
+        $currentUser = $this->ci->currentUser;
+
+        // Access-controlled page
+        if (!$authorizer->checkAccess($currentUser, 'uri_label')) {
+            $loginPage = $this->ci->router->pathFor('login');
+           return $response->withRedirect($loginPage, 400);
+        }
+
+
+        // Get parameters
+        $params = $request->getParsedBody();
+        $data = json_decode(json_encode($params), FALSE);
+
+        $checkImage = SegImage::where('id', $data->dataSrc)
+                    ->whereDoesntHave('areas')
+                    ->count();
+        if($checkImage != 1){
+            return $response->withJson([], 408, JSON_PRETTY_PRINT);
+        }
+
+        if (!empty($data))
+        {
+           $areas= $data->areas;
+            foreach ($areas as $num => $area) {//for each rectangle
+                $SegArea = new SegArea;
+                $SegArea->source = $data->dataSrc;
+                $SegArea->areaType = $area->type;
+                $SegArea->data = serialize($area->points);//$array2 = unserialize($array);
+                if($currentUser){
+                    $SegArea->user = $currentUser->id;
+                }else{
+                    $SegArea->user = 0;
+                }
+                $SegArea->save();
+            }
+        }
+        else // $_POST is empty.
+        {
+            error_log("No data") ;
+        }
+
     }
 
     /**
@@ -289,7 +371,6 @@ class AreaController extends SimpleController
      */
     public function areaEvaluate($request, $response, $args)
     {
-        error_log("in areaEvaluate");
         /** @var UserFrosting\Sprinkle\Account\Authenticate\Authenticator $authenticator */
         $authenticator = $this->ci->authenticator;
         if (!$authenticator->check()) {
@@ -322,15 +403,14 @@ class AreaController extends SimpleController
             
             $source = mysqli_real_escape_string($db,($data->dataSrc));
             $validated = mysqli_real_escape_string($db,($data->validated));
-            error_log($validated);
             if ($validated == 1){
 
             }else{
-                $this->deleteArea($source,$db);
+                $this->deleteArea($source);
             }
             $sql = "UPDATE `labelimglinks` SET `validated` = $validated ,`validated_at`= NOW() WHERE `labelimglinks`.`id` = '$source'";
             if ($db->query($sql) === TRUE) {
-                error_log("record done") ;
+                
             } else {
                 error_log("Error: " . $sql . "<br>" . $db->error) ;
             }
@@ -342,7 +422,53 @@ class AreaController extends SimpleController
         }
     }
 
-    private function deleteArea($source = NULL,$db){
+    /**
+     * Update a segarea and validate it.
+     *
+     * This page requires authentication.
+     * Request type: PUT
+     */
+    public function segAreaEvaluate($request, $response, $args)
+    {
+        /** @var UserFrosting\Sprinkle\Account\Authenticate\Authenticator $authenticator */
+        $authenticator = $this->ci->authenticator;
+        if (!$authenticator->check()) {
+            $loginPage = $this->ci->router->pathFor('login');
+            return $response->withRedirect($loginPage, 400);
+        }
+
+        /** @var UserFrosting\Sprinkle\Account\Authorize\AuthorizationManager */
+        $authorizer = $this->ci->authorizer;
+
+        /** @var UserFrosting\Sprinkle\Account\Model\User $currentUser */
+        $currentUser = $this->ci->currentUser;
+
+        // Access-controlled page
+        if (!$authorizer->checkAccess($currentUser, 'uri_validate')) {
+            $loginPage = $this->ci->router->pathFor('login');
+           return $response->withRedirect($loginPage, 400);
+        }
+
+        // Get PUT parameters: (name, slug, icon, description)
+        $params = $request->getParsedBody();
+        $data = json_decode(json_encode($params), FALSE);
+        $checkImage = SegImage::where('id', $data->dataSrc)
+                    ->where('updated_at',$data->updated)
+                    ->count();
+        if($checkImage != 1){
+            return $response->withJson([], 408, JSON_PRETTY_PRINT);
+        }
+
+        if($data->validated == 0){
+            $rowsToDelete = SegArea::where('source', '=', $data->dataSrc)->delete();
+        }
+
+        $segimg = SegImage::where('id', $data->dataSrc)->first();
+        $segimg->validated = $data->validated;
+        $segimg->save();
+    }
+
+    private function deleteArea($source = NULL){
         if(!is_null($source)){
             $rowsToDelete = ImgArea::where('source', '=', $source)->delete();
         }

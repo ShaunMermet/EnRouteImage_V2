@@ -14,6 +14,8 @@ namespace UserFrosting\Sprinkle\Site\Controller;
 use UserFrosting\Sprinkle\Site\Model\ImgCategories;
 use UserFrosting\Sprinkle\Site\Model\ImgArea;
 use UserFrosting\Sprinkle\Site\Model\ImgLinks;
+use UserFrosting\Sprinkle\Site\Model\SegImage;
+use UserFrosting\Sprinkle\Site\Model\SegCategory;
 
 class UploadHandler
 {
@@ -52,8 +54,8 @@ class UploadHandler
         $this->response = array();
         $this->options = array(
             'script_url' => $this->get_full_url().'/admin/upload/upload'/*.$this->basename($this->get_server_var('SCRIPT_NAME'))*/,
-            'upload_dir' => dirname($this->get_server_var('SCRIPT_FILENAME')).'/../img/',
-            'upload_url' => $this->get_full_url().'/../img/',
+            'upload_dir' => dirname($this->get_server_var('SCRIPT_FILENAME')).'/img/',
+            'upload_url' => $this->get_full_url().'/img/',
             'input_stream' => 'php://input',
             'user_dirs' => false,
             'mkdir_mode' => 0755,
@@ -173,6 +175,15 @@ class UploadHandler
         }
         if ($options) {
             $this->options = $options + $this->options;
+            if($options['script_url']){
+                $this->options['script_url'] = $this->get_full_url().$options['script_url'];
+            }
+            if($options['upload_dir']){
+                $this->options['upload_dir'] = dirname($this->get_server_var('SCRIPT_FILENAME')).$options['upload_dir'];
+            }
+            if($options['upload_url']){
+                $this->options['upload_url'] = $this->get_full_url().$options['upload_url'];
+            }
         }
         if ($error_messages) {
             $this->error_messages = $error_messages + $this->error_messages;
@@ -304,9 +315,17 @@ class UploadHandler
             die("Connection failed: " . $db->connect_error);
         }
         $filename = mysqli_real_escape_string($db,$file_name);
-        $sql = "SELECT cat.category FROM labelimgcategories cat LEFT JOIN labelimglinks lnk ON lnk.category =cat.id
+        if($this->options['imageMode'] == 'segmentation'){
+            $sql = "SELECT cat.category FROM segcategories cat LEFT JOIN segImages lnk ON lnk.category =cat.id
                 WHERE lnk.path = '$filename'";
+        }else{
+            $sql = "SELECT cat.category FROM labelimgcategories cat LEFT JOIN labelimglinks lnk ON lnk.category =cat.id
+                WHERE lnk.path = '$filename'";
+        }
+        
         $cat = $db->query($sql);
+        if(!$cat)
+            return "";
         $catRes = $cat->fetch_object();
         if($catRes)
             return $catRes->category;
@@ -1164,76 +1183,87 @@ class UploadHandler
         
     }
 	protected function insertInDB($filename,$category,$area){
-        /** @var UserFrosting\Config\Config $config */
-        $config = $this->ci->config['db.default'];
-        $db = mysqli_connect($config['host'],$config['username'],$config['password'],$config['database']);
-        $areas = explode(",",$area);
+        if($this->options['imageMode'] == 'segmentation'){
+            if ($category == '') $category = 0;
+            $SegImg = new SegImage;
+            $SegImg->path = $filename;
+            $SegImg->category = $category;
+            $SegImg->save();
+            //TODO insert data for segImage
+            
+            return "OK";
+        }else{
+            /** @var UserFrosting\Config\Config $config */
+            $config = $this->ci->config['db.default'];
+            $db = mysqli_connect($config['host'],$config['username'],$config['password'],$config['database']);
+            $areas = explode(",",$area);
 
-		if ($db->connect_error) {
-			die("Connection failed: " . $db->connect_error);
-		} 
-        $DBfilename = mysqli_real_escape_string($db,$filename);
-        $DBcategory = mysqli_real_escape_string($db,$category);
-        if ($DBcategory == '') $DBcategory = 0;
-		$sql = "
-			INSERT INTO labelimglinks (path,category)
-			VALUES ('$DBfilename','$DBcategory')";
+    		if ($db->connect_error) {
+    			die("Connection failed: " . $db->connect_error);
+    		} 
+            $DBfilename = mysqli_real_escape_string($db,$filename);
+            $DBcategory = mysqli_real_escape_string($db,$category);
+            if ($DBcategory == '') $DBcategory = 0;
+    		$sql = "
+    			INSERT INTO labelimglinks (path,category)
+    			VALUES ('$DBfilename','$DBcategory')";
 
-		if ($db->query($sql) === TRUE) {
-            $imgID = $db->insert_id;
-            $db->close();
-		} else {
-			$error = $db->error;
-			$db->close();
-			error_log($error);
-			return $error;
-		}
-        if ($area) {
-            foreach ($areas as $key => $value) {
-                $farea = explode(" ", $value);
-                //Get Values
-                $rectCategory = $farea[0];
-                $rectLeft = $farea[4];
-                $rectTop = $farea[5];
-                $rectRight = $farea[6];
-                $rectBottom = $farea[7];
-                //Check category
-                $checkCat = ImgCategories::where('Category',  $rectCategory)
+    		if ($db->query($sql) === TRUE) {
+                $imgID = $db->insert_id;
+                $db->close();
+    		} else {
+    			$error = $db->error;
+    			$db->close();
+    			error_log($error);
+    			return $error;
+    		}
+            if ($area) {
+                foreach ($areas as $key => $value) {
+                    $farea = explode(" ", $value);
+                    //Get Values
+                    $rectCategory = $farea[0];
+                    $rectLeft = $farea[4];
+                    $rectTop = $farea[5];
+                    $rectRight = $farea[6];
+                    $rectBottom = $farea[7];
+                    //Check category
+                    $checkCat = ImgCategories::where('Category',  $rectCategory)
+                       ->first();
+                    //error_log($checkCat);
+                    if($checkCat){
+                        $rectType = $checkCat->id;
+                    }
+
+
+                    //Creation cat if doesn't exist
+                    if(!$checkCat){
+                        $catColor = $this->rand_color();
+                        $CatToInsert = new ImgCategories;
+                        $CatToInsert->Category = $rectCategory;
+                        $CatToInsert->Color = $catColor;
+                        $CatToInsert->save();
+                        $rectType = $CatToInsert->id;
+                    }
+                    //insert areas
+                    $areaToInsert = new ImgArea;
+                    $areaToInsert->source = $imgID;
+                    $areaToInsert->rectType = $rectType;
+                    $areaToInsert->rectLeft = $rectLeft;
+                    $areaToInsert->rectTop = $rectTop;
+                    $areaToInsert->rectRight = $rectRight;
+                    $areaToInsert->rectBottom = $rectBottom;
+                    $areaToInsert->user = 0;
+                    $areaToInsert->save();
+                }
+                //Valid img
+                $imgToValid = ImgLinks::where('id',  $imgID)
                    ->first();
-                //error_log($checkCat);
-                if($checkCat){
-                    $rectType = $checkCat->id;
-                }
-
-
-                //Creation cat if doesn't exist
-                if(!$checkCat){
-                    $catColor = $this->rand_color();
-                    $CatToInsert = new ImgCategories;
-                    $CatToInsert->Category = $rectCategory;
-                    $CatToInsert->Color = $catColor;
-                    $CatToInsert->save();
-                    $rectType = $CatToInsert->id;
-                }
-                //insert areas
-                $areaToInsert = new ImgArea;
-                $areaToInsert->source = $imgID;
-                $areaToInsert->rectType = $rectType;
-                $areaToInsert->rectLeft = $rectLeft;
-                $areaToInsert->rectTop = $rectTop;
-                $areaToInsert->rectRight = $rectRight;
-                $areaToInsert->rectBottom = $rectBottom;
-                $areaToInsert->user = 0;
-                $areaToInsert->save();
+                $imgToValid->validated = 1;
+                $imgToValid->category = $rectType;
+                $imgToValid->save();
             }
-            //Valid img
-            $imgToValid = ImgLinks::where('id',  $imgID)
-               ->first();
-            $imgToValid->validated = 1;
-            $imgToValid->category = $rectType;
-            $imgToValid->save();
+            return "OK";
         }
-        return "OK";
 	}
     protected function rand_color() {
         return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
@@ -1534,16 +1564,20 @@ class UploadHandler
         return $this->generate_response($response, $print_response);
     }
 	protected function deleteInDB($filename){
-        
-		$imgToDel = ImgLinks::where('path',  $filename)
-               ->first();
+        if($this->options['imageMode'] == 'segmentation'){
+            //TODO delete table segImage
 
-        $areaToDel = ImgArea::where('source',  $imgToDel->id)
-               ->get();
-        foreach ($areaToDel as $area) {
-            $area->delete();
+        }else{
+            $imgToDel = ImgLinks::where('path',  $filename)
+                   ->first();
+            $areaToDel = ImgArea::where('source',  $imgToDel->id)
+                   ->get();
+            foreach ($areaToDel as $area) {
+                $area->delete();
+            }
+            $imgToDel->delete();
         }
-        $imgToDel->delete();
+    	
 	}
 
     protected function basename($filepath, $suffix = null) {
