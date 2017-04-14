@@ -15,8 +15,9 @@ $(function () {
     'use strict';
 
     // Initialize the jQuery File Upload widget:
+    var form = document.getElementById("fileupload");
     $('#fileupload').fileupload({
-        url: 'upload/upload'
+        url: form.action//'segUpload/upload'
     });
 
     // Enable iframe cross-domain access via redirect option:

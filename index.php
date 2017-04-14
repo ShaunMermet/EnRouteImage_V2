@@ -1,5 +1,3 @@
 <?php
-header("Location: cloud");
-//phpinfo();
-
+require_once 'public/index.php';
 ?>
