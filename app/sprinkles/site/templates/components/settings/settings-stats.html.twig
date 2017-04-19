@@ -1,5 +1,5 @@
 <div class="box-header">
-    <h3 class="box-title"><i class="fa fa-bar-chart"></i> {{translate("ACCOUNT.SETTINGS.STATS")}}</h3>
+    <h3 class="box-title"><i class="fa fa-bar-chart"></i> {{translate("ACCOUNT.SETTINGS.BBOX_STATS")}}</h3>
 </div>
 {% if checkAccess('uri_account_settings') %}
   <div class="row">
@@ -45,6 +45,62 @@
           <span class="info-box-icon" style="background-color : #FFFFFF;" title="{{ translate("ACCOUNT.SETTINGS.STATS.SUCCESS_RATE") }}"><i id="account_successRate_icone"></i></span>
           <div class="info-box-content">
             <span class="info-box-text" id="account_successRate_textBox"></span>
+          </div>
+          <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+      </div>
+      <!-- /.col -->
+  </div>
+  <!-- /.row -->
+{% endif %}
+<div class="box-header">
+    <h3 class="box-title"><i class="fa fa-bar-chart"></i> {{translate("ACCOUNT.SETTINGS.SEG_STATS")}}</h3>
+</div>
+{% if checkAccess('uri_account_settings') %}
+  <div class="row">
+      <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box">
+          <span class="info-box-icon bg-yellow"  title="{{ translate("ACCOUNT.SETTINGS.STATS.SUBMITTED") }}"><i class="fa fa-object-ungroup"></i></span>
+          <div class="info-box-content">
+            <span class="info-box-text" id="account_segSubmitted_textBox"></span>
+          </div>
+          <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+      </div>
+      <!-- /.col -->
+
+      <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box">
+          <span class="info-box-icon bg-red" title="{{ translate("ACCOUNT.SETTINGS.STATS.REJECTED") }}"><i class="fa fa-window-close-o"></i></span>
+          <div class="info-box-content">
+            <span class="info-box-text" id="account_segRejected_textBox"></span>
+          </div>
+          <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+      </div>
+      <!-- /.col -->
+
+
+      <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box">
+          <span class="info-box-icon bg-green" title="{{ translate("ACCOUNT.SETTINGS.STATS.VALIDATED") }}"><i class="fa fa-check-square-o"></i></span>
+          <div class="info-box-content">
+            <span class="info-box-text" id="account_segValidated_textBox"></span>
+          </div>
+          <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+      </div>
+      <!-- /.col -->
+
+      <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box">
+          <span class="info-box-icon" style="background-color : #FFFFFF;" title="{{ translate("ACCOUNT.SETTINGS.STATS.SUCCESS_RATE") }}"><i id="account_segSuccessRate_icone"></i></span>
+          <div class="info-box-content">
+            <span class="info-box-text" id="account_segSuccessRate_textBox"></span>
           </div>
           <!-- /.info-box-content -->
         </div>

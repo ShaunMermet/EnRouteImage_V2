@@ -16,6 +16,7 @@ use UserFrosting\Sprinkle\Site\Model\ImgArea;
 use UserFrosting\Sprinkle\Site\Model\ImgLinks;
 use UserFrosting\Sprinkle\Site\Model\SegImage;
 use UserFrosting\Sprinkle\Site\Model\SegCategory;
+use UserFrosting\Sprinkle\Site\Model\SegArea;
 
 class UploadHandler
 {
@@ -1188,9 +1189,42 @@ class UploadHandler
             $SegImg = new SegImage;
             $SegImg->path = $filename;
             $SegImg->category = $category;
+            $SegImg->validated = 1;
             $SegImg->save();
-            //TODO insert data for segImage
             
+            $areas = array_filter(explode("\n",$area));
+
+            if ($area) {
+                foreach ($areas as $key => $value) {
+                    error_log("individual string area");
+                    error_log(print_r($value,true));
+                    $farea = explode(" ", $value);
+                    $areaCategory = $farea[0];
+                    $areaString = $farea[1]; 
+                    //Check category
+                    $checkCat = SegCategory::where('Category',  $areaCategory)
+                       ->first();
+                    if($checkCat){
+                        $areaType = $checkCat->id;
+                    } 
+                    //Creation cat if doesn't exist
+                    if(!$checkCat){
+                        $catColor = $this->rand_color();
+                        $CatToInsert = new SegCategories;
+                        $CatToInsert->Category = $areaCategory;
+                        $CatToInsert->Color = $catColor;
+                        $CatToInsert->save();
+                        $areaType = $CatToInsert->id;
+                    } 
+                    //insert areas
+                    $areaToInsert = new SegArea;
+                    $areaToInsert->source = $SegImg->id;
+                    $areaToInsert->areaType = $areaType;
+                    $areaToInsert->data = $areaString;
+                    $areaToInsert->user = 0;
+                    $areaToInsert->save();
+                }
+            }
             return "OK";
         }else{
             /** @var UserFrosting\Config\Config $config */
@@ -1229,7 +1263,6 @@ class UploadHandler
                     //Check category
                     $checkCat = ImgCategories::where('Category',  $rectCategory)
                        ->first();
-                    //error_log($checkCat);
                     if($checkCat){
                         $rectType = $checkCat->id;
                     }
@@ -1566,6 +1599,14 @@ class UploadHandler
 	protected function deleteInDB($filename){
         if($this->options['imageMode'] == 'segmentation'){
             //TODO delete table segImage
+            $imgToDel = SegImage::where('path',  $filename)
+                   ->first();
+            $areaToDel = SegArea::where('source',  $imgToDel->id)
+                   ->get();
+            foreach ($areaToDel as $area) {
+                $area->delete();
+            }
+            $imgToDel->delete();
 
         }else{
             $imgToDel = ImgLinks::where('path',  $filename)

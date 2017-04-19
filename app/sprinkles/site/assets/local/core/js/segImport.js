@@ -1,7 +1,7 @@
 function import_onOtherChanged(){
-	var otherInput = document.getElementById("fileOtherImport");
-	otherInput.value = "";
-	return;
+	//var otherInput = document.getElementById("fileOtherImport");
+	//otherInput.value = "";
+	//return;
 	//TDOD : Finish import
 	var imgArray = [];
 	
@@ -23,8 +23,7 @@ function import_onOtherChanged(){
 					//var data = getFileData(otherList[i]);
 					var rowFound = promisedImages[j];
 					getFileData(otherList[i],rowFound,function(data,row){
-						var cat = getCat(data);
-						row.children[5].innerText = cat+" : "+data.length;
+						row.children[5].innerText = "Poly : "+data.length;
 						row.children[1].value = data;
 					});
 				}
@@ -40,8 +39,9 @@ function import_onOtherChanged(){
 
             reader.onload = function(e) {
                 console.log (reader.result);
-                res = reader.result.split("\n");
-                res = res.filter(Boolean);
+                res = reader.result;
+                //res = reader.result.split("\n");
+                //res = res.filter(Boolean);
                 console.log(res);
                 callback(res,row);
             }
@@ -50,12 +50,5 @@ function import_onOtherChanged(){
         } else {
             console.log("File not supported!");
         }
-	}
-	function getCat(data){
-		cat = "";
-		if (data.length > 0) {
-			cat = data[0].split(" ")[0];
-		}
-		return cat;
 	}
 }

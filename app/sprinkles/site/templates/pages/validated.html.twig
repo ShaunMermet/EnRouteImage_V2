@@ -25,11 +25,13 @@
 	<div style="text-align: center;">
 	<table style="border-collapse: separate;border-spacing: 10px;" align="center">
 	  	<tr>
+	  		<th>Type</th>
 	    	<th>Category</th>
 	    	<th>Validated</th>
 	    	<th>Results per page</th>
 	  	</tr>
 	  	<tr>
+	  		<td><select class="js-basic-single" id="comboValidatedMode" style="max-width:90%;" style="width: 150px;" onchange="onComboModeChanged()"></select></td>
 		    <td><select class="js-basic-single" id="comboValidatedCategory" style="max-width:90%;" style="width: 150px;"></select></td>
 		    <td><select class="js-basic-single" id="comboValidatedValidated" style="max-width:90%;" style="width: 150px;"></select></td>
 		    <td><select class="js-basic-single" id="comboValidatedNbrResult" style="max-width:90%;" style="width: 150px;"></select></td>

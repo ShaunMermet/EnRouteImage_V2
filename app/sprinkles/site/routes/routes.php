@@ -118,12 +118,14 @@ $app->group('/segImages', function () {
 
  	$this->get('/nbrBYcategory', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getNbrSegImagesByCat');
 
- 	//$this->get('/imgSprunje', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getImageSprunje');
+ 	$this->get('/imgSprunje', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getSegImageSprunje');
 
 });//->add('authGuard');
 
 $app->group('/areas', function () {
 	$this->get('/all', 'UserFrosting\Sprinkle\Site\Controller\AreaController:getAllAreas');
+
+	$this->get('/byIds', 'UserFrosting\Sprinkle\Site\Controller\AreaController:getAreasByIds');
 
 	$this->get('/areaSprunje', 'UserFrosting\Sprinkle\Site\Controller\AreaController:getAreaSprunje');
 
@@ -136,7 +138,7 @@ $app->group('/segAreas', function () {
 
 	$this->get('/byIds', 'UserFrosting\Sprinkle\Site\Controller\AreaController:getSegAreasByIds');
 
-	//$this->get('/areaSprunje', 'UserFrosting\Sprinkle\Site\Controller\AreaController:getAreaSprunje');
+	$this->get('/areaSprunje', 'UserFrosting\Sprinkle\Site\Controller\AreaController:getSegAreaSprunje');
 
 	//$this->get('/areauserstats', 'UserFrosting\Sprinkle\Site\Controller\AreaController:getAreaUserStats');
 

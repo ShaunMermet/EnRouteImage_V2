@@ -25,8 +25,10 @@ return [
 	            "SUBMITTED"        => "Tags submitted",
 	            "REJECTED"         => "Tags rejected",
 	            "VALIDATED"        => "Tags validated",
-	            "SUCCESS_RATE"     =>"Success rate"
+	            "SUCCESS_RATE"     =>"Success rate",
         	],
+            "BBOX_STATS"     =>"Bbox statistics",
+            "SEG_STATS"     =>"Segmentation statistics"
         ]
     ],
 

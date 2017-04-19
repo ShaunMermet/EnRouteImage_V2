@@ -1,9 +1,29 @@
 var validated_imgPath = "../../img/";
+var validated_segImgPath = "../../img/segmentation/";
 
 var dataHandler = {};
 
 
-validated_loadCategories();
+validated_loadSegCategories();
+function validated_loadSegCategories(){
+	// Fetch and render the categories
+	var url = site.uri.public + '/segCategory/all';
+	$.ajax({
+	  type: "GET",
+	  url: url
+	})
+	.then(
+	    // Fetch successful
+	    function (data) {
+	        validated_loadCategories();
+	        dataHandler.segCategories = data.rows;
+	    },
+	    // Fetch failed
+	    function (data) {
+	        
+	    }
+	);
+}
 function validated_loadCategories(){
 	// Fetch and render the categories
 	var url = site.uri.public + '/category/all2';
@@ -15,6 +35,7 @@ function validated_loadCategories(){
 	    // Fetch successful
 	    function (data) {
 	        validated_initCombos(data.rows);
+	        dataHandler.bboxCategories = data.rows;
 	    },
 	    // Fetch failed
 	    function (data) {
@@ -31,20 +52,6 @@ function validated_initCombos(data){
 	}
 }
 function validated_initCombo(comboElem,data){
-	function emptyCombo(comboElem){
-		while (comboElem.childElementCount != 0){
-			comboElem.removeChild(comboElem.firstChild);
-		}
-	}
-	function catReworked(catSprunje){
-		var cat = {};
-		for (i = 0; i < catSprunje.length; i++) {
-		   cat[catSprunje[i].id] = [];
-		   cat[catSprunje[i].id]['Category'] = catSprunje[i].Category;
-		   cat[catSprunje[i].id]['Color'] = catSprunje[i].Color;
-		}
-		return cat;
-	}
 	/////// ALL combos ///////
 	emptyCombo(comboElem);
 	
@@ -60,7 +67,7 @@ function validated_initCombo(comboElem,data){
 		}
 
 		dataHandler.categories = catReworked(data);
-		//$(comboElem).select2(/*{placeholder: 'Select a category'}*/)
+		$(comboElem).select2(/*{placeholder: 'Select a category'}*/)
 		//.on("change", function(e) {
 	    //      console.log(comboElem.value+ " selected");
 	          //validated_loadImages(cat);
@@ -69,24 +76,77 @@ function validated_initCombo(comboElem,data){
 		$(comboElem).append("<option value=-1>ALL</option>");
 		$(comboElem).append("<option value=0>Non-validated</option>");
 		$(comboElem).append("<option value=1>Validated</option>");
+		$(comboElem).select2()
 	}else if(comboElem.id == 'comboValidatedNbrResult'){
 		$(comboElem).append("<option value=5>5</option>");
 		$(comboElem).append("<option value=25>25</option>");
 		$(comboElem).append("<option value=50>50</option>");
 		$(comboElem).append("<option value=100>100</option>");
 		$(comboElem).val(100);
+		$(comboElem).select2()
+	}else if(comboElem.id == 'comboValidatedMode'){
+		//$(comboElem).append("<option value=-1>ALL</option>");
+		$(comboElem).append("<option value=0>Bbox</option>");
+		$(comboElem).append("<option value=1>Segmented</option>");
+		$(comboElem).select2()
 	}
 	
+}
+function emptyCombo(comboElem){
+	while (comboElem.childElementCount != 0){
+		comboElem.removeChild(comboElem.firstChild);
+	}
+}
+function catReworked(catSprunje){
+	var cat = {};
+	for (i = 0; i < catSprunje.length; i++) {
+	   cat[catSprunje[i].id] = [];
+	   cat[catSprunje[i].id]['Category'] = catSprunje[i].Category;
+	   cat[catSprunje[i].id]['Color'] = catSprunje[i].Color;
+	}
+	return cat;
+}
+
+function onComboModeChanged(){
+	var catCombo = document.getElementById('comboValidatedCategory');
+	emptyCombo(catCombo);
+
 	
+	var imgType = document.getElementById('comboValidatedMode');
+	if(imgType.value == 1){
+		var data = dataHandler.segCategories;
+	}else if(imgType.value == 0){
+		var data = dataHandler.bboxCategories;
+	}
+
+	$(catCombo).append("<option value=-1>ALL</option>");
+	for (i = 0; i < data.length; i++) {
+		appendToCombo(data[i].Category,data[i].id);
+	}
+
+	function appendToCombo(category,type){
+		$(catCombo).append("<option value=\""+type+"\">"+category+"</option>");
+	}
+
+	dataHandler.categories = catReworked(data);
 }
 
 
 ////////////GET IMG FROM SERVER//////
 function validated_loadImages(categories,filter){
+	// Fetch and render the images
 	
 	console.log(filter);
-	// Fetch and render the images
-	var url = site.uri.public + '/images/imgSprunje';
+	var imgType = document.getElementById('comboValidatedMode');
+	var mode = imgType.value;
+	if(mode == 1){
+		var url = site.uri.public + '/segImages/imgSprunje';
+		var imgPath = validated_segImgPath;
+	}else{
+		var url = site.uri.public + '/images/imgSprunje';
+		var imgPath = validated_imgPath;
+	}
+
 	$.ajax({
 		type: "GET",
 		data: filter,
@@ -140,34 +200,40 @@ function validated_loadImages(categories,filter){
 			    });
 				for(var i = 0; i < data.rows.length; ++i){
 					var img = data.rows[i];
-	    			$('#preview').append("<div  style='position:relative;' id='imgdiv"+img.id+"' ><img id='img"+img.id+"' data-id="+img.id+" class='imgDisp' unselectable='on' src='"+validated_imgPath+img.path+"' /></div>");
-					//console.log("add "+data.rows[i].path);
-					var imgElem = document.getElementById("img"+img.id);
-					//imgElem.onclick = function(e){
-						//onClickHandler(e);
-					//	console.log("img left clicked");
-					//	console.log(e);
-					//	toggleMenuOn();
-					//}
+	    			$('#preview').append("<div  style='margin: 10px;position:relative;' id='imgdiv"+img.id+"' ><img id='img"+img.id+"' data-id="+img.id+" class='imgDisp' unselectable='on' src='"+imgPath+img.path+"' /><canvas id='areaCanvas"+img.id+"' style='position:absolute;top: 0px;left: 0px;width:100%;height:100%;''></canvas></div>");
+					
+					//var imgElem = document.getElementById("img"+img.id);
 
-					var url = site.uri.public + '/areas/areaSprunje';
+					if (mode == 1 ){
+		    			var url = site.uri.public + '/segAreas/byIds';
+		    			var dataArea= {};
+							dataArea["ids"]=[img.id];
+		    		}
+		    		else{
+		    			var url = site.uri.public + '/areas/byIds';
+		    			var dataArea= {};
+							dataArea["ids"]=[img.id];
+		    		}
+
 					$.ajax({
 						type: "GET",
-						data: { 
-						    filters: {source : img.id},
-					  	},
+						data: dataArea,
 						url: url
 					})
 					.then(
 					    // Fetch successful
-					    function (data) {
-					    	if (data.rows[0]){
-					    		var imgElem = document.getElementById("img"+data.rows[0].source);
-					    		drawRects(imgElem,data.rows,categories);
+					    function (dataAreaRes) {
+					    	if (dataAreaRes!=""){
+					    		if (mode == 1 ){
+					    			drawAreas(document.getElementById("imgdiv"+dataAreaRes[0].source),dataAreaRes,categories);
+					    		}
+					    		else{
+					    			drawRects(document.getElementById("img"+dataAreaRes[0].source),dataAreaRes,categories);
+					    		}
 					    	}
 					    },
 					    // Fetch failed
-					    function (data) {
+					    function (dataAreaRes) {
 					        
 					    }
 				    );
@@ -475,6 +541,36 @@ function validated_loadImages(categories,filter){
 
 
 			
+		}
+	}
+	function drawAreas(cnvElem,rects,categories){
+		var areaCanvas = cnvElem.children[1];
+		var refImage = cnvElem.children[0];
+		areaCanvas.width = refImage.width;
+		areaCanvas.height = refImage.height;
+		var initRatio = getImgRatio(refImage);
+		for(var i = 0; i < rects.length; ++i){
+			reviewedArea = rects[i];
+		
+				areaCtx = areaCanvas.getContext("2d");
+				areaCtx.lineJoin = "round";
+				areaCtx.beginPath();
+				var coordList = JSON.parse( reviewedArea.data );
+				areaCtx.moveTo(coordList[0][0]*initRatio, coordList[0][1]*initRatio);
+
+				for(var j = 1; j < coordList.length; ++j){
+					areaCtx.lineTo(coordList[j][0]*initRatio, coordList[j][1]*initRatio);
+				}
+				
+				var color = categories[reviewedArea.areaType].Color;
+				areaCtx.globalAlpha=0.5;
+		 		areaCtx.fillStyle = color;//"#ff0000";
+		 		areaCtx.lineWidth  = 3;
+		 		areaCtx.strokeStyle = "#ffffff";
+		 		areaCtx.closePath();
+				areaCtx.fill();
+				areaCtx.globalAlpha=1;
+				areaCtx.stroke();
 		}
 	}
 }

@@ -389,17 +389,21 @@ class SiteController extends SimpleController
                 /* fetch object array */
                 foreach ($imgToExport as $NImage) {
                     $imgToExportPath = "img/".$NImage->path;
-                    $pngpath = "tmp/".$tmpFolder."/".$NImage->path .".png";
-                    $dsetpngpath = "tmp/"."testto8bit".".png";
+                    $path_parts = pathinfo($NImage->path);
+                    $pngpath = "tmp/".$tmpFolder."/".$path_parts['filename'] .".png";
+                    $txtpath = "tmp/".$tmpFolder."/".$path_parts['filename'] .".txt";
+                    $txtfile = fopen($txtpath, "w") or die("Unable to open file!");
                     $size = getimagesize($imgToExportPath);
                     $im = @imagecreate($size[0], $size[1])
                         or die("Cannot Initialize new GD image stream");
                     $background_color = imagecolorallocate($im, 0, 0, 0);
                     
+                    //Building segmentation image 
                     $imgAreas = SegArea::with('category')
                                 ->where('source', $NImage->id)
                                 ->whereIn('areaType', $data->category)
                                 ->get();
+      
                     foreach ($imgAreas as $imgArea) {
                         $arrPoly = json_decode (unserialize($imgArea->data));
                         $arrPoly2 = call_user_func_array('array_merge', $arrPoly);
@@ -415,13 +419,32 @@ class SiteController extends SimpleController
                         imagesetthickness($im, 3);
                         imagepolygon($im, $arrPoly2, count($arrPoly),$col_poly);
                     }
+                    //Save segmentation image 
                     header('Content-Type: image/png');
                     imagepng($im,$pngpath);
                     imagedestroy($im);
 
-                    $zip->addFile($pngpath, $NImage->path .".png");
-                    $zip->addFile($imgToExportPath, $NImage->path);
+                    //Building txt file with polygon data
+                    $imgAreas = SegArea::with('category')
+                                ->where('source', $NImage->id)
+                                ->get();
+      
+                    foreach ($imgAreas as $imgArea) {
+                        $line = $imgArea->category->Category." ".$imgArea->data;
+                        fwrite($txtfile, $line);
+                        fwrite($txtfile, "\n");
+                    }
+                    
+                    //Closing txt file with polygon data
+                    fclose($txtfile);
+
+
+                    //Completing Zip
+                    $zip->addFile($txtpath, $path_parts['filename'] .".txt");
+                    $zip->addFile($pngpath, $path_parts['filename'] .".png");
+                    $zip->addFile($imgToExportPath, $path_parts['filename'].".jpeg");
                 }
+
                 
                 /* free result set */
                 $zip->close();

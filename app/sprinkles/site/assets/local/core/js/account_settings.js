@@ -43,6 +43,45 @@ function accountSettings_getAreasValidated(){
 	    		document.getElementById("account_successRate_icone").setAttribute("class", ico);
 	    		document.getElementById("account_successRate_textBox").style.color = color;
 	    		document.getElementById("account_successRate_icone").style.color = color;
+
+
+
+
+
+	    		document.getElementById("account_segSubmitted_textBox").textContent = data['segPendingArea']+data['segDeletedArea']+data['segValidatedArea'];
+	    		document.getElementById("account_segSubmitted_textBox").title = data['segPendingArea']+data['segDeletedArea']+data['segValidatedArea'];
+
+	    		document.getElementById("account_segRejected_textBox").textContent = data['segDeletedArea'];
+	    		document.getElementById("account_segRejected_textBox").title = data['segDeletedArea'];
+
+	    		document.getElementById("account_segValidated_textBox").textContent = data['segValidatedArea'];
+	    		document.getElementById("account_segValidated_textBox").title = data['segValidatedArea'];
+
+	    		var success = 0;
+	    		if((data['segValidatedArea'] + data['segDeletedArea']) != 0){
+	    			success = 100*data['segValidatedArea']/(data['segValidatedArea'] + data['segDeletedArea'])
+	    		}
+	    		success = Math.floor(success * 100) / 100;
+	    		var rate = success + "%";
+	    		var color = "#000000"
+	    		var ico = "";
+	    		if(success < 75){
+	    			ico = "fa fa-frown-o";
+	    			color = "#dd4b39 "
+	    		}else if(success < 90){
+					ico = "fa fa-meh-o";
+					color = "#f39c12"
+	    		}else{
+					ico = "fa fa-smile-o";
+					color = "#00a65a "
+	    		}
+	    		
+
+	    		document.getElementById("account_segSuccessRate_textBox").textContent = rate;
+	    		document.getElementById("account_segSuccessRate_textBox").title = rate;
+	    		document.getElementById("account_segSuccessRate_icone").setAttribute("class", ico);
+	    		document.getElementById("account_segSuccessRate_textBox").style.color = color;
+	    		document.getElementById("account_segSuccessRate_icone").style.color = color;
 	    		
     		}
 	    },

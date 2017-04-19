@@ -14,6 +14,7 @@ use UserFrosting\Sprinkle\Core\Controller\SimpleController;
 use UserFrosting\Support\Exception\ForbiddenException;
 use UserFrosting\Sprinkle\Account\Authenticate\Authenticator;
 use UserFrosting\Sprinkle\Site\Sprunje\ImgAreaSprunje;
+use UserFrosting\Sprinkle\Site\Sprunje\SegAreaSprunje;
 use UserFrosting\Sprinkle\Site\Model\ImgArea;
 use UserFrosting\Sprinkle\Site\Model\ImgLinks;
 use UserFrosting\Sprinkle\Site\Model\SegArea;
@@ -61,6 +62,46 @@ class AreaController extends SimpleController
         $classMapper = $this->ci->classMapper;
 
         $sprunje = new ImgAreaSprunje($classMapper, $params);
+
+        // Be careful how you consume this data - it has not been escaped and contains untrusted user-supplied content.
+        // For example, if you plan to insert it into an HTML DOM, you must escape it on the client side (or use client-side templating).
+        return $sprunje->toResponse($response);
+    }
+
+    /**
+     * Get the segareas corresponding to sprunje filter.
+     *
+     * This page requires authentication.
+     * Request type: GET
+     */
+    public function getSegAreaSprunje($request, $response, $args)
+    {
+        // GET parameters
+        $params = $request->getQueryParams();
+
+        /** @var UserFrosting\Sprinkle\Account\Authenticate\Authenticator $authenticator */
+        $authenticator = $this->ci->authenticator;
+        if (!$authenticator->check()) {
+            $loginPage = $this->ci->router->pathFor('login');
+            return $response->withRedirect($loginPage, 400);
+        }
+
+        /** @var UserFrosting\Sprinkle\Account\Authorize\AuthorizationManager */
+        $authorizer = $this->ci->authorizer;
+
+        /** @var UserFrosting\Sprinkle\Account\Model\User $currentUser */
+        $currentUser = $this->ci->currentUser;
+
+        // Access-controlled page
+        if (!$authorizer->checkAccess($currentUser, 'get_area')) {
+            $loginPage = $this->ci->router->pathFor('login');
+           return $response->withRedirect($loginPage, 400);
+        }
+
+        /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
+        $classMapper = $this->ci->classMapper;
+
+        $sprunje = new SegAreaSprunje($classMapper, $params);
 
         // Be careful how you consume this data - it has not been escaped and contains untrusted user-supplied content.
         // For example, if you plan to insert it into an HTML DOM, you must escape it on the client side (or use client-side templating).
@@ -116,6 +157,21 @@ class AreaController extends SimpleController
                                 ->where('validated', '=',0)
                                 ->count();
 
+        
+        $count['segDeletedArea'] = SegArea::onlyTrashed()
+                                ->where('user', '=', $currentUser->id)
+                                ->count();
+        
+        $count['segValidatedArea'] = SegArea::where('user', '=', $currentUser->id)
+                                ->joinSegImage()
+                                ->where('validated', '=',1)
+                                ->count();
+
+        $count['segPendingArea'] = SegArea::where('user', '=', $currentUser->id)
+                                ->joinSegImage()
+                                ->where('validated', '=',0)
+                                ->count();                                
+
 
         // Be careful how you consume this data - it has not been escaped and contains untrusted user-supplied content.
         // For example, if you plan to insert it into an HTML DOM, you must escape it on the client side (or use client-side templating).
@@ -154,6 +210,47 @@ class AreaController extends SimpleController
                             ->get();
         
 
+        $result = $imgAreas->toArray();
+
+        // Be careful how you consume this data - it has not been escaped and contains untrusted user-supplied content.
+        // For example, if you plan to insert it into an HTML DOM, you must escape it on the client side (or use client-side templating).
+        return $response->withJson($result, 200, JSON_PRETTY_PRINT);
+    }
+
+    /**
+     * Returns all (not deleted) seg areas of images on provided ids.
+     *
+     * This page requires authentication.
+     * Request type: GET
+     */
+    public function getAreasByIds($request, $response, $args)
+    {
+        /** @var UserFrosting\Sprinkle\Account\Authenticate\Authenticator $authenticator */
+        $authenticator = $this->ci->authenticator;
+        if (!$authenticator->check()) {
+            $loginPage = $this->ci->router->pathFor('login');
+            return $response->withRedirect($loginPage, 400);
+        }
+
+        /** @var UserFrosting\Sprinkle\Account\Authorize\AuthorizationManager */
+        $authorizer = $this->ci->authorizer;
+
+        /** @var UserFrosting\Sprinkle\Account\Model\User $currentUser */
+        $currentUser = $this->ci->currentUser;
+
+        // Access-controlled page
+        if (!$authorizer->checkAccess($currentUser, 'uri_validate')) {
+            $loginPage = $this->ci->router->pathFor('login');
+           return $response->withRedirect($loginPage, 400);
+        }
+
+        // GET parameters
+        $params = $request->getQueryParams();
+
+       $imgAreas = ImgArea::with('category')
+                            ->whereIn('source', $params["ids"])
+                            ->get();
+        
         $result = $imgAreas->toArray();
 
         // Be careful how you consume this data - it has not been escaped and contains untrusted user-supplied content.
