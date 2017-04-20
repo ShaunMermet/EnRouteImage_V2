@@ -23,8 +23,11 @@ function import_onOtherChanged(){
 					//var data = getFileData(otherList[i]);
 					var rowFound = promisedImages[j];
 					getFileData(otherList[i],rowFound,function(data,row){
-						row.children[5].innerText = "Poly : "+data.length;
 						row.children[1].value = data;
+						polyCalc = data.split("\n");
+						polyCalc = polyCalc.filter(Boolean);
+						row.children[5].innerText = "Poly : "+polyCalc.length;
+						
 					});
 				}
 			}

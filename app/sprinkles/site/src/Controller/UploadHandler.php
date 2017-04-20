@@ -1188,8 +1188,6 @@ class UploadHandler
             if ($category == '') $category = 0;
             $SegImg = new SegImage;
             $SegImg->path = $filename;
-            $SegImg->category = $category;
-            $SegImg->validated = 1;
             $SegImg->save();
             
             $areas = array_filter(explode("\n",$area));
@@ -1224,6 +1222,11 @@ class UploadHandler
                     $areaToInsert->user = 0;
                     $areaToInsert->save();
                 }
+                $imgToValid = SegImage::where('id',  $SegImg->id)
+                   ->first();
+                $imgToValid->validated = 1;
+                $imgToValid->category = $areaType;
+                $imgToValid->save();
             }
             return "OK";
         }else{

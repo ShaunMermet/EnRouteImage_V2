@@ -388,7 +388,7 @@ class SiteController extends SimpleController
                 
                 /* fetch object array */
                 foreach ($imgToExport as $NImage) {
-                    $imgToExportPath = "img/".$NImage->path;
+                    $imgToExportPath = "img/segmentation/".$NImage->path;
                     $path_parts = pathinfo($NImage->path);
                     $pngpath = "tmp/".$tmpFolder."/".$path_parts['filename'] .".png";
                     $txtpath = "tmp/".$tmpFolder."/".$path_parts['filename'] .".txt";
