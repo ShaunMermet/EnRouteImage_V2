@@ -63,9 +63,8 @@
   justify-content: center;
 }
 .imgcontainerVD img{
-  height: 150px;
-  //margin-top: 10px;
-  //margin : 10px;
+  max-height: 150px;
+  max-width: 100%;
 }
 
 .btn-upload {
