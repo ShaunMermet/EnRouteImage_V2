@@ -200,7 +200,7 @@ function validated_loadImages(categories,filter){
 			    });
 				for(var i = 0; i < data.rows.length; ++i){
 					var img = data.rows[i];
-	    			$('#preview').append("<div  style='margin: 10px;position:relative;' id='imgdiv"+img.id+"' ><img id='img"+img.id+"' data-id="+img.id+" class='imgDisp' unselectable='on' src='"+imgPath+img.path+"' /><canvas id='areaCanvas"+img.id+"' style='position:absolute;top: 0px;left: 0px;width:100%;height:100%;''></canvas></div>");
+	    			$('#preview').append("<div  style='margin: 10px;position:relative;' id='imgdiv"+img.id+"' ><img id='img"+img.id+"' data-id="+img.id+" class='imgDisp' unselectable='on' src='"+imgPath+img.path+"' />");
 					
 					//var imgElem = document.getElementById("img"+img.id);
 
@@ -601,3 +601,21 @@ function validated_sendSearch(page = null){
 	dataHandler.filter = filter;
 	validated_loadImages(dataHandler.categories,filter);
 }
+
+
+function validated_getParentElementRatio(element){
+	var refImage = element.parentElement.firstChild;
+	return refImage.clientWidth/refImage.naturalWidth;
+}
+window.addEventListener("resize", function(){
+	var elements = document.getElementsByClassName("rectangleView");
+	if(elements.length>0){
+		for (var i = 0; i < elements.length; ++i) {
+			var ratio = validated_getParentElementRatio(elements[i]);
+			elements[i].style.left = parseFloat(elements[i].rectSetLeft*ratio/elements[i].rectSetRatio) + 'px';
+			elements[i].style.top = parseFloat(elements[i].rectSetTop*ratio/elements[i].rectSetRatio) + 'px';
+			elements[i].style.width = parseFloat(elements[i].rectSetWidth*ratio/elements[i].rectSetRatio) + 'px';
+			elements[i].style.height = parseFloat(elements[i].rectSetHeight*ratio/elements[i].rectSetRatio) + 'px';
+		}
+	}
+});
