@@ -755,3 +755,7 @@ ALTER TABLE `segAreas`
 --
 ALTER TABLE `segAreas`
   MODIFY `id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+
+--------------------------------
+--- Changes for Beta 0.3.2 ----
+--------------------------------
