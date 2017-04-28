@@ -200,43 +200,7 @@ function validated_loadImages(categories,filter){
 			    });
 				for(var i = 0; i < data.rows.length; ++i){
 					var img = data.rows[i];
-	    			$('#preview').append("<div  style='margin: 10px;position:relative;' id='imgdiv"+img.id+"' ><img id='img"+img.id+"' data-id="+img.id+" class='imgDisp' unselectable='on' src='"+imgPath+img.path+"' />");
-					
-					//var imgElem = document.getElementById("img"+img.id);
-
-					if (mode == 1 ){
-		    			var url = site.uri.public + '/segAreas/byIds';
-		    			var dataArea= {};
-							dataArea["ids"]=[img.id];
-		    		}
-		    		else{
-		    			var url = site.uri.public + '/areas/byIds';
-		    			var dataArea= {};
-							dataArea["ids"]=[img.id];
-		    		}
-
-					$.ajax({
-						type: "GET",
-						data: dataArea,
-						url: url
-					})
-					.then(
-					    // Fetch successful
-					    function (dataAreaRes) {
-					    	if (dataAreaRes!=""){
-					    		if (mode == 1 ){
-					    			drawAreas(document.getElementById("imgdiv"+dataAreaRes[0].source),dataAreaRes,categories);
-					    		}
-					    		else{
-					    			drawRects(document.getElementById("img"+dataAreaRes[0].source),dataAreaRes,categories);
-					    		}
-					    	}
-					    },
-					    // Fetch failed
-					    function (dataAreaRes) {
-					        
-					    }
-				    );
+	    			$('#preview').append("<div  style='margin: 10px;position:relative;' id='imgdiv"+img.id+"' ><img id='img"+img.id+"' data-id="+img.id+" data-mode="+mode+" class='imgDisp' unselectable='on' src='"+imgPath+img.path+"' onload='onImgLoaded(this.id)'/><canvas id='areaCanvas"+img.id+"' style='position:absolute;top: 0px;left: 0px;''></canvas></div>");
 				}
 	    		
 			}
@@ -488,92 +452,140 @@ function validated_loadImages(categories,filter){
 			preview.removeChild(preview.firstChild);
 		}
 	}
-	function getImgRatio(imgElem){
-		return imgElem.clientWidth/imgElem.naturalWidth;
-	}
-	function adaptText(imgElem,rects){
-		var textWidth = rects.childNodes[0].scrollWidth;
-		var leftImage = imgElem.offsetLeft - 0;
-		if((parseFloat(rects.style.left) + textWidth) >= (leftImage+imgElem.width)){
-			rects.childNodes[0].style.left = -textWidth + 'px';
-		}
-		else{
-			rects.childNodes[0].style.left = 0 + 'px';
-		}
-		var textHeight = rects.childNodes[0].scrollHeight;
-		var topImage = imgElem.offsetTop;
-		if((parseFloat(rects.style.top) + textHeight) >= (topImage+imgElem.height)){
-			rects.childNodes[0].style.top = -textHeight + 'px';
-		}
-		else{
-			rects.childNodes[0].style.top = 0 + 'px';
-		}
-	}
-	function drawRects(imgElem,rects,categories){
-		for(var i = 0; i < rects.length; ++i){
-			reviewedRect = rects[i];
-			
-			var initRatio = getImgRatio(imgElem);
-			currentRectangle = document.createElement('div');
-			currentRectangle.className = 'rectangleView';
-			var str = categories[reviewedRect.rectType].Category;
-			var type = reviewedRect.rectType;
-			var color = categories[reviewedRect.rectType].Color;
-			currentRectangle.rectType = type;
-			currentRectangle.rectSetRatio = 1;
-			currentRectangle.rectSetLeft = parseInt(reviewedRect.rectLeft);
-			currentRectangle.rectSetTop = parseInt(reviewedRect.rectTop);
-			currentRectangle.rectSetWidth = reviewedRect.rectRight - reviewedRect.rectLeft;
-			currentRectangle.rectSetHeight = reviewedRect.rectBottom - reviewedRect.rectTop;
-			currentRectangle.style.left = (parseInt(reviewedRect.rectLeft)*initRatio+imgElem.offsetLeft) + 'px';
-			currentRectangle.style.top = (parseInt(reviewedRect.rectTop)*initRatio+imgElem.offsetTop) + 'px';
-			currentRectangle.style.border= "2px solid "+color;
-			currentRectangle.style.color= color;
-			var text = document.createElement('div');
-			var t = document.createTextNode(str);
-			text.className = 'rectangleText';
-			text.appendChild(t);
-			currentRectangle.appendChild(text);
-			currentRectangle.style.width = (reviewedRect.rectRight - reviewedRect.rectLeft)*initRatio + 'px';
-			currentRectangle.style.height = (reviewedRect.rectBottom - reviewedRect.rectTop)*initRatio + 'px';
-			imgElem.parentElement.appendChild(currentRectangle);
-			adaptText(imgElem,currentRectangle);
+	
+}
 
+function onImgLoaded(id){
+	var img = document.getElementById(id);
+	var imgId = img.getAttribute("data-id");
+	var mode = img.getAttribute("data-mode");
 
-			
-		}
+	if (mode == 1 ){
+		var url = site.uri.public + '/segAreas/byIds';
+		var dataArea= {};
+			dataArea["ids"]=[imgId];
 	}
-	function drawAreas(cnvElem,rects,categories){
-		var areaCanvas = cnvElem.children[1];
-		var refImage = cnvElem.children[0];
-		areaCanvas.width = refImage.width;
-		areaCanvas.height = refImage.height;
-		var initRatio = getImgRatio(refImage);
-		for(var i = 0; i < rects.length; ++i){
-			reviewedArea = rects[i];
-		
-				areaCtx = areaCanvas.getContext("2d");
-				areaCtx.lineJoin = "round";
-				areaCtx.beginPath();
-				var coordList = JSON.parse( reviewedArea.data );
-				areaCtx.moveTo(coordList[0][0]*initRatio, coordList[0][1]*initRatio);
+	else{
+		var url = site.uri.public + '/areas/byIds';
+		var dataArea= {};
+			dataArea["ids"]=[imgId];
+	}
 
-				for(var j = 1; j < coordList.length; ++j){
-					areaCtx.lineTo(coordList[j][0]*initRatio, coordList[j][1]*initRatio);
-				}
-				
-				var color = categories[reviewedArea.areaType].Color;
-				areaCtx.globalAlpha=0.5;
-		 		areaCtx.fillStyle = color;//"#ff0000";
-		 		areaCtx.lineWidth  = 3;
-		 		areaCtx.strokeStyle = "#ffffff";
-		 		areaCtx.closePath();
-				areaCtx.fill();
-				areaCtx.globalAlpha=1;
-				areaCtx.stroke();
-		}
+	$.ajax({
+		type: "GET",
+		data: dataArea,
+		url: url
+	})
+	.then(
+	    // Fetch successful
+	    function (dataAreaRes) {
+	    	if (dataAreaRes!=""){
+	    		if (mode == 1 ){
+	    			drawAreas(document.getElementById("imgdiv"+dataAreaRes[0].source),dataAreaRes,catReworked(dataHandler.segCategories));
+	    		}
+	    		else{
+	    			drawRects(document.getElementById("img"+dataAreaRes[0].source),dataAreaRes,catReworked(dataHandler.bboxCategories));
+	    		}
+	    	}
+	    },
+	    // Fetch failed
+	    function (dataAreaRes) {
+	        
+	    }
+    );
+}
+
+function getImgRatio(imgElem){
+	return imgElem.clientWidth/imgElem.naturalWidth;
+}
+function adaptText(imgElem,rects){
+	var textWidth = rects.childNodes[0].scrollWidth;
+	var leftImage = imgElem.offsetLeft - 0;
+	if((parseFloat(rects.style.left) + textWidth) >= (leftImage+imgElem.width)){
+		rects.childNodes[0].style.left = -textWidth + 'px';
+	}
+	else{
+		rects.childNodes[0].style.left = 0 + 'px';
+	}
+	var textHeight = rects.childNodes[0].scrollHeight;
+	var topImage = imgElem.offsetTop;
+	if((parseFloat(rects.style.top) + textHeight) >= (topImage+imgElem.height)){
+		rects.childNodes[0].style.top = -textHeight + 'px';
+	}
+	else{
+		rects.childNodes[0].style.top = 0 + 'px';
 	}
 }
+function drawRects(imgElem,rects,categories){
+	for(var i = 0; i < rects.length; ++i){
+		reviewedRect = rects[i];
+		
+		var initRatio = getImgRatio(imgElem);
+		currentRectangle = document.createElement('div');
+		currentRectangle.className = 'rectangleView';
+		var str = categories[reviewedRect.rectType].Category;
+		var type = reviewedRect.rectType;
+		var color = categories[reviewedRect.rectType].Color;
+		currentRectangle.rectType = type;
+		currentRectangle.rectSetRatio = 1;
+		currentRectangle.rectSetLeft = parseInt(reviewedRect.rectLeft);
+		currentRectangle.rectSetTop = parseInt(reviewedRect.rectTop);
+		currentRectangle.rectSetWidth = reviewedRect.rectRight - reviewedRect.rectLeft;
+		currentRectangle.rectSetHeight = reviewedRect.rectBottom - reviewedRect.rectTop;
+		currentRectangle.style.left = (parseInt(reviewedRect.rectLeft)*initRatio+imgElem.offsetLeft) + 'px';
+		currentRectangle.style.top = (parseInt(reviewedRect.rectTop)*initRatio+imgElem.offsetTop) + 'px';
+		currentRectangle.style.border= "2px solid "+color;
+		currentRectangle.style.color= color;
+		var text = document.createElement('div');
+		var t = document.createTextNode(str);
+		text.className = 'rectangleText';
+		text.appendChild(t);
+		currentRectangle.appendChild(text);
+		currentRectangle.style.width = (reviewedRect.rectRight - reviewedRect.rectLeft)*initRatio + 'px';
+		currentRectangle.style.height = (reviewedRect.rectBottom - reviewedRect.rectTop)*initRatio + 'px';
+		imgElem.parentElement.appendChild(currentRectangle);
+		adaptText(imgElem,currentRectangle);
+
+
+		
+	}
+}
+function drawAreas(cnvElem,rects,categories){
+	var areaCanvas = cnvElem.children[1];
+	var refImage = cnvElem.children[0];
+	areaCanvas.width = refImage.width;
+	areaCanvas.height = refImage.height;
+	var initRatio = getImgRatio(refImage);
+	for(var i = 0; i < rects.length; ++i){
+		reviewedArea = rects[i];
+	
+			areaCtx = areaCanvas.getContext("2d");
+			areaCtx.lineJoin = "round";
+			areaCtx.beginPath();
+			var coordList = JSON.parse( reviewedArea.data );
+			areaCtx.moveTo(coordList[0][0]*initRatio, coordList[0][1]*initRatio);
+
+			for(var j = 1; j < coordList.length; ++j){
+				areaCtx.lineTo(coordList[j][0]*initRatio, coordList[j][1]*initRatio);
+			}
+			
+			var color = categories[reviewedArea.areaType].Color;
+			areaCtx.globalAlpha=0.5;
+	 		areaCtx.fillStyle = color;//"#ff0000";
+	 		areaCtx.lineWidth  = 3;
+	 		areaCtx.strokeStyle = "#ffffff";
+	 		areaCtx.closePath();
+			areaCtx.fill();
+			areaCtx.globalAlpha=1;
+			areaCtx.stroke();
+	}
+}
+
+
+
+
+
+
 
 function validated_onSearchClicked(){
 	console.log("start search");
