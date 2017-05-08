@@ -359,11 +359,11 @@
     
     {% if checkAccess('uri_export') %}
     {{ assets.js('js/segExport') | raw }}
-    {{ assets.js('js/segImport') | raw }}
     {% endif %} 
     {% if checkAccess('uri_export') %}
     {{ assets.js('js/jscolor') | raw }}
     {{ assets.js('js/segCategoriesEditor') | raw }}
     {% endif %} 
+    {{ assets.js('js/segImport') | raw }}
     {{ assets.js('js/segUpload') | raw }}
 {% endblock %}

@@ -352,11 +352,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
     {% if checkAccess('uri_export') %}
     {{ assets.js('js/export') | raw }}
-    {{ assets.js('js/import') | raw }}
     {% endif %} 
     {% if checkAccess('uri_export') %}
     {{ assets.js('js/jscolor') | raw }}
     {{ assets.js('js/categoriesEditor') | raw }}
     {% endif %} 
+    {{ assets.js('js/import') | raw }}
     {{ assets.js('js/upload') | raw }}
 {% endblock %}
