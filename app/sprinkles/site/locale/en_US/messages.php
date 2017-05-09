@@ -49,4 +49,7 @@ return [
     "SEG_LABEL"               =>"Segmentation",
     "SEG_VALIDATE"               =>"SegValidation",
     "SEG_LABEL_description" =>"Choose a category and start to tag images !",
+    "PASSWORD" => [
+        "BETWEEN"   => "Password between {{min}}-{{max}} characters"
+    ],
 ];
