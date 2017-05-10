@@ -191,6 +191,8 @@ function label_initCombo(){
 var drawMode =true;
 var eraseMode = false;
 var moveMode = false;
+var resizeMode = false;
+var elemMoveMode = false;
 label_updateButtons();
 
 if(document.getElementById("moveButton"))
@@ -290,17 +292,24 @@ function label_onTouchMove(e){
 ///////////////////////////////////////////
 
 function onMoveHandler(e) {
+	
 	var refImage = document.getElementById('image');
 	var refPreview = document.getElementById('preview');
+	
 	if(drawMode== true){
-		if (element !== null) {
+		if(resizeMode)
+			resizeElement(e, element);
+		else if(elemMoveMode){
+			moveElement(e, element);
+		}
+		else if (element !== null) {
 
 		
 			if(e.type == "mousemove"){
 				var pageX = e.pageX;
 				var pageY = e.pageY;
 			}
-			else if(e.type == "touchmove"){
+			else if(e.type == "touchmove" && e.targetTouches){
 				var pageX = e.targetTouches[0].pageX;
 				var pageY = e.targetTouches[0].pageY;
 			}
@@ -308,6 +317,7 @@ function onMoveHandler(e) {
 				var pageX = 0;
 				var pageY = 0;
 				console.log("no event recognized");
+				return;
 			}
 			//document.getElementById('value4').innerHTML = "pageX "+parseInt(pageX)+" pageY "+parseInt(pageY);
 			//document.getElementById('value6').innerHTML = "mX "+mouse.startX+" mY "+mouse.startX;
@@ -362,6 +372,95 @@ function onMoveHandler(e) {
 	}
 }
 
+function resizeElement(e, element){
+	console.log("try resize");
+	var refImage = document.getElementById('image');
+	var refPreview = document.getElementById('preview');
+	if(e.type == "mousemove"){
+		var pageX = e.pageX;
+		var pageY = e.pageY;
+	}
+	else if(e.type == "touchmove"){
+		var pageX = e.originalEvent.targetTouches[0].pageX;
+		var pageY = e.originalEvent.targetTouches[0].pageY;
+	}
+	else{
+		console.log("no event recognized");
+		return;
+	}
+	var leftImage = refPreview.parentElement.offsetLeft;//distance between window border and the left of the image
+	var normalLeft = mouse.startX;
+	var currentDistanceX = pageX - (leftImage + normalLeft);//distance between initial mouse and mouse
+	var reverseLeft = pageX - leftImage;//when going to the left, distance between left of image and the mouse (current mouse)
+	var tmpWidth = Math.abs(currentDistanceX);//width of rect
+	var reverseWidth = mouse.startWidth - currentDistanceX;
+
+	////////   Y   /////////////////////////
+	var topImage = refPreview.parentElement.offsetTop ;
+	var normalTop = mouse.startY;
+	var currentDistanceY = pageY - (topImage + normalTop);
+	var reverseTop = pageY - topImage;
+	var tmpHeight = Math.abs(currentDistanceY);
+	var reverseHeight = mouse.startHeight - currentDistanceY;
+	
+	if(resizeMode == "Left"){
+		if (reverseLeft >= 0 && currentDistanceX < mouse.startWidth)//going left, when going under 0 we stop expending the box
+			element.style.width = reverseWidth + 'px';
+		if(reverseLeft >= 0 && currentDistanceX < mouse.startWidth)//Rectangle is moved if going on left, when going out of image we stop moiving rect ( width expand is also stopped)
+			element.style.left = reverseLeft + 'px';
+	}
+	else if (resizeMode == "Top"){
+		if (reverseTop >= 0 && currentDistanceY < mouse.startHeight)
+			element.style.height = reverseHeight + 'px';
+		if(reverseTop >= 0 && currentDistanceY < mouse.startHeight)
+			element.style.top = reverseTop + 'px';
+	}
+	else if (resizeMode == "Right" && currentDistanceX > 0){
+		if ((normalLeft + tmpWidth) <= refImage.width)//going right, offset + rect.width can't be bigger than img.width
+			element.style.width = tmpWidth + 'px';
+	}
+	else if (resizeMode == "Bottom" && currentDistanceY > 0){
+		if ((normalTop + tmpHeight) <= refImage.height)
+				element.style.height = tmpHeight + 'px';
+	}
+	//Mimimum size of rect
+	if(parseFloat(element.style.width) >= minSize && parseFloat(element.style.height) >= minSize)
+		refPreview.appendChild(element);
+	else if(element.parentElement)
+		refPreview.removeChild(element);
+	adaptText();
+}
+function moveElement(e, element){
+	var refImage = document.getElementById('image');
+	var refPreview = document.getElementById('preview');
+	if(e.type == "mousemove"){
+		var pageX = e.pageX;
+		var pageY = e.pageY;
+	}
+	else if(e.type == "touchmove"){
+		var pageX = e.originalEvent.targetTouches[0].pageX;
+		var pageY = e.originalEvent.targetTouches[0].pageY;
+	}
+	else{
+		console.log("no event recognized");
+		return;
+	}
+	////////   X   /////////////////////////
+	var leftImage = refPreview.parentElement.offsetLeft;//distance between window border and the left of the image
+	var currentDistanceX = pageX - (leftImage + mouse.startX);//distance between initial mouse and mouse
+	
+	if(currentDistanceX >= 0 && (currentDistanceX + element.offsetWidth) <= refImage.width)//Rectangle is moved if going on left, when going out of image we stop moiving rect ( width expand is also stopped)
+		element.style.left = currentDistanceX + 'px';
+	
+	////////   Y   /////////////////////////
+	var topImage = refPreview.parentElement.offsetTop ;
+	var currentDistanceY = pageY - (topImage + mouse.startY);
+	if(currentDistanceY >= 0 && (currentDistanceY + element.offsetHeight) <= refImage.height)
+		element.style.top = currentDistanceY + 'px';
+
+	adaptText();
+}
+
 
 function onClickHandler(e) {
 	if(eraseMode== true){
@@ -373,6 +472,9 @@ function onClickHandler(e) {
 		else if(e.target.className == "rectangleText"){
 			e.target.parentElement.remove();
 		}
+	}
+	else{
+		e.target.parentElement.appendChild(e.target);
 	}
 }
 
@@ -414,19 +516,33 @@ function onDownHandler(e) {
 		var t = document.createTextNode(str);
 		text.className = 'rectangleText';
 		text.appendChild(t);
+		text.style.pointerEvents = "none";
 		element.appendChild(text);
 		//refPreview.appendChild(element);
 		//adaptText();
 		element.style.width = 0;
 		element.style.height = 0;
-		refPreview.style.cursor = "crosshair";
-		element.onmouseover = function(e){
-			//console.log("mouse over");
+		//refPreview.style.cursor = "crosshair";
+
+		element.onmousedown = function(e){
+			onElementDownHandler(e,$(this));
 		}
-		element.onmouseout = function(e){
-			//console.log("mouse out");
+		element.onmousemove = function(e){
+			onElementMoveHandler(e,$(this));
 		}
-		
+		$(".rectangle").on('touchstart',function(e,data) {  
+			onElementDownHandler(e,$(this));
+		});
+		$(".rectangle").on('touchmove',function(e,data) {
+			onMoveHandler(e); 
+		});
+		$(".rectangle").on('touchend',function(e,data) { 
+			console.log("element touchend");
+			resizeMode = false;
+			elemMoveMode = false;
+			element = null;
+		});
+
 	}
 }
 
@@ -442,8 +558,79 @@ function onUpHandler(e) {
 			element = null;
 		}
 		canvas.style.cursor = "default";
-		//console.log("mouse up");
 	}
+	resizeMode = false;
+	elemMoveMode = false;
+}
+function onElementDownHandler(e,selection){
+	if(drawMode){
+		var refPreview = document.getElementById('preview');
+		if(e.type == "mousedown"){
+			var offsetX = e.offsetX;
+			var offsetY = e.offsetY;
+			var reactiveLength = parseInt(selection.css('borderLeftWidth'));
+			var pageX = e.pageX;
+			var pageY = e.pageY;
+		}
+		else if(e.type == "touchstart"){
+			var offsetX = e.originalEvent.targetTouches[0].pageX - e.originalEvent.currentTarget.offsetLeft - refPreview.parentElement.offsetLeft;
+			var offsetY = e.originalEvent.targetTouches[0].pageY - e.originalEvent.currentTarget.offsetTop - refPreview.parentElement.offsetTop;
+			var reactiveLength = parseInt(selection.css('borderLeftWidth')) +10;
+			var pageX = e.originalEvent.targetTouches[0].pageX;
+			var pageY = e.originalEvent.targetTouches[0].pageY;
+		}
+		else{
+			var offsetX = 0;
+			var offsetY = 0;
+			console.log("no event recognized");
+			return;
+		}
+		if(  offsetX <= reactiveLength){
+	       	resizeMode = "Left";
+	       	element = e.target;
+	       	mouse.startX = element.offsetLeft;
+			mouse.startY = element.offsetTop;
+			mouse.startWidth = element.offsetWidth;
+	    }
+	    else if(  offsetY <= reactiveLength){
+       		resizeMode = "Top";
+       		element = e.target;
+       		mouse.startX = element.offsetLeft;
+			mouse.startY = element.offsetTop;
+			mouse.startHeight = element.offsetHeight;
+	    }
+	    else if(  offsetX >= (e.target.clientWidth - reactiveLength) ){
+	       	resizeMode = "Right";
+	       	element = e.target;
+	       	mouse.startX = element.offsetLeft;
+			mouse.startY = element.offsetTop;
+	    }
+	    else if(  offsetY >= (e.target.clientHeight - reactiveLength) ){
+	       	resizeMode = "Bottom";
+	       	element = e.target;
+	       	mouse.startX = element.offsetLeft;
+			mouse.startY = element.offsetTop;
+	    }
+	    else{
+	    	elemMoveMode = true;
+	    	element = e.target;
+	    	mouse.startX = pageX - element.offsetLeft - refPreview.parentElement.offsetLeft;
+	    	mouse.startY = pageY - element.offsetTop - refPreview.parentElement.offsetTop;
+	    }
+	}
+}
+function onElementMoveHandler(e,selection){
+	if(eraseMode){
+		e.target.style.cursor = "default";
+	}
+	else if(e.offsetX <= parseInt(selection.css('borderLeftWidth')) || e.offsetX >= (e.target.clientWidth - parseInt(selection.css('borderLeftWidth'))) ){
+		e.target.style.cursor = "ew-resize";
+    }
+    else if(e.offsetY <= parseInt(selection.css('borderLeftWidth')) || e.offsetY >= (e.target.clientHeight - parseInt(selection.css('borderLeftWidth'))) ){
+		e.target.style.cursor = "ns-resize";
+    }
+    else
+    	e.target.style.cursor = "all-scroll";
 }
 function adaptText(){
 	////  X //////
