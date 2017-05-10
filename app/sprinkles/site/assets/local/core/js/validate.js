@@ -74,6 +74,12 @@ function validate_loadImages(){
 }
 
 function validate_addImage(){
+	if(validate_imgPathList.length == 0){
+		document.getElementById("moreButton").style = "DISPLAY: initial;";
+		document.getElementById("RejectButton").style = "DISPLAY: none;";
+		document.getElementById("ValidateButton").style = "DISPLAY: none;";
+		return;
+	}
 	validate_srcId = validate_imgPathList[validate_imgPathListIndex].id;
 	var imgName = validate_imgPathList[validate_imgPathListIndex].path;
 	var imgToAdd = validate_imgPath+imgName;
@@ -97,7 +103,7 @@ function validate_addImage(){
 	  img.addEventListener('error', error)
 	}
 	
-	document.getElementById('imgCounter').innerHTML = "Image "+(validate_imgPathListIndex+1)+" of "+validate_imgPathList.length;
+	document.getElementById('imgCounter').innerHTML = "";//"Image "+(validate_imgPathListIndex+1)+" of "+validate_imgPathList.length;
 	document.getElementById("moreButton").style = "DISPLAY: none;";
 	document.getElementById("RejectButton").style = "DISPLAY: initial;";
 	document.getElementById("ValidateButton").style = "DISPLAY: initial;";
@@ -189,9 +195,10 @@ function validate_nextImage(){
 			validate_addImage();
 		else{
 			console.log("no more img");
-			document.getElementById("moreButton").style = "DISPLAY: initial;";
-			document.getElementById("RejectButton").style = "DISPLAY: none;";
-			document.getElementById("ValidateButton").style = "DISPLAY: none;";
+			//document.getElementById("moreButton").style = "DISPLAY: initial;";
+			//document.getElementById("RejectButton").style = "DISPLAY: none;";
+			//document.getElementById("ValidateButton").style = "DISPLAY: none;";
+			validate_loadImages();
 		}
 	}
 }

@@ -40,7 +40,7 @@ function label_addImage(){
 		var imgToAdd = label_imgPath+imgName;
 		document.getElementById('image').src = imgToAdd;
 		label_initSelection();
-		document.getElementById('imgCounter').innerHTML = "Image "+(label_imgPathListIndex+1)+" / "+label_imgPathList.length;
+		document.getElementById('imgCounter').innerHTML = "";//"Image "+(label_imgPathListIndex+1)+" / "+label_imgPathList.length;
 		document.getElementById("moreButton").style = "DISPLAY: none;";
 		document.getElementById("nextButton").style = "DISPLAY: initial;";
 	}
@@ -75,8 +75,9 @@ function label_nextImage(){
 		if(label_imgPathListIndex<label_imgPathList.length)
 			label_addImage();
 		else{
-			document.getElementById("moreButton").style = "DISPLAY: initial;";
-			document.getElementById("nextButton").style = "DISPLAY: none;";
+			//document.getElementById("moreButton").style = "DISPLAY: initial;";
+			//document.getElementById("nextButton").style = "DISPLAY: none;";
+			label_loadImages();
 		}
 	}
 }

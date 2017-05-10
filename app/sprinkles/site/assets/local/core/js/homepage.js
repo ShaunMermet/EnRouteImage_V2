@@ -41,7 +41,7 @@ function homepage_addImage(){
 		var imgToAdd = homepage_imgPath+imgName;
 		document.getElementById('image').src = imgToAdd;//$('#preview').html("<img id='image' unselectable='on' onresize='"homepage_onImgResize()"' src='"+imgToAdd+"' />")
 		homepage_initSelection();
-		document.getElementById('imgCounter').innerHTML = "Image "+(homepage_imgPathListIndex+1)+" / "+homepage_imgPathList.length;
+		document.getElementById('imgCounter').innerHTML = "";//"Image "+(homepage_imgPathListIndex+1)+" / "+homepage_imgPathList.length;
 		document.getElementById("moreButton").style = "DISPLAY: none;";
 		document.getElementById("nextButton").style = "DISPLAY: initial;";
 	}
@@ -94,9 +94,9 @@ function homepage_nextImage(){
 			homepage_addImage();
 		else{
 			console.log("no more img");
-			document.getElementById("moreButton").style = "DISPLAY: initial;";
-			document.getElementById("nextButton").style = "DISPLAY: none;";
-			//homepage_loadImages();
+			//document.getElementById("moreButton").style = "DISPLAY: initial;";
+			//document.getElementById("nextButton").style = "DISPLAY: none;";
+			homepage_loadImages();
 		}
 	}
 }
