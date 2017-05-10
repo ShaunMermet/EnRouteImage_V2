@@ -765,8 +765,10 @@ INSERT INTO `permission_roles` (`permission_id`, `role_id`, `created_at`, `updat
 
 INSERT INTO `roles` (`id`, `slug`, `name`, `description`) VALUES (4, 'uploader', 'Uploader', 'This role provide rights to access the upload page and upload images');
 INSERT INTO `permission_roles` (`permission_id`, `role_id`, `created_at`, `updated_at`) VALUES ('25', '4', '2017-05-08 11:33:59', '2017-05-08 11:33:59');
+INSERT INTO `permission_roles` (`permission_id`, `role_id`, `created_at`, `updated_at`) VALUES ('27', '4', '2017-05-08 11:33:59', '2017-05-08 11:33:59');
 INSERT INTO `permission_roles` (`permission_id`, `role_id`, `created_at`, `updated_at`) VALUES ('12', '4', '2017-05-08 11:33:59', '2017-05-08 11:33:59');
 UPDATE `permissions` SET `conditions` = 'has_role(self.id,2) || has_role(self.id,3) || has_role(self.id,4)' WHERE `permissions`.`id` = 12;
 UPDATE `permissions` SET `conditions` = 'has_role(self.id,2) || has_role(self.id,4)' WHERE `permissions`.`id` = 25;
+UPDATE `permissions` SET `conditions` = 'has_role(self.id,2) || has_role(self.id,4)' WHERE `permissions`.`id` = 27;
 INSERT INTO `permissions` (`id`, `slug`, `name`, `conditions`, `description`, `created_at`, `updated_at`) VALUES (NULL, 'delete_img', 'delete images', 'has_role(self.id,2) || has_role(self.id,4)', 'grants rights to create roles', NULL, NULL);
 INSERT INTO `permission_roles` (`permission_id`, `role_id`, `created_at`, `updated_at`) VALUES ('35', '2', NULL, NULL);
