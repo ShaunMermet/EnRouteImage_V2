@@ -3,7 +3,7 @@ var validated_segImgPath = "../../img/segmentation/";
 
 var dataHandler = {};
 
-
+	    
 validated_loadSegCategories();
 function validated_loadSegCategories(){
 	// Fetch and render the categories
@@ -136,6 +136,8 @@ function onComboModeChanged(){
 function validated_loadImages(categories,filter){
 	// Fetch and render the images
 	
+	//clickListener();
+
 	console.log(filter);
 	var imgType = document.getElementById('comboValidatedMode');
 	var mode = imgType.value;
@@ -200,9 +202,11 @@ function validated_loadImages(categories,filter){
 			    });
 				for(var i = 0; i < data.rows.length; ++i){
 					var img = data.rows[i];
-	    			$('#preview').append("<div  style='margin: 10px;position:relative;' id='imgdiv"+img.id+"' ><img id='img"+img.id+"' data-id="+img.id+" data-mode="+mode+" class='imgDisp' unselectable='on' src='"+imgPath+img.path+"' onload='onImgLoaded(this.id)'/><canvas id='areaCanvas"+img.id+"' style='position:absolute;top: 0px;left: 0px;''></canvas></div>");
+					if(!img.updated_at) img.updated_at = " ";
+	    			$('#preview').append("<div  style='margin: 10px;position:relative;' id='imgdiv"+img.id+"' ><img id='img"+img.id+"' data-id="+img.id+" data-mode="+mode+" data-updated="+img.updated_at.replace(" ", ";") +" class='imgDisp' unselectable='on' src='"+imgPath+img.path+"' onload='onImgLoaded(this.id)'/><canvas id='areaCanvas"+img.id+"' style='position:absolute;top: 0px;left: 0px;pointer-events: none;''></canvas></div>");
 				}
-	    		
+	    		document.removeEventListener( "click",__onImgLeftClicked);
+				document.addEventListener( "click",__onImgLeftClicked);
 			}
 	    },
 	    // Fetch failed
@@ -307,16 +311,17 @@ function validated_loadImages(categories,filter){
 	   * Initialise our application's code.
 	   */
 	  function init() {
-	    clickListener();
 	    keyupListener();
 	    resizeListener();
 	  }
 	  function __onImgLeftClicked(e) {
+	  		e.stopImmediatePropagation();
 	      var clickeElIsLink = clickInsideElement( e, contextMenuLinkClassName );
 
 	      if ( clickeElIsLink ) {
 	        e.preventDefault();
 	        menuItemListener( clickeElIsLink );
+	        document.removeEventListener( "click",__onImgLeftClicked);
 	      } else {
 	        taskItemInContext = clickInsideElement( e, taskItemClassName );
 	          if ( taskItemInContext ) {
@@ -334,8 +339,9 @@ function validated_loadImages(categories,filter){
 	   * Listens for click events.
 	   */
 	  function clickListener() {
-	  	document.removeEventListener( "click",__onImgLeftClicked);
-	    document.addEventListener( "click", __onImgLeftClicked);
+	  	
+	     
+	     document.addEventListener( "click", __onImgLeftClicked);
 	  }
 
 	  /**
@@ -420,7 +426,13 @@ function validated_loadImages(categories,filter){
 			data["validated"]=0;
 			data[site.csrf.keys.name] = site.csrf.name;
 			data[site.csrf.keys.value] = site.csrf.value;
-			var url = site.uri.public + '/bbox/validate/evaluate';
+			var mode = taskItemInContext.getAttribute("data-mode");
+			if (mode == 1 ){
+				data["updated"]=taskItemInContext.getAttribute("data-updated").replace(";", " ");
+				var url = site.uri.public + '/segment/validate/evaluate';
+			}
+			else
+				var url = site.uri.public + '/bbox/validate/evaluate';
 			$.ajax({
 			  type: "PUT",
 			  url: url,
