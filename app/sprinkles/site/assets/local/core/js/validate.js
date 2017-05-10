@@ -198,7 +198,7 @@ function validate_nextImage(){
 			//document.getElementById("moreButton").style = "DISPLAY: initial;";
 			//document.getElementById("RejectButton").style = "DISPLAY: none;";
 			//document.getElementById("ValidateButton").style = "DISPLAY: none;";
-			validate_loadImages();
+			validate_onMoreClicked();
 		}
 	}
 }

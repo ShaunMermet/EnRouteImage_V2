@@ -1,16 +1,28 @@
-var homepage_imgPathList=[];
-var homepage_imgPathListIndex = 0;
-var homepage_imgPath = "../img/";
-var homepage_phpPath = "../../php/";
-var homepage_srcName = 0;
+var label_imgPathList=[];
+var label_imgPathListIndex = 0;
+var label_imgPath = "../img/";
+var label_phpPath = "../../php/";
+var label_srcName = 0;
 //if(document.getElementById("openButton"))
 //	document.getElementById("openButton").style = "DISPLAY: none;";
 
 
+var mouse = {
+		x: 0,
+		y: 0,
+		// coord in image ref
+		startX: 0,
+		startY: 0
+	};
+
+	var element = null;
+	var minSize = 10;
+
+
 
 ////////////GET IMG FROM SERVER//////
-homepage_loadImages();
-function homepage_loadImages(){
+label_loadImages();
+function label_loadImages(){
 	// Fetch and render the images
 	var url = site.uri.public + '/images/cleanNA';
 	$.ajax({
@@ -21,11 +33,12 @@ function homepage_loadImages(){
 	    // Fetch successful
 	    function (data) {
 	    	if(data!=""){
-				homepage_imgPathList = data;
+				//var res = JSON.parse(data);
+				label_imgPathList = data;//res;
 			}
-			else homepage_imgPathList = [];
-			homepage_imgPathListIndex = 0;
-			homepage_addImage();
+			else label_imgPathList = [];
+			label_imgPathListIndex = 0;
+			label_addImage();
 	    },
 	    // Fetch failed
 	    function (data) {
@@ -34,20 +47,20 @@ function homepage_loadImages(){
 	);
 }
 
-function homepage_addImage(){
-	if(homepage_imgPathList.length>0){
-		homepage_srcName = homepage_imgPathList[homepage_imgPathListIndex].id;
-		var imgName = homepage_imgPathList[homepage_imgPathListIndex].path;
-		var imgToAdd = homepage_imgPath+imgName;
-		document.getElementById('image').src = imgToAdd;//$('#preview').html("<img id='image' unselectable='on' onresize='"homepage_onImgResize()"' src='"+imgToAdd+"' />")
-		homepage_initSelection();
-		document.getElementById('imgCounter').innerHTML = "";//"Image "+(homepage_imgPathListIndex+1)+" / "+homepage_imgPathList.length;
+function label_addImage(){
+	if(label_imgPathList.length>0){
+		label_srcName = label_imgPathList[label_imgPathListIndex].id;
+		var imgName = label_imgPathList[label_imgPathListIndex].path;
+		var imgToAdd = label_imgPath+imgName;
+		document.getElementById('image').src = imgToAdd;//$('#preview').html("<img id='image' unselectable='on' onresize='"label_onImgResize()"' src='"+imgToAdd+"' />")
+		label_initSelection();
+		document.getElementById('imgCounter').innerHTML = "";//"Image "+(label_imgPathListIndex+1)+" / "+label_imgPathList.length;
 		document.getElementById("moreButton").style = "DISPLAY: none;";
 		document.getElementById("nextButton").style = "DISPLAY: initial;";
 	}
 }
 
-function homepage_onImgResize(){
+function label_onImgResize(){
 	console.log("resize");
 }
 window.addEventListener("resize", function(){
@@ -56,7 +69,7 @@ window.addEventListener("resize", function(){
 	//document.getElementById('value1').innerHTML = "left "+refPreview.parentElement.offsetLeft+" top "+refPreview.parentElement.offsetTop;
 	//document.getElementById('value3').innerHTML = "left "+refPreview.offsetLeft+" top "+refPreview.offsetTop;
 	var elements = document.getElementsByClassName("rectangle");
-	var ratio = homepage_getImgRatio();
+	var ratio = label_getImgRatio();
 	if(elements.length>0){
 		for (var i = 0; i < elements.length; ++i) {
 			console.log("Resize rect ratio :"+ratio);
@@ -77,38 +90,38 @@ window.addEventListener("resize", function(){
    }
 });
 
-function homepage_getImgRatio(){
+function label_getImgRatio(){
 	var refImage = document.getElementById('image');
 	return refImage.clientWidth/refImage.naturalWidth;
 	//document.getElementById('value2').innerHTML = "ratio "+refImage.clientWidth/refImage.naturalWidth;
 	//document.getElementById('value3').innerHTML = "ratio "+refImage.clientHeight/refImage.naturalHeight;
 }
 
-function homepage_nextImage(){
-	if(homepage_imgPathList.length>0){
-		homepage_wipeRectangle();
-		homepage_removeImage();
-		tools_freeImageNA(homepage_imgPathList[homepage_imgPathListIndex].id);
-		homepage_imgPathListIndex++;
-		if(homepage_imgPathListIndex<homepage_imgPathList.length)
-			homepage_addImage();
+function label_nextImage(){
+	if(label_imgPathList.length>0){
+		label_wipeRectangle();
+		label_removeImage();
+		tools_freeImage(label_imgPathList[label_imgPathListIndex].id);
+		label_imgPathListIndex++;
+		if(label_imgPathListIndex<label_imgPathList.length)
+			label_addImage();
 		else{
 			console.log("no more img");
 			//document.getElementById("moreButton").style = "DISPLAY: initial;";
 			//document.getElementById("nextButton").style = "DISPLAY: none;";
-			homepage_loadImages();
+			label_loadImages();
 		}
 	}
 }
 
-function homepage_removeImage(){
+function label_removeImage(){
 	var refImage = document.getElementById('image');
 	if(refImage){
 		//refImage.remove();
 		refImage.src = "";
 	}
 }
-function homepage_wipeRectangle(){
+function label_wipeRectangle(){
 	var elements = document.getElementsByClassName("rectangle");
 	while(elements.length>0){
 		elements[0].remove();
@@ -122,14 +135,14 @@ function homepage_wipeRectangle(){
 ////  COMBO    //////////////////
 //creating categories 
 
-var homepage_catId = [];
-var homepage_catText=[];
-var homepage_catColor= [];
+var label_catId = [];
+var label_catText=[];
+var label_catColor= [];
 
 
 
-homepage_loadCategories();
-function homepage_loadCategories(){
+label_loadCategories();
+function label_loadCategories(){
 	// Fetch and render the categories
 	var url = site.uri.public + '/category/allNA';
 	$.ajax({
@@ -139,14 +152,14 @@ function homepage_loadCategories(){
 	.then(
 	    // Fetch successful
 	    function (data) {
-	    	console.log(data);
-	        var res = data.rows;// JSON.parse(data);
+	        //var res = JSON.parse(data);
+	        var res = data.rows;
 				for(i = 0; i < res.length; i++){
-					homepage_catId[i] = parseInt(res[i].id);
-					homepage_catText[i] = res[i].Category;
-					homepage_catColor[i] = res[i].Color;
+					label_catId[i] = parseInt(res[i].id);
+					label_catText[i] = res[i].Category;
+					label_catColor[i] = res[i].Color;
 				}
-				homepage_initCombo();
+				label_initCombo();
 	    },
 	    // Fetch failed
 	    function (data) {
@@ -155,9 +168,9 @@ function homepage_loadCategories(){
 	);
 }
 
-function homepage_initCombo(){
-	for (i = 0; i < homepage_catId.length; i++) {
-		appendToCombo(homepage_catText[i],homepage_catId[i]);
+function label_initCombo(){
+	for (i = 0; i < label_catId.length; i++) {
+		appendToCombo(label_catText[i],label_catId[i]);
 	}
 
 
@@ -178,31 +191,33 @@ function homepage_initCombo(){
 var drawMode =true;
 var eraseMode = false;
 var moveMode = false;
-homepage_updateButtons();
+var resizeMode = false;
+var elemMoveMode = false;
+label_updateButtons();
 
 if(document.getElementById("moveButton"))
 	document.getElementById("moveButton").style = "DISPLAY: none;";
 
-function homepage_onEraseClicked(){
+function label_onEraseClicked(){
 		drawMode =false;
 		eraseMode = true;
 		moveMode = false;
-		homepage_updateButtons();
+		label_updateButtons();
 };
-function homepage_onDrawClicked(){
+function label_onDrawClicked(){
 		drawMode =true;
 		eraseMode = false;
 		moveMode = false;
-		homepage_updateButtons();
+		label_updateButtons();
 };
-function homepage_onMoveClicked(){
+function label_onMoveClicked(){
 		drawMode =false;
 		eraseMode = false;
 		moveMode = true;
-		homepage_updateButtons();
+		label_updateButtons();
 };
 
-function homepage_updateButtons(){
+function label_updateButtons(){
 	if(drawMode)
 		$("#drawButton").toggleClass("selected", true);
 	else
@@ -225,200 +240,15 @@ function homepage_updateButtons(){
 
 ////  Draw square management  /////////////////////////////////////////////////
 
-function homepage_initSelection(){
-	homepage_initDraw(document.getElementById('preview'));
+function label_initSelection(){
+	label_initDraw();
 };
 	
-function homepage_initDraw(canvas) {
-	var mouse = {
-		x: 0,
-		y: 0,
-		// coord in image ref
-		startX: 0,
-		startY: 0
-	};
 
-	var element = null;
-	var minSize = 10;
 	
 
-	function onMoveHandler(e) {
-		var refImage = document.getElementById('image');
-		var refPreview = document.getElementById('preview');
-		if(drawMode== true){
-			if (element !== null) {
-
-			
-				if(e.type == "mousemove"){
-					var pageX = e.pageX;
-					var pageY = e.pageY;
-				}
-				else if(e.type == "touchmove"){
-					var pageX = e.targetTouches[0].pageX;
-					var pageY = e.targetTouches[0].pageY;
-				}
-				else{
-					var pageX = 0;
-					var pageY = 0;
-					console.log("no event recognized");
-				}
-				//document.getElementById('value4').innerHTML = "pageX "+parseInt(pageX)+" pageY "+parseInt(pageY);
-				//document.getElementById('value6').innerHTML = "mX "+mouse.startX+" mY "+mouse.startX;
-				//document.getElementById('value7').innerHTML = "e.X "+e.offsetX+" e.Y "+e.offsetY;
-				////////   X   /////////////////////////
-				var leftImage = refPreview.parentElement.offsetLeft;//distance between window border and the left of the image
-				var currentDistanceX = pageX - (leftImage + mouse.startX);//distance between initial mouse and mouse
-				var tmpWidth = Math.abs(currentDistanceX);//width of rect
-				var normalLeft = mouse.startX;//when going to the right, distance between left of image and the border of rect (initial pos of mouse)
-				var reverseLeft = pageX - leftImage;//when going to the left, distance between left of image and the mouse (current mouse)
-				if(currentDistanceX > 0)
-					var reverseX = false; else var reverseX = true;
-				
-				if (reverseX == false && ((normalLeft + tmpWidth) <= refImage.width))//going right, offset + rect.width can't be bigger than img.width
-					element.style.width = tmpWidth + 'px';
-				if (reverseX == true && reverseLeft >= 0)//going left, when going under 0 we stop expending the box
-					element.style.width = tmpWidth + 'px';
-														//On some case we don't actualise width
-				
-				if(reverseX == true && reverseLeft >= 0)//Rectangle is moved if going on left, when going out of image we stop moiving rect ( width expand is also stopped)
-					element.style.left = reverseLeft + 'px';
-				if(reverseX == false)
-					element.style.left = normalLeft + 'px';//when going right, starting point is always the same 
-				
-				
-				////////   Y   /////////////////////////
-				var topImage = refPreview.parentElement.offsetTop ;
-				var currentDistanceY = pageY - (topImage + mouse.startY);
-				var tmpHeight = Math.abs(currentDistanceY);
-				var normalTop = mouse.startY;
-				var reverseTop = pageY - topImage;
-				if(currentDistanceY > 0)
-					var reverseY = false; else var reverseY = true;
-				
-				if (reverseY == false && ((normalTop + tmpHeight) <= refImage.height))
-					element.style.height = tmpHeight + 'px';
-				if (reverseY == true && reverseTop >= 0)
-					element.style.height = tmpHeight + 'px';
-				//Rectangle is moved if going on top
-				if(reverseY == true && reverseTop >= 0)
-					element.style.top = reverseTop + 'px';
-				if(reverseY == false)
-					element.style.top = normalTop + 'px';
-				//Mimimum size of rect
-				if(parseFloat(element.style.width) >= minSize && parseFloat(element.style.height) >= minSize)
-					canvas.appendChild(element);
-				else if(element.parentElement)
-					canvas.removeChild(element);
-				//document.getElementById('value5').innerHTML = "left "+element.style.left+" top "+element.style.top;
-				adaptText();
-			}
-		}
-	}
-	
-	
-	function onClickHandler(e) {
-		if(eraseMode== true){
-			//console.log("go pour effacement"+e.target);
-			if(e.target.className == "rectangle"){
-				//console.log("effacement");
-				e.target.remove();
-			}
-			else if(e.target.className == "rectangleText"){
-				e.target.parentElement.remove();
-			}
-		}
-	}
-	
-	function onDownHandler(e) {
-		var refImage = document.getElementById('image');
-		var refPreview = document.getElementById('preview');
-		if(drawMode== true && element == null && refImage !== null){
-			if(e.type == "mousedown"){
-				var pageX = e.pageX;
-				var pageY = e.pageY;
-			}
-			else if(e.type == "touchstart"){
-				var pageX = e.targetTouches[0].pageX;
-				var pageY = e.targetTouches[0].pageY;
-			}
-			else{
-				var pageX = 0;
-				var pageY = 0;
-				console.log("no event recognized");
-			}
-			//In image coord (relative to img)
-			//mouse.startX = (pageX - refImage.offsetLeft);
-			//mouse.startY = (pageY - refImage.offsetTop);
-			mouse.startX = (pageX - refPreview.parentElement.offsetLeft);
-			mouse.startY = (pageY - refPreview.parentElement.offsetTop);
-			element = document.createElement('div');
-			element.className = 'rectangle';
-			var combo = document.getElementById("combo");
-			var str = combo.options[combo.selectedIndex].text;
-			var type = combo.options[combo.selectedIndex].value;
-			var color = homepage_catColor[homepage_catId.indexOf(parseInt(type))]
-			element.rectType = type;
-			//Don't use it as we do not display rect when too small (it's a dot at the start)
-			//element.style.left = pageX + 'px';
-			//element.style.top = pageY + 'px';
-			element.style.border= "3px solid "+color;
-			element.style.color= color;
-			var text = document.createElement('div');
-			var t = document.createTextNode(str);
-			text.className = 'rectangleText';
-			text.appendChild(t);
-			element.appendChild(text);
-			//canvas.appendChild(element);
-			//adaptText();
-			element.style.width = 0;
-			element.style.height = 0;
-			canvas.style.cursor = "crosshair";
-			element.onmouseover = function(e){
-				//console.log("mouse over");
-			}
-			element.onmouseout = function(e){
-				//console.log("mouse out");
-			}
-			
-		}
-	}
-	
-	function onUpHandler(e) {
-		if(drawMode== true){
-			if(element != null){
-				element.rectSetLeft = element.offsetLeft;
-				element.rectSetTop = element.offsetTop;
-				element.rectSetWidth = element.offsetWidth;
-				element.rectSetHeight = element.offsetHeight;
-				element.rectSetRatio = homepage_getImgRatio();
-				element = null;
-			}
-			canvas.style.cursor = "default";
-			//console.log("mouse up");
-		}
-	}
-	function adaptText(){
-		////  X //////
-		var refImage = document.getElementById('image');
-		var textWidth = element.childNodes[0].scrollWidth;
-		var leftImage = refImage.offsetLeft - 0;
-		if((parseFloat(element.style.left) + textWidth) >= (leftImage+refImage.width)){
-			element.childNodes[0].style.left = -textWidth + 'px';
-		}
-		else{
-			element.childNodes[0].style.left = 0 + 'px';
-		}
-		////  Y //////
-		var refImage = document.getElementById('image');
-		var textHeight = element.childNodes[0].scrollHeight;
-		var topImage = refImage.offsetTop;
-		if((parseFloat(element.style.top) + textHeight) >= (topImage+refImage.height)){
-			element.childNodes[0].style.top = -textHeight + 'px';
-		}
-		else{
-			element.childNodes[0].style.top = 0 + 'px';
-		}
-	}
+function label_initDraw() {
+	var canvas = document.getElementById('preview');
 	/////  CLICK  ///////////////////////////
 	document.onmousemove = function (e) {
 		onMoveHandler(e);
@@ -433,43 +263,406 @@ function homepage_initDraw(canvas) {
 		onUpHandler(e);
 	}
 	
-	/////  TOUCH  ////////////////////////////
-	
+}
 
+/////  TOUCH  ////////////////////////////
+function label_onTouchStart(e){
+	console.log("touchstart");
+	if(!moveMode)
+		e.preventDefault();
+	onClickHandler(e);
+	onDownHandler(e);
+}
+function label_onTouchEnd(e){
+	if(!moveMode)
+		e.preventDefault();
+	console.log("touchend");
+	onUpHandler(e);
+}
+function label_onTouchCancel(e){
+	e.preventDefault();
+	console.log("touchcancel");
+}
+function label_onTouchMove(e){
+	if(!moveMode)
+		e.preventDefault();
+	onMoveHandler(e);
+	console.log("touchmove");
+}
+///////////////////////////////////////////
+
+function onMoveHandler(e) {
+	
 	var refImage = document.getElementById('image');
-
+	var refPreview = document.getElementById('preview');
 	
-	refImage.ontouchstart = function handleStart(e) {
-								if(!moveMode)
-									e.preventDefault();
-								console.log("touchstart");
-								onClickHandler(e);
-								onDownHandler(e);
-							}
-	refImage.ontouchend = function handleEnd(e) {
-								if(!moveMode)
-									e.preventDefault();
-								console.log("touchend");
-								onUpHandler(e);
-							}
-	refImage.ontouchcancel = function handleCancel(e) {
-								e.preventDefault();
-								console.log("touchcancel");
-							}
-	refImage.ontouchmove = 	function handleMove(e) {
-								if(!moveMode)
-									e.preventDefault();
-								onMoveHandler(e);
-								console.log("touchmove");
-							}		
-	///////////////////////////////////////////
+	if(drawMode== true){
+		if(resizeMode)
+			resizeElement(e, element);
+		else if(elemMoveMode){
+			moveElement(e, element);
+		}
+		else if (element !== null) {
+
+		
+			if(e.type == "mousemove"){
+				var pageX = e.pageX;
+				var pageY = e.pageY;
+			}
+			else if(e.type == "touchmove" && e.targetTouches){
+				var pageX = e.targetTouches[0].pageX;
+				var pageY = e.targetTouches[0].pageY;
+			}
+			else{
+				var pageX = 0;
+				var pageY = 0;
+				console.log("no event recognized");
+				return;
+			}
+			//document.getElementById('value4').innerHTML = "pageX "+parseInt(pageX)+" pageY "+parseInt(pageY);
+			//document.getElementById('value6').innerHTML = "mX "+mouse.startX+" mY "+mouse.startX;
+			//document.getElementById('value7').innerHTML = "e.X "+e.offsetX+" e.Y "+e.offsetY;
+			////////   X   /////////////////////////
+			var leftImage = refPreview.parentElement.offsetLeft;//distance between window border and the left of the image
+			var currentDistanceX = pageX - (leftImage + mouse.startX);//distance between initial mouse and mouse
+			var tmpWidth = Math.abs(currentDistanceX);//width of rect
+			var normalLeft = mouse.startX;//when going to the right, distance between left of image and the border of rect (initial pos of mouse)
+			var reverseLeft = pageX - leftImage;//when going to the left, distance between left of image and the mouse (current mouse)
+			if(currentDistanceX > 0)
+				var reverseX = false; else var reverseX = true;
+			
+			if (reverseX == false && ((normalLeft + tmpWidth) <= refImage.width))//going right, offset + rect.width can't be bigger than img.width
+				element.style.width = tmpWidth + 'px';
+			if (reverseX == true && reverseLeft >= 0)//going left, when going under 0 we stop expending the box
+				element.style.width = tmpWidth + 'px';
+													//On some case we don't actualise width
+			
+			if(reverseX == true && reverseLeft >= 0)//Rectangle is moved if going on left, when going out of image we stop moiving rect ( width expand is also stopped)
+				element.style.left = reverseLeft + 'px';
+			if(reverseX == false)
+				element.style.left = normalLeft + 'px';//when going right, starting point is always the same 
+			
+			
+			////////   Y   /////////////////////////
+			var topImage = refPreview.parentElement.offsetTop ;
+			var currentDistanceY = pageY - (topImage + mouse.startY);
+			var tmpHeight = Math.abs(currentDistanceY);
+			var normalTop = mouse.startY;
+			var reverseTop = pageY - topImage;
+			if(currentDistanceY > 0)
+				var reverseY = false; else var reverseY = true;
+			
+			if (reverseY == false && ((normalTop + tmpHeight) <= refImage.height))
+				element.style.height = tmpHeight + 'px';
+			if (reverseY == true && reverseTop >= 0)
+				element.style.height = tmpHeight + 'px';
+			//Rectangle is moved if going on top
+			if(reverseY == true && reverseTop >= 0)
+				element.style.top = reverseTop + 'px';
+			if(reverseY == false)
+				element.style.top = normalTop + 'px';
+			//Mimimum size of rect
+			if(parseFloat(element.style.width) >= minSize && parseFloat(element.style.height) >= minSize)
+				refPreview.appendChild(element);
+			else if(element.parentElement)
+				refPreview.removeChild(element);
+			//document.getElementById('value5').innerHTML = "left "+element.style.left+" top "+element.style.top;
+			adaptText();
+		}
+	}
+}
+
+function resizeElement(e, element){
+	console.log("try resize");
+	var refImage = document.getElementById('image');
+	var refPreview = document.getElementById('preview');
+	if(e.type == "mousemove"){
+		var pageX = e.pageX;
+		var pageY = e.pageY;
+	}
+	else if(e.type == "touchmove"){
+		var pageX = e.originalEvent.targetTouches[0].pageX;
+		var pageY = e.originalEvent.targetTouches[0].pageY;
+	}
+	else{
+		console.log("no event recognized");
+		return;
+	}
+	var leftImage = refPreview.parentElement.offsetLeft;//distance between window border and the left of the image
+	var normalLeft = mouse.startX;
+	var currentDistanceX = pageX - (leftImage + normalLeft);//distance between initial mouse and mouse
+	var reverseLeft = pageX - leftImage;//when going to the left, distance between left of image and the mouse (current mouse)
+	var tmpWidth = Math.abs(currentDistanceX);//width of rect
+	var reverseWidth = mouse.startWidth - currentDistanceX;
+
+	////////   Y   /////////////////////////
+	var topImage = refPreview.parentElement.offsetTop ;
+	var normalTop = mouse.startY;
+	var currentDistanceY = pageY - (topImage + normalTop);
+	var reverseTop = pageY - topImage;
+	var tmpHeight = Math.abs(currentDistanceY);
+	var reverseHeight = mouse.startHeight - currentDistanceY;
+	
+	if(resizeMode == "Left"){
+		if (reverseLeft >= 0 && currentDistanceX < mouse.startWidth)//going left, when going under 0 we stop expending the box
+			element.style.width = reverseWidth + 'px';
+		if(reverseLeft >= 0 && currentDistanceX < mouse.startWidth)//Rectangle is moved if going on left, when going out of image we stop moiving rect ( width expand is also stopped)
+			element.style.left = reverseLeft + 'px';
+	}
+	else if (resizeMode == "Top"){
+		if (reverseTop >= 0 && currentDistanceY < mouse.startHeight)
+			element.style.height = reverseHeight + 'px';
+		if(reverseTop >= 0 && currentDistanceY < mouse.startHeight)
+			element.style.top = reverseTop + 'px';
+	}
+	else if (resizeMode == "Right" && currentDistanceX > 0){
+		if ((normalLeft + tmpWidth) <= refImage.width)//going right, offset + rect.width can't be bigger than img.width
+			element.style.width = tmpWidth + 'px';
+	}
+	else if (resizeMode == "Bottom" && currentDistanceY > 0){
+		if ((normalTop + tmpHeight) <= refImage.height)
+				element.style.height = tmpHeight + 'px';
+	}
+	//Mimimum size of rect
+	if(parseFloat(element.style.width) >= minSize && parseFloat(element.style.height) >= minSize)
+		refPreview.appendChild(element);
+	else if(element.parentElement)
+		refPreview.removeChild(element);
+	adaptText();
+}
+function moveElement(e, element){
+	var refImage = document.getElementById('image');
+	var refPreview = document.getElementById('preview');
+	if(e.type == "mousemove"){
+		var pageX = e.pageX;
+		var pageY = e.pageY;
+	}
+	else if(e.type == "touchmove"){
+		var pageX = e.originalEvent.targetTouches[0].pageX;
+		var pageY = e.originalEvent.targetTouches[0].pageY;
+	}
+	else{
+		console.log("no event recognized");
+		return;
+	}
+	////////   X   /////////////////////////
+	var leftImage = refPreview.parentElement.offsetLeft;//distance between window border and the left of the image
+	var currentDistanceX = pageX - (leftImage + mouse.startX);//distance between initial mouse and mouse
+	
+	if(currentDistanceX >= 0 && (currentDistanceX + element.offsetWidth) <= refImage.width)//Rectangle is moved if going on left, when going out of image we stop moiving rect ( width expand is also stopped)
+		element.style.left = currentDistanceX + 'px';
+	
+	////////   Y   /////////////////////////
+	var topImage = refPreview.parentElement.offsetTop ;
+	var currentDistanceY = pageY - (topImage + mouse.startY);
+	if(currentDistanceY >= 0 && (currentDistanceY + element.offsetHeight) <= refImage.height)
+		element.style.top = currentDistanceY + 'px';
+
+	adaptText();
 }
 
 
+function onClickHandler(e) {
+	if(eraseMode== true){
+		//console.log("go pour effacement"+e.target);
+		if(e.target.className == "rectangle"){
+			//console.log("effacement");
+			e.target.remove();
+		}
+		else if(e.target.className == "rectangleText"){
+			e.target.parentElement.remove();
+		}
+	}
+	else{
+		e.target.parentElement.appendChild(e.target);
+	}
+}
+
+function onDownHandler(e) {
+	var refImage = document.getElementById('image');
+	var refPreview = document.getElementById('preview');
+	if(drawMode== true && element == null && refImage !== null){
+		if(e.type == "mousedown"){
+			var pageX = e.pageX;
+			var pageY = e.pageY;
+		}
+		else if(e.type == "touchstart"){
+			var pageX = e.targetTouches[0].pageX;
+			var pageY = e.targetTouches[0].pageY;
+		}
+		else{
+			var pageX = 0;
+			var pageY = 0;
+			console.log("no event recognized");
+		}
+		//In image coord (relative to img)
+		//mouse.startX = (pageX - refImage.offsetLeft);
+		//mouse.startY = (pageY - refImage.offsetTop);
+		mouse.startX = (pageX - refPreview.parentElement.offsetLeft);
+		mouse.startY = (pageY - refPreview.parentElement.offsetTop);
+		element = document.createElement('div');
+		element.className = 'rectangle';
+		var combo = document.getElementById("combo");
+		var str = combo.options[combo.selectedIndex].text;
+		var type = combo.options[combo.selectedIndex].value;
+		var color = label_catColor[label_catId.indexOf(parseInt(type))];
+		element.rectType = type;
+		//Don't use it as we do not display rect when too small (it's a dot at the start)
+		//element.style.left = pageX + 'px';
+		//element.style.top = pageY + 'px';
+		element.style.border= "3px solid "+color;
+		element.style.color= color;
+		var text = document.createElement('div');
+		var t = document.createTextNode(str);
+		text.className = 'rectangleText';
+		text.appendChild(t);
+		text.style.pointerEvents = "none";
+		element.appendChild(text);
+		//refPreview.appendChild(element);
+		//adaptText();
+		element.style.width = 0;
+		element.style.height = 0;
+		//refPreview.style.cursor = "crosshair";
+
+		element.onmousedown = function(e){
+			onElementDownHandler(e,$(this));
+		}
+		element.onmousemove = function(e){
+			onElementMoveHandler(e,$(this));
+		}
+		$(".rectangle").on('touchstart',function(e,data) {  
+			onElementDownHandler(e,$(this));
+		});
+		$(".rectangle").on('touchmove',function(e,data) {
+			onMoveHandler(e); 
+		});
+		$(".rectangle").on('touchend',function(e,data) { 
+			console.log("element touchend");
+			resizeMode = false;
+			elemMoveMode = false;
+			element = null;
+		});
+
+	}
+}
+
+function onUpHandler(e) {
+	var canvas = document.getElementById('preview');
+	if(drawMode== true){
+		if(element != null){
+			element.rectSetLeft = element.offsetLeft;
+			element.rectSetTop = element.offsetTop;
+			element.rectSetWidth = element.offsetWidth;
+			element.rectSetHeight = element.offsetHeight;
+			element.rectSetRatio = label_getImgRatio();
+			element = null;
+		}
+		canvas.style.cursor = "default";
+	}
+	resizeMode = false;
+	elemMoveMode = false;
+}
+function onElementDownHandler(e,selection){
+	if(drawMode){
+		var refPreview = document.getElementById('preview');
+		if(e.type == "mousedown"){
+			var offsetX = e.offsetX;
+			var offsetY = e.offsetY;
+			var reactiveLength = parseInt(selection.css('borderLeftWidth'));
+			var pageX = e.pageX;
+			var pageY = e.pageY;
+		}
+		else if(e.type == "touchstart"){
+			var offsetX = e.originalEvent.targetTouches[0].pageX - e.originalEvent.currentTarget.offsetLeft - refPreview.parentElement.offsetLeft;
+			var offsetY = e.originalEvent.targetTouches[0].pageY - e.originalEvent.currentTarget.offsetTop - refPreview.parentElement.offsetTop;
+			var reactiveLength = parseInt(selection.css('borderLeftWidth')) +10;
+			var pageX = e.originalEvent.targetTouches[0].pageX;
+			var pageY = e.originalEvent.targetTouches[0].pageY;
+		}
+		else{
+			var offsetX = 0;
+			var offsetY = 0;
+			console.log("no event recognized");
+			return;
+		}
+		if(  offsetX <= reactiveLength){
+	       	resizeMode = "Left";
+	       	element = e.target;
+	       	mouse.startX = element.offsetLeft;
+			mouse.startY = element.offsetTop;
+			mouse.startWidth = element.offsetWidth;
+	    }
+	    else if(  offsetY <= reactiveLength){
+       		resizeMode = "Top";
+       		element = e.target;
+       		mouse.startX = element.offsetLeft;
+			mouse.startY = element.offsetTop;
+			mouse.startHeight = element.offsetHeight;
+	    }
+	    else if(  offsetX >= (e.target.clientWidth - reactiveLength) ){
+	       	resizeMode = "Right";
+	       	element = e.target;
+	       	mouse.startX = element.offsetLeft;
+			mouse.startY = element.offsetTop;
+	    }
+	    else if(  offsetY >= (e.target.clientHeight - reactiveLength) ){
+	       	resizeMode = "Bottom";
+	       	element = e.target;
+	       	mouse.startX = element.offsetLeft;
+			mouse.startY = element.offsetTop;
+	    }
+	    else{
+	    	elemMoveMode = true;
+	    	element = e.target;
+	    	mouse.startX = pageX - element.offsetLeft - refPreview.parentElement.offsetLeft;
+	    	mouse.startY = pageY - element.offsetTop - refPreview.parentElement.offsetTop;
+	    }
+	}
+}
+function onElementMoveHandler(e,selection){
+	if(eraseMode){
+		e.target.style.cursor = "default";
+	}
+	else if(e.offsetX <= parseInt(selection.css('borderLeftWidth')) || e.offsetX >= (e.target.clientWidth - parseInt(selection.css('borderLeftWidth'))) ){
+		e.target.style.cursor = "ew-resize";
+    }
+    else if(e.offsetY <= parseInt(selection.css('borderLeftWidth')) || e.offsetY >= (e.target.clientHeight - parseInt(selection.css('borderLeftWidth'))) ){
+		e.target.style.cursor = "ns-resize";
+    }
+    else
+    	e.target.style.cursor = "all-scroll";
+}
+function adaptText(){
+	////  X //////
+	var refImage = document.getElementById('image');
+	var textWidth = element.childNodes[0].scrollWidth;
+	var leftImage = refImage.offsetLeft - 0;
+	if((parseFloat(element.style.left) + textWidth) >= (leftImage+refImage.width)){
+		element.childNodes[0].style.left = -textWidth + 'px';
+	}
+	else{
+		element.childNodes[0].style.left = 0 + 'px';
+	}
+	////  Y //////
+	var refImage = document.getElementById('image');
+	var textHeight = element.childNodes[0].scrollHeight;
+	var topImage = refImage.offsetTop;
+	if((parseFloat(element.style.top) + textHeight) >= (topImage+refImage.height)){
+		element.childNodes[0].style.top = -textHeight + 'px';
+	}
+	else{
+		element.childNodes[0].style.top = 0 + 'px';
+	}
+}
+	
+	
+	
 
 
 
-function homepage_onNextClicked(){
+
+
+function label_onNextClicked(){
 	var elements = document.getElementsByClassName("rectangle");
 	if(elements.length>0){
 		console.log("prepare request");
@@ -483,7 +676,7 @@ function homepage_onNextClicked(){
 			var rectType = elements[i].rectType;
 			data["rects"][i]={type:rectType,rectLeft:rectLeft,rectTop:rectTop,rectRight:rectRight,rectBottom:rectBottom}
 		}
-		data["dataSrc"]=homepage_srcName;
+		data["dataSrc"]=label_srcName;
 		console.log(data);
 		data[site.csrf.keys.name] = site.csrf.name;
 		data[site.csrf.keys.value] = site.csrf.value;
@@ -498,7 +691,7 @@ function homepage_onNextClicked(){
 		.then(
 		    // Fetch successful
 		    function (data) {
-				homepage_nextImage();
+				label_nextImage();
 		    },
 		    // Fetch failed
 		    function (data) {
@@ -507,18 +700,18 @@ function homepage_onNextClicked(){
 		);
 	}
 	else{
-		homepage_nextImage();
+		label_nextImage();
 	}
 }
 
-function homepage_onMoreClicked(){
-	homepage_loadImages();
+function label_onMoreClicked(){
+	label_loadImages();
 	console.log("Load more");
 }
 window.onbeforeunload = function(e) {
-	for(var i = homepage_imgPathListIndex; i < homepage_imgPathList.length; ++i){
-		tools_freeImageNA(homepage_imgPathList[i].id);
-		console.log("Free " +homepage_imgPathList[i].id);
+	for(var i = label_imgPathListIndex; i < label_imgPathList.length; ++i){
+		tools_freeImage (label_imgPathList[i].id);
+		console.log("Free " +label_imgPathList[i].id);
 	}
 };
 ////////////////////////////////////////////
