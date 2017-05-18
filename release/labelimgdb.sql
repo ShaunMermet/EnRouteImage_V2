@@ -808,13 +808,9 @@ select
 from
     users
 
-UPDATE `permissions` SET `conditions` = '(has_role(self.id,2) && !has_role(user.id,2) && subset(fields,[\'name\',\'email\',\'locale\',\'flag_enabled\',\'flag_verified\',\'password\',\'roles\'])) || (has_role(self.id,3) && equals_num(self.group_id,user.group_id) && !is_master(user.id) && !has_role(user.id,2) && (!has_role(user.id,3) || equals_num(self.id,user.id)) && subset(fields,[\'name\',\'email\',\'locale\',\'flag_enabled\',\'flag_verified\',\'password\',\'roles\']))' WHERE `permissions`.`id` = 9;
 UPDATE `users` SET `group_id`=0 WHERE 1;
 ALTER TABLE `users` CHANGE `group_id` `group_id` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'The id of the user group.';
 UPDATE `permissions` SET `conditions` = 'in_group(self.id,group.id)' WHERE `permissions`.`id` = 14;
-UPDATE `permissions` SET `conditions` = 'has_role(self.id,3) && equals_num(self.group_id,user.group_id) && !is_master(user.id) && !has_role(user.id,2) && (!has_role(user.id,3) || equals_num(self.id,user.id)) && subset(fields,[\'name\',\'email\',\'locale\',\'flag_enabled\',\'flag_verified\',\'password\',\'roles\'])' WHERE `permissions`.`id` = 9;
-UPDATE `permissions` SET `conditions` = '!has_role(user.id,2) && subset(fields,[\'name\',\'email\',\'locale\',\'group\',\'flag_enabled\',\'flag_verified\',\'password\',roles])' WHERE `permissions`.`id` = 8;
-UPDATE `permissions` SET `conditions` = 'has_role(self.id,3) && share_group(self.group_id,user.group_id) && !is_master(user.id) && !has_role(user.id,2) && (!has_role(user.id,3) || equals_num(self.id,user.id)) && subset(fields,[\'name\',\'email\',\'locale\',\'flag_enabled\',\'flag_verified\',\'password\',\'roles\'])' WHERE `permissions`.`id` = 9;
 UPDATE `permissions` SET `conditions` = 'has_role(self.id,3) && share_group(self.id,user.id) && !is_master(user.id) && !has_role(user.id,2) && (!has_role(user.id,3) || equals_num(self.id,user.id)) && subset(fields,[\'name\',\'email\',\'locale\',\'flag_enabled\',\'flag_verified\',\'password\',\'roles\'])' WHERE `permissions`.`id` = 9;
 UPDATE `permissions` SET `conditions` = 'share_group(self.id,user.id) && !is_master(user.id) && !has_role(user.id,2) && (!has_role(user.id,3) || equals_num(self.id,user.id))' WHERE `permissions`.`id` = 17;
 UPDATE `permissions` SET `conditions` = 'in_group(self.id,group.id) && in(property,[\'name\',\'icon\',\'slug\',\'description\',\'users\'])' WHERE `permissions`.`id` = 20;
