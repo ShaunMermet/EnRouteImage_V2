@@ -772,3 +772,60 @@ UPDATE `permissions` SET `conditions` = 'has_role(self.id,2) || has_role(self.id
 UPDATE `permissions` SET `conditions` = 'has_role(self.id,2) || has_role(self.id,4)' WHERE `permissions`.`id` = 27;
 INSERT INTO `permissions` (`id`, `slug`, `name`, `conditions`, `description`, `created_at`, `updated_at`) VALUES (NULL, 'delete_img', 'delete images', 'has_role(self.id,2) || has_role(self.id,4)', 'grants rights to create roles', NULL, NULL);
 INSERT INTO `permission_roles` (`permission_id`, `role_id`, `created_at`, `updated_at`) VALUES ('35', '2', NULL, NULL);
+
+
+CREATE TABLE `user_groups` (
+  `user_id` int(10) UNSIGNED NOT NULL,
+  `group_id` int(10) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Indexes for table `permission_roles`
+--
+ALTER TABLE `user_groups`
+  ADD PRIMARY KEY (`user_id`,`group_id`),
+  ADD KEY `user_groups_user_id_index` (`user_id`),
+  ADD KEY `user_groups_group_id_index` (`group_id`);
+
+UPDATE `groups` SET `slug` = 'public' WHERE `groups`.`id` = 1;
+UPDATE `groups` SET `name` = 'Public' WHERE `groups`.`id` = 1;
+
+
+insert into user_groups
+( 
+    user_id ,
+    group_id ,
+    created_at ,
+    updated_at
+)
+select
+    id,
+    group_id,
+    now(),
+    now()
+from
+    users
+
+UPDATE `permissions` SET `conditions` = '(has_role(self.id,2) && !has_role(user.id,2) && subset(fields,[\'name\',\'email\',\'locale\',\'flag_enabled\',\'flag_verified\',\'password\',\'roles\'])) || (has_role(self.id,3) && equals_num(self.group_id,user.group_id) && !is_master(user.id) && !has_role(user.id,2) && (!has_role(user.id,3) || equals_num(self.id,user.id)) && subset(fields,[\'name\',\'email\',\'locale\',\'flag_enabled\',\'flag_verified\',\'password\',\'roles\']))' WHERE `permissions`.`id` = 9;
+UPDATE `users` SET `group_id`=0 WHERE 1;
+ALTER TABLE `users` CHANGE `group_id` `group_id` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'The id of the user group.';
+UPDATE `permissions` SET `conditions` = 'in_group(self.id,group.id)' WHERE `permissions`.`id` = 14;
+UPDATE `permissions` SET `conditions` = 'has_role(self.id,3) && equals_num(self.group_id,user.group_id) && !is_master(user.id) && !has_role(user.id,2) && (!has_role(user.id,3) || equals_num(self.id,user.id)) && subset(fields,[\'name\',\'email\',\'locale\',\'flag_enabled\',\'flag_verified\',\'password\',\'roles\'])' WHERE `permissions`.`id` = 9;
+UPDATE `permissions` SET `conditions` = '!has_role(user.id,2) && subset(fields,[\'name\',\'email\',\'locale\',\'group\',\'flag_enabled\',\'flag_verified\',\'password\',roles])' WHERE `permissions`.`id` = 8;
+UPDATE `permissions` SET `conditions` = 'has_role(self.id,3) && share_group(self.group_id,user.group_id) && !is_master(user.id) && !has_role(user.id,2) && (!has_role(user.id,3) || equals_num(self.id,user.id)) && subset(fields,[\'name\',\'email\',\'locale\',\'flag_enabled\',\'flag_verified\',\'password\',\'roles\'])' WHERE `permissions`.`id` = 9;
+UPDATE `permissions` SET `conditions` = 'has_role(self.id,3) && share_group(self.id,user.id) && !is_master(user.id) && !has_role(user.id,2) && (!has_role(user.id,3) || equals_num(self.id,user.id)) && subset(fields,[\'name\',\'email\',\'locale\',\'flag_enabled\',\'flag_verified\',\'password\',\'roles\'])' WHERE `permissions`.`id` = 9;
+UPDATE `permissions` SET `conditions` = 'share_group(self.id,user.id) && !is_master(user.id) && !has_role(user.id,2) && (!has_role(user.id,3) || equals_num(self.id,user.id))' WHERE `permissions`.`id` = 17;
+UPDATE `permissions` SET `conditions` = 'in_group(self.id,group.id) && in(property,[\'name\',\'icon\',\'slug\',\'description\',\'users\'])' WHERE `permissions`.`id` = 20;
+UPDATE `permissions` SET `conditions` = 'share_group(self.id,user.id) && !is_master(user.id) && !has_role(user.id,2) && (!has_role(user.id,3) || equals_num(self.id,user.id)) && in(property,[\'user_name\',\'name\',\'email\',\'locale\',\'roles\',\'group\',\'activities\'])' WHERE `permissions`.`id` = 22;
+UPDATE `permissions` SET `conditions` = 'has_role(self.id,2) || has_role(self.id,5)' WHERE `permissions`.`id` = 24;
+INSERT INTO `roles` (`id`, `slug`, `name`, `description`, `created_at`, `updated_at`) VALUES (NULL, 'validator', 'Validator', 'This role provide rights to access to the validation process and the validation pages.', '2017-05-08 11:09:53', '2017-05-08 11:09:53');
+INSERT INTO `permission_roles` (`permission_id`, `role_id`, `created_at`, `updated_at`) VALUES ('24', '5', NULL, NULL);
+UPDATE `permissions` SET `conditions` = '(!has_role(user.id,2) || equals_num(self.id,user.id)) && subset(fields,[\'name\',\'email\',\'locale\',\'group\',\'flag_enabled\',\'flag_verified\',\'password\',roles])' WHERE `permissions`.`id` = 8;
+
+
+--------------------------------------------------------
+
+ALTER TABLE `labelimglinks` ADD `group` INT(1) NULL DEFAULT NULL COMMENT 'group tag on image ref : groups' AFTER `category`;
+ALTER TABLE `segimages` ADD `group` INT(1) NULL DEFAULT NULL COMMENT 'group tag on image ref : groups' AFTER `category`;

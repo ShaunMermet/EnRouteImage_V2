@@ -179,6 +179,7 @@
         <input type="hidden" name="category[]">
         <input type="hidden" name="data[]">
         <input type="hidden" name="name[]" value="{%=file.name%}">
+        <input type="hidden" name="group[]">
         <td>
             <span class="preview"></span>
         </td>
@@ -188,6 +189,9 @@
         </td>
         <td>
             <p class="data"></p>
+        </td>
+        <td>
+            <select class="js-basic-single" id="grpAssignUp" style="max-width:90%;" style="width: 150px;"></select>
         </td>
         <td>
             <select class="js-basic-single" id="catAssignUp" style="max-width:90%;" style="width: 150px;"></select>
@@ -236,6 +240,7 @@
             {% } %}
         </td>
         <td>
+            <span> {%=file.group%}</span>
             <span> {%=file.category%}</span>
         </td>
         <td>

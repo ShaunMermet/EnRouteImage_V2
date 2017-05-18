@@ -22,7 +22,7 @@
             ],
             'registration' => [
                 'user_defaults' => [
-                    'group' => 'groupuser'
+                    'group' => 'Public'
                 ]
             ]
         ],   

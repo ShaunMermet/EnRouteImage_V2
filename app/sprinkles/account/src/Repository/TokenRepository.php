@@ -9,7 +9,7 @@
 namespace UserFrosting\Sprinkle\Account\Repository;
 
 use Carbon\Carbon;
-use UserFrosting\Sprinkle\Account\Model\User;
+use UserFrosting\Sprinkle\Site\Model\User;
 use UserFrosting\Sprinkle\Core\Model\UFModel;
 use UserFrosting\Sprinkle\Core\Util\ClassMapper;
 

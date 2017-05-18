@@ -17,6 +17,7 @@ use UserFrosting\Sprinkle\Site\Model\ImgLinks;
 use UserFrosting\Sprinkle\Site\Model\SegImage;
 use UserFrosting\Sprinkle\Site\Model\SegCategory;
 use UserFrosting\Sprinkle\Site\Model\SegArea;
+use Illuminate\Database\QueryException;
 
 class UploadHandler
 {
@@ -169,7 +170,8 @@ class UploadHandler
                     'max_height' => 80
                 )
             ),
-            'print_response' => true
+            'print_response' => true,
+            'imageMode' => 'bbox'
         );
         if ($ci) {
             $this->ci = $ci;
@@ -307,6 +309,20 @@ class UploadHandler
         }
         return $size;
     }
+    protected function get_file_group($file_name){
+        if($this->options['imageMode'] == 'segmentation'){
+            $getGrp = SegImage::where('path',  $file_name)
+                ->with('group')
+                ->first();
+        }else{
+            $getGrp = ImgLinks::where('path',  $file_name)
+                ->with('group')
+                ->first();
+        }
+        if(!$getGrp) return '';
+        $result = $getGrp->toArray();
+        return $result['group']['name'];
+    }
     protected function get_file_category($file_name){
         /** @var UserFrosting\Config\Config $config */
         $config = $this->ci->config['db.default'];
@@ -356,6 +372,7 @@ class UploadHandler
             $file = new \stdClass();
             $file->name = $file_name;
             $file->category = $this->get_file_category($file_name);
+            $file->group = $this->get_file_group($file_name);
             $file->size = $this->get_file_size(
                 $this->get_upload_path($file_name)
             );
@@ -1111,9 +1128,11 @@ class UploadHandler
 		
         $addData = $this->handle_form_data($name, $index);
         $file->categoryValue = $addData['category'];
+        $file->groupValue = $addData['group'];
         $file->areaData = $addData['data'];
 
         error_log('in before insert func cat '.$file->categoryValue);
+        error_log('in before insert func grp '.$file->groupValue);
 		$tmpHashName = sha1_file($uploaded_file);
 		$file->name = $this->fix_file_extension($uploaded_file, $tmpHashName, $size, $type, $error,
             $index, $content_range);
@@ -1123,9 +1142,10 @@ class UploadHandler
 		
 		if ($this->validate($uploaded_file, $file, $error, $index)) {
             
-			$returnMsg = $this->insertInDB($file->name,$file->categoryValue,$file->areaData);
+			$returnMsg = $this->insertInDB($file);
 			if($returnMsg == "OK"){
                 $file->category = $this->get_file_category($file->name);
+                $file->group = $this->get_file_group($file->name);
 				$upload_dir = $this->get_upload_path();
 				if (!is_dir($upload_dir)) {
 					mkdir($upload_dir, $this->options['mkdir_mode'], true);
@@ -1171,7 +1191,7 @@ class UploadHandler
 				}
 				$this->set_additional_file_properties($file);
 			}else{
-				if (strpos($returnMsg, "Duplicate entry") !== false){
+                if (strpos($returnMsg, "Duplicate entry") !== false){
 					$file->error = $this->get_error_message('duplicate_key');//duplicate_key
 				}else{
 					$file->error = $this->get_error_message('insert_db_failed');//insert_db_failed
@@ -1183,12 +1203,25 @@ class UploadHandler
 		
         
     }
-	protected function insertInDB($filename,$category,$area){
+	protected function insertInDB($file){
+        $filename = $file->name;
+        $category = $file->categoryValue;
+        $group = $file->groupValue;
+        $area = $file->areaData;
         if($this->options['imageMode'] == 'segmentation'){
             if ($category == '') $category = 0;
+            if ($group == '') $group = 1;
             $SegImg = new SegImage;
             $SegImg->path = $filename;
-            $SegImg->save();
+            $SegImg->category = $category;
+            $SegImg->group = $group;
+            
+            try{
+                $SegImg->save();
+            }
+            catch (QueryException $e){
+                return $e;
+            }
             
             $areas = array_filter(explode("\n",$area));
 
@@ -1226,34 +1259,32 @@ class UploadHandler
                    ->first();
                 $imgToValid->validated = 1;
                 $imgToValid->category = $areaType;
-                $imgToValid->save();
+                try{
+                    $imgToValid->save();
+                }
+                catch (QueryException $e){
+                    return $e;
+                }
+
             }
             return "OK";
         }else{
-            /** @var UserFrosting\Config\Config $config */
-            $config = $this->ci->config['db.default'];
-            $db = mysqli_connect($config['host'],$config['username'],$config['password'],$config['database']);
+            if ($category == '') $category = 0;
+            if ($group == '') $group = 1;
+            $BboxImg = new ImgLinks;
+            $BboxImg->path = $filename;
+            $BboxImg->category = $category;
+            $BboxImg->group = $group;
+
+            try{
+                $BboxImg->save();
+            }
+            catch (QueryException $e){
+                return $e;
+            }
+            
             $areas = explode(",",$area);
 
-    		if ($db->connect_error) {
-    			die("Connection failed: " . $db->connect_error);
-    		} 
-            $DBfilename = mysqli_real_escape_string($db,$filename);
-            $DBcategory = mysqli_real_escape_string($db,$category);
-            if ($DBcategory == '') $DBcategory = 0;
-    		$sql = "
-    			INSERT INTO labelimglinks (path,category)
-    			VALUES ('$DBfilename','$DBcategory')";
-
-    		if ($db->query($sql) === TRUE) {
-                $imgID = $db->insert_id;
-                $db->close();
-    		} else {
-    			$error = $db->error;
-    			$db->close();
-    			error_log($error);
-    			return $error;
-    		}
             if ($area) {
                 foreach ($areas as $key => $value) {
                     $farea = explode(" ", $value);
@@ -1292,11 +1323,16 @@ class UploadHandler
                     $areaToInsert->save();
                 }
                 //Valid img
-                $imgToValid = ImgLinks::where('id',  $imgID)
+                $imgToValid = ImgLinks::where('id',  $BboxImg->id)
                    ->first();
                 $imgToValid->validated = 1;
                 $imgToValid->category = $rectType;
-                $imgToValid->save();
+                try{
+                    $imgToValid->save();
+                }
+                catch (QueryException $e){
+                    return $e;
+                }
             }
             return "OK";
         }
@@ -1349,6 +1385,7 @@ class UploadHandler
         $result = [];
         foreach ($_POST['name'] as $key => $value) {
             $result[$_POST['name'][$key]]['category'] = $_POST['category'][$key];
+            $result[$_POST['name'][$key]]['group'] = $_POST['group'][$key];
             $result[$_POST['name'][$key]]['data'] = $_POST['data'][$key];
         }
         error_log(print_r($_POST,true));

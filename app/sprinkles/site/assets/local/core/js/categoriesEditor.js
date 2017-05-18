@@ -19,8 +19,7 @@ function catEdit_loadCategories(){
 	.then(
 	    // Fetch successful
 	    function (data) {
-	    	console.log(data);
-	        var res = data.rows;
+	    	var res = data.rows;
 				catEdit_catId = [];
 				catEdit_catText=[];
 				catEdit_catColor= [];

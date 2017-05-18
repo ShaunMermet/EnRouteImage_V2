@@ -144,6 +144,7 @@ $app->group('/segAreas', function () {
 
 });//->add('authGuard');
 
+
 //PUT
 $app->group('/freeimage', function () {
 	$this->put('/{img_id}', 'UserFrosting\Sprinkle\Site\Controller\ImageController:freeImage');
@@ -153,3 +154,37 @@ $app->group('/freeimageNA', function () {
 	$this->put('/{img_id}', 'UserFrosting\Sprinkle\Site\Controller\ImageController:freeImageNoAuth');
 
 });//->add('authGuard');
+
+//Overrides
+
+$app->group('/account', function () {
+    $this->post('/register', 'UserFrosting\Sprinkle\Site\Controller\Overrides\AccountController:register');
+});
+$app->group('/api/users', function () {
+    //$this->delete('/u/{user_name}', 'UserFrosting\Sprinkle\Site\Controller\Overrides\UserController:delete');
+
+    $this->get('', 'UserFrosting\Sprinkle\Site\Controller\Overrides\UserController:getList');
+
+    //$this->get('/u/{user_name}', 'UserFrosting\Sprinkle\Site\Controller\Overrides\UserController:getInfo');
+
+    //$this->get('/u/{user_name}/activities', 'UserFrosting\Sprinkle\Site\Controller\Overrides\UserController:getActivities');
+
+    //$this->get('/u/{user_name}/roles', 'UserFrosting\Sprinkle\Site\Controller\Overrides\UserController:getRoles');
+
+    $this->post('', 'UserFrosting\Sprinkle\Site\Controller\Overrides\UserController:create');
+
+    //$this->post('/u/{user_name}/password-reset', 'UserFrosting\Sprinkle\Site\Controller\Overrides\UserController:createPasswordReset');
+
+    $this->put('/u/{user_name}', 'UserFrosting\Sprinkle\Site\Controller\Overrides\UserController:updateInfo');
+
+    //$this->put('/u/{user_name}/{field}', 'UserFrosting\Sprinkle\Site\Controller\Overrides\UserController:updateField');
+})->add('authGuard');
+
+$app->group('/modals/users', function () {
+    $this->get('/edit', 'UserFrosting\Sprinkle\Site\Controller\Overrides\UserController:getModalEdit');
+})->add('authGuard');
+
+//$app->group('/group', function () {
+//	$this->get('/all', 'UserFrosting\Sprinkle\Site\Controller\Overrides\GroupController:getAllGroup');
+
+//});//->add('authGuard');

@@ -49,17 +49,32 @@ class ImageController extends SimpleController
         /** @var UserFrosting\Sprinkle\Account\Model\User $currentUser */
         $currentUser = $this->ci->currentUser;
 
+        /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
+        $classMapper = $this->ci->classMapper;
+
         // Access-controlled page
         if (!$authorizer->checkAccess($currentUser, 'uri_label')) {
             $loginPage = $this->ci->router->pathFor('login');
            return $response->withRedirect($loginPage, 400);
         }
 
+        $UserWGrp = $classMapper->staticMethod('user', 'where', 'id', $currentUser->id)
+                                ->with('group')
+                                ->first();
 
+        $validGroup = ['NULL'];
+        foreach ($UserWGrp->group as $group) {
+            array_push($validGroup, $group->id);
+        }
+        
         $maxImageRequested = getenv('MAX_IMAGE_REQUESTED');
 
         $imgLinks = ImgLinks::whereDoesntHave('areas')
                     ->where ('available', '=', 1)
+                    ->where(function ($imgLinks) {
+                        $imgLinks->whereIn('group', $validGroup)
+                                ->orWhereNull('group');
+                        })
                     ->inRandomOrder()
                     ->limit($maxImageRequested)
                     ->get();
@@ -99,17 +114,31 @@ class ImageController extends SimpleController
         /** @var UserFrosting\Sprinkle\Account\Model\User $currentUser */
         $currentUser = $this->ci->currentUser;
 
+        /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
+        $classMapper = $this->ci->classMapper;
+
         // Access-controlled page
         if (!$authorizer->checkAccess($currentUser, 'uri_label')) {
             $loginPage = $this->ci->router->pathFor('login');
            return $response->withRedirect($loginPage, 400);
         }
 
+        $UserWGrp = $classMapper->staticMethod('user', 'where', 'id', $currentUser->id)
+                                ->with('group')
+                                ->first();
+
+        $validGroup = ['NULL'];
+        foreach ($UserWGrp->group as $group) {
+            array_push($validGroup, $group->id);
+        }
 
         $maxImageRequested = getenv('MAX_IMAGE_REQUESTED');
 
         $segImg = SegImage::whereDoesntHave('areas')
-                //->where ('available', '=', 1)
+                ->where(function ($segImg) {
+                    $segImg->whereIn('group', $validGroup)
+                            ->orWhereNull('group');
+                    })
                 ->inRandomOrder()
                 ->limit($maxImageRequested)
                 ->get();
