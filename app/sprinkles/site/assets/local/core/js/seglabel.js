@@ -449,7 +449,11 @@ function label_onMoreClicked(){
 	label_loadImages();
 	console.log("Load more");
 }
-
+window.onscroll = function(){
+	var top  = window.pageYOffset || document.documentElement.scrollTop;
+	var filler = document.getElementById('filler');
+	filler.style.height = (top-filler.parentElement.offsetTop)+ 'px';
+};
 
 
 

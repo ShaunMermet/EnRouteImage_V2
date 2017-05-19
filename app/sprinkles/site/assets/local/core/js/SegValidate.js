@@ -292,4 +292,9 @@ function updateNbrAreas(){
 	//var elements = document.getElementsByClassName("rectangle");
 	document.getElementById('value1').innerHTML = "Area(s) : "+validate_AreasList.length;
 }
+window.onscroll = function(){
+	var top  = window.pageYOffset || document.documentElement.scrollTop;
+	var filler = document.getElementById('filler');
+	filler.style.height = (top-filler.parentElement.offsetTop)+ 'px';
+};
 ////////////////////////////////////////////

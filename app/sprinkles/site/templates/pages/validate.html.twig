@@ -14,7 +14,8 @@
 {% block body_matter %}
 	<section>
 	<div class="labelimg-container">
-		<div class="column column-one">
+		<div class="column column-one" style="position:sticky;">
+			<div id="filler"></div>
 			<button id="ValidateButton"class="button-validate" type="button" onclick="validate_onValidateClicked()" onload="validate_onload()">Validate</button>
 			<button id="RejectButton"class="button-reject" type="button" onclick="validate_onRejectClicked()">Reject</button>
 			<button id="moreButton"class="button" type="button" onclick="validate_onMoreClicked()">More image</button>
