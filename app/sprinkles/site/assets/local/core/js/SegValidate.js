@@ -86,6 +86,7 @@ function validate_addImage(){
 	  validate_drawAreas(validate_srcId);//initSelection();
 	  img.removeEventListener('load', loaded);
 	  img.removeEventListener('load', error);
+	  updateNbrAreas();
 	}
 	function error() {
 		
@@ -287,4 +288,8 @@ window.onbeforeunload = function(e) {
 		console.log("Free " +validate_imgPathList[i].id);
 	}
 };
+function updateNbrAreas(){
+	//var elements = document.getElementsByClassName("rectangle");
+	document.getElementById('value1').innerHTML = "Area(s) : "+validate_AreasList.length;
+}
 ////////////////////////////////////////////

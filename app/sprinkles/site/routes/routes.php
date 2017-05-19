@@ -100,7 +100,7 @@ $app->group('/images', function () {
 
     $this->get('/annotated', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getImagesA');
 
-    $this->get('/validated', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getImagesV');
+    //$this->get('/validated', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getImagesV');
 
  	$this->put('/nbrBYcategory', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getNbrImagesByCat');
 

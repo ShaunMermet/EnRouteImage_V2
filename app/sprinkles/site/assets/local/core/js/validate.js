@@ -141,6 +141,7 @@ function validate_drawRects(idImage){
 			validate_currentRectangle.style.height = (reviewedRect.rectBottom - reviewedRect.rectTop)*initRatio + 'px';
 			(document.getElementById('preview')).appendChild(validate_currentRectangle);
 			validate_adaptText();
+			updateNbrAreas();
 		}
 	}
 }
@@ -269,4 +270,8 @@ window.onbeforeunload = function(e) {
 		console.log("Free " +validate_imgPathList[i].id);
 	}
 };
+function updateNbrAreas(){
+	var elements = document.getElementsByClassName("rectangle");
+	document.getElementById('value1').innerHTML = "Bbox : "+elements.length;
+}
 ////////////////////////////////////////////

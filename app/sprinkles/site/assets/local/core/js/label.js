@@ -57,6 +57,7 @@ function label_addImage(){
 		document.getElementById('imgCounter').innerHTML = "";//"Image "+(label_imgPathListIndex+1)+" / "+label_imgPathList.length;
 		document.getElementById("moreButton").style = "DISPLAY: none;";
 		document.getElementById("nextButton").style = "DISPLAY: initial;";
+		updateNbrAreas();
 	}
 }
 
@@ -127,7 +128,13 @@ function label_wipeRectangle(){
 		elements[0].remove();
 		
 	}
+	updateNbrAreas();
 }
+
+function updateNbrAreas(){
+	var elements = document.getElementsByClassName("rectangle");
+	document.getElementById('value1').innerHTML = "Bbox : "+elements.length;
+}	
 
 /////////////////////////
 
@@ -476,6 +483,7 @@ function onClickHandler(e) {
 	else{
 		e.target.parentElement.appendChild(e.target);
 	}
+	updateNbrAreas();
 }
 
 function onDownHandler(e) {
@@ -561,6 +569,7 @@ function onUpHandler(e) {
 	}
 	resizeMode = false;
 	elemMoveMode = false;
+	updateNbrAreas();
 }
 function onElementDownHandler(e,selection){
 	if(drawMode){
