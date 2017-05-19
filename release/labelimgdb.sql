@@ -825,3 +825,6 @@ UPDATE `permissions` SET `conditions` = '(!has_role(user.id,2) || equals_num(sel
 
 ALTER TABLE `labelimglinks` ADD `group` INT(1) NULL DEFAULT NULL COMMENT 'group tag on image ref : groups' AFTER `category`;
 ALTER TABLE `segimages` ADD `group` INT(1) NULL DEFAULT NULL COMMENT 'group tag on image ref : groups' AFTER `category`;
+
+ALTER TABLE `labelimglinks` ADD `naturalWidth` INT(4) NULL COMMENT 'Image width' AFTER `validated_at`, ADD `naturalHeight` INT(4) NULL COMMENT 'Image Height' AFTER `naturalWidth`;
+ALTER TABLE `segimages` ADD `naturalWidth` INT(4) NULL COMMENT 'Image width' AFTER `validated_at`, ADD `naturalHeight` INT(4) NULL COMMENT 'Image Height' AFTER `naturalWidth`;

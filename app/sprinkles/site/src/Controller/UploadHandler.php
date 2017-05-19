@@ -1139,7 +1139,11 @@ class UploadHandler
 		error_log($file->name);
         $file->size = $this->fix_integer_overflow((int)$size);
         $file->type = $type;
-		
+        
+        $fileDimensionInfo = getimagesize($uploaded_file);
+		$file->naturalWidth = $fileDimensionInfo[0];
+        $file->naturalHeight = $fileDimensionInfo[1];
+        
 		if ($this->validate($uploaded_file, $file, $error, $index)) {
             
 			$returnMsg = $this->insertInDB($file);
@@ -1181,7 +1185,7 @@ class UploadHandler
 					if ($this->is_valid_image_file($file_path)) {
 						$this->handle_image_file($file_path, $file);
 					}
-				} else {
+                } else {
 					$file->size = $file_size;
                     error_log("upload handler abort");
 					if (!$content_range && $this->options['discard_aborted_uploads']) {
@@ -1208,6 +1212,8 @@ class UploadHandler
         $category = $file->categoryValue;
         $group = $file->groupValue;
         $area = $file->areaData;
+        $naturalWidth = $file->naturalWidth;
+        $naturalHeight = $file->naturalHeight;
         if($this->options['imageMode'] == 'segmentation'){
             if ($category == '') $category = 0;
             if ($group == '') $group = 1;
@@ -1215,6 +1221,8 @@ class UploadHandler
             $SegImg->path = $filename;
             $SegImg->category = $category;
             $SegImg->group = $group;
+            $SegImg->naturalWidth = $naturalWidth;
+            $SegImg->naturalHeight = $naturalHeight;
             
             try{
                 $SegImg->save();
@@ -1275,6 +1283,8 @@ class UploadHandler
             $BboxImg->path = $filename;
             $BboxImg->category = $category;
             $BboxImg->group = $group;
+            $BboxImg->naturalWidth = $naturalWidth;
+            $BboxImg->naturalHeight = $naturalHeight;
 
             try{
                 $BboxImg->save();
