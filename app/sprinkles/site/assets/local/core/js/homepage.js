@@ -57,6 +57,7 @@ function label_addImage(){
 		document.getElementById('imgCounter').innerHTML = "";//"Image "+(label_imgPathListIndex+1)+" / "+label_imgPathList.length;
 		document.getElementById("moreButton").style = "DISPLAY: none;";
 		document.getElementById("nextButton").style = "DISPLAY: initial;";
+		updateNbrAreas();
 	}
 }
 
@@ -77,6 +78,7 @@ window.addEventListener("resize", function(){
 			elements[i].style.top = parseFloat(elements[i].rectSetTop*ratio/elements[i].rectSetRatio) + 'px';
 			elements[i].style.width = parseFloat(elements[i].rectSetWidth*ratio/elements[i].rectSetRatio) + 'px';
 			elements[i].style.height = parseFloat(elements[i].rectSetHeight*ratio/elements[i].rectSetRatio) + 'px';
+			drawAnchor(elements[i]);
 		}
 
 	}
@@ -101,7 +103,7 @@ function label_nextImage(){
 	if(label_imgPathList.length>0){
 		label_wipeRectangle();
 		label_removeImage();
-		tools_freeImage(label_imgPathList[label_imgPathListIndex].id);
+		tools_freeImageNA(label_imgPathList[label_imgPathListIndex].id);
 		label_imgPathListIndex++;
 		if(label_imgPathListIndex<label_imgPathList.length)
 			label_addImage();
@@ -127,7 +129,13 @@ function label_wipeRectangle(){
 		elements[0].remove();
 		
 	}
+	updateNbrAreas();
 }
+
+function updateNbrAreas(){
+	var elements = document.getElementsByClassName("rectangle");
+	document.getElementById('value1').innerHTML = "Bbox : "+elements.length;
+}	
 
 /////////////////////////
 
@@ -368,6 +376,7 @@ function onMoveHandler(e) {
 				refPreview.removeChild(element);
 			//document.getElementById('value5').innerHTML = "left "+element.style.left+" top "+element.style.top;
 			adaptText();
+			drawAnchor(element);
 		}
 	}
 }
@@ -403,23 +412,23 @@ function resizeElement(e, element){
 	var tmpHeight = Math.abs(currentDistanceY);
 	var reverseHeight = mouse.startHeight - currentDistanceY;
 	
-	if(resizeMode == "Left"){
+	if(resizeMode == "Left" || resizeMode == "Top-left" || resizeMode == "Bottom-left"){
 		if (reverseLeft >= 0 && currentDistanceX < mouse.startWidth)//going left, when going under 0 we stop expending the box
 			element.style.width = reverseWidth + 'px';
 		if(reverseLeft >= 0 && currentDistanceX < mouse.startWidth)//Rectangle is moved if going on left, when going out of image we stop moiving rect ( width expand is also stopped)
 			element.style.left = reverseLeft + 'px';
 	}
-	else if (resizeMode == "Top"){
+	if (resizeMode == "Top" || resizeMode == "Top-left" || resizeMode == "Top-right"){
 		if (reverseTop >= 0 && currentDistanceY < mouse.startHeight)
 			element.style.height = reverseHeight + 'px';
 		if(reverseTop >= 0 && currentDistanceY < mouse.startHeight)
 			element.style.top = reverseTop + 'px';
 	}
-	else if (resizeMode == "Right" && currentDistanceX > 0){
+	if ( (  resizeMode == "Right" || resizeMode == "Bottom-right" || resizeMode == "Top-right"  ) && currentDistanceX > 0 ){
 		if ((normalLeft + tmpWidth) <= refImage.width)//going right, offset + rect.width can't be bigger than img.width
 			element.style.width = tmpWidth + 'px';
 	}
-	else if (resizeMode == "Bottom" && currentDistanceY > 0){
+	if ( (  resizeMode == "Bottom" || resizeMode == "Bottom-right" || resizeMode == "Bottom-left"  ) && currentDistanceY > 0 ){
 		if ((normalTop + tmpHeight) <= refImage.height)
 				element.style.height = tmpHeight + 'px';
 	}
@@ -429,6 +438,7 @@ function resizeElement(e, element){
 	else if(element.parentElement)
 		refPreview.removeChild(element);
 	adaptText();
+	drawAnchor(element);
 }
 function moveElement(e, element){
 	var refImage = document.getElementById('image');
@@ -459,6 +469,7 @@ function moveElement(e, element){
 		element.style.top = currentDistanceY + 'px';
 
 	adaptText();
+	//drawAnchor(element);
 }
 
 
@@ -476,6 +487,7 @@ function onClickHandler(e) {
 	else{
 		e.target.parentElement.appendChild(e.target);
 	}
+	updateNbrAreas();
 }
 
 function onDownHandler(e) {
@@ -512,12 +524,17 @@ function onDownHandler(e) {
 		//element.style.top = pageY + 'px';
 		element.style.border= "3px solid "+color;
 		element.style.color= color;
+		var canvas = document.createElement('canvas');
+		canvas.style.pointerEvents = "none";
+  		canvas.style.margin = "-5px";//(anchorScale-3)/2 +3
 		var text = document.createElement('div');
 		var t = document.createTextNode(str);
 		text.className = 'rectangleText';
 		text.appendChild(t);
 		text.style.pointerEvents = "none";
+		text.style.position = "absolute";
 		element.appendChild(text);
+		element.appendChild(canvas);
 		//refPreview.appendChild(element);
 		//adaptText();
 		element.style.width = 0;
@@ -561,6 +578,7 @@ function onUpHandler(e) {
 	}
 	resizeMode = false;
 	elemMoveMode = false;
+	updateNbrAreas();
 }
 function onElementDownHandler(e,selection){
 	if(drawMode){
@@ -585,50 +603,78 @@ function onElementDownHandler(e,selection){
 			console.log("no event recognized");
 			return;
 		}
-		if(  offsetX <= reactiveLength){
+		element = e.target;
+
+		if( (  offsetX <= reactiveLength  ) && (  offsetY <= reactiveLength  ) ){// Top-left
+	    	resizeMode = "Top-left";
+	    }
+	    else if( (  offsetX >= (e.target.clientWidth - reactiveLength)  ) && (  offsetY >= (e.target.clientHeight - reactiveLength)  ) ){// Bottom-right
+	    	resizeMode = "Bottom-right";
+		}
+
+		else if( (  offsetX <= reactiveLength  ) && (  offsetY >= (e.target.clientHeight - reactiveLength)  ) ){// Bottom-left
+	    	resizeMode = "Bottom-left";
+	    }
+	    else if( (  offsetX >= (e.target.clientWidth - reactiveLength)  ) && (  offsetY <= reactiveLength  ) ){// Top-right
+	    	resizeMode = "Top-right";
+		}
+
+		else if(  offsetX <= reactiveLength){
 	       	resizeMode = "Left";
-	       	element = e.target;
-	       	mouse.startX = element.offsetLeft;
-			mouse.startY = element.offsetTop;
-			mouse.startWidth = element.offsetWidth;
+	       	mouse.startWidth = element.offsetWidth;
 	    }
 	    else if(  offsetY <= reactiveLength){
        		resizeMode = "Top";
-       		element = e.target;
-       		mouse.startX = element.offsetLeft;
-			mouse.startY = element.offsetTop;
-			mouse.startHeight = element.offsetHeight;
+       		mouse.startHeight = element.offsetHeight;
 	    }
 	    else if(  offsetX >= (e.target.clientWidth - reactiveLength) ){
 	       	resizeMode = "Right";
-	       	element = e.target;
-	       	mouse.startX = element.offsetLeft;
-			mouse.startY = element.offsetTop;
 	    }
 	    else if(  offsetY >= (e.target.clientHeight - reactiveLength) ){
 	       	resizeMode = "Bottom";
-	       	element = e.target;
-	       	mouse.startX = element.offsetLeft;
-			mouse.startY = element.offsetTop;
 	    }
 	    else{
 	    	elemMoveMode = true;
-	    	element = e.target;
+	    }
+	    if(elemMoveMode){
 	    	mouse.startX = pageX - element.offsetLeft - refPreview.parentElement.offsetLeft;
 	    	mouse.startY = pageY - element.offsetTop - refPreview.parentElement.offsetTop;
+	    }
+	    else{
+	    	mouse.startX = element.offsetLeft;
+			mouse.startY = element.offsetTop;
+			mouse.startWidth = element.offsetWidth;
+			mouse.startHeight = element.offsetHeight;
 	    }
 	}
 }
 function onElementMoveHandler(e,selection){
+	var reactiveLength = parseInt(selection.css('borderLeftWidth'));
 	if(eraseMode){
 		e.target.style.cursor = "default";
 	}
-	else if(e.offsetX <= parseInt(selection.css('borderLeftWidth')) || e.offsetX >= (e.target.clientWidth - parseInt(selection.css('borderLeftWidth'))) ){
+
+	else if( (  e.offsetX <= reactiveLength  ) && (  e.offsetY <= reactiveLength  ) ){// Top-left
+    	e.target.style.cursor = "nwse-resize";
+    }
+    else if( (  e.offsetX >= (e.target.clientWidth - reactiveLength)  ) && (  e.offsetY >= (e.target.clientHeight - reactiveLength)  ) ){// Bottom-right
+    	e.target.style.cursor = "nwse-resize";
+	}
+
+	else if( (  e.offsetX <= reactiveLength  ) && (  e.offsetY >= (e.target.clientHeight - reactiveLength)  ) ){// Top-right
+    	e.target.style.cursor = "nesw-resize";
+    }
+    else if( (  e.offsetX >= (e.target.clientWidth - reactiveLength)  ) && (  e.offsetY <= reactiveLength  ) ){// Bottom-left
+    	e.target.style.cursor = "nesw-resize";
+	}
+
+    else if(e.offsetX <= reactiveLength || e.offsetX >= (e.target.clientWidth - reactiveLength) ){// Left & Right
 		e.target.style.cursor = "ew-resize";
     }
-    else if(e.offsetY <= parseInt(selection.css('borderLeftWidth')) || e.offsetY >= (e.target.clientHeight - parseInt(selection.css('borderLeftWidth'))) ){
+    else if(e.offsetY <= reactiveLength || e.offsetY >= (e.target.clientHeight - reactiveLength) ){// Top & Bottom
 		e.target.style.cursor = "ns-resize";
     }
+    
     else
     	e.target.style.cursor = "all-scroll";
 }
@@ -653,6 +699,41 @@ function adaptText(){
 	else{
 		element.childNodes[0].style.top = 0 + 'px';
 	}
+}
+function drawAnchor(element){
+	var canvas = element.children[1];
+	var anchorScale = 7;//In px
+	canvas.width = element.offsetWidth+(anchorScale-3);
+	canvas.height = element.offsetHeight+(anchorScale-3);
+
+	var ctx=canvas.getContext("2d");
+	ctx.fillStyle = 'white';
+	//Corner
+	ctx.fillRect( 0, 0, anchorScale, anchorScale );
+	ctx.fillRect( canvas.width-anchorScale, 0, anchorScale, anchorScale );
+	ctx.fillRect( 0, canvas.height-anchorScale, anchorScale, anchorScale );
+	ctx.fillRect( canvas.width-anchorScale, canvas.height-anchorScale, anchorScale, anchorScale );
+	//Mid-Border
+	ctx.fillRect( (  canvas.width-anchorScale  )/2, 0, anchorScale, anchorScale );
+	ctx.fillRect( (  canvas.width-anchorScale  )/2, canvas.height-anchorScale, anchorScale, anchorScale );
+	ctx.fillRect( 0, (  canvas.height-anchorScale  )/2, anchorScale, anchorScale );
+	ctx.fillRect( canvas.width-anchorScale, (  canvas.height-anchorScale  )/2, anchorScale, anchorScale );
+	//Middle
+	ctx.fillRect( (  canvas.width-anchorScale  )/2, (  canvas.height-anchorScale  )/2, anchorScale, anchorScale );
+	ctx.fillStyle = 'black';
+	//Corner
+	ctx.rect( 0, 0, anchorScale, anchorScale );
+	ctx.rect( canvas.width-anchorScale, 0, anchorScale, anchorScale );
+	ctx.rect( 0, canvas.height-anchorScale, anchorScale, anchorScale );
+	ctx.rect( canvas.width-anchorScale, canvas.height-anchorScale, anchorScale, anchorScale );
+	//Mid-Border
+	ctx.rect( (  canvas.width-anchorScale  )/2, 0, anchorScale, anchorScale );
+	ctx.rect( (  canvas.width-anchorScale  )/2, canvas.height-anchorScale, anchorScale, anchorScale );
+	ctx.rect( 0, (  canvas.height-anchorScale  )/2, anchorScale, anchorScale );
+	ctx.rect( canvas.width-anchorScale, (  canvas.height-anchorScale  )/2, anchorScale, anchorScale );
+	//Middle
+	ctx.rect( (  canvas.width-anchorScale  )/2, (  canvas.height-anchorScale  )/2, anchorScale, anchorScale );
+	ctx.stroke();
 }
 	
 	
@@ -710,9 +791,14 @@ function label_onMoreClicked(){
 }
 window.onbeforeunload = function(e) {
 	for(var i = label_imgPathListIndex; i < label_imgPathList.length; ++i){
-		tools_freeImage (label_imgPathList[i].id);
+		tools_freeImageNA (label_imgPathList[i].id);
 		console.log("Free " +label_imgPathList[i].id);
 	}
+};
+window.onscroll = function(){
+	var top  = window.pageYOffset || document.documentElement.scrollTop;
+	var filler = document.getElementById('filler');
+	filler.style.height = (top-filler.parentElement.offsetTop)+ 'px';
 };
 ////////////////////////////////////////////
 
