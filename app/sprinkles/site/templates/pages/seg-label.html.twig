@@ -16,14 +16,16 @@
 <div class="labelimg-container">
 	<div class="column column-one" style="position:sticky;">
 		<div id="filler"></div>
-		<select class="js-basic-single" id="combo" style="max-width:90%;" style="width: 150px;"></select>
-		<button id="nextButton"class="button" type="button" onclick="label_onNextClicked()">Next image</button>
-		<button id="moreButton"class="button" type="button" onclick="label_onMoreClicked()">More image</button>
-		<button id="drawButton" class="btn-mode" type="button"onclick="label_onDrawClicked()">Draw</button>
-		<button id="eraseButton"class="btn-mode" type="button" onclick="label_onEraseClicked()" style = "DISPLAY: none;">Delete</button>
-		<button id="eraseButton"class="btn-mode" type="button" onclick="label_onResetClicked()">Reset</button>
-		<div id="imgCounter">No image</div>
-		<div id="value1" max-width= "100px">Areas : 0</div>
+		<div id="leftMenu" style ="display: flex;flex-direction: column;">
+			<select class="js-basic-single" id="combo" style="max-width:90%;" style="width: 150px;"></select>
+			<button id="nextButton"class="button" type="button" onclick="label_onNextClicked()">Next image</button>
+			<button id="moreButton"class="button" type="button" onclick="label_onMoreClicked()">More image</button>
+			<button id="drawButton" class="btn-mode" type="button"onclick="label_onDrawClicked()">Draw</button>
+			<button id="eraseButton"class="btn-mode" type="button" onclick="label_onEraseClicked()" style = "DISPLAY: none;">Delete</button>
+			<button id="eraseButton"class="btn-mode" type="button" onclick="label_onResetClicked()">Reset</button>
+			<div id="imgCounter">No image</div>
+			<div id="value1" max-width= "100px">Areas : 0</div>
+		</div>
 	</div>
 	<div class="column column-four">
 			<div id="preview" class="imgcontainer" ondragstart="return false;" ondrop="return false;" style="position: relative;">

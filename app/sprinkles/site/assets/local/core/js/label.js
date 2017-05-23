@@ -824,7 +824,12 @@ window.onbeforeunload = function(e) {
 window.onscroll = function(){
 	var top  = window.pageYOffset || document.documentElement.scrollTop;
 	var filler = document.getElementById('filler');
-	filler.style.height = (top-filler.parentElement.offsetTop)+ 'px';
+	var leftMenu = document.getElementById('leftMenu');
+	var intendedHeight = top-filler.parentElement.offsetTop;
+	if(intendedHeight < 0) intendedHeight = 0;
+	var heightTest = ( intendedHeight + leftMenu.offsetHeight) < filler.parentElement.offsetHeight;
+	if( heightTest > 0 )
+		filler.style.height = (intendedHeight)+ 'px';
 };
 ////////////////////////////////////////////
 

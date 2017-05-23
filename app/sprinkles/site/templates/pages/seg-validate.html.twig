@@ -16,12 +16,14 @@
 	<div class="labelimg-container">
 		<div class="column column-one" style="position:sticky;">
 			<div id="filler"></div>
-			<button id="ValidateButton"class="button-validate" type="button" onclick="validate_onValidateClicked()">Validate</button>
-			<button id="RejectButton"class="button-reject" type="button" onclick="validate_onRejectClicked()">Reject</button>
-			<button id="moreButton"class="button" type="button" onclick="validate_onMoreClicked()" style = "DISPLAY: none;">More image</button>
-			<div id="imgCounter">No image</div>
-			<div id="value1" max-width= "100px"></div>
-			<div id="legend" style="max-width:100px"></div>
+			<div id="leftMenu" style ="display: flex;flex-direction: column;">
+				<button id="ValidateButton"class="button-validate" type="button" onclick="validate_onValidateClicked()">Validate</button>
+				<button id="RejectButton"class="button-reject" type="button" onclick="validate_onRejectClicked()">Reject</button>
+				<button id="moreButton"class="button" type="button" onclick="validate_onMoreClicked()" style = "DISPLAY: none;">More image</button>
+				<div id="imgCounter">No image</div>
+				<div id="value1" max-width= "100px"></div>
+				<div id="legend" style="max-width:100px"></div>
+			</div>
 		</div>
 		<div class="column column-four">
 			<div id="preview" class="imgcontainer" ondragstart="return false;" ondrop="return false;" style="position: relative;">
