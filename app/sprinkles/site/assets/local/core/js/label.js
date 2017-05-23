@@ -3,6 +3,7 @@ var label_imgPathListIndex = 0;
 var label_imgPath = "../img/";
 var label_phpPath = "../../php/";
 var label_srcName = 0;
+var label_pagemode = "";//"label", "homepage",//"segmentation"
 //if(document.getElementById("openButton"))
 //	document.getElementById("openButton").style = "DISPLAY: none;";
 
@@ -19,12 +20,20 @@ var mouse = {
 	var minSize = 10;
 
 
-
+function label_initpage(pagemode){
+	label_pagemode = pagemode;
+	label_loadImages();
+	label_loadCategories();
+}
 ////////////GET IMG FROM SERVER//////
-label_loadImages();
 function label_loadImages(){
 	// Fetch and render the images
-	var url = site.uri.public + '/images/clean';
+	if(label_pagemode == "label"){
+		var url = site.uri.public + '/images/clean';
+	}
+	else if (label_pagemode == "homepage"){
+		var url = site.uri.public + '/images/cleanNA';
+	}
 	$.ajax({
 	  type: "GET",
 	  url: url
@@ -103,12 +112,17 @@ function label_nextImage(){
 	if(label_imgPathList.length>0){
 		label_wipeRectangle();
 		label_removeImage();
-		tools_freeImage(label_imgPathList[label_imgPathListIndex].id);
+		if(label_pagemode == "label"){
+			tools_freeImage(label_imgPathList[label_imgPathListIndex].id);
+		}
+		else if (label_pagemode == "homepage"){
+			tools_freeImageNA(label_imgPathList[label_imgPathListIndex].id);
+		}
 		label_imgPathListIndex++;
 		if(label_imgPathListIndex<label_imgPathList.length)
 			label_addImage();
 		else{
-			console.log("no more img");
+			//console.log("no more img");
 			//document.getElementById("moreButton").style = "DISPLAY: initial;";
 			//document.getElementById("nextButton").style = "DISPLAY: none;";
 			label_loadImages();
@@ -149,10 +163,14 @@ var label_catColor= [];
 
 
 
-label_loadCategories();
 function label_loadCategories(){
 	// Fetch and render the categories
-	var url = site.uri.public + '/category/all2';
+	if(label_pagemode == "label"){
+		var url = site.uri.public + '/category/all2';
+	}
+	else if (label_pagemode == "homepage"){
+		var url = site.uri.public + '/category/allNA';
+	}
 	$.ajax({
 	  type: "GET",
 	  url: url
@@ -763,7 +781,12 @@ function label_onNextClicked(){
 		data[site.csrf.keys.value] = site.csrf.value;
 
 		// submit rects
-		var url = site.uri.public + '/bbox/annotate';
+		if(label_pagemode == "label"){
+			var url = site.uri.public + '/bbox/annotate';
+		}
+		else if (label_pagemode == "homepage"){
+			var url = site.uri.public + '/bbox/annotateNA';
+		}
 		$.ajax({
 		  type: "POST",
 		  url: url,
@@ -787,12 +810,15 @@ function label_onNextClicked(){
 
 function label_onMoreClicked(){
 	label_loadImages();
-	console.log("Load more");
 }
 window.onbeforeunload = function(e) {
 	for(var i = label_imgPathListIndex; i < label_imgPathList.length; ++i){
-		tools_freeImage (label_imgPathList[i].id);
-		console.log("Free " +label_imgPathList[i].id);
+		if(label_pagemode == "label"){
+			tools_freeImage (label_imgPathList[i].id);
+		}
+		else if (label_pagemode == "homepage"){
+			tools_freeImageNA (label_imgPathList[i].id);
+		}
 	}
 };
 window.onscroll = function(){

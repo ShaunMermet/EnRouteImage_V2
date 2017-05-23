@@ -158,7 +158,8 @@
         },
 		"js/label": {
             "scripts": [
-                "local/core/js/label.js"
+                "local/core/js/label.js",
+                "local/core/js/labelInit.js"
             ],
             "options": {
                 "result": {
@@ -182,7 +183,8 @@
         },
         "js/homepage": {
             "scripts": [
-                "local/core/js/homepage.js"
+                "local/core/js/label.js",
+                "local/core/js/homepageInit.js"
             ],
             "options": {
                 "result": {
