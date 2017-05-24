@@ -251,7 +251,7 @@ class SiteController extends SimpleController
             /////////////SELECT ////////////////
             $sql = "SELECT lnk.path
                     FROM labelimglinks lnk LEFT JOIN labelimgarea are ON lnk.id =are.source AND are.deleted_at IS NULL
-                    WHERE are.deleted_at IS NULL AND lnk.validated = 1 AND are.rectType = '$category'
+                    WHERE are.deleted_at IS NULL AND lnk.state = 3 AND are.rectType = '$category'
                     GROUP BY lnk.id";
 
             $result = $db->query($sql);
@@ -288,7 +288,7 @@ class SiteController extends SimpleController
                     $txtfile = fopen("tmp/".$tmpFolder."/".$path_parts['filename'].".txt", "w") or die("Unable to open file!");
                     $sql = "SELECT cat.Category,are.rectLeft,are.rectTop,are.rectRight,are.rectBottom
         FROM labelimglinks lnk LEFT JOIN labelimgarea are ON lnk.id =are.source AND are.deleted_at IS NULL LEFT JOIN labelimgcategories cat ON cat.id=are.rectType
-        WHERE are.deleted_at IS NULL AND lnk.validated = 1 AND are.rectType = '$category' AND lnk.path = '$obj->path'"; 
+        WHERE are.deleted_at IS NULL AND lnk.state = 3 AND are.rectType = '$category' AND lnk.path = '$obj->path'"; 
                     $rows = $db->query($sql);
                     $curImg = 0;
                     while ($rect = $rows->fetch_object()) {
@@ -367,7 +367,7 @@ class SiteController extends SimpleController
             $imgToExport = SegImage::whereHas('areas', function ($query) use($data) {
                                 $query->whereIn('areaType', $data->category);//->where('areaType', '=', $data->category);
                             })
-                            ->where ('validated', '=', 1)
+                            ->where ('state', '=', 3)
                             ->get();
             
             if (count($imgToExport) > 0) {

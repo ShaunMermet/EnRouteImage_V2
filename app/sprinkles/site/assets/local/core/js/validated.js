@@ -74,8 +74,10 @@ function validated_initCombo(comboElem,data){
         //});
 	}else if(comboElem.id == 'comboValidatedValidated'){
 		$(comboElem).append("<option value=-1>ALL</option>");
-		$(comboElem).append("<option value=0>Non-validated</option>");
-		$(comboElem).append("<option value=1>Validated</option>");
+		$(comboElem).append("<option value=1>New</option>");
+		$(comboElem).append("<option value=2>Pending</option>");
+		$(comboElem).append("<option value=3>Validated</option>");
+		$(comboElem).append("<option value=4>Rejected</option>");
 		$(comboElem).select2()
 	}else if(comboElem.id == 'comboValidatedNbrResult'){
 		$(comboElem).append("<option value=5>5</option>");
@@ -618,7 +620,7 @@ function validated_sendSearch(page = null){
 	filter['sorts'] = {validated_at : 'desc'};
 	validatedType = document.getElementById("comboValidatedValidated").value;
 	if(validatedType != -1 ){
-	    filter['filters']['validated'] = validatedType;
+		filter['filters']['state'] = validatedType;
 	}
 	categoryType = document.getElementById("comboValidatedCategory").value;
 	if(categoryType != -1 ){

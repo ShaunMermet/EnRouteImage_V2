@@ -1265,7 +1265,7 @@ class UploadHandler
                 }
                 $imgToValid = SegImage::where('id',  $SegImg->id)
                    ->first();
-                $imgToValid->validated = 1;
+                $imgToValid->state = 3;
                 $imgToValid->category = $areaType;
                 try{
                     $imgToValid->save();
@@ -1335,7 +1335,7 @@ class UploadHandler
                 //Valid img
                 $imgToValid = ImgLinks::where('id',  $BboxImg->id)
                    ->first();
-                $imgToValid->validated = 1;
+                $imgToValid->state = 3;
                 $imgToValid->category = $rectType;
                 try{
                     $imgToValid->save();

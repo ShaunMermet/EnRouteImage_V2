@@ -828,3 +828,9 @@ ALTER TABLE `segimages` ADD `group` INT(1) NULL DEFAULT NULL COMMENT 'group tag 
 
 ALTER TABLE `labelimglinks` ADD `naturalWidth` INT(4) NULL COMMENT 'Image width' AFTER `validated_at`, ADD `naturalHeight` INT(4) NULL COMMENT 'Image Height' AFTER `naturalWidth`;
 ALTER TABLE `segimages` ADD `naturalWidth` INT(4) NULL COMMENT 'Image width' AFTER `validated_at`, ADD `naturalHeight` INT(4) NULL COMMENT 'Image Height' AFTER `naturalWidth`;
+
+ALTER TABLE `labelimglinks` ADD `state` INT(1) NOT NULL DEFAULT '1' COMMENT '1 : waiting for tag, 2 : wating for validation, 3 : Validated, 4 : Rejected' AFTER `validated`;
+ALTER TABLE `segimages` ADD `state` INT(1) NOT NULL DEFAULT '1' COMMENT '1 : waiting for tag, 2 : wating for validation, 3 : Validated, 4 : Rejected' AFTER `validated`;
+
+ALTER TABLE `users` ADD `stats_validated` INT NOT NULL DEFAULT '0' COMMENT 'Nbr of images validated' AFTER `group_id`, ADD `stats_rejected` INT NOT NULL DEFAULT '0' COMMENT 'Nbr of images validated' AFTER `stats_validated`;
+ALTER TABLE `users` ADD `stats_validated_seg` INT NOT NULL DEFAULT '0' COMMENT 'Nbr of seg images validated' AFTER `stats_rejected`, ADD `stats_rejected_seg` INT NOT NULL DEFAULT '0' COMMENT 'Nbr of seg images validated' AFTER `stats_validated_seg`;

@@ -18,9 +18,7 @@ $sql = "SELECT * FROM `labelimglinks` WHERE `naturalWidth` IS NULL";
 $imgs = $link->query($sql);
 while ($img = $imgs->fetch_object()) {
 	$imgInfo = getimagesize($imgPath.$img->path);
-	error_log(print_r($img->path,true));
-    error_log(print_r($imgInfo,true));
-    $sql2 = "UPDATE `labelimglinks` 
+	$sql2 = "UPDATE `labelimglinks` 
     SET `naturalWidth`='$imgInfo[0]',`naturalHeight`='$imgInfo[1]' 
     WHERE `labelimglinks`.`id` = '$img->id'";
     $link->query($sql2);

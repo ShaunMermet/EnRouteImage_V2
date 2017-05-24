@@ -22,10 +22,13 @@ return [
         "SETTINGS" => [
             "STATS" => [
 	            "@TRANSLATION"     => "Account statistics",
-	            "SUBMITTED"        => "Tags submitted",
-	            "REJECTED"         => "Tags rejected",
-	            "VALIDATED"        => "Tags validated",
-	            "SUCCESS_RATE"     =>"Success rate",
+	            "SUBMITTED"        => "Number of images waiting for validation",
+	            "REJECTED"         => "Number of images rejected",
+	            "VALIDATED"        => "Number of images validated",
+	            "SUCCESS_RATE"     =>"Success rate
+>90% is good
+>75% is medium
+<75% is not good",
         	],
             "BBOX_STATS"     =>"Bbox statistics",
             "SEG_STATS"     =>"Segmentation statistics"

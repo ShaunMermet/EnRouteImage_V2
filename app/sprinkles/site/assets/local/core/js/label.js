@@ -25,6 +25,7 @@ function label_initpage(pagemode){
 	label_pagemode = pagemode;
 	label_loadImages();
 	label_loadCategories();
+	label_getCountEdit();
 }
 ////////////GET IMG FROM SERVER//////
 function label_loadImages(){
@@ -912,6 +913,7 @@ function label_onNextClicked(){
 		    // Fetch successful
 		    function (data) {
 				label_nextImage();
+				label_getCountEdit();
 		    },
 		    // Fetch failed
 		    function (data) {
@@ -922,6 +924,27 @@ function label_onNextClicked(){
 	else{
 		label_nextImage();
 	}
+}
+function label_getCountEdit(){
+	if(label_pagemode == "homepage") return;
+	var url = site.uri.public + '/images/myeditCount';
+	$.ajax({
+	  type: "GET",
+	  url: url
+	})
+	.then(
+	    // Fetch successful
+	    function (data) {
+			label_updateEditNbr(data);
+	    },
+	    // Fetch failed
+	    function (data) {
+	        
+	    }
+	);
+}
+function label_updateEditNbr(data){
+	document.getElementById('editValue').innerHTML = "Nbr images :  "+data.pendingImg;
 }
 
 function label_onMoreClicked(){

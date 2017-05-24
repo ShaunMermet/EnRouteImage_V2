@@ -7,6 +7,7 @@ var label_AreasList = [];
 
 
 ////////////GET IMG FROM SERVER//////
+label_getCountEdit();
 label_loadImages();
 function label_loadImages(){
 	label_imgPathList = [];
@@ -562,6 +563,7 @@ function label_onNextClicked(){
 		    // Fetch successful
 		    function (data) {
 				label_nextImage();
+				label_getCountEdit();
 		    },
 		    // Fetch failed
 		    function (data) {
@@ -573,6 +575,27 @@ function label_onNextClicked(){
 	else{
 		label_nextImage();
 	}
+}
+
+function label_getCountEdit(){
+	var url = site.uri.public + '/segImages/myeditCount';
+	$.ajax({
+	  type: "GET",
+	  url: url
+	})
+	.then(
+	    // Fetch successful
+	    function (data) {
+			label_updateEditNbr(data);
+	    },
+	    // Fetch failed
+	    function (data) {
+	        
+	    }
+	);
+}
+function label_updateEditNbr(data){
+	document.getElementById('editValue').innerHTML = "Nbr images :  "+data.pendingSegImg;
 }
 
 function label_onMoreClicked(){

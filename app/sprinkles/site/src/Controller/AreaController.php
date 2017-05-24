@@ -141,36 +141,39 @@ class AreaController extends SimpleController
         /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
         $classMapper = $this->ci->classMapper;
 
+        $user = $classMapper->staticMethod('user', 'where', 'id', $currentUser->id)
+                                ->first();
+
         $count = [];
         
-        $count['deletedArea'] = ImgArea::onlyTrashed()
-                                ->where('user', '=', $currentUser->id)
-                                ->count();
+        $count['rejectedImg'] = $user->stats_rejected;
         
-        $count['validatedArea'] = ImgArea::where('user', '=', $currentUser->id)
-                                ->joinImglinks()
-                                ->where('validated', '=',1)
+        $count['validatedImg'] = $user->stats_validated;
+
+        $count['pendingImg'] = ImgLinks::whereHas('areas', function ($query) use ($currentUser){
+                                $query->where('user', '=', $currentUser->id);
+                                })
+                                ->where ('state', '=', 2)
+                                ->where(function ($imgLinks) use ($validGroup){
+                                $imgLinks->whereIn('group', $validGroup)
+                                        ->orWhereNull('group');
+                                })
                                 ->count();
 
-        $count['pendingArea'] = ImgArea::where('user', '=', $currentUser->id)
-                                ->joinImglinks()
-                                ->where('validated', '=',0)
-                                ->count();
-
         
-        $count['segDeletedArea'] = SegArea::onlyTrashed()
-                                ->where('user', '=', $currentUser->id)
-                                ->count();
+        $count['segRejectedImg'] = $user->stats_rejected_seg;
         
-        $count['segValidatedArea'] = SegArea::where('user', '=', $currentUser->id)
-                                ->joinSegImage()
-                                ->where('validated', '=',1)
-                                ->count();
+        $count['segValidatedImg'] = $user->stats_validated_seg;
 
-        $count['segPendingArea'] = SegArea::where('user', '=', $currentUser->id)
-                                ->joinSegImage()
-                                ->where('validated', '=',0)
-                                ->count();                                
+        $count['segPendingImg'] = SegImage::whereHas('areas', function ($query) use ($currentUser){
+                                    $query->where('user', '=', $currentUser->id);
+                                })
+                                ->where ('state', '=', 2)
+                                ->where(function ($imgLinks) use ($validGroup){
+                                $imgLinks->whereIn('group', $validGroup)
+                                        ->orWhereNull('group');
+                                })
+                                ->count();                               
 
 
         // Be careful how you consume this data - it has not been escaped and contains untrusted user-supplied content.
@@ -353,6 +356,9 @@ class AreaController extends SimpleController
                 }
                 $area->save();
             }
+            $targetImg = ImgLinks::where('id', $data->dataSrc)->first();
+            $targetImg->state = 2;
+            $targetImg->save();
         }
         else // $_POST is empty.
         {
@@ -415,12 +421,14 @@ class AreaController extends SimpleController
                 }
                 $SegArea->save();
             }
+            $targetImg = SegImage::where('id', $data->dataSrc)->first();
+            $targetImg->state = 2;
+            $targetImg->save();
         }
         else // $_POST is empty.
         {
             error_log("No data") ;
         }
-
     }
 
     /**
@@ -456,6 +464,9 @@ class AreaController extends SimpleController
                 }
                 $area->save();
             }
+            $targetImg = ImgLinks::where('id', $data->dataSrc)->first();
+            $targetImg->state = 2;
+            $targetImg->save();
         }
         else // $_POST is empty.
         {
@@ -484,6 +495,9 @@ class AreaController extends SimpleController
         /** @var UserFrosting\Sprinkle\Account\Model\User $currentUser */
         $currentUser = $this->ci->currentUser;
 
+        /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
+        $classMapper = $this->ci->classMapper;
+
         // Access-controlled page
         if (!$authorizer->checkAccess($currentUser, 'uri_validate')) {
             $loginPage = $this->ci->router->pathFor('login');
@@ -503,12 +517,19 @@ class AreaController extends SimpleController
             
             $source = mysqli_real_escape_string($db,($data->dataSrc));
             $validated = mysqli_real_escape_string($db,($data->validated));
+            $user = $classMapper->staticMethod('user', 'where', 'id', $currentUser->id)
+                                ->first();
+            $state = 4;
             if ($validated == 1){
-
+                $state = 3;
+                $user->stats_validated = $user->stats_validated+1;
             }else{
-                $this->deleteAreas($source,FALSE);
+                //$this->deleteAreas($source,FALSE);
+                $state = 4;
+                $user->stats_rejected = $user->stats_rejected+1;
             }
-            $sql = "UPDATE `labelimglinks` SET `validated` = $validated ,`validated_at`= NOW() WHERE `labelimglinks`.`id` = '$source'";
+            $user->save();
+            $sql = "UPDATE `labelimglinks` SET `state` = $state ,`validated_at`= NOW() WHERE `labelimglinks`.`id` = '$source'";
             if ($db->query($sql) === TRUE) {
                 
             } else {
@@ -543,6 +564,9 @@ class AreaController extends SimpleController
         /** @var UserFrosting\Sprinkle\Account\Model\User $currentUser */
         $currentUser = $this->ci->currentUser;
 
+        /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
+        $classMapper = $this->ci->classMapper;
+
         // Access-controlled page
         if (!$authorizer->checkAccess($currentUser, 'uri_validate')) {
             $loginPage = $this->ci->router->pathFor('login');
@@ -560,12 +584,22 @@ class AreaController extends SimpleController
         }
 
         if($data->validated == 0){
-            $this->deleteSegAreas($data->dataSrc,FALSE);
+            //$this->deleteSegAreas($data->dataSrc,FALSE);
         }
 
         $segimg = SegImage::where('id', $data->dataSrc)->first();
-        $segimg->validated = $data->validated;
+        $user = $classMapper->staticMethod('user', 'where', 'id', $currentUser->id)
+                                ->first();
+        if($data->validated == 0){
+            $segimg->state = 4;
+            $user->stats_rejected_seg = $user->stats_rejected_seg+1;
+        }
+        else{
+            $segimg->state = 3;
+            $user->stats_validated_seg = $user->stats_validated_seg+1;
+        }
         $segimg->save();
+        $user->save();
     }
 
     private function deleteAreas($source = NULL,$forcedelete){

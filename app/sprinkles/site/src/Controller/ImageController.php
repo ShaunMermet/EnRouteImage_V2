@@ -69,7 +69,10 @@ class ImageController extends SimpleController
         
         $maxImageRequested = getenv('MAX_IMAGE_REQUESTED');
 
-        $imgLinks = ImgLinks::whereDoesntHave('areas')
+        $imgLinks = ImgLinks::where(function ($imgLinks){
+                    $imgLinks->where ('state', '=', 1)
+                            ->orWhere ('state', '=', 4);
+                    })
                     ->where ('available', '=', 1)
                     ->where(function ($imgLinks) use ($validGroup){
                     $imgLinks->whereIn('group', $validGroup)
@@ -135,7 +138,10 @@ class ImageController extends SimpleController
 
         $maxImageRequested = getenv('MAX_IMAGE_REQUESTED');
 
-        $segImg = SegImage::whereDoesntHave('areas')
+        $segImg = SegImage::where(function ($imgLinks){
+                $imgLinks->where ('state', '=', 1)
+                        ->orWhere ('state', '=', 4);
+                })
                 ->where(function ($imgLinks) use ($validGroup){
                 $imgLinks->whereIn('group', $validGroup)
                         ->orWhereNull('group');
@@ -164,7 +170,10 @@ class ImageController extends SimpleController
 
         $maxImageRequested = getenv('MAX_IMAGE_REQUESTED');
 
-        $imgLinks = ImgLinks::whereDoesntHave('areas')
+        $imgLinks = ImgLinks::where(function ($imgLinks){
+                    $imgLinks->where ('state', '=', 1)
+                            ->orWhere ('state', '=', 4);
+                    })
                     ->where ('available', '=', 1)
                     ->where(function ($imgLinks) use ($validGroup){
                     $imgLinks->whereIn('group', $validGroup)
@@ -229,9 +238,8 @@ class ImageController extends SimpleController
 
         $maxImageRequested = getenv('MAX_IMAGE_REQUESTED');
 
-        $imgLinks = ImgLinks::has('areas')
-                    ->where ('available', '=', 1)
-                    ->where ('validated', '=', 0)
+        $imgLinks = ImgLinks::where ('available', '=', 1)
+                    ->where ('state', '=', 2)
                     ->where(function ($imgLinks) use ($validGroup){
                     $imgLinks->whereIn('group', $validGroup)
                             ->orWhereNull('group');
@@ -295,9 +303,7 @@ class ImageController extends SimpleController
 
         $maxImageRequested = getenv('MAX_IMAGE_REQUESTED');
 
-        $segImg = SegImage::has('areas')
-                    //->where ('available', '=', 1)
-                    ->where ('validated', '=', 0)
+        $segImg = SegImage::where ('state', '=', 2)
                     ->where(function ($segImg) use ($validGroup){
                     $segImg->whereIn('group', $validGroup)
                             ->orWhereNull('group');
@@ -360,7 +366,7 @@ class ImageController extends SimpleController
                                 $query->where('user', '=', $currentUser->id);
                             })
                     ->where ('available', '=', 1)
-                    ->where ('validated', '=', 0)
+                    ->where ('state', '=', 2)
                     ->where(function ($imgLinks) use ($validGroup){
                     $imgLinks->whereIn('group', $validGroup)
                             ->orWhereNull('group');
@@ -426,7 +432,7 @@ class ImageController extends SimpleController
         $imgLinks = SegImage::whereHas('areas', function ($query) use ($currentUser){
                                 $query->where('user', '=', $currentUser->id);
                             })
-                    ->where ('validated', '=', 0)
+                    ->where ('state', '=', 2)
                     ->where(function ($imgLinks) use ($validGroup){
                     $imgLinks->whereIn('group', $validGroup)
                             ->orWhereNull('group');
@@ -440,6 +446,120 @@ class ImageController extends SimpleController
         // Be careful how you consume this data - it has not been escaped and contains untrusted user-supplied content.
         // For example, if you plan to insert it into an HTML DOM, you must escape it on the client side (or use client-side templating).
         return $response->withJson($result, 200, JSON_PRETTY_PRINT);
+    }
+
+
+
+    /**
+     * Returns nbr images that have been annotated by current user, waiting for validation.
+     *
+     * This page requires authentication.
+     * Request type: GET
+     */
+    public function getCountImagesAbyMe($request, $response, $args)
+    {
+        /** @var UserFrosting\Sprinkle\Account\Authenticate\Authenticator $authenticator */
+        $authenticator = $this->ci->authenticator;
+        if (!$authenticator->check()) {
+            $loginPage = $this->ci->router->pathFor('login');
+            return $response->withRedirect($loginPage, 400);
+        }
+
+        /** @var UserFrosting\Sprinkle\Account\Authorize\AuthorizationManager */
+        $authorizer = $this->ci->authorizer;
+
+        /** @var UserFrosting\Sprinkle\Account\Model\User $currentUser */
+        $currentUser = $this->ci->currentUser;
+
+        /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
+        $classMapper = $this->ci->classMapper;
+
+        // Access-controlled page
+        if (!$authorizer->checkAccess($currentUser, 'uri_label')) {
+            $loginPage = $this->ci->router->pathFor('login');
+           return $response->withRedirect($loginPage, 400);
+        }
+
+        $UserWGrp = $classMapper->staticMethod('user', 'where', 'id', $currentUser->id)
+                                ->with('group')
+                                ->first();
+
+        $validGroup = ['NULL'];
+        foreach ($UserWGrp->group as $group) {
+            array_push($validGroup, $group->id);
+        }
+
+        $count = [];
+
+        $count['pendingImg'] = ImgLinks::whereHas('areas', function ($query) use ($currentUser){
+                                $query->where('user', '=', $currentUser->id);
+                            })
+                            ->where ('state', '=', 2)
+                            ->where(function ($imgLinks) use ($validGroup){
+                            $imgLinks->whereIn('group', $validGroup)
+                                    ->orWhereNull('group');
+                            })
+                            ->count();
+
+        // Be careful how you consume this data - it has not been escaped and contains untrusted user-supplied content.
+        // For example, if you plan to insert it into an HTML DOM, you must escape it on the client side (or use client-side templating).
+        return $response->withJson($count, 200, JSON_PRETTY_PRINT);
+    }
+
+    /**
+     * Returns nbr images that have been annotated by current user, waiting for validation.
+     *
+     * This page requires authentication.
+     * Request type: GET
+     */
+    public function getCountSegImagesAbyMe($request, $response, $args)
+    {
+        /** @var UserFrosting\Sprinkle\Account\Authenticate\Authenticator $authenticator */
+        $authenticator = $this->ci->authenticator;
+        if (!$authenticator->check()) {
+            $loginPage = $this->ci->router->pathFor('login');
+            return $response->withRedirect($loginPage, 400);
+        }
+
+        /** @var UserFrosting\Sprinkle\Account\Authorize\AuthorizationManager */
+        $authorizer = $this->ci->authorizer;
+
+        /** @var UserFrosting\Sprinkle\Account\Model\User $currentUser */
+        $currentUser = $this->ci->currentUser;
+
+        /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
+        $classMapper = $this->ci->classMapper;
+
+        // Access-controlled page
+        if (!$authorizer->checkAccess($currentUser, 'uri_label')) {
+            $loginPage = $this->ci->router->pathFor('login');
+           return $response->withRedirect($loginPage, 400);
+        }
+
+        $UserWGrp = $classMapper->staticMethod('user', 'where', 'id', $currentUser->id)
+                                ->with('group')
+                                ->first();
+
+        $validGroup = ['NULL'];
+        foreach ($UserWGrp->group as $group) {
+            array_push($validGroup, $group->id);
+        }
+
+        $count = [];
+
+        $count['pendingSegImg'] = SegImage::whereHas('areas', function ($query) use ($currentUser){
+                                $query->where('user', '=', $currentUser->id);
+                            })
+                            ->where ('state', '=', 2)
+                            ->where(function ($imgLinks) use ($validGroup){
+                            $imgLinks->whereIn('group', $validGroup)
+                                    ->orWhereNull('group');
+                            })
+                            ->count();
+
+        // Be careful how you consume this data - it has not been escaped and contains untrusted user-supplied content.
+        // For example, if you plan to insert it into an HTML DOM, you must escape it on the client side (or use client-side templating).
+        return $response->withJson($count, 200, JSON_PRETTY_PRINT);
     }
 
     /**
@@ -558,7 +678,7 @@ class ImageController extends SimpleController
         $count['countByCat'] = ImgLinks::whereHas('areas', function ($query) use($data) {
                                     $query->where('rectType', '=', $data->category);
                                 })
-                                ->where ('validated', '=', 1)
+                                ->where ('state', '=', 3)
                                 ->count();
 
         // Be careful how you consume this data - it has not been escaped and contains untrusted user-supplied content.
@@ -600,7 +720,7 @@ class ImageController extends SimpleController
         $count['countByCat'] = SegImage::whereHas('areas', function ($query) use($params) {
                                     $query->whereIn('areaType', $params["ids"]);
                                 })
-                                ->where ('validated', '=', 1)
+                                ->where ('state', '=', 3)
                                 ->count();
 
         // Be careful how you consume this data - it has not been escaped and contains untrusted user-supplied content.
