@@ -246,8 +246,9 @@ class AreaController extends SimpleController
 
         // GET parameters
         $params = $request->getQueryParams();
+        if (!array_key_exists("ids",$params)) $params["ids"] = [];
 
-       $imgAreas = ImgArea::with('category')
+        $imgAreas = ImgArea::with('category')
                             ->whereIn('source', $params["ids"])
                             ->get();
         
@@ -335,6 +336,7 @@ class AreaController extends SimpleController
 
         if (!empty($data))
         {
+            $this->deleteAreas($data->dataSrc,TRUE);
             $rects= $data->rects;
             foreach ($rects as $num => $rect) {//for each rectangle
                 $area = new ImgArea;
@@ -391,7 +393,7 @@ class AreaController extends SimpleController
         $data = json_decode(json_encode($params), FALSE);
 
         $checkImage = SegImage::where('id', $data->dataSrc)
-                    ->whereDoesntHave('areas')
+                    ->where('updated_at',$data->updated)
                     ->count();
         if($checkImage != 1){
             return $response->withJson([], 408, JSON_PRETTY_PRINT);
@@ -399,7 +401,8 @@ class AreaController extends SimpleController
 
         if (!empty($data))
         {
-           $areas= $data->areas;
+            $this->deleteSegAreas($data->dataSrc,TRUE);
+            $areas= $data->areas;
             foreach ($areas as $num => $area) {//for each rectangle
                 $SegArea = new SegArea;
                 $SegArea->source = $data->dataSrc;
@@ -503,7 +506,7 @@ class AreaController extends SimpleController
             if ($validated == 1){
 
             }else{
-                $this->deleteArea($source);
+                $this->deleteAreas($source,FALSE);
             }
             $sql = "UPDATE `labelimglinks` SET `validated` = $validated ,`validated_at`= NOW() WHERE `labelimglinks`.`id` = '$source'";
             if ($db->query($sql) === TRUE) {
@@ -557,7 +560,7 @@ class AreaController extends SimpleController
         }
 
         if($data->validated == 0){
-            $rowsToDelete = SegArea::where('source', '=', $data->dataSrc)->delete();
+            $this->deleteSegAreas($data->dataSrc,FALSE);
         }
 
         $segimg = SegImage::where('id', $data->dataSrc)->first();
@@ -565,9 +568,20 @@ class AreaController extends SimpleController
         $segimg->save();
     }
 
-    private function deleteArea($source = NULL){
+    private function deleteAreas($source = NULL,$forcedelete){
         if(!is_null($source)){
-            $rowsToDelete = ImgArea::where('source', '=', $source)->delete();
+            if($forcedelete)
+                $rowsToDelete = ImgArea::where('source', '=', $source)->forceDelete();
+            else
+                $rowsToDelete = ImgArea::where('source', '=', $source)->delete();
+        }
+    }
+    private function deleteSegAreas($source = NULL,$forcedelete){
+        if(!is_null($source)){
+            if($forcedelete)
+                $rowsToDelete = SegArea::where('source', '=', $source)->forceDelete();
+            else
+                $rowsToDelete = SegArea::where('source', '=', $source)->delete();
         }
     }
 }

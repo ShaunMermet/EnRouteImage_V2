@@ -100,6 +100,8 @@ $app->group('/images', function () {
 
     $this->get('/annotated', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getImagesA');
 
+    $this->get('/myedit', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getImagesAbyMe');
+
     //$this->get('/validated', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getImagesV');
 
  	$this->put('/nbrBYcategory', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getNbrImagesByCat');
@@ -113,6 +115,8 @@ $app->group('/segImages', function () {
     $this->get('/clean', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getSegImagesC');
 
     $this->get('/annotated', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getSegImagesA');
+
+    $this->get('/myedit', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getSegImagesAbyMe');
 
     //$this->get('/validated', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getImagesV');
 

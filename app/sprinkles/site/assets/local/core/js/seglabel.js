@@ -3,14 +3,18 @@ var label_imgPathListIndex = 0;
 var label_imgPath = "../img/segmentation/";
 var label_phpPath = "../../php/";
 var label_srcName = 0;
-
+var label_AreasList = [];
 
 
 ////////////GET IMG FROM SERVER//////
 label_loadImages();
 function label_loadImages(){
+	label_imgPathList = [];
 	// Fetch and render the images
-	var url = site.uri.public + '/segImages/clean';
+	if(reworkMode)
+		var url = site.uri.public + '/segImages/myedit';
+	else
+		var url = site.uri.public + '/segImages/clean';
 	$.ajax({
 	  type: "GET",
 	  url: url
@@ -21,9 +25,41 @@ function label_loadImages(){
 	    	if(data!=""){
 				//var res = JSON.parse(data);
 				label_imgPathList = data;//res;
+				console.log("Seg images");
+				console.log(data);
 			}
 			else label_imgPathList = [];
 			label_imgPathListIndex = 0;
+			label_loadRects();
+	    },
+	    // Fetch failed
+	    function (data) {
+	        
+	    }
+	);
+}
+function label_loadRects(){
+	var data= {};
+	data["ids"]=[];
+	for(var i = 0; i < label_imgPathList.length; ++i){
+		data["ids"].push(label_imgPathList[i].id);
+	}
+	// Fetch and render the categories
+	var url = site.uri.public + '/segAreas/byIds';
+	$.ajax({
+	  type: "GET",
+	  url: url,
+	  data: data
+	})
+	.then(
+	    // Fetch successful
+	    function (data) {
+	    	if(data!=""){
+				label_AreasList = data;
+				console.log("Seg areas");
+				console.log(data);
+			}
+			else label_AreasList = [];
 			label_addImage();
 	    },
 	    // Fetch failed
@@ -34,6 +70,7 @@ function label_loadImages(){
 }
 
 function label_addImage(){
+	label_removeImage();
 	if(label_imgPathList.length>0){
 		label_srcName = label_imgPathList[label_imgPathListIndex].id;
 		var imgName = label_imgPathList[label_imgPathListIndex].path;
@@ -43,20 +80,110 @@ function label_addImage(){
 		document.getElementById('imgCounter').innerHTML = "";//"Image "+(label_imgPathListIndex+1)+" / "+label_imgPathList.length;
 		document.getElementById("moreButton").style = "DISPLAY: none;";
 		document.getElementById("nextButton").style = "DISPLAY: initial;";
+
+		var img = document.getElementById('image');
+
+		function loaded() {
+		  label_drawAreas(label_srcName);//initSelection();
+		  label_drawLegend(label_srcName);
+		  img.removeEventListener('load', loaded);
+		  img.removeEventListener('load', error);
+		  updateNbrAreas();
+		}
+		function error() {
+			
+		}
+		if (img.complete) {
+		  loaded();
+		} else {
+		  img.addEventListener('load', loaded)
+		  img.addEventListener('error', error)
+		}
+
 	}
 }
 
+var dataAreas = [];
+var currentPoly= {};
 
-function label_onImgLoaded(){
-	console.log("loaded");
-	var refImage = document.getElementById('image');
+function label_drawAreas(idImage){
 	var areaCanvas = document.getElementById("areaCanvas");
+	var refImage = document.getElementById('image');
 	areaCanvas.width = refImage.width;
 	areaCanvas.height = refImage.height;
 	var lineCanvas = document.getElementById("lineCanvas");
 	lineCanvas.width = refImage.width;
 	lineCanvas.height = refImage.height;
+	var initRatio = label_getImgRatio();
+	for(var i = 0; i < label_AreasList.length; ++i){
+		reviewedArea = label_AreasList[i];
+		if(parseInt(reviewedArea.source) == idImage){
+
+			areaCtx = areaCanvas.getContext("2d");
+			areaCtx.lineJoin = "round";
+			areaCtx.beginPath();
+			var coordList = JSON.parse( reviewedArea.data );
+			areaCtx.moveTo(coordList[0][0]*initRatio, coordList[0][1]*initRatio);
+
+			for(var j = 1; j < coordList.length; ++j){
+				areaCtx.lineTo(coordList[j][0]*initRatio, coordList[j][1]*initRatio);
+			}
+			
+			var color = reviewedArea.category.Color;
+			areaCtx.globalAlpha=0.5;
+	 		areaCtx.fillStyle = color;//"#ff0000";
+	 		areaCtx.lineWidth  = 3;
+	 		areaCtx.strokeStyle = "#ffffff";
+	 		areaCtx.closePath();
+			areaCtx.fill();
+			areaCtx.globalAlpha=1;
+			areaCtx.stroke();
+
+			currentPoly = {};
+			currentPoly.type = reviewedArea.areaType;
+			currentPoly.points = reviewedArea.data;
+			dataAreas.push(currentPoly);
+		}
+	}
+	updateNbrAreas();
 }
+
+function label_drawLegend(idImage){
+	var legendDiv = document.getElementById("legend");
+	legendDiv.innerHTML = "";
+	var legend = {};
+	for(var i = 0; i < dataAreas.length; ++i){
+		var areaType = dataAreas[i].type;
+		legend[areaType] = label_catObject[areaType];
+	}
+	console.log(legend);
+	for (var key in legend){
+		var cat = legend[key];
+		legContainer = document.createElement('div');
+		legContainer.style.display = "inline-flex";
+		legContainer.className = 'legend';
+		
+		legColor = document.createElement('div');
+		legColor.style.width = legColor.style.height = 30 +'px';
+		legColor.style.background = cat.Color;
+		legColor.style.border= "1px solid "+"#000000";
+		legColor.title = cat.Category;
+		legContainer.appendChild(legColor);
+		
+		legText = document.createElement('div');
+		legText.style.width = 65 +'px';
+		legText.style.margin = "4px 0px 0px 3px";
+		legText.style.overflow = "hidden";
+		legText.style.textOverflow = "ellipsis";
+		legText.title = cat.Category;
+		t = document.createTextNode(cat.Category);
+		legText.appendChild(t);
+		legContainer.appendChild(legText);
+		
+		legendDiv.appendChild(legContainer);
+	}
+}
+
 function label_getImgRatio(){
 	var refImage = document.getElementById('image');
 	return refImage.clientWidth/refImage.naturalWidth;
@@ -68,9 +195,7 @@ function label_getCnvRatio(){
 
 function label_nextImage(){
 	if(label_imgPathList.length>0){
-		label_wipeAreas();
 		label_removeImage();
-		//tools_freeImage(label_imgPathList[label_imgPathListIndex].id);
 		label_imgPathListIndex++;
 		if(label_imgPathListIndex<label_imgPathList.length)
 			label_addImage();
@@ -83,6 +208,7 @@ function label_nextImage(){
 }
 
 function label_removeImage(){
+	label_wipeAreas();
 	var refImage = document.getElementById('image');
 	if(refImage){
 		refImage.src = "";
@@ -94,6 +220,7 @@ function label_wipeAreas(){
 	areaCtx.clearRect(0, 0, areaCanvas.width, areaCanvas.height);
 	dataAreas = [];
 	updateNbrAreas();
+
 }
 
 /////////////////////////
@@ -105,6 +232,7 @@ function label_wipeAreas(){
 var label_catId = [];
 var label_catText=[];
 var label_catColor= [];
+var label_catObject = {};
 
 
 
@@ -124,6 +252,7 @@ function label_loadCategories(){
 					label_catId[i] = parseInt(res[i].id);
 					label_catText[i] = res[i].Category;
 					label_catColor[i] = res[i].Color;
+					label_catObject[label_catId[i]] = {Category :label_catText[i], Color:label_catColor[i]}
 				}
 				label_initCombo();
 	    },
@@ -217,25 +346,25 @@ var mouse = {
 		startY: 0
 	};
 
-	var element = null;
-	var minSize = 10;
+var element = null;
+var minSize = 10;
 
-	var refImage = document.getElementById('image');
-	var areaCanvas = document.getElementById("areaCanvas");
-	var lineCanvas = document.getElementById("lineCanvas");
-	areaCtx = areaCanvas.getContext("2d"),
-    lineCtx = lineCanvas.getContext("2d"),
-    areaCtx.lineJoin = "round";
-    lineCtx.lineJoin = "round";
-    painting = false,
-    lastX = 0,
-    lastY = 0;
+var refImage = document.getElementById('image');
+var areaCanvas = document.getElementById("areaCanvas");
+var lineCanvas = document.getElementById("lineCanvas");
+areaCtx = areaCanvas.getContext("2d"),
+lineCtx = lineCanvas.getContext("2d"),
+areaCtx.lineJoin = "round";
+lineCtx.lineJoin = "round";
+painting = false,
+lastX = 0,
+lastY = 0;
 
-    var dataAreas = [];
-    var currentPoly= {};
+
 
 function updateNbrAreas(){
 	document.getElementById('value1').innerHTML = "Areas : "+dataAreas.length;
+	label_drawLegend(label_srcName);
 }	
 function label_initDraw(canvas) {
 
@@ -320,7 +449,7 @@ function onDownHandler(e) {
 		var type = combo.options[combo.selectedIndex].value;
 		
 		currentPoly = {};
-		currentPoly.type = type;
+		currentPoly.type = parseInt(type);
 		currentPoly.points = [];
 		var ratio = label_getImgRatio();
 		currentPoly.points.push([lastX/ratio,lastY/ratio]);
@@ -417,6 +546,7 @@ function label_onNextClicked(){
 		var data= {};
 		data["areas"]=dataAreas;
 		data["dataSrc"]=label_srcName;
+		data["updated"]= label_imgPathList[label_imgPathListIndex].updated_at;
 		console.log(data);
 		data[site.csrf.keys.name] = site.csrf.name;
 		data[site.csrf.keys.value] = site.csrf.value;
@@ -460,6 +590,14 @@ window.onscroll = function(){
 		filler.style.height = (intendedHeight)+ 'px';
 };
 
+///////////////////////////////
+var reworkMode = false;
 
-
+function label_onReworkClicked(element){
+	if (element.checked)
+		reworkMode = true;
+	else
+		reworkMode = false;
+	label_loadImages();
+}
 

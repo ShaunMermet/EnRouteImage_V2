@@ -4,6 +4,7 @@ var label_imgPath = "../img/";
 var label_phpPath = "../../php/";
 var label_srcName = 0;
 var label_pagemode = "";//"label", "homepage",//"segmentation"
+var label_rectanglesList = [];
 //if(document.getElementById("openButton"))
 //	document.getElementById("openButton").style = "DISPLAY: none;";
 
@@ -28,8 +29,13 @@ function label_initpage(pagemode){
 ////////////GET IMG FROM SERVER//////
 function label_loadImages(){
 	// Fetch and render the images
+	label_freeRemainingImages();
+	label_imgPathList = [];
 	if(label_pagemode == "label"){
-		var url = site.uri.public + '/images/clean';
+		if(reworkMode)
+			var url = site.uri.public + '/images/myedit';
+		else
+			var url = site.uri.public + '/images/clean';
 	}
 	else if (label_pagemode == "homepage"){
 		var url = site.uri.public + '/images/cleanNA';
@@ -47,6 +53,34 @@ function label_loadImages(){
 			}
 			else label_imgPathList = [];
 			label_imgPathListIndex = 0;
+			label_loadRects();
+	    },
+	    // Fetch failed
+	    function (data) {
+	        
+	    }
+	);
+}
+
+function label_loadRects(){
+	var data= {};
+	data["ids"]=[];
+	for(var i = 0; i < label_imgPathList.length; ++i){
+		data["ids"].push(label_imgPathList[i].id);
+	}
+	var url = site.uri.public + '/areas/byIds';
+	$.ajax({
+	  type: "GET",
+	  url: url,
+	  data: data
+	})
+	.then(
+	    // Fetch successful
+	    function (data) {
+	    	if(data!=""){
+				label_rectanglesList = data;
+			}
+			else label_rectanglesList = [];
 			label_addImage();
 	    },
 	    // Fetch failed
@@ -57,6 +91,7 @@ function label_loadImages(){
 }
 
 function label_addImage(){
+	label_removeImage();
 	if(label_imgPathList.length>0){
 		label_srcName = label_imgPathList[label_imgPathListIndex].id;
 		var imgName = label_imgPathList[label_imgPathListIndex].path;
@@ -67,6 +102,87 @@ function label_addImage(){
 		document.getElementById("moreButton").style = "DISPLAY: none;";
 		document.getElementById("nextButton").style = "DISPLAY: initial;";
 		updateNbrAreas();
+
+		///Load complete
+		var img = document.getElementById('image');
+		function loaded() {
+		  //draw rect
+		  label_drawRects(label_srcName);//initSelection();
+		  img.removeEventListener('load', loaded);
+		  img.removeEventListener('load', error);
+		}
+		function error() {
+			//alert('error');
+		}
+		if (img.complete) {
+		  loaded();
+		} else {
+		  img.addEventListener('load', loaded)
+		  img.addEventListener('error', error)
+		}
+	}
+	else
+		label_removeImage();
+}
+
+function label_drawRects(idImage){
+	for(var i = 0; i < label_rectanglesList.length; ++i){
+		reviewedRect = label_rectanglesList[i];
+
+		if(parseInt(reviewedRect.source) == idImage){
+			var refImage = document.getElementById('image');
+			var initRatio = label_getImgRatio();
+			var element = document.createElement('div');
+			element.className = 'rectangle';
+			var str = reviewedRect.category.Category;
+			var type = reviewedRect.rectType;
+			var color = reviewedRect.category.Color;
+			element.rectType = type;
+			element.rectSetRatio = 1;
+			element.rectSetLeft = parseInt(reviewedRect.rectLeft);
+			element.rectSetTop = parseInt(reviewedRect.rectTop);
+			element.rectSetWidth = reviewedRect.rectRight - reviewedRect.rectLeft;
+			element.rectSetHeight = reviewedRect.rectBottom - reviewedRect.rectTop;
+			element.style.left = /*(leftImage+*/parseInt(reviewedRect.rectLeft)*initRatio/*)*/ + 'px';
+			element.style.top = /*(topImage+*/parseInt(reviewedRect.rectTop)*initRatio/*)*/ + 'px';
+			element.style.border= "3px solid "+color;
+			element.style.color= color;
+			var canvas = document.createElement('canvas');
+			canvas.style.pointerEvents = "none";
+	  		canvas.style.margin = "-5px";//(anchorScale-3)/2 +3
+			var text = document.createElement('div');
+			var t = document.createTextNode(str);
+			text.className = 'rectangleText';
+			text.appendChild(t);
+			element.appendChild(text);
+			text.style.pointerEvents = "none";
+			text.style.position = "absolute";
+			element.appendChild(canvas);
+			element.style.width = (reviewedRect.rectRight - reviewedRect.rectLeft)*initRatio + 'px';
+			element.style.height = (reviewedRect.rectBottom - reviewedRect.rectTop)*initRatio + 'px';
+			(document.getElementById('preview')).appendChild(element);
+			adaptText(element);
+			updateNbrAreas();
+			drawAnchor(element);
+		
+			element.onmousedown = function(e){
+				onElementDownHandler(e,$(this));
+			}
+			element.onmousemove = function(e){
+				onElementMoveHandler(e,$(this));
+			}
+			$(".rectangle").on('touchstart',function(e,data) {  
+				onElementDownHandler(e,$(this));
+			});
+			$(".rectangle").on('touchmove',function(e,data) {
+				onMoveHandler(e); 
+			});
+			$(".rectangle").on('touchend',function(e,data) { 
+				resizeMode = false;
+				elemMoveMode = false;
+				element = null;
+			});
+		}
 	}
 }
 
@@ -110,7 +226,6 @@ function label_getImgRatio(){
 
 function label_nextImage(){
 	if(label_imgPathList.length>0){
-		label_wipeRectangle();
 		label_removeImage();
 		if(label_pagemode == "label"){
 			tools_freeImage(label_imgPathList[label_imgPathListIndex].id);
@@ -131,6 +246,7 @@ function label_nextImage(){
 }
 
 function label_removeImage(){
+	label_wipeRectangle();
 	var refImage = document.getElementById('image');
 	if(refImage){
 		//refImage.remove();
@@ -393,7 +509,7 @@ function onMoveHandler(e) {
 			else if(element.parentElement)
 				refPreview.removeChild(element);
 			//document.getElementById('value5').innerHTML = "left "+element.style.left+" top "+element.style.top;
-			adaptText();
+			adaptText(element);
 			drawAnchor(element);
 		}
 	}
@@ -455,7 +571,7 @@ function resizeElement(e, element){
 		refPreview.appendChild(element);
 	else if(element.parentElement)
 		refPreview.removeChild(element);
-	adaptText();
+	adaptText(element);
 	drawAnchor(element);
 }
 function moveElement(e, element){
@@ -486,8 +602,8 @@ function moveElement(e, element){
 	if(currentDistanceY >= 0 && (currentDistanceY + element.offsetHeight) <= refImage.height)
 		element.style.top = currentDistanceY + 'px';
 
-	adaptText();
-	//drawAnchor(element);
+	adaptText(element);
+	drawAnchor(element);
 }
 
 
@@ -696,7 +812,7 @@ function onElementMoveHandler(e,selection){
     else
     	e.target.style.cursor = "all-scroll";
 }
-function adaptText(){
+function adaptText(element){
 	////  X //////
 	var refImage = document.getElementById('image');
 	var textWidth = element.childNodes[0].scrollWidth;
@@ -812,6 +928,9 @@ function label_onMoreClicked(){
 	label_loadImages();
 }
 window.onbeforeunload = function(e) {
+	label_freeRemainingImages();
+};
+function label_freeRemainingImages(){
 	for(var i = label_imgPathListIndex; i < label_imgPathList.length; ++i){
 		if(label_pagemode == "label"){
 			tools_freeImage (label_imgPathList[i].id);
@@ -820,7 +939,7 @@ window.onbeforeunload = function(e) {
 			tools_freeImageNA (label_imgPathList[i].id);
 		}
 	}
-};
+}
 window.onscroll = function(){
 	var top  = window.pageYOffset || document.documentElement.scrollTop;
 	var filler = document.getElementById('filler');
@@ -832,6 +951,17 @@ window.onscroll = function(){
 		filler.style.height = (intendedHeight)+ 'px';
 };
 ////////////////////////////////////////////
+
+var reworkMode = false;
+
+function label_onReworkClicked(element){
+	if (element.checked)
+		reworkMode = true;
+	else
+		reworkMode = false;
+	label_freeRemainingImages();
+	label_loadImages();
+}
 
 
 

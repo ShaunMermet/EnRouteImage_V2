@@ -316,6 +316,133 @@ class ImageController extends SimpleController
     }
 
     /**
+     * Returns all images that have been annotated by current user, waiting for validation.
+     *
+     * This page requires authentication.
+     * Request type: GET
+     */
+    public function getImagesAbyMe($request, $response, $args)
+    {
+        /** @var UserFrosting\Sprinkle\Account\Authenticate\Authenticator $authenticator */
+        $authenticator = $this->ci->authenticator;
+        if (!$authenticator->check()) {
+            $loginPage = $this->ci->router->pathFor('login');
+            return $response->withRedirect($loginPage, 400);
+        }
+
+        /** @var UserFrosting\Sprinkle\Account\Authorize\AuthorizationManager */
+        $authorizer = $this->ci->authorizer;
+
+        /** @var UserFrosting\Sprinkle\Account\Model\User $currentUser */
+        $currentUser = $this->ci->currentUser;
+
+        /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
+        $classMapper = $this->ci->classMapper;
+
+        // Access-controlled page
+        if (!$authorizer->checkAccess($currentUser, 'uri_label')) {
+            $loginPage = $this->ci->router->pathFor('login');
+           return $response->withRedirect($loginPage, 400);
+        }
+
+        $UserWGrp = $classMapper->staticMethod('user', 'where', 'id', $currentUser->id)
+                                ->with('group')
+                                ->first();
+
+        $validGroup = ['NULL'];
+        foreach ($UserWGrp->group as $group) {
+            array_push($validGroup, $group->id);
+        }
+
+        $maxImageRequested = getenv('MAX_IMAGE_REQUESTED');
+
+        $imgLinks = ImgLinks::whereHas('areas', function ($query) use ($currentUser){
+                                $query->where('user', '=', $currentUser->id);
+                            })
+                    ->where ('available', '=', 1)
+                    ->where ('validated', '=', 0)
+                    ->where(function ($imgLinks) use ($validGroup){
+                    $imgLinks->whereIn('group', $validGroup)
+                            ->orWhereNull('group');
+                    })
+                    ->orderBy('group', 'desc')
+                    //->limit($maxImageRequested)
+                    ->get();
+        //Reserve Images
+        foreach ($imgLinks as $img) {
+            $img->available = 0;
+            $img->requested = date("Y-m-d H:i:s");
+            $img->save();
+        }
+
+        $result = $imgLinks->toArray();
+
+        // Be careful how you consume this data - it has not been escaped and contains untrusted user-supplied content.
+        // For example, if you plan to insert it into an HTML DOM, you must escape it on the client side (or use client-side templating).
+        return $response->withJson($result, 200, JSON_PRETTY_PRINT);
+    }
+
+    /**
+     * Returns all seg images that have been annotated by current user, waiting for validation.
+     *
+     * This page requires authentication.
+     * Request type: GET
+     */
+    public function getSegImagesAbyMe($request, $response, $args)
+    {
+        /** @var UserFrosting\Sprinkle\Account\Authenticate\Authenticator $authenticator */
+        $authenticator = $this->ci->authenticator;
+        if (!$authenticator->check()) {
+            $loginPage = $this->ci->router->pathFor('login');
+            return $response->withRedirect($loginPage, 400);
+        }
+
+        /** @var UserFrosting\Sprinkle\Account\Authorize\AuthorizationManager */
+        $authorizer = $this->ci->authorizer;
+
+        /** @var UserFrosting\Sprinkle\Account\Model\User $currentUser */
+        $currentUser = $this->ci->currentUser;
+
+        /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
+        $classMapper = $this->ci->classMapper;
+
+        // Access-controlled page
+        if (!$authorizer->checkAccess($currentUser, 'uri_label')) {
+            $loginPage = $this->ci->router->pathFor('login');
+           return $response->withRedirect($loginPage, 400);
+        }
+
+        $UserWGrp = $classMapper->staticMethod('user', 'where', 'id', $currentUser->id)
+                                ->with('group')
+                                ->first();
+
+        $validGroup = ['NULL'];
+        foreach ($UserWGrp->group as $group) {
+            array_push($validGroup, $group->id);
+        }
+
+        $maxImageRequested = getenv('MAX_IMAGE_REQUESTED');
+
+        $imgLinks = SegImage::whereHas('areas', function ($query) use ($currentUser){
+                                $query->where('user', '=', $currentUser->id);
+                            })
+                    ->where ('validated', '=', 0)
+                    ->where(function ($imgLinks) use ($validGroup){
+                    $imgLinks->whereIn('group', $validGroup)
+                            ->orWhereNull('group');
+                    })
+                    ->orderBy('group', 'desc')
+                    //->limit($maxImageRequested)
+                    ->get();
+
+        $result = $imgLinks->toArray();
+
+        // Be careful how you consume this data - it has not been escaped and contains untrusted user-supplied content.
+        // For example, if you plan to insert it into an HTML DOM, you must escape it on the client side (or use client-side templating).
+        return $response->withJson($result, 200, JSON_PRETTY_PRINT);
+    }
+
+    /**
      * Returns all images that have been validated.
      *
      * This page requires authentication.
