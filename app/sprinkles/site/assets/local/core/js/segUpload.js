@@ -7,7 +7,7 @@ var upl_grpText=[];
 upl_loadGroups();
 function upl_loadGroups(){
 	// Fetch the groups
-	var url = site.uri.public + '/api/groups';
+	var url = site.uri.public + '/api/groups/mygroups';
 	$.ajax({
 	  type: "GET",
 	  url: url
@@ -63,21 +63,27 @@ function upl_initCombos(){
 	var x = document.getElementsByClassName("js-basic-single");
 	var i;
 	for (i = 0; i < x.length; i++) {
-	   upl_initCombo(x[i]);
+		upl_initCombo(x[i]);
 	}
 }
 
 function upl_initCombo(comboElem){
+	preValue = comboElem.value;
 	emptyCombo(comboElem);
 	if(comboElem.id == "grpAssignUp"){
-		initGrpCombo(comboElem);
-	}else if(comboElem.id == "catAssignUp"){
-		initCatCombo(comboElem);
-	}else
-		initStdCombo(comboElem);
+		initGrpCombo(comboElem,preValue);
+	}
+	else if(comboElem.id == "catAssignUp"){
+		initCatCombo(comboElem,preValue);
+	}
+	else if(comboElem.id == "grpAssignAll" || comboElem.id == "grpAssignEx"){
+		initGrpAllCombo(comboElem,preValue);
+	}
+	else
+		initStdCombo(comboElem,preValue);
 }
 
-function initGrpCombo(comboElem){
+function initGrpCombo(comboElem, value){
 	if(upl_grpText.length == 0 ){
 		return;
 	}
@@ -90,12 +96,29 @@ function initGrpCombo(comboElem){
 		$(comboElem).append("<option value=\""+type+"\">"+category+"</option>");
 	}
 
-	$(comboElem).select2({placeholder: 'Select a group'})
+	$(comboElem).select2({allowClear: true,placeholder: 'Select a group'})
 	.on("change", function(e) {
       this.parentElement.parentElement.children[3].value = this.value;
     });
+    $(comboElem).val(value).trigger("change");
 }
-function initCatCombo(comboElem){
+function initGrpAllCombo(comboElem, value){
+	if(upl_grpText.length == 0 ){
+		return;
+	}
+	$(comboElem).append("<option></option>");
+	for (i = 0; i < upl_grpId.length; i++) {
+		appendToCombo(upl_grpText[i],upl_grpId[i]);
+	}
+
+	function appendToCombo(category,type){
+		$(comboElem).append("<option value=\""+type+"\">"+category+"</option>");
+	}
+
+	$(comboElem).select2({allowClear: true,placeholder: 'Select a group'});
+	$(comboElem).val(value).trigger("change");
+}
+function initCatCombo(comboElem, value){
 	if(upl_catText.length == 0 ){
 		return;
 	}
@@ -108,12 +131,13 @@ function initCatCombo(comboElem){
 		$(comboElem).append("<option value=\""+type+"\">"+category+"</option>");
 	}
 
-	$(comboElem).select2({placeholder: 'Select a category'})
+	$(comboElem).select2({allowClear: true,placeholder: 'Select a category'})
 	.on("change", function(e) {
       this.parentElement.parentElement.children[0].value = this.value;
     });
+    $(comboElem).val(value).trigger("change");
 }
-function initStdCombo(comboElem){
+function initStdCombo(comboElem, value){
 	if(upl_catText.length == 0 ){
 		return;
 	}
@@ -126,7 +150,8 @@ function initStdCombo(comboElem){
 		$(comboElem).append("<option value=\""+type+"\">"+category+"</option>");
 	}
 
-	$(comboElem).select2({placeholder: 'Select a category'})
+	$(comboElem).select2({allowClear: true,placeholder: 'Select a category'});
+	$(comboElem).val(value).trigger("change");
 }
 
 function onCatAssignAllChanged(){
@@ -135,10 +160,22 @@ function onCatAssignAllChanged(){
 	   upl_syncCatAssignUp(x[i]);
 	}
 }
+function onGrpAssignAllChanged(){
+	var x = document.getElementsByClassName("js-basic-single");
+	for (i = 0; i < x.length; i++) {
+	   upl_syncGrpAssignUp(x[i]);
+	}
+}
 function upl_syncCatAssignUp(comboElem){
 	var masterCombo = document.getElementById("catAssignAll");
 	if(comboElem.id == "catAssignUp"){
 		$(comboElem).val(masterCombo.value).trigger("change");
+	}
+}
+function upl_syncGrpAssignUp(comboElem){
+	var masterGrpCombo = document.getElementById("grpAssignAll");
+	if(comboElem.id == "grpAssignUp"){
+		$(comboElem).val(masterGrpCombo.value).trigger("change");
 	}
 }
 

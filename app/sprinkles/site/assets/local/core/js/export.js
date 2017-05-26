@@ -1,83 +1,64 @@
-////  COMBO    //////////////////
-var export_catId = [];
-var export_catText=[];
-var export_catColor= [];
-var export_phpPath = "../../php/";
-if(document.getElementById("dlButton")){
-	document.getElementById("dlButton").disabled = true;
-	document.getElementById("dlButton").style.opacity = 0.5;
-}
 var export_token = "";
 
-export_loadCategories();
-function export_loadCategories(){
-	// Fetch and render the categories
-	var url = site.uri.public + '/category/all2';
-	$.ajax({
-	  type: "GET",
-	  url: url
-	})
-	.then(
-	    // Fetch successful
-	    function (data) {
-	         var res = data.rows;
-	        	export_catId = [];
-				export_catText = [];
-				export_catColor = [];
-				for(i = 0; i < res.length; i++){
-					export_catId[i] = parseInt(res[i].id);
-					export_catText[i] = res[i].Category;
-					export_catColor[i] = res[i].Color;
-				}
-				export_initCombo();
-	    },
-	    // Fetch failed
-	    function (data) {
-	        
-	    }
-	);
-}
-
-function export_initCombo(){
-	emptyCombo();
-	$("#combo").append("<option></option>");
-	for (i = 0; i < export_catId.length; i++) {
-		appendToCombo(export_catText[i],export_catId[i]);
-	}
-
-
-	function appendToCombo(category,type){
-		$("#combo").append("<option value=\""+type+"\">"+category+"</option>");
-	}
-
-
-	
-	$('#combo').select2({placeholder: 'Select a category'});
-
-	function emptyCombo(){
-		while (combo.childElementCount != 0){
-			combo.removeChild(combo.firstChild);
-		}
-	}
-
-}
 function export_onComboChanged(){
 	export_getNbrInCat();
 }
 
-function export_getNbrInCat(){
-	
-	var data= {};
-	var combo = document.getElementById("combo");
-	data["category"]=combo.value;
+function export_onAddClicked(){
+	addInput("comboColumn", "" , "js-basic-single export cat");
+}
+function export_onGrpAddClicked(){
+	addInput("comboColumnGrp","grpAssignEx","js-basic-single export group");
+}
+function addInput(divName,id,className) {
+    var newDiv = document.createElement('select');
+    newDiv.className = className;
+    newDiv.onchange = export_onComboChanged;
+    newDiv.id = id;
+    document.getElementById(divName).appendChild(newDiv);
+    upl_initCombo(newDiv);
+}
+function export_onRemoveClicked(){
+	removeInput("comboColumn");
+}
+function export_onGrpRemoveClicked(){
+	removeInput("comboColumnGrp");
+}
+function removeInput(divName){
+	var comboColumn = document.getElementById(divName);
+	if(comboColumn.lastElementChild){
+		comboColumn.removeChild(comboColumn.lastElementChild);
+		comboColumn.removeChild(comboColumn.lastElementChild);
+		export_getNbrInCat();
+	}
+}
 
+function export_getNbrInCat(){
+	console.log("combo detected");
+	var data= {};
+	data["ids"]=[];
+	data["groups"]=[];
+	var x = document.getElementsByClassName("js-basic-single export cat");
+	for (i = 0; i < x.length; i++) {
+		if(x[i].value){
+	   		console.log("Category "+x[i].value);
+	   		data["ids"].push(x[i].value);
+	   }
+	}
+	var y = document.getElementsByClassName("js-basic-single export group");
+	for (i = 0; i < y.length; i++) {
+		if(y[i].value){
+	   		console.log("group "+y[i].value);
+	   		data["groups"].push(y[i].value);
+	   }
+	}
+	
 	data[site.csrf.keys.name] = site.csrf.name;
 	data[site.csrf.keys.value] = site.csrf.value;
 
-	// Free the images (became available)
 	var url = site.uri.public + '/images/nbrBYcategory';
 	$.ajax({
-	  type: "PUT",
+	  type: "GET",
 	  url: url,
 	  data: data
 	})
@@ -97,10 +78,23 @@ function export_getNbrInCat(){
 ///////////////////////////////
 
 function export_onExportClicked(){
-	var selectedCat = document.getElementById("combo").value;
-	console.log("Export : "+selectedCat);
 	var data= {};
-	data["category"]=selectedCat;
+	data["category"]=[];
+	data["groups"]=[];
+	var x = document.getElementsByClassName("js-basic-single export cat");
+	for (i = 0; i < x.length; i++) {
+		if(x[i].value){
+	   		console.log("Category "+x[i].value);
+	   		data["category"].push(x[i].value);
+	   }
+	}
+	var y = document.getElementsByClassName("js-basic-single export group");
+	for (i = 0; i < y.length; i++) {
+		if(y[i].value){
+	   		console.log("group "+y[i].value);
+	   		data["groups"].push(y[i].value);
+	   }
+	}
 	data[site.csrf.keys.name] = site.csrf.name;
 	data[site.csrf.keys.value] = site.csrf.value;
 
@@ -118,6 +112,7 @@ function export_onExportClicked(){
 			if(typeof res === 'object' && "link" in res){
 				document.getElementById("dlButton").disabled = false;
 				document.getElementById("dlButton").style.opacity = 1;
+				document.getElementById("dlButton").style.pointerEvents = "all";
 				export_token = res.link;
 				document.getElementById('imgCounter').innerHTML = "Download ready";
 			}
@@ -131,6 +126,7 @@ function export_onExportClicked(){
 	);
 	document.getElementById('imgCounter').innerHTML = "Preparing download...";
 }
+
 function export_onDlClicked(){
 	document.getElementById("dlButton").disabled = true;
 	document.getElementById("dlButton").style.opacity = 0.5;

@@ -1,66 +1,5 @@
-////  COMBO    //////////////////
-var catEdit_catId = [];
-var catEdit_catText=[];
-var catEdit_catColor= [];
 var catEdit_phpPath = "../../php/";
-if(document.getElementById("editCatPanel")){
-	document.getElementById("editCatPanel").style = "DISPLAY: none;";
-}
 
-
-catEdit_loadCategories();
-function catEdit_loadCategories(){
-	// Fetch and render the categories
-	var url = site.uri.public + '/segCategory/all';
-	$.ajax({
-	  type: "GET",
-	  url: url
-	})
-	.then(
-	    // Fetch successful
-	    function (data) {
-	    	console.log(data);
-	        var res = data.rows;
-				catEdit_catId = [];
-				catEdit_catText=[];
-				catEdit_catColor= [];
-				for(i = 0; i < res.length; i++){
-					catEdit_catId[i] = parseInt(res[i].id);
-					catEdit_catText[i] = res[i].Category;
-					catEdit_catColor[i] = res[i].Color;
-				}
-				catEdit_initCombo();
-	    },
-	    // Fetch failed
-	    function (data) {
-	        
-	    }
-	);
-}
-
-function catEdit_initCombo(){
-	emptyCombo();
-	$("#comboEdit").append("<option></option>");
-	for (i = 0; i < catEdit_catId.length; i++) {
-		catEdit_appendToCombo(catEdit_catText[i],catEdit_catId[i]);
-	}
-
-
-	function catEdit_appendToCombo(category,type){
-		$("#comboEdit").append("<option value=\""+type+"\">"+category+"</option>");
-	}
-
-
-	
-	$('#comboEdit').select2({placeholder: 'Select a category'});
-	
-	function emptyCombo(){
-		while (comboEdit.childElementCount != 0){
-			comboEdit.removeChild(comboEdit.firstChild);
-		}
-	}
-
-}
 function catEdit_onEditClicked(){
 	
 	catEdit_fillCateditPanel();
@@ -72,9 +11,11 @@ function catEdit_onEditClicked(){
 
 function catEdit_fillCateditPanel(){
 	var combo = document.getElementById("comboEdit");
+	if(combo.selectedIndex == -1)
+		return;
 	var str = combo.options[combo.selectedIndex].text;
 	var type = combo.options[combo.selectedIndex].value;
-	var color = catEdit_catColor[catEdit_catId.indexOf(parseInt(type))];
+	var color = upl_catColor[upl_catId.indexOf(parseInt(type))];
 	
 	if(type){//Edit existing category
 		catEditText.value = str;
@@ -155,9 +96,9 @@ function catEdit_sendServerEdit(mode,catId,catText = "",catColor = ""){
 	.then(
 	    // Fetch successful
 	    function (data) {
-	    	catEdit_loadCategories();
+	    	//catEdit_loadCategories();
 	    	upl_loadCategories();
-	    	export_loadCategories();
+	    	//export_loadCategories();
 	    },
 	    // Fetch failed
 	    function (data) {

@@ -671,14 +671,24 @@ class ImageController extends SimpleController
            return $response->withRedirect($loginPage, 400);
         }
 
-        // Get PUT parameters: 
-        $params = $request->getParsedBody();
-        $data = json_decode(json_encode($params), FALSE);
+        // GET parameters
+        $params = $request->getQueryParams();
+        if (!array_key_exists("ids",$params)) $params["ids"] = [];
+        if (!array_key_exists("groups",$params)) $params["groups"] = [1];
         
-        $count['countByCat'] = ImgLinks::whereHas('areas', function ($query) use($data) {
-                                    $query->where('rectType', '=', $data->category);
+        $count['countByCat'] = ImgLinks::whereHas('areas', function ($query) use($params) {
+                                    $query->whereIn('rectType', $params["ids"]);
                                 })
                                 ->where ('state', '=', 3)
+                                ->where(function ($imgLinks) use ($params){
+                                    if(in_array(1, $params["groups"])){
+                                    $imgLinks->whereIn('group', $params["groups"])
+                                            ->orWhereNull('group');
+                                    }
+                                    else{
+                                        $imgLinks->whereIn('group', $params["groups"]);
+                                    }
+                                })
                                 ->count();
 
         // Be careful how you consume this data - it has not been escaped and contains untrusted user-supplied content.
@@ -716,12 +726,24 @@ class ImageController extends SimpleController
         
         // GET parameters
         $params = $request->getQueryParams();
+        if (!array_key_exists("ids",$params)) $params["ids"] = [];
+        if (!array_key_exists("groups",$params)) $params["groups"] = [1];
         
         $count['countByCat'] = SegImage::whereHas('areas', function ($query) use($params) {
                                     $query->whereIn('areaType', $params["ids"]);
                                 })
                                 ->where ('state', '=', 3)
+                                ->where(function ($imgLinks) use ($params){
+                                    if(in_array(1, $params["groups"])){
+                                    $imgLinks->whereIn('group', $params["groups"])
+                                            ->orWhereNull('group');
+                                    }
+                                    else{
+                                        $imgLinks->whereIn('group', $params["groups"]);
+                                    }
+                                })
                                 ->count();
+                                    
 
         // Be careful how you consume this data - it has not been escaped and contains untrusted user-supplied content.
         // For example, if you plan to insert it into an HTML DOM, you must escape it on the client side (or use client-side templating).
@@ -759,6 +781,16 @@ class ImageController extends SimpleController
 
         /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
         $classMapper = $this->ci->classMapper;
+
+        $UserWGrp = $classMapper->staticMethod('user', 'where', 'id', $currentUser->id)
+                                ->with('group')
+                                ->first();
+
+        $validGroup = [];
+        foreach ($UserWGrp->group as $group) {
+            array_push($validGroup, $group->id);
+        }
+        $params['filters']['group'] = implode("||",$validGroup);
 
         $sprunje = new ImgLinksSprunje($classMapper, $params);
 
@@ -798,6 +830,16 @@ class ImageController extends SimpleController
 
         /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
         $classMapper = $this->ci->classMapper;
+
+        $UserWGrp = $classMapper->staticMethod('user', 'where', 'id', $currentUser->id)
+                                ->with('group')
+                                ->first();
+
+        $validGroup = [];
+        foreach ($UserWGrp->group as $group) {
+            array_push($validGroup, $group->id);
+        }
+        $params['filters']['group'] = implode("||",$validGroup);
 
         $sprunje = new SegImageSprunje($classMapper, $params);
 

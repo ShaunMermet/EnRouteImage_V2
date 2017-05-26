@@ -171,7 +171,8 @@ class UploadHandler
                 )
             ),
             'print_response' => true,
-            'imageMode' => 'bbox'
+            'imageMode' => 'bbox',
+            'groups' => [NULL,1]
         );
         if ($ci) {
             $this->ci = $ci;
@@ -186,6 +187,9 @@ class UploadHandler
             }
             if($options['upload_url']){
                 $this->options['upload_url'] = $this->get_full_url().$options['upload_url'];
+            }
+            if(array_key_exists('groups',$options)){
+                $this->options['groups'] = $options['groups'];
             }
         }
         if ($error_messages) {
@@ -369,6 +373,21 @@ class UploadHandler
 
     protected function get_file_object($file_name) {
         if ($this->is_valid_file_object($file_name)) {
+            //check grp, if not in allowed grp, return null
+            if($this->options['imageMode'] == 'segmentation'){
+                $getGrp = SegImage::where('path',  $file_name)
+                    ->with('group')
+                    ->first();
+            }else{
+                $getGrp = ImgLinks::where('path',  $file_name)
+                    ->with('group')
+                    ->first();
+            }
+            $result = $getGrp->toArray();
+            if($result['group'] &&  !in_array($result['group']['id'], $this->options['groups'])  )
+                return null;
+            ///////
+
             $file = new \stdClass();
             $file->name = $file_name;
             $file->category = $this->get_file_category($file_name);

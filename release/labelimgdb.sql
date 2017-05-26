@@ -834,3 +834,11 @@ ALTER TABLE `segimages` ADD `state` INT(1) NOT NULL DEFAULT '1' COMMENT '1 : wai
 
 ALTER TABLE `users` ADD `stats_validated` INT NOT NULL DEFAULT '0' COMMENT 'Nbr of images validated' AFTER `group_id`, ADD `stats_rejected` INT NOT NULL DEFAULT '0' COMMENT 'Nbr of images validated' AFTER `stats_validated`;
 ALTER TABLE `users` ADD `stats_validated_seg` INT NOT NULL DEFAULT '0' COMMENT 'Nbr of seg images validated' AFTER `stats_rejected`, ADD `stats_rejected_seg` INT NOT NULL DEFAULT '0' COMMENT 'Nbr of seg images validated' AFTER `stats_validated_seg`;
+
+
+--Lines to run after the scripts initImageStateColumn.php and initSegImageStateColumn.php otherwise info on img validated or not is lost.
+--It's ok it those line aren't run, it will be just an unused column in DB
+--ALTER TABLE `labelimglinks`
+--  DROP `validated`;
+--ALTER TABLE `segimages`
+--  DROP `validated`;

@@ -106,7 +106,7 @@ $app->group('/images', function () {
 
     //$this->get('/validated', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getImagesV');
 
- 	$this->put('/nbrBYcategory', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getNbrImagesByCat');
+ 	$this->get('/nbrBYcategory', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getNbrImagesByCat');
 
  	$this->get('/imgSprunje', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getImageSprunje');
 
@@ -190,6 +190,12 @@ $app->group('/api/users', function () {
 
 $app->group('/modals/users', function () {
     $this->get('/edit', 'UserFrosting\Sprinkle\Site\Controller\Overrides\UserController:getModalEdit');
+})->add('authGuard');
+
+$app->group('/api/groups', function () {
+
+	$this->get('/mygroups', 'UserFrosting\Sprinkle\Site\Controller\Overrides\GroupController:getMyGroups');
+
 })->add('authGuard');
 
 //$app->group('/group', function () {

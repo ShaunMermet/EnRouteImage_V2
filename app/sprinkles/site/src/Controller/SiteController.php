@@ -10,6 +10,8 @@ use Chumper\Zipper\Zipper;
 use UserFrosting\Sprinkle\Site\Controller\UploadHandler;
 use UserFrosting\Sprinkle\Site\Model\SegImage;
 use UserFrosting\Sprinkle\Site\Model\SegArea;
+use UserFrosting\Sprinkle\Site\Model\ImgArea;
+use UserFrosting\Sprinkle\Site\Model\ImgLinks;
 
 /**
  * Controller class for site-related requests.
@@ -212,8 +214,9 @@ class SiteController extends SimpleController
 
         return $this->ci->view->render($response, 'pages/validated.html.twig');
     }
+
     /**
-     * Prepare a Zip file to be download.
+     * Prepare an image Zip file to be download.
      *
      * Request type: POST
      */
@@ -244,71 +247,73 @@ class SiteController extends SimpleController
         $config = $this->ci->config['db.default'];
         $db = mysqli_connect($config['host'],$config['username'],$config['password'],$config['database']);
 
+        if(!array_key_exists ('category',$data)) $data->category = [];
+        if(!array_key_exists ('groups',$data)) $data->groups = [1];
+        error_log(print_r($data,true));
         if (!empty($data))
         {
-
-            $category = mysqli_real_escape_string($db,($data->category));
-            /////////////SELECT ////////////////
-            $sql = "SELECT lnk.path
-                    FROM labelimglinks lnk LEFT JOIN labelimgarea are ON lnk.id =are.source AND are.deleted_at IS NULL
-                    WHERE are.deleted_at IS NULL AND lnk.state = 3 AND are.rectType = '$category'
-                    GROUP BY lnk.id";
-
-            $result = $db->query($sql);
+            $imgToExport = ImgLinks::whereHas('areas', function ($query) use($data) {
+                                $query->whereIn('rectType', $data->category);//->where('areaType', '=', $data->category);
+                            })
+                            ->where ('state', '=', 3)
+                            ->where(function ($imgLinks) use ($data){
+                                if(in_array(1, $data->groups)){
+                                $imgLinks->whereIn('group', $data->groups)
+                                        ->orWhereNull('group');
+                                }
+                                else{
+                                    $imgLinks->whereIn('group', $data->groups);
+                                }
+                            })
+                            ->get();
             
-            $imgFound = $result->num_rows;
+            if (count($imgToExport) > 0) {
             
-            if ($imgFound > 0) {
-            
-                $sql = "SELECT cat.Category FROM labelimgcategories cat WHERE cat.id= '$category'";
-                $cat = $db->query($sql);
-                $catRes = $cat->fetch_object();
-                //get category object // TODO: change to another name cause multi cat
-
-                // Need filename / list of images
                 $tmpFolder = sha1(rand().microtime());
+                $exportFileName = $currentUser->user_name."_".time();
                 
-                if(!$this->saveTmpFolder($tmpFolder,$tmpFolder."/".$catRes->Category.".zip",$db))
+                if(!$this->saveTmpFolder($tmpFolder,$tmpFolder."/".$exportFileName.".zip",$db))
                     exit;
                 
                 mkdir("tmp/".$tmpFolder, 0700);
-                $filename = ("tmp/".$tmpFolder."/".$catRes->Category.".zip");
+                $filename = ("tmp/".$tmpFolder."/".$exportFileName.".zip");
 
 
                 
                 $zip = new \ZipArchive();
                 $zip->open($filename, \ZipArchive::CREATE);
                 
-                $fileNameLink = "";
                 /* fetch object array */
-                //for each image
-                while ($obj = $result->fetch_object()) {
-                    $path_parts = pathinfo($obj->path);
-                    $fileNameLink = $path_parts['filename'];
-                    $txtfile = fopen("tmp/".$tmpFolder."/".$path_parts['filename'].".txt", "w") or die("Unable to open file!");
-                    $sql = "SELECT cat.Category,are.rectLeft,are.rectTop,are.rectRight,are.rectBottom
-        FROM labelimglinks lnk LEFT JOIN labelimgarea are ON lnk.id =are.source AND are.deleted_at IS NULL LEFT JOIN labelimgcategories cat ON cat.id=are.rectType
-        WHERE are.deleted_at IS NULL AND lnk.state = 3 AND are.rectType = '$category' AND lnk.path = '$obj->path'"; 
-                    $rows = $db->query($sql);
-                    $curImg = 0;
-                    while ($rect = $rows->fetch_object()) {
-                        $line = $rect->Category." 0 0 0 ".$rect->rectLeft." ".$rect->rectTop." ".$rect->rectRight." ".$rect->rectBottom." 0 0 0 0 0 0 0";
+                foreach ($imgToExport as $NImage) {
+                    $imgToExportPath = "img/".$NImage->path;
+                    $path_parts = pathinfo($NImage->path);
+                    $txtpath = "tmp/".$tmpFolder."/".$path_parts['filename'] .".txt";
+                    $txtfile = fopen($txtpath, "w") or die("Unable to open file!");
+
+                    //Building txt file with polygon data
+                    $imgAreas = ImgArea::with('category')
+                                ->where('source', $NImage->id)
+                                ->get();
+      
+                    foreach ($imgAreas as $imgArea) {
+                        $line = $imgArea->category->Category." 0 0 0 ".$imgArea->rectLeft." ".$imgArea->rectTop." ".$imgArea->rectRight." ".$imgArea->rectBottom." 0 0 0 0 0 0 0";
                         fwrite($txtfile, $line);
                         fwrite($txtfile, "\n");
-                        $curImg++;
-                        $prct = $curImg/$imgFound*100;
                     }
+                    
+                    //Closing txt file with polygon data
                     fclose($txtfile);
 
-                    $zip->addFile("tmp/".$tmpFolder."/".$path_parts['filename'].".txt", $path_parts['filename'].".txt");
-                    $zip->addFile("img/".$obj->path, $obj->path);
+
+                    //Completing Zip
+                    $zip->addFile($txtpath, $path_parts['filename'] .".txt");
+                    $zip->addFile($imgToExportPath, $path_parts['filename'].".jpeg");
                 }
+
                 
                 /* free result set */
                 $zip->close();
-                $cat->close();
-                $result->close();
-                $rows->close();
+               
 
                 $files = glob('tmp/'.$tmpFolder.'/*.{txt}', GLOB_BRACE);
                 foreach($files as $file) {
@@ -362,12 +367,26 @@ class SiteController extends SimpleController
         $config = $this->ci->config['db.default'];
         $db = mysqli_connect($config['host'],$config['username'],$config['password'],$config['database']);
 
+        if(!array_key_exists ('category',$data)) $data->category = [];
+        if(!array_key_exists ('groups',$data)) $data->groups = [1];
+        error_log(print_r($data,true));
         if (!empty($data))
         {
             $imgToExport = SegImage::whereHas('areas', function ($query) use($data) {
                                 $query->whereIn('areaType', $data->category);//->where('areaType', '=', $data->category);
                             })
                             ->where ('state', '=', 3)
+                            ->where(function ($imgLinks) use ($data){
+                                if(in_array(1, $data->groups)){
+                                $imgLinks->whereIn('group', $data->groups)
+                                        ->orWhereNull('group');
+                                        error_log("first ");
+                                }
+                                else{
+                                    $imgLinks->whereIn('group', $data->groups);
+                                    error_log("second");
+                                }
+                            })
                             ->get();
             
             if (count($imgToExport) > 0) {
@@ -581,9 +600,23 @@ class SiteController extends SimpleController
            return $response->withRedirect($loginPage, 400);
         }
 
+        /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
+        $classMapper = $this->ci->classMapper;
+
+        $UserWGrp = $classMapper->staticMethod('user', 'where', 'id', $currentUser->id)
+                                ->with('group')
+                                ->first();
+
+        $validGroup = ['NULL'];
+        foreach ($UserWGrp->group as $group) {
+            array_push($validGroup, $group->id);
+        }
+
         //include('UploadHandler.php');
         error_reporting(E_ALL | E_STRICT);
-        $upload_handler = new UploadHandler($this->ci);
+        $upload_handler = new UploadHandler($this->ci,array(
+            'groups' => $validGroup
+            ));
 
     }
 
@@ -611,13 +644,26 @@ class SiteController extends SimpleController
            return $response->withRedirect($loginPage, 400);
         }
 
+        /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
+        $classMapper = $this->ci->classMapper;
+
+        $UserWGrp = $classMapper->staticMethod('user', 'where', 'id', $currentUser->id)
+                                ->with('group')
+                                ->first();
+
+        $validGroup = ['NULL'];
+        foreach ($UserWGrp->group as $group) {
+            array_push($validGroup, $group->id);
+        }
+
         //include('UploadHandler.php');
         error_reporting(E_ALL | E_STRICT);
         $upload_handler = new UploadHandler($this->ci,array(
             'script_url' => '/admin/segUpload/upload',
             'upload_dir' => '/img/segmentation/',
             'upload_url' => '/img/segmentation/',
-            'imageMode' => 'segmentation'
+            'imageMode' => 'segmentation',
+            'groups' => $validGroup
             ));
 
     }

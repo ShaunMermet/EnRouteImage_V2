@@ -29,7 +29,7 @@ class GroupController extends SimpleController
      * This page requires authentication.
      * Request type: GET
      */
-    public function getAllGroup($request, $response, $args)
+    public function getMyGroups($request, $response, $args)
     {
         // GET parameters
         $params = $request->getQueryParams();
@@ -56,7 +56,17 @@ class GroupController extends SimpleController
         /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
         $classMapper = $this->ci->classMapper;
 
-        $sprunje = new GroupSprunje($classMapper, $params);
+        $UserWGrp = $classMapper->staticMethod('user', 'where', 'id', $currentUser->id)
+                                ->with('group')
+                                ->first();
+
+        $validGroup = [];
+        foreach ($UserWGrp->group as $group) {
+            array_push($validGroup, $group->id);
+        }
+        $params['filters']['id'] = implode("||",$validGroup);
+
+        $sprunje = $classMapper->createInstance('group_sprunje', $classMapper, $params);
 
         // Be careful how you consume this data - it has not been escaped and contains untrusted user-supplied content.
         // For example, if you plan to insert it into an HTML DOM, you must escape it on the client side (or use client-side templating).

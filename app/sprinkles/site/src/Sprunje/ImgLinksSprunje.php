@@ -21,4 +21,15 @@ class ImgLinksSprunje extends Sprunje
 
         return $query;
     }
+    protected function filterGroup($query, $value)
+    {
+        // Split value on separator for OR queries
+        $values = explode($this->orSeparator, $value);
+        return $query->where(function ($query) use ($values) {
+            foreach ($values as $value) {
+                $query = $query->orLike('group', $value);
+            }
+        })
+        ->orWhereNull('group');
+    }
 }

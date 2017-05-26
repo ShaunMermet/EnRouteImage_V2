@@ -44,14 +44,28 @@
     <div class="labelimg-container">
     	<div class="column column-one">
     	</div>
-    	<div class="column column-two">
-    		<select class="js-basic-single" id="combo" style="max-width:90%;" style="width: 150px;" onchange="export_onComboChanged()"></select>
-    		<br/>
-    		<div id="imgCounter"></div>
-    	</div>
+        <div class="column column-two" style="max-width: 100px;">
+            <b>Group</b>
+            <select class="js-basic-single export group" id="grpAssignEx" onchange="export_onComboChanged()"></select>
+            <div  id="comboColumnGrp"></div>
+            <div>
+                <button id="addButton" class="small-btn" type="button" onclick="export_onGrpAddClicked()">+</button>
+                <button id="removeButton" class="small-btn" type="button" onclick="export_onGrpRemoveClicked()">-</button>
+            </div>
+        </div>
+        <div class="column column-two" style="max-width: 100px;">
+            <b>Category</b>
+            <select class="js-basic-single export cat" onchange="export_onComboChanged()"></select>
+            <div  id="comboColumn"></div>
+            <div>
+                <button id="addButton" class="small-btn" type="button" onclick="export_onAddClicked()">+</button>
+                <button id="removeButton" class="small-btn" type="button" onclick="export_onRemoveClicked()">-</button>
+            </div>
+        </div>
     	<div class="column column-three">
     		<button id="exportButton"class="button" type="button" onclick="export_onExportClicked()">Export</button>
-    		<button id="dlButton"class="button-validate" type="button" onclick="export_onDlClicked()">Download</button>
+    		<button id="dlButton"class="button-validate" type="button" onclick="export_onDlClicked()"  style="opacity: 0.5;pointer-events: none;" disabled>Download</button>
+            <div id="imgCounter"></div>
     		<div id="prepare"></div>
     		<div id="dlLink"></div>
     	</div>
@@ -80,7 +94,7 @@
         </div>
         
     </div>
-    <div class="labelimg-container" id="editCatPanel">
+    <div class="labelimg-container" id="editCatPanel" style="DISPLAY:none;">
         <div class="column column-one">
             <!-- Textfield -->
             <input type="text" name="Category name" id="catEditText">
@@ -135,6 +149,7 @@
 				<i class="glyphicon glyphicon-upload"></i>
 				<span>Start upload</span>
 			</button>
+            <select class="js-basic-single" id="grpAssignAll" style="max-width:90%;" style="width: 150px;" onchange="onGrpAssignAllChanged()"></select>
             <select class="js-basic-single" id="catAssignAll" style="max-width:90%;" style="width: 150px;" onchange="onCatAssignAllChanged()"></select>
 			<!-- The global file processing state -->
 			<span class="fileupload-process"></span>
@@ -234,7 +249,11 @@
             {% } %}
         </td>
         <td>
+        </td>
+        <td>
             <span> {%=file.group%}</span>
+        </td>
+        <td>
             <span> {%=file.category%}</span>
         </td>
         <td>
