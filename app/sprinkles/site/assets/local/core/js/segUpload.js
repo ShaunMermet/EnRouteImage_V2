@@ -155,13 +155,13 @@ function initStdCombo(comboElem, value){
 }
 
 function onCatAssignAllChanged(){
-	var x = document.getElementsByClassName("js-basic-single");
+	var x = document.getElementsByClassName("js-basic-single cat");
 	for (i = 0; i < x.length; i++) {
 	   upl_syncCatAssignUp(x[i]);
 	}
 }
 function onGrpAssignAllChanged(){
-	var x = document.getElementsByClassName("js-basic-single");
+	var x = document.getElementsByClassName("js-basic-single grp");
 	for (i = 0; i < x.length; i++) {
 	   upl_syncGrpAssignUp(x[i]);
 	}
