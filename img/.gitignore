@@ -6,3 +6,5 @@
 
 # ... except for this one.
 !.gitignore
+!segmentation
+!light
