@@ -166,17 +166,19 @@ class ImageController extends SimpleController
                 ->with('group')
                 ->get();
 
-        $table = $segImg->toArray();
-        $imgRate = $table["cprs_rate"];
-        $groupRate = $table["group"]["bb_cprs_rate"];
-        if(is_null($groupRate)){
-            $publicGrp = $classMapper->staticMethod('group', 'where', 'id', 1)->first();
-            $groupRate = $publicGrp->bb_cprs_rate;
-        }
-        if($imgRate != $groupRate){
-            $this->createLightImgBbox($segImg->path,$groupRate);
-            $segImg->cprs_rate = $groupRate;
-            $segImg->save();
+        foreach ($segImg as $img) {
+            $table = $img->toArray();
+            $imgRate = $table["cprs_rate"];
+            $groupRate = $table["group"]["seg_cprs_rate"];
+            if(is_null($groupRate)){
+                $publicGrp = $classMapper->staticMethod('group', 'where', 'id', 1)->first();
+                $groupRate = $publicGrp->bb_cprs_rate;
+            }
+            if($imgRate != $groupRate){
+                $this->createLightImgSeg($img->path,$groupRate);
+                $img->cprs_rate = $groupRate;
+                $img->save();
+            }
         }
         $result = $segImg->toArray();
 
@@ -373,17 +375,19 @@ class ImageController extends SimpleController
                     ->with('group')
                     ->get();
         
-        $table = $segImg->toArray();
-        $imgRate = $table["cprs_rate"];
-        $groupRate = $table["group"]["bb_cprs_rate"];
-        if(is_null($groupRate)){
-            $publicGrp = $classMapper->staticMethod('group', 'where', 'id', 1)->first();
-            $groupRate = $publicGrp->bb_cprs_rate;
-        }
-        if($imgRate != $groupRate){
-            $this->createLightImgBbox($segImg->path,$groupRate);
-            $segImg->cprs_rate = $groupRate;
-            $segImg->save();
+        foreach ($segImg as $img) {
+            $table = $img->toArray();
+            $imgRate = $table["cprs_rate"];
+            $groupRate = $table["group"]["seg_cprs_rate"];
+            if(is_null($groupRate)){
+                $publicGrp = $classMapper->staticMethod('group', 'where', 'id', 1)->first();
+                $groupRate = $publicGrp->bb_cprs_rate;
+            }
+            if($imgRate != $groupRate){
+                $this->createLightImgSeg($img->path,$groupRate);
+                $img->cprs_rate = $groupRate;
+                $img->save();
+            }
         }
 
         $result = $segImg->toArray();
@@ -528,17 +532,19 @@ class ImageController extends SimpleController
                     ->with('group')
                     ->get();
 
-        $table = $segImg->toArray();
-        $imgRate = $table["cprs_rate"];
-        $groupRate = $table["group"]["bb_cprs_rate"];
-        if(is_null($groupRate)){
-            $publicGrp = $classMapper->staticMethod('group', 'where', 'id', 1)->first();
-            $groupRate = $publicGrp->bb_cprs_rate;
-        }
-        if($imgRate != $groupRate){
-            $this->createLightImgBbox($segImg->path,$groupRate);
-            $segImg->cprs_rate = $groupRate;
-            $segImg->save();
+        foreach ($segImg as $img) {
+            $table = $img->toArray();
+            $imgRate = $table["cprs_rate"];
+            $groupRate = $table["group"]["seg_cprs_rate"];
+            if(is_null($groupRate)){
+                $publicGrp = $classMapper->staticMethod('group', 'where', 'id', 1)->first();
+                $groupRate = $publicGrp->bb_cprs_rate;
+            }
+            if($imgRate != $groupRate){
+                $this->createLightImgSeg($img->path,$groupRate);
+                $img->cprs_rate = $groupRate;
+                $img->save();
+            }
         }
 
         $result = $imgLinks->toArray();
@@ -950,6 +956,12 @@ class ImageController extends SimpleController
     protected function createLightImgBbox($imgName,$scale){
         $source = "img/".$imgName;
         $dest = "img/light/".$imgName;
+        copy($source,$dest);
+        $this->createLightImg($dest,$dest,$imgName,($scale));
+    }
+    protected function createLightImgSeg($imgName,$scale){
+        $source = "img/".$imgName;
+        $dest = "img/segmentation/light/".$imgName;
         copy($source,$dest);
         $this->createLightImg($dest,$dest,$imgName,($scale));
     }
