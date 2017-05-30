@@ -565,7 +565,10 @@ class SiteController extends SimpleController
         header("Accept-Ranges: bytes");
         header('Content-Length: ' . filesize($filename));
          
+        ob_end_flush();
+        ob_get_flush();
         print readfile($filename);
+
         error_log("etape 5");
         $this->rrmdir($tmpPath.$token);
 

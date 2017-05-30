@@ -29,7 +29,7 @@ class SegImageSprunje extends Sprunje
             foreach ($values as $value) {
                 $query = $query->orLike('group', $value);
             }
-        })
-        ->orWhereNull('group');
+            $query = $query->orWhereNull('group');
+        });
     }
 }
