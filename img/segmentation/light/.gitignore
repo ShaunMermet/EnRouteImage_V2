@@ -6,4 +6,3 @@
 
 # ... except for this one.
 !.gitignore
-!light

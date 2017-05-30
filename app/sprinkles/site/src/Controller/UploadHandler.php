@@ -105,7 +105,7 @@ class UploadHandler
             'accept_file_types' => '/\.(jpe?g|png)$/i',
             // The php.ini settings upload_max_filesize and post_max_size
             // take precedence over the following max_file_size setting:
-            'max_file_size' => 10000000,
+            'max_file_size' => 10*1024*1024,
             'min_file_size' => 1,
             // The maximum number of files for the upload directory:
             'max_number_of_files' => null,
@@ -155,6 +155,8 @@ class UploadHandler
                     'max_height' => 600
                 ),
                 */
+                'light' => array(
+                ),
                 'thumbnail' => array(
                     // Uncomment the following to use a defined directory for the thumbnails
                     // instead of a subdirectory based on the version identifier.
@@ -1055,6 +1057,7 @@ class UploadHandler
     protected function get_image_size($file_path) {
         if ($this->options['image_library']) {
             if (extension_loaded('imagick')) {
+                error_log("imagick");
                 $image = new \Imagick();
                 try {
                     if (@$image->pingImage($file_path)) {

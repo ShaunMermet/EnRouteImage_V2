@@ -842,3 +842,7 @@ ALTER TABLE `users` ADD `stats_validated_seg` INT NOT NULL DEFAULT '0' COMMENT '
 --  DROP `validated`;
 --ALTER TABLE `segimages`
 --  DROP `validated`;
+
+
+ALTER TABLE `groups` ADD `bb_cprs_rate` INT NOT NULL DEFAULT '100' COMMENT 'Compression rate for Bbox images 0 is low quality small file 100 is best quality' AFTER `icon`, ADD `seg_cprs_rate` INT NOT NULL DEFAULT '100' COMMENT 'Compression rate for segmentation images 0 is low quality small file 100 is best quality' AFTER `bb_cprs_rate`;
+ALTER TABLE `labelimglinks` ADD `cprs_rate` INT NOT NULL DEFAULT '-1' COMMENT 'Rate of the image compressed in \'light\' folder' AFTER `group`;

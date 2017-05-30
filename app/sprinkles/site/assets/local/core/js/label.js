@@ -1,6 +1,6 @@
 var label_imgPathList=[];
 var label_imgPathListIndex = 0;
-var label_imgPath = "../img/";
+var label_imgPath = "../img/light/";
 var label_phpPath = "../../php/";
 var label_srcName = 0;
 var label_pagemode = "";//"label", "homepage",//"segmentation"

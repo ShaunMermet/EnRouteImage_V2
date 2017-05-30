@@ -81,12 +81,26 @@ class ImageController extends SimpleController
                     ->orderBy('group', 'desc')
                     ->inRandomOrder()
                     ->limit($maxImageRequested)
+                    ->with('group')
                     ->get();
         //Reserve Images
         foreach ($imgLinks as $img) {
             $img->available = 0;
             $img->requested = date("Y-m-d H:i:s");
             $img->save();
+
+            $table = $img->toArray();
+            $imgRate = $table["cprs_rate"];
+            $groupRate = $table["group"]["bb_cprs_rate"];
+            if(is_null($groupRate)){
+                $publicGrp = $classMapper->staticMethod('group', 'where', 'id', 1)->first();
+                $groupRate = $publicGrp->bb_cprs_rate;
+            }
+            if($imgRate != $groupRate){
+                $this->createLightImgBbox($img->path,$groupRate);
+                $img->cprs_rate = $groupRate;
+                $img->save();
+            }
         }
 
         $result = $imgLinks->toArray();
@@ -96,7 +110,7 @@ class ImageController extends SimpleController
         return $response->withJson($result, 200, JSON_PRETTY_PRINT);
 
     }
-
+    
     /**
      * Returns all seg images that are neither validated nor annotated.
      *
@@ -149,7 +163,21 @@ class ImageController extends SimpleController
                 ->orderBy('group', 'desc')
                 ->inRandomOrder()
                 ->limit($maxImageRequested)
+                ->with('group')
                 ->get();
+
+        $table = $segImg->toArray();
+        $imgRate = $table["cprs_rate"];
+        $groupRate = $table["group"]["bb_cprs_rate"];
+        if(is_null($groupRate)){
+            $publicGrp = $classMapper->staticMethod('group', 'where', 'id', 1)->first();
+            $groupRate = $publicGrp->bb_cprs_rate;
+        }
+        if($imgRate != $groupRate){
+            $this->createLightImgBbox($segImg->path,$groupRate);
+            $segImg->cprs_rate = $groupRate;
+            $segImg->save();
+        }
         $result = $segImg->toArray();
 
         // Be careful how you consume this data - it has not been escaped and contains untrusted user-supplied content.
@@ -170,6 +198,9 @@ class ImageController extends SimpleController
 
         $maxImageRequested = getenv('MAX_IMAGE_REQUESTED');
 
+        /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
+        $classMapper = $this->ci->classMapper;
+
         $imgLinks = ImgLinks::where(function ($imgLinks){
                     $imgLinks->where ('state', '=', 1)
                             ->orWhere ('state', '=', 4);
@@ -182,12 +213,26 @@ class ImageController extends SimpleController
                     ->orderBy('group', 'desc')
                     ->inRandomOrder()
                     ->limit($maxImageRequested)
+                    ->with('group')
                     ->get();
         //Reserve Images
         foreach ($imgLinks as $img) {
             $img->available = 0;
             $img->requested = date("Y-m-d H:i:s");
             $img->save();
+
+            $table = $img->toArray();
+            $imgRate = $table["cprs_rate"];
+            $groupRate = $table["group"]["bb_cprs_rate"];
+            if(is_null($groupRate)){
+                $publicGrp = $classMapper->staticMethod('group', 'where', 'id', 1)->first();
+                $groupRate = $publicGrp->bb_cprs_rate;
+            }
+            if($imgRate != $groupRate){
+                $this->createLightImgBbox($img->path,$groupRate);
+                $img->cprs_rate = $groupRate;
+                $img->save();
+            }
         }
 
         $result = $imgLinks->toArray();
@@ -247,12 +292,26 @@ class ImageController extends SimpleController
                     ->orderBy('group', 'desc')
                     ->inRandomOrder()
                     ->limit($maxImageRequested)
+                    ->with('group')
                     ->get();
         //Reserve Images
         foreach ($imgLinks as $img) {
             $img->available = 0;
             $img->requested = date("Y-m-d H:i:s");
             $img->save();
+
+            $table = $img->toArray();
+            $imgRate = $table["cprs_rate"];
+            $groupRate = $table["group"]["bb_cprs_rate"];
+            if(is_null($groupRate)){
+                $publicGrp = $classMapper->staticMethod('group', 'where', 'id', 1)->first();
+                $groupRate = $publicGrp->bb_cprs_rate;
+            }
+            if($imgRate != $groupRate){
+                $this->createLightImgBbox($img->path,$groupRate);
+                $img->cprs_rate = $groupRate;
+                $img->save();
+            }
         }
 
         $result = $imgLinks->toArray();
@@ -311,8 +370,21 @@ class ImageController extends SimpleController
                     ->orderBy('group', 'desc')
                     ->inRandomOrder()
                     ->limit($maxImageRequested)
+                    ->with('group')
                     ->get();
         
+        $table = $segImg->toArray();
+        $imgRate = $table["cprs_rate"];
+        $groupRate = $table["group"]["bb_cprs_rate"];
+        if(is_null($groupRate)){
+            $publicGrp = $classMapper->staticMethod('group', 'where', 'id', 1)->first();
+            $groupRate = $publicGrp->bb_cprs_rate;
+        }
+        if($imgRate != $groupRate){
+            $this->createLightImgBbox($segImg->path,$groupRate);
+            $segImg->cprs_rate = $groupRate;
+            $segImg->save();
+        }
 
         $result = $segImg->toArray();
 
@@ -373,12 +445,26 @@ class ImageController extends SimpleController
                     })
                     ->orderBy('group', 'desc')
                     //->limit($maxImageRequested)
+                    ->with('group')
                     ->get();
         //Reserve Images
         foreach ($imgLinks as $img) {
             $img->available = 0;
             $img->requested = date("Y-m-d H:i:s");
             $img->save();
+
+            $table = $img->toArray();
+            $imgRate = $table["cprs_rate"];
+            $groupRate = $table["group"]["bb_cprs_rate"];
+            if(is_null($groupRate)){
+                $publicGrp = $classMapper->staticMethod('group', 'where', 'id', 1)->first();
+                $groupRate = $publicGrp->bb_cprs_rate;
+            }
+            if($imgRate != $groupRate){
+                $this->createLightImgBbox($img->path,$groupRate);
+                $img->cprs_rate = $groupRate;
+                $img->save();
+            }
         }
 
         $result = $imgLinks->toArray();
@@ -439,7 +525,21 @@ class ImageController extends SimpleController
                     })
                     ->orderBy('group', 'desc')
                     //->limit($maxImageRequested)
+                    ->with('group')
                     ->get();
+
+        $table = $segImg->toArray();
+        $imgRate = $table["cprs_rate"];
+        $groupRate = $table["group"]["bb_cprs_rate"];
+        if(is_null($groupRate)){
+            $publicGrp = $classMapper->staticMethod('group', 'where', 'id', 1)->first();
+            $groupRate = $publicGrp->bb_cprs_rate;
+        }
+        if($imgRate != $groupRate){
+            $this->createLightImgBbox($segImg->path,$groupRate);
+            $segImg->cprs_rate = $groupRate;
+            $segImg->save();
+        }
 
         $result = $imgLinks->toArray();
 
@@ -847,5 +947,52 @@ class ImageController extends SimpleController
         // For example, if you plan to insert it into an HTML DOM, you must escape it on the client side (or use client-side templating).
         return $sprunje->toResponse($response);
     }
+    protected function createLightImgBbox($imgName,$scale){
+        $source = "img/".$imgName;
+        $dest = "img/light/".$imgName;
+        copy($source,$dest);
+        $this->createLightImg($dest,$dest,$imgName,($scale));
+    }
+    protected function createLightImg($imgPath,$destPath,$imgName,$scale){
+        error_log("final ".$scale);
+        error_log($imgPath);
+        $before = ini_get('memory_limit');
+        error_log("Before ".$before);
+        ini_set('memory_limit', '512M');
+
+        $originalImg = $this->imageCreateFromAny($imgPath);
+        imagejpeg($originalImg,$destPath,$scale);
+        
+        ini_set('memory_limit', $before);
+        
+    }
+    protected function imageCreateFromAny($filepath) { 
+        $type = exif_imagetype($filepath); // [] if you don't have exif you could use getImageSize() 
+        $allowedTypes = array( 
+            1,  // [] gif 
+            2,  // [] jpg 
+            3,  // [] png 
+            6   // [] bmp 
+        ); 
+        if (!in_array($type, $allowedTypes)) { 
+            return false; 
+        } 
+        switch ($type) { 
+            case 1 : 
+                $im = imageCreateFromGif($filepath); 
+            break; 
+            case 2 : 
+                $im = imageCreateFromJpeg($filepath); 
+            break; 
+            case 3 : 
+                $im = imageCreateFromPng($filepath); 
+            break; 
+            case 6 : 
+                $im = imageCreateFromBmp($filepath); 
+            break; 
+        }    
+        return $im;  
+    }
     
+
 }
