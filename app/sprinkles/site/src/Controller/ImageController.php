@@ -954,10 +954,7 @@ class ImageController extends SimpleController
         $this->createLightImg($dest,$dest,$imgName,($scale));
     }
     protected function createLightImg($imgPath,$destPath,$imgName,$scale){
-        error_log("final ".$scale);
-        error_log($imgPath);
         $before = ini_get('memory_limit');
-        error_log("Before ".$before);
         ini_set('memory_limit', '512M');
 
         $originalImg = $this->imageCreateFromAny($imgPath);
