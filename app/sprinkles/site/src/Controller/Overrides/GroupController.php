@@ -24,7 +24,7 @@ use UserFrosting\Sprinkle\Site\Sprunje\GroupSprunje;
 class GroupController extends SimpleController
 {
     /**
-     * Returns all segmetation categories.
+     * Returns list of my groups.
      *
      * This page requires authentication.
      * Request type: GET

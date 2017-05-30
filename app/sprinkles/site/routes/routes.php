@@ -195,6 +195,7 @@ $app->group('/modals/users', function () {
 $app->group('/api/groups', function () {
 
 	$this->get('/mygroups', 'UserFrosting\Sprinkle\Site\Controller\Overrides\GroupController:getMyGroups');
+	$this->get('', 'UserFrosting\Sprinkle\Site\Controller\Overrides\GroupController:getMyGroups');
 
 })->add('authGuard');
 

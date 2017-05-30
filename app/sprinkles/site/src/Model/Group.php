@@ -36,7 +36,9 @@ class Group extends UFModel
         "slug",
         "name",
         "description",
-        "icon"
+        "icon",
+        "bb_cprs_rate",
+        "seg_cprs_rate"
     ];
 
     /**

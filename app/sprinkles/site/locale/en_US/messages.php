@@ -55,4 +55,10 @@ return [
     "PASSWORD" => [
         "BETWEEN"   => "Password between {{min}}-{{max}} characters"
     ],
+    "GROUP" => [
+        "BB_CPRS_RATE"        => "Bbox compression rate",
+        "BB_CPRS_RATE_INFO" => "(0-100) 0 is low size, 100 is high quality",
+        "SEG_CPRS_RATE"            => "Segmentation compression rate",
+        "SEG_CPRS_RATE_INFO"    => "(0-100) 0 is low size, 100 is high quality"
+    ]
 ];
