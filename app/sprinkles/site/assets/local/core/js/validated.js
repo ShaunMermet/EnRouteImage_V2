@@ -205,7 +205,7 @@ function validated_loadImages(categories,filter){
 				for(var i = 0; i < data.rows.length; ++i){
 					var img = data.rows[i];
 					if(!img.updated_at) img.updated_at = " ";
-	    			$('#preview').append("<div  style='margin: 10px;position:relative;' id='imgdiv"+img.id+"' ><img id='img"+img.id+"' data-id="+img.id+" data-mode="+mode+" data-updated="+img.updated_at.replace(" ", ";") +" data-naturalWidth="+img.naturalWidth+" data-naturalHeight="+img.naturalHeight+" class='imgDisp' unselectable='on' src='"+imgPath+img.path+"' onload='onImgLoaded(this.id)'/><canvas id='areaCanvas"+img.id+"' style='position:absolute;top: 0px;left: 0px;pointer-events: none;''></canvas></div>");
+	    			$('#preview').append("<div  style='margin: 10px;position:relative;' id='imgdiv"+img.id+"' ><img id='img"+img.id+"' data-id="+img.id+" data-state="+img.state+" data-mode="+mode+" data-updated="+img.updated_at.replace(" ", ";") +" data-naturalWidth="+img.naturalWidth+" data-naturalHeight="+img.naturalHeight+" class='imgDisp' unselectable='on' src='"+imgPath+img.path+"' onload='onImgLoaded(this.id)'/><canvas id='areaCanvas"+img.id+"' style='position:absolute;top: 0px;left: 0px;pointer-events: none;''></canvas></div>");
 				}
 	    		document.removeEventListener( "click",__onImgLeftClicked);
 				document.addEventListener( "click",__onImgLeftClicked);
@@ -327,9 +327,16 @@ function validated_loadImages(categories,filter){
 	      } else {
 	        taskItemInContext = clickInsideElement( e, taskItemClassName );
 	          if ( taskItemInContext ) {
-		        document.getElementById("context_menu_title").childNodes[1].textContent = " Image "+taskItemInContext.getAttribute("data-id");
+		        tmpMenu = document.getElementById("context_menu_title");
+		        tmpMenu.childNodes[1].textContent = " Image "+taskItemInContext.getAttribute("data-id");
 		    	e.preventDefault();
-		        toggleMenuOn();
+		        if(taskItemInContext.getAttribute(   "data-state"   ) == 3  ||  //Validated
+	          			taskItemInContext.getAttribute(   "data-state"   ) == 2 ){//pending
+		        	toggleMenuOn(true);
+		        }
+		        else{
+		        	toggleMenuOn(false);
+		        }
 		        positionMenu(e);
 		      } else {
 		        taskItemInContext = null;
@@ -369,10 +376,17 @@ function validated_loadImages(categories,filter){
 	  /**
 	   * Turns the custom context menu on.
 	   */
-	  function toggleMenuOn() {
+	  function toggleMenuOn($filled) {
 	    if ( menuState !== 1 ) {
 	      menuState = 1;
 	      menu.classList.add( contextMenuActive );
+	    }
+	    var contextLink = document.getElementsByClassName("context-menu__link");
+	    if( !$filled ){
+	    	contextLink[0].style = "display:none";
+	    }
+	    else{
+	    	contextLink[0].style = "display:initial";
 	    }
 	  }
 
