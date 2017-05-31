@@ -89,18 +89,7 @@ class ImageController extends SimpleController
             $img->requested = date("Y-m-d H:i:s");
             $img->save();
 
-            $table = $img->toArray();
-            $imgRate = $table["cprs_rate"];
-            $groupRate = $table["group"]["bb_cprs_rate"];
-            if(is_null($groupRate)){
-                $publicGrp = $classMapper->staticMethod('group', 'where', 'id', 1)->first();
-                $groupRate = $publicGrp->bb_cprs_rate;
-            }
-            if($imgRate != $groupRate){
-                $this->createLightImgBbox($img->path,$groupRate);
-                $img->cprs_rate = $groupRate;
-                $img->save();
-            }
+            $this->createLightImgBbox($img->path);
         }
 
         $result = $imgLinks->toArray();
@@ -110,7 +99,6 @@ class ImageController extends SimpleController
         return $response->withJson($result, 200, JSON_PRETTY_PRINT);
 
     }
-    
     /**
      * Returns all seg images that are neither validated nor annotated.
      *
@@ -167,19 +155,9 @@ class ImageController extends SimpleController
                 ->get();
 
         foreach ($segImg as $img) {
-            $table = $img->toArray();
-            $imgRate = $table["cprs_rate"];
-            $groupRate = $table["group"]["seg_cprs_rate"];
-            if(is_null($groupRate)){
-                $publicGrp = $classMapper->staticMethod('group', 'where', 'id', 1)->first();
-                $groupRate = $publicGrp->bb_cprs_rate;
-            }
-            if($imgRate != $groupRate){
-                $this->createLightImgSeg($img->path,$groupRate);
-                $img->cprs_rate = $groupRate;
-                $img->save();
-            }
+            $this->createLightImgSeg($img->path);
         }
+
         $result = $segImg->toArray();
 
         // Be careful how you consume this data - it has not been escaped and contains untrusted user-supplied content.
@@ -223,18 +201,7 @@ class ImageController extends SimpleController
             $img->requested = date("Y-m-d H:i:s");
             $img->save();
 
-            $table = $img->toArray();
-            $imgRate = $table["cprs_rate"];
-            $groupRate = $table["group"]["bb_cprs_rate"];
-            if(is_null($groupRate)){
-                $publicGrp = $classMapper->staticMethod('group', 'where', 'id', 1)->first();
-                $groupRate = $publicGrp->bb_cprs_rate;
-            }
-            if($imgRate != $groupRate){
-                $this->createLightImgBbox($img->path,$groupRate);
-                $img->cprs_rate = $groupRate;
-                $img->save();
-            }
+            $this->createLightImgBbox($img->path);
         }
 
         $result = $imgLinks->toArray();
@@ -302,18 +269,7 @@ class ImageController extends SimpleController
             $img->requested = date("Y-m-d H:i:s");
             $img->save();
 
-            $table = $img->toArray();
-            $imgRate = $table["cprs_rate"];
-            $groupRate = $table["group"]["bb_cprs_rate"];
-            if(is_null($groupRate)){
-                $publicGrp = $classMapper->staticMethod('group', 'where', 'id', 1)->first();
-                $groupRate = $publicGrp->bb_cprs_rate;
-            }
-            if($imgRate != $groupRate){
-                $this->createLightImgBbox($img->path,$groupRate);
-                $img->cprs_rate = $groupRate;
-                $img->save();
-            }
+            $this->createLightImgBbox($img->path);
         }
 
         $result = $imgLinks->toArray();
@@ -376,18 +332,7 @@ class ImageController extends SimpleController
                     ->get();
         
         foreach ($segImg as $img) {
-            $table = $img->toArray();
-            $imgRate = $table["cprs_rate"];
-            $groupRate = $table["group"]["seg_cprs_rate"];
-            if(is_null($groupRate)){
-                $publicGrp = $classMapper->staticMethod('group', 'where', 'id', 1)->first();
-                $groupRate = $publicGrp->bb_cprs_rate;
-            }
-            if($imgRate != $groupRate){
-                $this->createLightImgSeg($img->path,$groupRate);
-                $img->cprs_rate = $groupRate;
-                $img->save();
-            }
+            $this->createLightImgSeg($img->path);
         }
 
         $result = $segImg->toArray();
@@ -457,18 +402,7 @@ class ImageController extends SimpleController
             $img->requested = date("Y-m-d H:i:s");
             $img->save();
 
-            $table = $img->toArray();
-            $imgRate = $table["cprs_rate"];
-            $groupRate = $table["group"]["bb_cprs_rate"];
-            if(is_null($groupRate)){
-                $publicGrp = $classMapper->staticMethod('group', 'where', 'id', 1)->first();
-                $groupRate = $publicGrp->bb_cprs_rate;
-            }
-            if($imgRate != $groupRate){
-                $this->createLightImgBbox($img->path,$groupRate);
-                $img->cprs_rate = $groupRate;
-                $img->save();
-            }
+            $this->createLightImgBbox($img->path);
         }
 
         $result = $imgLinks->toArray();
@@ -519,12 +453,12 @@ class ImageController extends SimpleController
 
         $maxImageRequested = getenv('MAX_IMAGE_REQUESTED');
 
-        $imgLinks = SegImage::whereHas('areas', function ($query) use ($currentUser){
+        $segImg = SegImage::whereHas('areas', function ($query) use ($currentUser){
                                 $query->where('user', '=', $currentUser->id);
                             })
                     ->where ('state', '=', 2)
-                    ->where(function ($imgLinks) use ($validGroup){
-                    $imgLinks->whereIn('group', $validGroup)
+                    ->where(function ($segImg) use ($validGroup){
+                    $segImg->whereIn('group', $validGroup)
                             ->orWhereNull('group');
                     })
                     ->orderBy('group', 'desc')
@@ -533,21 +467,10 @@ class ImageController extends SimpleController
                     ->get();
 
         foreach ($segImg as $img) {
-            $table = $img->toArray();
-            $imgRate = $table["cprs_rate"];
-            $groupRate = $table["group"]["seg_cprs_rate"];
-            if(is_null($groupRate)){
-                $publicGrp = $classMapper->staticMethod('group', 'where', 'id', 1)->first();
-                $groupRate = $publicGrp->bb_cprs_rate;
-            }
-            if($imgRate != $groupRate){
-                $this->createLightImgSeg($img->path,$groupRate);
-                $img->cprs_rate = $groupRate;
-                $img->save();
-            }
+            $this->createLightImgSeg($img->path);
         }
 
-        $result = $imgLinks->toArray();
+        $result = $segImg->toArray();
 
         // Be careful how you consume this data - it has not been escaped and contains untrusted user-supplied content.
         // For example, if you plan to insert it into an HTML DOM, you must escape it on the client side (or use client-side templating).
@@ -953,17 +876,70 @@ class ImageController extends SimpleController
         // For example, if you plan to insert it into an HTML DOM, you must escape it on the client side (or use client-side templating).
         return $sprunje->toResponse($response);
     }
-    protected function createLightImgBbox($imgName,$scale){
+    protected function createLightImgBbox($imgName){
+        /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
+        $classMapper = $this->ci->classMapper;
+
+        $img = ImgLinks::where ('path', '=', $imgName)
+                    ->with('group')
+                    ->first();
+        if(is_null($img)) {
+            error_log($imgName." img not found");
+            return;
+        }
+        $table = $img->toArray();
+        $imgRate = $table["cprs_rate"];
+        $groupRate = $table["group"]["bb_cprs_rate"];
+        if(is_null($groupRate)){
+            $publicGrp = $classMapper->staticMethod('group', 'where', 'id', 1)->first();
+            $groupRate = $publicGrp->bb_cprs_rate;
+        }
+            
         $source = "img/".$imgName;
         $dest = "img/light/".$imgName;
-        copy($source,$dest);
-        $this->createLightImg($dest,$dest,$imgName,($scale));
+        if($imgRate != $groupRate){
+            $this->createLightImg($source,$dest,$imgName,$groupRate);
+            $img->cprs_rate = $groupRate;
+            $img->save();
+        }
+        if(!file_exists($dest)){
+            $this->createLightImg($source,$dest,$imgName,$groupRate);
+            $img->cprs_rate = $groupRate;
+            $img->save();
+        }
+
     }
-    protected function createLightImgSeg($imgName,$scale){
+    protected function createLightImgSeg($imgName){
+        /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
+        $classMapper = $this->ci->classMapper;
+
+        $img = SegImage::where ('path', '=', $imgName)
+                    ->with('group')
+                    ->first();
+        if(is_null($img)) {
+            error_log($imgName." img not found");
+            return;
+        }
+        $table = $img->toArray();
+        $imgRate = $table["cprs_rate"];
+        $groupRate = $table["group"]["bb_cprs_rate"];
+        if(is_null($groupRate)){
+            $publicGrp = $classMapper->staticMethod('group', 'where', 'id', 1)->first();
+            $groupRate = $publicGrp->bb_cprs_rate;
+        }
+            
         $source = "img/".$imgName;
         $dest = "img/segmentation/light/".$imgName;
-        copy($source,$dest);
-        $this->createLightImg($dest,$dest,$imgName,($scale));
+        if($imgRate != $groupRate){
+            $this->createLightImg($source,$dest,$imgName,$groupRate);
+            $img->cprs_rate = $groupRate;
+            $img->save();
+        }
+        if(!file_exists($dest)){
+            $this->createLightImg($source,$dest,$imgName,$groupRate);
+            $img->cprs_rate = $groupRate;
+            $img->save();
+        }
     }
     protected function createLightImg($imgPath,$destPath,$imgName,$scale){
         $before = ini_get('memory_limit');
