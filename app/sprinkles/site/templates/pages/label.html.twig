@@ -44,9 +44,9 @@
 		</div>
 	</div>
 	<div class="column column-four">
-		<div id="preview" class="imgcontainer" ondragstart="return false;" ondrop="return false;" ontouchstart="label_onTouchStart(event)">
+		<div id="preview" class="imgcontainer" ondragstart="return false;" ondrop="return false;"  style="position: relative;overflow: auto;white-space: nowrap;height:100%;">
 			<img id='image' unselectable='on' onresize='onImgResize()' src=''  ontouchend="label_onTouchEnd(event)"
-			ontouchcancel="label_onTouchCancel(event)" ontouchmove="label_onTouchMove(event)"/>
+			ontouchcancel="label_onTouchCancel(event)" ontouchmove="label_onTouchMove(event)" ontouchstart="label_onTouchStart(event)"/>
 		</div>
 		
 	</div>

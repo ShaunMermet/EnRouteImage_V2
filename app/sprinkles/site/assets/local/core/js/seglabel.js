@@ -73,6 +73,21 @@ function label_loadRects(){
 function label_addImage(){
 	label_removeImage();
 	if(label_imgPathList.length>0){
+		var nativeWidth = label_imgPathList[label_imgPathListIndex].naturalWidth;
+		var nativeHeight = label_imgPathList[label_imgPathListIndex].naturalHeight;
+		var img = document.getElementById('image');
+		var imgContainer = document.getElementsByClassName('labelimg-container');
+		if(nativeWidth/nativeHeight > 16/9){
+			console.log("wide image");
+			img.style.height = "100%";
+			img.style.width = "";
+			imgContainer[0].style.height = "calc(100vh - 168px)";
+		}else{
+			console.log("classic image");
+			img.style.height = "";
+			img.style.width = "100%";
+			imgContainer[0].style.height = "";
+		}
 		label_srcName = label_imgPathList[label_imgPathListIndex].id;
 		var imgName = label_imgPathList[label_imgPathListIndex].path;
 		var imgToAdd = label_imgPath+imgName;
@@ -82,7 +97,7 @@ function label_addImage(){
 		document.getElementById("moreButton").style = "DISPLAY: none;";
 		document.getElementById("nextButton").style = "DISPLAY: initial;";
 
-		var img = document.getElementById('image');
+		
 
 		function loaded() {
 		  label_drawAreas(label_srcName);//initSelection();
@@ -432,12 +447,12 @@ function onDownHandler(e) {
 	var refPreview = document.getElementById('preview');
 	if(drawMode== true && element == null && refImage !== null){
 		if(e.type == "mousedown"){
-			lastX = (e.pageX - areaCanvas.offsetParent.offsetParent.offsetLeft)/cnvRatio;
-			lastY = (e.pageY - areaCanvas.offsetParent.offsetParent.offsetTop)/cnvRatio;
+			lastX = (e.pageX - areaCanvas.offsetParent.offsetParent.offsetLeft + refPreview.scrollLeft)/cnvRatio;
+			lastY = (e.pageY - areaCanvas.offsetParent.offsetParent.offsetTop + refPreview.scrollTop)/cnvRatio;
 		}
 		else if(e.type == "touchstart"){
-			lastX = (e.targetTouches[0].pageX - areaCanvas.offsetParent.offsetParent.offsetLeft)/cnvRatio;
-			lastY = (e.targetTouches[0].pageY - areaCanvas.offsetParent.offsetParent.offsetTop)/cnvRatio;
+			lastX = (e.targetTouches[0].pageX - areaCanvas.offsetParent.offsetParent.offsetLeft + refPreview.scrollLeft)/cnvRatio;
+			lastY = (e.targetTouches[0].pageY - areaCanvas.offsetParent.offsetParent.offsetTop + refPreview.scrollTop)/cnvRatio;
 		}
 		else{
 			console.log("no event recognized");
@@ -461,13 +476,14 @@ function onDownHandler(e) {
 function onMoveHandler(e) {
 
 	if (painting) {
+		var refPreview = document.getElementById('preview');
         if(e.type == "mousemove"){
-    		mouseX = e.pageX - areaCanvas.offsetParent.offsetParent.offsetLeft;
-        	mouseY = e.pageY - areaCanvas.offsetParent.offsetParent.offsetTop;
+    		mouseX = e.pageX - areaCanvas.offsetParent.offsetParent.offsetLeft + refPreview.scrollLeft;
+        	mouseY = e.pageY - areaCanvas.offsetParent.offsetParent.offsetTop + refPreview.scrollTop;
 		}
 		else if(e.type == "touchmove"){
-			mouseX = e.targetTouches[0].pageX - areaCanvas.offsetParent.offsetParent.offsetLeft;
-        	mouseY = e.targetTouches[0].pageY - areaCanvas.offsetParent.offsetParent.offsetTop;
+			mouseX = e.targetTouches[0].pageX - areaCanvas.offsetParent.offsetParent.offsetLeft + refPreview.scrollLeft;
+        	mouseY = e.targetTouches[0].pageY - areaCanvas.offsetParent.offsetParent.offsetTop + refPreview.scrollTop;
 		}
 
         console.log(" move : add x y");

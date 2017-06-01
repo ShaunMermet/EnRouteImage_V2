@@ -94,6 +94,21 @@ function label_loadRects(){
 function label_addImage(){
 	label_removeImage();
 	if(label_imgPathList.length>0){
+		var nativeWidth = label_imgPathList[label_imgPathListIndex].naturalWidth;
+		var nativeHeight = label_imgPathList[label_imgPathListIndex].naturalHeight;
+		var img = document.getElementById('image');
+		var imgContainer = document.getElementsByClassName('labelimg-container');
+		if(nativeWidth/nativeHeight > 16/9){
+			console.log("wide image");
+			img.style.height = "100%";
+			img.style.width = "";
+			imgContainer[0].style.height = "calc(100vh - 168px)";
+		}else{
+			console.log("classic image");
+			img.style.height = "";
+			img.style.width = "100%";
+			imgContainer[0].style.height = "";
+		}
 		label_srcName = label_imgPathList[label_imgPathListIndex].id;
 		var imgName = label_imgPathList[label_imgPathListIndex].path;
 		var imgToAdd = label_imgPath+imgName;
@@ -105,7 +120,6 @@ function label_addImage(){
 		updateNbrAreas();
 
 		///Load complete
-		var img = document.getElementById('image');
 		function loaded() {
 		  //draw rect
 		  label_drawRects(label_srcName);//initSelection();
@@ -172,13 +186,16 @@ function label_drawRects(idImage){
 			element.onmousemove = function(e){
 				onElementMoveHandler(e,$(this));
 			}
-			$(".rectangle").on('touchstart',function(e,data) {  
+			$(".rectangle").on('touchstart',function(e,data) {
+				e.preventDefault();  
 				onElementDownHandler(e,$(this));
 			});
 			$(".rectangle").on('touchmove',function(e,data) {
+				e.preventDefault();  
 				onMoveHandler(e); 
 			});
 			$(".rectangle").on('touchend',function(e,data) { 
+				e.preventDefault();  
 				resizeMode = false;
 				elemMoveMode = false;
 				element = null;
@@ -410,7 +427,6 @@ function label_initDraw() {
 
 /////  TOUCH  ////////////////////////////
 function label_onTouchStart(e){
-	console.log("touchstart");
 	if(!moveMode)
 		e.preventDefault();
 	onClickHandler(e);
@@ -419,23 +435,19 @@ function label_onTouchStart(e){
 function label_onTouchEnd(e){
 	if(!moveMode)
 		e.preventDefault();
-	console.log("touchend");
 	onUpHandler(e);
 }
 function label_onTouchCancel(e){
 	e.preventDefault();
-	console.log("touchcancel");
 }
 function label_onTouchMove(e){
 	if(!moveMode)
 		e.preventDefault();
 	onMoveHandler(e);
-	console.log("touchmove");
 }
 ///////////////////////////////////////////
 
 function onMoveHandler(e) {
-	
 	var refImage = document.getElementById('image');
 	var refPreview = document.getElementById('preview');
 	
@@ -449,11 +461,11 @@ function onMoveHandler(e) {
 
 		
 			if(e.type == "mousemove"){
-				var pageX = e.pageX;
+				var pageX = e.pageX + refPreview.scrollLeft;
 				var pageY = e.pageY;
 			}
 			else if(e.type == "touchmove" && e.targetTouches){
-				var pageX = e.targetTouches[0].pageX;
+				var pageX = e.targetTouches[0].pageX + refPreview.scrollLeft;
 				var pageY = e.targetTouches[0].pageY;
 			}
 			else{
@@ -521,11 +533,11 @@ function resizeElement(e, element){
 	var refImage = document.getElementById('image');
 	var refPreview = document.getElementById('preview');
 	if(e.type == "mousemove"){
-		var pageX = e.pageX;
+		var pageX = e.pageX + refPreview.scrollLeft;
 		var pageY = e.pageY;
 	}
 	else if(e.type == "touchmove"){
-		var pageX = e.originalEvent.targetTouches[0].pageX;
+		var pageX = e.originalEvent.targetTouches[0].pageX + refPreview.scrollLeft;
 		var pageY = e.originalEvent.targetTouches[0].pageY;
 	}
 	else{
@@ -630,11 +642,11 @@ function onDownHandler(e) {
 	var refPreview = document.getElementById('preview');
 	if(drawMode== true && element == null && refImage !== null){
 		if(e.type == "mousedown"){
-			var pageX = e.pageX;
+			var pageX = e.pageX + refPreview.scrollLeft;
 			var pageY = e.pageY;
 		}
 		else if(e.type == "touchstart"){
-			var pageX = e.targetTouches[0].pageX;
+			var pageX = e.targetTouches[0].pageX + refPreview.scrollLeft;
 			var pageY = e.targetTouches[0].pageY;
 		}
 		else{
@@ -682,18 +694,7 @@ function onDownHandler(e) {
 		element.onmousemove = function(e){
 			onElementMoveHandler(e,$(this));
 		}
-		$(".rectangle").on('touchstart',function(e,data) {  
-			onElementDownHandler(e,$(this));
-		});
-		$(".rectangle").on('touchmove',function(e,data) {
-			onMoveHandler(e); 
-		});
-		$(".rectangle").on('touchend',function(e,data) { 
-			console.log("element touchend");
-			resizeMode = false;
-			elemMoveMode = false;
-			element = null;
-		});
+		
 
 	}
 }
@@ -710,6 +711,22 @@ function onUpHandler(e) {
 			element = null;
 		}
 		canvas.style.cursor = "default";
+
+		$(".rectangle").on('touchstart',function(e,data) {
+			e.preventDefault();  
+			onElementDownHandler(e,$(this));
+		});
+		$(".rectangle").on('touchmove',function(e,data) {
+			e.preventDefault();
+			onMoveHandler(e); 
+		});
+		$(".rectangle").on('touchend',function(e,data) {
+			onClickHandler(e);
+			e.preventDefault(); 
+			resizeMode = false;
+			elemMoveMode = false;
+			element = null;
+		});
 	}
 	resizeMode = false;
 	elemMoveMode = false;
@@ -726,7 +743,7 @@ function onElementDownHandler(e,selection){
 			var pageY = e.pageY;
 		}
 		else if(e.type == "touchstart"){
-			var offsetX = e.originalEvent.targetTouches[0].pageX - e.originalEvent.currentTarget.offsetLeft - refPreview.parentElement.offsetLeft;
+			var offsetX = e.originalEvent.targetTouches[0].pageX - e.originalEvent.currentTarget.offsetLeft - refPreview.parentElement.offsetLeft  + refPreview.scrollLeft;
 			var offsetY = e.originalEvent.targetTouches[0].pageY - e.originalEvent.currentTarget.offsetTop - refPreview.parentElement.offsetTop;
 			var reactiveLength = parseInt(selection.css('borderLeftWidth')) +10;
 			var pageX = e.originalEvent.targetTouches[0].pageX;

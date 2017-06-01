@@ -37,10 +37,10 @@
 		</div>
 	</div>
 	<div class="column column-four">
-			<div id="preview" class="imgcontainer" ondragstart="return false;" ondrop="return false;" style="position: relative;">
+			<div id="preview" class="imgcontainer" ondragstart="return false;" ondrop="return false;" style="position: relative;overflow: auto;white-space: nowrap;height:100%;">
 				<img id='image' unselectable='on' src=''/>
-				<canvas id="lineCanvas" style="position:absolute;top: 0px;left: 0px;width:100%;height:100%;"></canvas>
-				<canvas id="areaCanvas" style="position:absolute;top: 0px;left: 0px;width:100%;height:100%;" ontouchstart="label_onTouchStart(event)" ontouchend="label_onTouchEnd(event)"
+				<canvas id="lineCanvas" style="position:absolute;top: 0px;left: 0px;"></canvas>
+				<canvas id="areaCanvas" style="position:absolute;top: 0px;left: 0px;" ontouchstart="label_onTouchStart(event)" ontouchend="label_onTouchEnd(event)"
 			ontouchcancel="label_onTouchCancel(event)" ontouchmove="label_onTouchMove(event)"></canvas>
 			</div>
 	</div>

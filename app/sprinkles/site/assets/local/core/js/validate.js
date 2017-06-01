@@ -80,13 +80,26 @@ function validate_addImage(){
 		document.getElementById("ValidateButton").style = "DISPLAY: none;";
 		return;
 	}
+	var nativeWidth = validate_imgPathList[validate_imgPathListIndex].naturalWidth;
+	var nativeHeight = validate_imgPathList[validate_imgPathListIndex].naturalHeight;
+	var img = document.getElementById('image');
+	var imgContainer = document.getElementsByClassName('labelimg-container');
+	if(nativeWidth/nativeHeight > 16/9){
+		console.log("wide image");
+		img.style.height = "100%";
+		img.style.width = "";
+		imgContainer[0].style.height = "calc(100vh - 168px)";
+	}else{
+		console.log("classic image");
+		img.style.height = "";
+		img.style.width = "100%";
+		imgContainer[0].style.height = "";
+	}
 	validate_srcId = validate_imgPathList[validate_imgPathListIndex].id;
 	var imgName = validate_imgPathList[validate_imgPathListIndex].path;
 	var imgToAdd = validate_imgPath+imgName;
 	document.getElementById('image').src = imgToAdd;//$('#preview').html("<img id='image' unselectable='on' src='"+imgToAdd+"' />")
 	
-	var img = document.getElementById('image');
-
 	function loaded() {
 	  //alert('loaded')
 	  validate_drawRects(validate_srcId);//initSelection();
