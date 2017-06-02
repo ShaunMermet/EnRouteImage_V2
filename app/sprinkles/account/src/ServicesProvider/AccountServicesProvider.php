@@ -19,7 +19,7 @@ use UserFrosting\Sprinkle\Account\Authenticate\AuthGuard;
 use UserFrosting\Sprinkle\Account\Authorize\AuthorizationManager;
 use UserFrosting\Sprinkle\Account\Log\UserActivityDatabaseHandler;
 use UserFrosting\Sprinkle\Account\Log\UserActivityProcessor;
-use UserFrosting\Sprinkle\Account\Model\User;
+use UserFrosting\Sprinkle\Site\Model\User;
 use UserFrosting\Sprinkle\Account\Repository\PasswordResetRepository;
 use UserFrosting\Sprinkle\Account\Repository\VerificationRepository;
 use UserFrosting\Sprinkle\Account\Twig\AccountExtension;

@@ -1,12 +1,12 @@
 # Fortress
 
-[![Join the chat at https://gitter.im/alexweissman/UserFrosting](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/alexweissman/UserFrosting?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Join the chat at https://chat.userfrosting.com/channel/support](https://demo.rocket.chat/images/join-chat.svg)](https://chat.userfrosting.com/channel/support)
 
 [![Click here to lend your support to: UserFrosting: A secure, modern user management system for PHP and make a donation at pledgie.com !](https://pledgie.com/campaigns/29583.png?skin_name=chrome)](https://pledgie.com/campaigns/29583)
 
 ### By [Alex Weissman](https://alexanderweissman.com)
 
-Copyright (c) 2015-2016
+Copyright (c) 2015-2017
 
 A schema-driven system for elegant whitelisting, transformation and validation of user input on both the client and server sides from a unified set of rules.
 
@@ -23,11 +23,11 @@ Sounds simple, right?  Unfortunately, even experienced developers often slip up,
 
 Part of the problem is that this kind of filtering must be done at every point in the application where the user can submit raw data to the server.  A modern web application might accept hundreds of different types of POST requests, and it can become extremely tedious to code the rules for each request manually.  Much of this work must also be done on both the client side (for user experience) and the server side (for security).
 
-Fortress solves this problem by providing a uniform interface for validating raw user input on both the client side (in Javascript) and on the server side (in PHP) using a single unified set of rules.  All you have to do is create a **request schema**, which defines what fields you're expecting the user to submit, and [rules](https://github.com/alexweissman/wdvss) for how to handle the contents of those fields.  For example, you might want to check that an email address is well-formed.  The request schema, which is simply a JSON document, makes it easy to manipulate these rules in one place.
+Fortress solves this problem by providing a uniform interface for validating raw user input on both the client side (in Javascript) and on the server side (in PHP) using a single unified set of rules.  All you have to do is create a **request schema**, which defines what fields you're expecting the user to submit, and [rules](https://github.com/userfrosting/wdvss) for how to handle the contents of those fields.  For example, you might want to check that an email address is well-formed.  The request schema, which is simply a JSON document, makes it easy to manipulate these rules in one place.
 
 The request schema can be applied on the server side to received request data, but also be transformed to formats compatible with client-side validation libraries such as [the jQuery Validation plugin](https://jqueryvalidation.org/), making it easy to perform client- and server-side validation without having to write every rule twice.
 
-An example request schema, written using the [WDVSS standard](https://github.com/alexweissman/wdvss):
+An example request schema, written using the [WDVSS standard](https://github.com/userfrosting/wdvss):
 
 **schema.json**
 
@@ -101,7 +101,7 @@ An example request schema, written using the [WDVSS standard](https://github.com
 
 ## Dependencies
 
-- PHP 5.4+
+- PHP 5.6+
 - [Valitron (server-side validation)](https://github.com/vlucas/valitron)
 - [HTML Purifier](https://github.com/ezyang/htmlpurifier)
 
@@ -115,8 +115,8 @@ An example request schema, written using the [WDVSS standard](https://github.com
 ```
 {
     "require": {
-        "php": ">=5.4.0",
-        "userfrosting/fortress": "2.0"
+        "php": ">=5.6.0",
+        "userfrosting/fortress": "^4.0.0"
     }
 }
 ```
@@ -129,14 +129,12 @@ and running `composer install`.
 
 ### Translator object
 
-Fortress requires a `MessageTranslator` (see [i18n](https://github.com/userfrosting/i18n)) object to translate message tokens that may appear in rules:
+Fortress requires a `MessageTranslator` (see [i18n](https://github.com/userfrosting/i18n)) object to translate message keys that may appear in rules:
 
 ```
-// Create a message translator
-$translator = new UserFrosting\I18n\MessageTranslator();
-// Set the translation paths
-$translator->setTranslationTable("locale/en_US.php");
-$translator->setDefaultTable("locale/en_US.php");
+$translator = new \UserFrosting\I18n\MessageTranslator();
+$translator->setPaths("locale/");
+$translator->loadLocaleFiles("en_US");
 ```
 
 ### Request schema
@@ -220,11 +218,11 @@ print_r($clientVal->rules());
 echo "</pre>";
 ```
 
-### Message tokens
+### Message keys
 
-The `message` for a rule can be either a plain string, or a [translatable message token](https://github.com/userfrosting/i18n).
+The `message` for a rule can be either a plain string, or a [translatable message key](https://github.com/userfrosting/i18n).
 
-In the definitions of translatable message tokens, the keyword "self" is reserved to refer to the name of the field being validated.  Thus, a message like this:
+In the definitions of translatable message keys, the keyword "self" is reserved to refer to the name of the field being validated.  Thus, a message like this:
 
 "MIN_LENGTH" => "The field '{{self}}' must be at least {{min}} characters long"
 

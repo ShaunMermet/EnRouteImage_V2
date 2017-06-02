@@ -8,6 +8,7 @@
  * @package UserFrosting
  * @link http://www.userfrosting.com/components/#i18n
  * @author @X-Anonymous-Y
+ *
  */
 
 return [
@@ -58,6 +59,7 @@ return [
     "SLUG"                              => "Schnecke",
     "SLUG_CONDITION"                    => "Schnecke/Bedingungen",
     "STATUS"                            => "Status",
+    "SUGGEST"                           => "Vorschlagen",
 
     "UNKNOWN"                           => "Unbekannt",
 
@@ -66,7 +68,7 @@ return [
     "ACTIVATE"                          => "Aktivieren",
     "ACTIVE"                            => "Aktiv",
     "ADD"                               => "Hinzufügen",
-    "CANCEL"                            => "Stornieren",
+    "CANCEL"                            => "Abbrechen",
     "CONFIRM"                           => "Bestätigen",
     "CREATE"                            => "Erstellen",
     "DELETE"                            => "Löschen",

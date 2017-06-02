@@ -69,8 +69,9 @@
             ]
         ],
         'debug' => [
-            'twig' => false,
-            'smtp' => true
+            'queries' => false,
+            'smtp' => true,
+            'twig' => false
         ],
         'mail'    => [
             'mailer'     => 'smtp',     // Set to one of 'smtp', 'mail', 'qmail', 'sendmail'
@@ -82,6 +83,7 @@
             'password'   => getenv('SMTP_PASSWORD') ?: null,
             'smtp_debug' => 4,
             'message_options' => [
+                'CharSet' => 'UTF-8',
                 'isHtml' => true,
                 'Timeout' => 15
             ]

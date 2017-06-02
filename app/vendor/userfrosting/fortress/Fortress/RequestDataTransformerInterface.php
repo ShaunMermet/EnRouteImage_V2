@@ -1,26 +1,30 @@
 <?php
+/**
+ * UserFrosting (http://www.userfrosting.com)
+ *
+ * @link      https://github.com/userfrosting/fortress
+ * @copyright Copyright (c) 2013-2017 Alexander Weissman
+ * @license   https://github.com/userfrosting/fortress/blob/master/licenses/UserFrosting.md (MIT License)
+ */
+namespace UserFrosting\Fortress;
 
 /**
  * RequestDataTransformer Interface
  *
  * Perform a series of transformations on a set of data fields, as specified by a RequestSchema.
  *
- * @package userfrosting/fortress
- * @author Alex Weissman
- * @link https://github.com/userfrosting/fortress
- * @license MIT
+ * @author Alexander Weissman
+ * @link https://alexanderweissman.com
  */
-namespace UserFrosting\Fortress;
-
 interface RequestDataTransformerInterface
-{   
+{
     /**
      * Set the schema for this transformer, as a valid RequestSchema object.
      *
      * @param RequestSchema $schema A RequestSchema object, containing the transformation rules.
-     */    
+     */
     public function setSchema($schema);
-    
+
     /**
      * Process each field in the specified data array, applying transformations in the specified order.
      *
@@ -28,14 +32,14 @@ interface RequestDataTransformerInterface
      * Also, set any default values for unspecified fields.
      *
      * @param array $data The array of data to be transformed.
-     * @param string $on_unexpected_var[optional] Determines what to do when a field is encountered that is not in the schema.  Set to one of:
+     * @param string $onUnexpectedVar[optional] Determines what to do when a field is encountered that is not in the schema.  Set to one of:
      * "allow": Treat the field as any other, allowing the value through.
      * "error": Raise an exception.
      * "skip" (default): Quietly ignore the field.  It will not be part of the transformed data array.
      * @return array The array of transformed data, mapping field names => values.
      */
-    public function transform($data, $on_unexpected_var);
-    
+    public function transform($data, $onUnexpectedVar);
+
     /**
      * Transform a raw field value.
      *
@@ -43,5 +47,5 @@ interface RequestDataTransformerInterface
      * @param string $value The value to be transformed.
      * @return string The transformed value.
      */
-    public function transformField($name, $value);    
+    public function transformField($name, $value);
 }

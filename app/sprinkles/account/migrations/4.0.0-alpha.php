@@ -5,7 +5,7 @@
     use UserFrosting\Sprinkle\Account\Model\Group;
     use UserFrosting\Sprinkle\Account\Model\Permission;
     use UserFrosting\Sprinkle\Account\Model\Role;
-    use UserFrosting\Sprinkle\Account\Model\User;
+    use UserFrosting\Sprinkle\Site\Model\User;
     use UserFrosting\Sprinkle\Account\Util\Password;
 
     /**

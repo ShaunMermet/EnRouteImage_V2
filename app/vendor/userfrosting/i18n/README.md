@@ -7,13 +7,13 @@ The I18n module handles translation tasks for UserFrosting.  The `MessageTransla
 ## Basic usage
 ### Step 1 - Set up language file(s).
 
-A language file returns an array mapping _language keys_ to _localized messages_.  Messages may optionally have placeholders.  For example:
+A language file returns an array mapping _message keys_ to _localized messages_.  Messages may optionally have placeholders.  For example:
 
 **locale/es_ES/main.php**
 
 ```
 return array(
-    //LANGUAGE_KEY => Localized message
+    //MESSAGE_KEY => Localized message
 	"ACCOUNT_SPECIFY_USERNAME" => "Introduce tu nombre de usuario.",
 	"ACCOUNT_SPECIFY_DISPLAY_NAME" => "Introduce tu nombre público.",
 	"ACCOUNT_USER_CHAR_LIMIT" => "Tu nombre de usuario debe estar entre {{min}} y {{max}} caracteres de longitud."
@@ -263,7 +263,7 @@ echo $translator->translate("NB_HUNGRY_CATS", ['nb': 5]); // Return "5 hungry ca
 ```
 
 ### The `&` placeholder
-When a placeholder name starts with the `&` character in translation files or the value of a placeholder starts with this same `&` character, it tells the translator to directly replace the placeholder with the right language key (if found). Note that this is CASE SENSITIVE and, as with the other handles, all placeholders defined in the main translation function are passed to all child translations. This is useful when you don't want to translate the same word over and over again in the same language file or with complex translations with plural values. Be caureful when using this with plurals as the plural value is passed to all child translation and can cause conflict (See [Example of a complex translation](#example-of-a-complex-translation)).
+When a placeholder name starts with the `&` character in translation files or the value of a placeholder starts with this same `&` character, it tells the translator to directly replace the placeholder with the message mapped by that message key (if found). Note that this is CASE SENSITIVE and, as with the other handles, all placeholders defined in the main translation function are passed to all child translations. This is useful when you don't want to translate the same word over and over again in the same language file or with complex translations with plural values. Be caureful when using this with plurals as the plural value is passed to all child translation and can cause conflict (See [Example of a complex translation](#example-of-a-complex-translation)).
 
 Example:
 ```

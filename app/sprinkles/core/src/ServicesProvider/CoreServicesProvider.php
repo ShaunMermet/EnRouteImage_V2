@@ -288,6 +288,23 @@ class CoreServicesProvider
             // Start Eloquent
             $capsule->bootEloquent();
 
+            if ($config['debug.queries']) {
+                $logger = $c->queryLogger;
+
+                foreach ($config['db'] as $name => $dbConfig) {
+                    $capsule->connection($name)->enableQueryLog();
+
+                    // Register listener
+                    $capsule->connection($name)->listen(function ($query) use ($logger) {
+                        $logger->debug("Query executed on database [{$query->connectionName}]:", [
+                            'query'    => $query->sql,
+                            'bindings' => $query->bindings,
+                            'time'     => $query->time . ' ms'
+                        ]);
+                    });
+                }
+            }
+
             return $capsule;
         };
 
@@ -448,6 +465,26 @@ class CoreServicesProvider
         };
 
         /**
+         * Laravel query logging with Monolog.
+         *
+         * Extend this service to push additional handlers onto the 'query' log stack.
+         */
+        $container['queryLogger'] = function ($c) {
+            $logger = new Logger('query');
+
+            $logFile = $c->locator->findResource('log://queries.log', true, true);
+
+            $handler = new StreamHandler($logFile);
+
+            $formatter = new MixedFormatter(null, null, true);
+
+            $handler->setFormatter($formatter);
+            $logger->pushHandler($handler);
+
+            return $logger;
+        };
+
+        /**
          * Override Slim's default router with the UF router.
          */
         $container['router'] = function ($c) {
@@ -578,6 +615,7 @@ class CoreServicesProvider
 
             if ($c->config['debug.twig']) {
                 $twig->enableDebug();
+                $view->addExtension(new \Twig_Extension_Debug());
             }
 
             // Register the Slim extension with Twig

@@ -1,22 +1,27 @@
 <?php
+/**
+ * UserFrosting (http://www.userfrosting.com)
+ *
+ * @link      https://github.com/userfrosting/i18n
+ * @copyright Copyright (c) 2013-2017 Alexander Weissman
+ * @license   https://github.com/userfrosting/i18n/blob/master/licenses/UserFrosting.md (MIT License)
+ */
+
+namespace UserFrosting\I18n;
+
+use Illuminate\Config\Repository;
+use UserFrosting\Support\Exception\FileNotFoundException;
 
 /**
  * MessageTranslator Class
  *
  * Translate message ids to a message in a specified language.
  *
- * @package   userfrosting/i18n
- * @link      https://github.com/userfrosting/i18n
+ * @author    Louis Charette
  * @author    Alexander Weissman
- * @license   https://github.com/userfrosting/UserFrosting/blob/master/licenses/UserFrosting.md (MIT License)
  */
-namespace UserFrosting\I18n;
-
-use Illuminate\Config\Repository;
-use UserFrosting\Support\Exception\FileNotFoundException;
-
-class MessageTranslator extends Repository {
-
+class MessageTranslator extends Repository
+{
     /**
      * @var array an array of paths to search for locale files.
      */
@@ -30,7 +35,7 @@ class MessageTranslator extends Repository {
     /**
      * @var array an array of paths to search for locale files.
      */
-    protected $_defaultPluralKey = 'plural';
+    protected $defaultPluralKey = 'plural';
 
     public function __construct(array $items = [])
     {
@@ -85,50 +90,52 @@ class MessageTranslator extends Repository {
      */
     public function mergeItems($key = null, $items)
     {
-        $target_values = array_get($this->items, $key);
-        if (is_array($target_values)) {
-            $modified_values = array_replace_recursive($target_values, $items);
+        $targetValues = array_get($this->items, $key);
+
+        if (is_array($targetValues)) {
+            $modifiedValues = array_replace_recursive($targetValues, $items);
         } else {
-            $modified_values = $items;
+            $modifiedValues = $items;
         }
 
-        array_set($this->items, $key, $modified_values);
+        array_set($this->items, $key, $modifiedValues);
     }
 
     /**
      * Recursively merge a locale file into this repository.
      *
-     * @param string $file_with_path
+     * @param string $fileWithPath
      */
-    public function mergeLocaleFile($file_with_path)
+    public function mergeLocaleFile($fileWithPath)
     {
-        if (!(file_exists($file_with_path) && is_readable($file_with_path))) {
-            throw new FileNotFoundException("The locale file '$file_with_path' could not be found or is not readable.");
+        if (!(file_exists($fileWithPath) && is_readable($fileWithPath))) {
+            throw new FileNotFoundException("The locale file '$fileWithPath' could not be found or is not readable.");
         } else {
             // Use null key to merge the entire locale array
-            $this->mergeItems(null, require $file_with_path);
+            $this->mergeItems(null, require $fileWithPath);
         }
     }
 
     /**
      * Load the locale items from all of the files.
      *
-     * @param string|array|null $locale_array
+     * @param string|array|null $localeArray
      */
-    public function loadLocaleFiles($locale_array = [])
+    public function loadLocaleFiles($localeArray = [])
     {
         //So we can accept strings argument also
-        if (!is_array($locale_array)) {
-            $locale_array = array($locale_array);
+        if (!is_array($localeArray)) {
+            $localeArray = array($localeArray);
         }
 
-        foreach ($locale_array as $locale) {
+        foreach ($localeArray as $locale) {
             // Search each locale path for default and environment-specific locale files
             foreach ($this->paths as $path) {
                 // Merge in default locale file
-                $default_files = $this->getLocaleFiles($path, $locale);
-                foreach ($default_files as $file_with_path) {
-                    $this->mergeLocaleFile($file_with_path);
+                $defaultFiles = $this->getLocaleFiles($path, $locale);
+
+                foreach ($defaultFiles as $fileWithPath) {
+                    $this->mergeLocaleFile($fileWithPath);
                 }
             }
         }
@@ -145,9 +152,9 @@ class MessageTranslator extends Repository {
     protected function getLocaleFiles($path, $locale)
     {
         // Find all the php files in the locale directory
-        $files_with_path = glob(rtrim($path, '/\\') . '/' . $locale . "/*.php");
+        $filesWithPath = glob(rtrim($path, '/\\') . '/' . $locale . "/*.php");
 
-        return $files_with_path;
+        return $filesWithPath;
     }
 
     /**
@@ -157,13 +164,13 @@ class MessageTranslator extends Repository {
      *
      * @return array List of locales found in current paths
      */
-    public function getAvailableLocales() {
-
+    public function getAvailableLocales()
+    {
         $availableLocales = [];
 
         foreach ($this->paths as $path) {
-            $full_paths = glob(rtrim($path, '/\\') . '/*', GLOB_ONLYDIR);
-            $locales = array_map('basename', $full_paths);
+            $fullPaths = glob(rtrim($path, '/\\') . '/*', GLOB_ONLYDIR);
+            $locales = array_map('basename', $fullPaths);
             $availableLocales = array_replace_recursive($availableLocales, $locales);
         }
 
@@ -173,22 +180,19 @@ class MessageTranslator extends Repository {
     /**
      * Translate the given message id into the currently configured language, substituting any placeholders that appear in the translated string.
      *
-     * Return the $message_id if not match is found
-     * @param string $message_id The id of the message id to translate. can use dot notation for array
+     * Return the $messageKey if not match is found
+     * @param string $messageKey The id of the message id to translate. can use dot notation for array
      * @param array|int $placeholders[optional] An optional hash of placeholder names => placeholder values to substitute.
      * @return string The translated message.
      */
-    public function translate($message_id, $placeholders = [])
+    public function translate($messageKey, $placeholders = [])
     {
-        // If we didn't find a match, we simply apply the placeholders to $message_id
-        if (!$this->has($message_id)) {
-
-            $message = $message_id;
-
+        // If we didn't find a match, we simply apply the placeholders to $messageKey
+        if (!$this->has($messageKey)) {
+            $message = $messageKey;
         } else {
-
             // Get the message
-            $message = $this->get($message_id);
+            $message = $this->get($messageKey);
 
             /* If the message is an array, we have to go deeper because an array can countain some special handles:
                 - @TRANSLATION
@@ -197,88 +201,75 @@ class MessageTranslator extends Repository {
                 - @PLURAL
             */
             if (is_array($message)) {
-
                 // Is the message array countain any plural rules (keys that are int)
                 if (!empty(array_filter(array_keys($message), 'is_int'))) {
 
                     // Now we can handle plurals using the @PLURAL to define the plural key. If it's not defined, we use the default one
-                    $plural_key = (isset($message['@PLURAL'])) ? $message['@PLURAL'] : $this->_defaultPluralKey;
+                    $pluralKey = (isset($message['@PLURAL'])) ? $message['@PLURAL'] : $this->defaultPluralKey;
 
                     // We try get the plural value and default to `1` if none is found
                     // We also allow for a shortcut using the second argument as a numeric value for simple strings.
-                    $plural_value = (isset($placeholders[$plural_key]) ? (int) $placeholders[$plural_key] : (!is_array($placeholders) && is_numeric($placeholders) ? $placeholders : null));
+                    $pluralValue = (isset($placeholders[$pluralKey]) ? (int) $placeholders[$pluralKey] : (!is_array($placeholders) && is_numeric($placeholders) ? $placeholders : null));
 
                     // Stop for a sec... We don't have a plural value, but before defaut to 1, we check if there's any @TRANSLATION handle
-                    if (is_null($plural_value) && (!$this->has($message_id . ".@TRANSLATION") || $this->get($message_id . ".@TRANSLATION") == null)) {
+                    if (is_null($pluralValue) && (!$this->has($messageKey . ".@TRANSLATION") || $this->get($messageKey . ".@TRANSLATION") == null)) {
 
                         //Default
-                        $plural_value = 1;
+                        $pluralValue = 1;
 
                     }
 
                     // If plural value is still null, we have found our message..!
-                    if (is_null($plural_value)) {
-
-                        $message = $this->get($message_id . ".@TRANSLATION");
-
+                    if (is_null($pluralValue)) {
+                        $message = $this->get($messageKey . ".@TRANSLATION");
                     } else {
 
                         // Ok great. Now we need the right plural form.
                         // N.B.: Plurals is based on phpBB and Mozilla work : https://developer.mozilla.org/en-US/docs/Mozilla/Localization/Localization_and_Plurals
-                        $key_found = false;
+                        $keyFound = false;
 
                         // 0 is handled differently. We use it so that "0 users" may be displayed as "No users".
-                        if ($plural_value == 0 && isset($message[0])) {
-
-                            $key_found = 0;
-
+                        if ($pluralValue == 0 && isset($message[0])) {
+                            $keyFound = 0;
                         } else {
 
-                            $use_plural_form = $this->get_plural_form($plural_value);
-                            if (isset($message[$use_plural_form]))
-                            {
+                            $usePluralForm = $this->getPluralForm($pluralValue);
+                            if (isset($message[$usePluralForm])) {
                                 // The key we need exists, so we use it.
-                                $key_found = $use_plural_form;
-                            }
-                            else
-                            {
+                                $keyFound = $usePluralForm;
+                            } else {
                                 // If the key we need doesn't exist, we use the previous one.
                                 $numbers = array_keys($message);
-                                foreach ($numbers as $num)
-                                {
-                                    if (is_int($num) && $num > $use_plural_form)
-                                    {
+                                foreach ($numbers as $num) {
+                                    if (is_int($num) && $num > $usePluralForm) {
                                         break;
                                     }
-                                    $key_found = $num;
+                                    $keyFound = $num;
                                 }
                             }
                         }
 
                         // If no key was found, use the last entry (because it is mostly the plural form).
-                        if ($key_found === false) {
+                        if ($keyFound === false) {
                             $numbers = array_keys($message);
-                            $key_found = end($numbers);
+                            $keyFound = end($numbers);
                         }
 
-                        $message = $message[$key_found];
+                        $message = $message[$keyFound];
 
                         // If we used the shortcut and $placeholders is a numeric value
                         // it must be passed back as an array for replacement in the main $message
                         if (is_numeric($placeholders) || empty($placeholders)) {
-                            $placeholders = array($plural_key => $plural_value);
+                            $placeholders = array($pluralKey => $pluralValue);
                         }
                     }
 
-                // @TRANSLATION => When $message_id is an array, this key is used. To use this, we can't have a plural value
-                } else if ($this->has($message_id . ".@TRANSLATION")) {
-
-                    $message = $this->get($message_id . ".@TRANSLATION");
-
-                // If we don't have plural AND a @TRANSLATION, we can't translate any translation key, so we will simply apply the placeholders to $message_id
+                // @TRANSLATION => When $messageKey is an array, this key is used. To use this, we can't have a plural value
+                } elseif ($this->has($messageKey . ".@TRANSLATION")) {
+                    $message = $this->get($messageKey . ".@TRANSLATION");
+                // If we don't have plural AND a @TRANSLATION, we can't translate any translation key, so we will simply apply the placeholders to $messageKey
                 } else {
-
-                    $message = $message_id;
+                    $message = $messageKey;
                 }
             }
         }
@@ -291,15 +282,15 @@ class MessageTranslator extends Repository {
 
         // Interpolate translatable placeholders values. This allows to
         // pre-translate placeholder which value starts with the `&` caracter
-        foreach ($placeholders as $name => $value){
-
+        foreach ($placeholders as $name => $value) {
             //We don't allow nested placeholders. They will return errors on the next lines
-            if (is_array($value)) { continue; }
+            if (is_array($value)) {
+                continue;
+            }
 
             // We test if the placeholder value starts the "&" caracter.
             // That means we need to translate that placeholder value
             if (substr($value, 0, 1) === '&') {
-
                 // Remove the current placeholder from the master $placeholder
                 // array, otherwise we end up in an infinite loop
                 $data = array_diff($placeholders, [$name => $value]);
@@ -332,19 +323,18 @@ class MessageTranslator extends Repository {
     * For some languages this is not as simple as for English.
     *
     * @param $number        int|float   The number we want to get the plural case for. Float numbers are floored.
-    * @param $force_rule    mixed   False to use the plural rule of the language package
+    * @param $forceRule    mixed   False to use the plural rule of the language package
     *                               or an integer to force a certain plural rule
     * @return   int     The plural-case we need to use for the number plural-rule combination
     */
-    public function get_plural_form($number, $force_rule = false)
+    public function getPluralForm($number, $forceRule = false)
     {
         $number = (int) $number;
 
         // Default to English rule (1) or the forced one
-        $rule = ($force_rule !== false) ? $force_rule : (($this->has('@PLURAL_RULE')) ? $this->get('@PLURAL_RULE') : 1);
+        $rule = ($forceRule !== false) ? $forceRule : (($this->has('@PLURAL_RULE')) ? $this->get('@PLURAL_RULE') : 1);
 
-        if ($rule > 15 || $rule < 0)
-        {
+        if ($rule > 15 || $rule < 0) {
             throw new OutOfRangeException("The rule number '$rule' must be between 0 and 16.");
         }
 
@@ -352,8 +342,7 @@ class MessageTranslator extends Repository {
         * The following plural rules are based on a list published by the Mozilla Developer Network & code from phpBB Group
         * https://developer.mozilla.org/en-US/docs/Mozilla/Localization/Localization_and_Plurals
         */
-        switch ($rule)
-        {
+        switch ($rule) {
             case 0:
                 /**
                 * Families: Asian (Chinese, Japanese, Korean, Vietnamese), Persian, Turkic/Altaic (Turkish), Thai, Lao

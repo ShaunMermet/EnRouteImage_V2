@@ -42,9 +42,7 @@
     </div>
     <div class="panel-body">
     <div class="labelimg-container">
-    	<div class="column column-one">
-    	</div>
-        <div class="column column-two" style="max-width: 100px;">
+    	<div class="column column-two" style="max-width: 100px;">
             <b>Group</b>
             <select class="js-basic-single export group" id="grpAssignEx" onchange="export_onComboChanged()"></select>
             <div  id="comboColumnGrp"></div>
@@ -81,7 +79,7 @@
     </div>
     <div class="panel-body">
     <div class="labelimg-container">
-        <div class="column column-one">
+        <div class="column column-two">
             <select class="js-basic-single" id="comboEdit" style="max-width:90%;" style="width: 150px;" onchange="onComboEditChanged()"></select>
             <br/>
             <div id="comboFeedback"></div>
@@ -134,7 +132,7 @@
 	<noscript><input type="hidden" name="redirect" value="https://blueimp.github.io/jQuery-File-Upload/"></noscript>
     <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
 	<div class="row fileupload-buttonbar">
-		<div class="col-lg-7">
+		<div class="col-lg-7" style="display: flex;justify-content: space-around;">
 			<!-- The fileinput-button span is used to style the file input field as button -->
 			<span class="btn btn-success fileinput-button">
 				<i class="glyphicon glyphicon-plus"></i>
@@ -149,8 +147,12 @@
 				<i class="glyphicon glyphicon-upload"></i>
 				<span>Start upload</span>
 			</button>
-            <select class="js-basic-single" id="grpAssignAll" style="max-width:90%;" style="width: 150px;" onchange="onGrpAssignAllChanged()"></select>
+            <span style="width:200px">
+                <select class="js-basic-single" id="grpAssignAll" style="max-width:90%;" style="width: 150px;" onchange="onGrpAssignAllChanged()"></select>
+            </span>
+            <span style="width:200px">
             <select class="js-basic-single" id="catAssignAll" style="max-width:90%;" style="width: 150px;" onchange="onCatAssignAllChanged()"></select>
+            </span>
 			<!-- The global file processing state -->
 			<span class="fileupload-process"></span>
 		</div>

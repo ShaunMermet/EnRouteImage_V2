@@ -52,8 +52,9 @@ return [
     ],
 
     "EMAIL" => [
-        "INVALID"   => "There is no account for '{{email}}'.",
-        "IN_USE"    => "Email '{{email}}' is already in use."
+        "INVALID"               => "There is no account for <strong>{{email}}</strong>.",
+        "IN_USE"                => "Email <strong>{{email}}</strong> is already in use.",
+        "VERIFICATION_REQUIRED" => "Email (verification required - use a real address!)"
     ],
 
     "EMAIL_OR_USERNAME" => "Username or email address",
@@ -66,7 +67,7 @@ return [
 
     "LOCALE" => [
         "ACCOUNT" => "The language and locale to use for your account",
-        "INVALID" => "'{{locale}}' is not a valid locale."
+        "INVALID" => "<strong>{{locale}}</strong> is not a valid locale."
     ],
 
     "LOGIN" => [
@@ -79,6 +80,8 @@ return [
     "LOGOUT" => "Logout",
 
     "NAME" => "Name",
+
+    "NAME_AND_EMAIL" => "Name and email",
 
     "PAGE" => [
         "LOGIN" => [
@@ -132,7 +135,7 @@ return [
         "SETTINGS"  => "Profile settings",
         "UPDATED"   => "Profile settings updated"
     ],
-    
+
     "REGISTER"      => "Register",
     "REGISTER_ME"   => "Sign me up",
 
@@ -162,8 +165,8 @@ return [
 
         "CHOOSE"        => "Choose a unique username",
         "INVALID"       => "Invalid username",
-        "IN_USE"        => "Username '{{user_name}}' is already in use.",
-        "NOT_AVAILABLE" => "Username '{{user_name}}' is not available. Choose a different name, or click 'suggest'."
+        "IN_USE"        => "Username <strong>{{user_name}}</strong> is already in use.",
+        "NOT_AVAILABLE" => "Username <strong>{{user_name}}</strong> is not available. Choose a different name, or click 'suggest'."
     ],
 
     "USER_ID_INVALID"       => "The requested user id does not exist.",

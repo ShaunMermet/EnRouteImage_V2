@@ -55,6 +55,11 @@ class PluginState
     protected $replace = false;
 
     /**
+     * @var bool $ignore
+     */
+    protected $ignore = false;
+
+    /**
      * Whether to merge the -dev sections.
      * @var bool $mergeDev
      */
@@ -91,6 +96,13 @@ class PluginState
      * @var bool $mergeExtraDeep
      */
     protected $mergeExtraDeep = false;
+
+    /**
+     * Whether to merge the scripts section.
+     *
+     * @var bool $mergeScripts
+     */
+    protected $mergeScripts = false;
 
     /**
      * @var bool $firstInstall
@@ -132,9 +144,11 @@ class PluginState
                 'require' => array(),
                 'recurse' => true,
                 'replace' => false,
+                'ignore-duplicates' => false,
                 'merge-dev' => true,
                 'merge-extra' => false,
                 'merge-extra-deep' => false,
+                'merge-scripts' => false,
             ),
             isset($extra['merge-plugin']) ? $extra['merge-plugin'] : array()
         );
@@ -145,9 +159,11 @@ class PluginState
             $config['require'] : array($config['require']);
         $this->recurse = (bool)$config['recurse'];
         $this->replace = (bool)$config['replace'];
+        $this->ignore = (bool)$config['ignore-duplicates'];
         $this->mergeDev = (bool)$config['merge-dev'];
         $this->mergeExtra = (bool)$config['merge-extra'];
         $this->mergeExtraDeep = (bool)$config['merge-extra-deep'];
+        $this->mergeScripts = (bool)$config['merge-scripts'];
     }
 
     /**
@@ -338,6 +354,16 @@ class PluginState
     }
 
     /**
+     * Should duplicate links be ignored?
+     *
+     * @return bool
+     */
+    public function ignoreDuplicateLinks()
+    {
+        return $this->ignore;
+    }
+
+    /**
      * Should the extra section be merged?
      *
      * By default, the extra section is not merged and there will be many
@@ -373,6 +399,19 @@ class PluginState
     public function shouldMergeExtraDeep()
     {
         return $this->mergeExtraDeep;
+    }
+
+
+    /**
+     * Should the scripts section be merged?
+     *
+     * By default, the scripts section is not merged.
+     *
+     * @return bool
+     */
+    public function shouldMergeScripts()
+    {
+        return $this->mergeScripts;
     }
 }
 // vim:sw=4:ts=4:sts=4:et:

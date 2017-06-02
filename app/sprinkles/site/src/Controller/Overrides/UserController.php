@@ -19,7 +19,7 @@ use UserFrosting\Fortress\RequestSchema;
 use UserFrosting\Fortress\ServerSideValidator;
 use UserFrosting\Fortress\Adapter\JqueryValidationAdapter;
 use UserFrosting\Sprinkle\Account\Model\Group;
-use UserFrosting\Sprinkle\Account\Model\User;
+use UserFrosting\Sprinkle\Site\Model\User;
 use UserFrosting\Sprinkle\Account\Util\Password;
 use UserFrosting\Sprinkle\Core\Controller\SimpleController;
 use UserFrosting\Sprinkle\Core\Facades\Debug;

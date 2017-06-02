@@ -8,10 +8,8 @@ $baseDir = dirname($vendorDir);
 return array(
     'Valitron' => array($vendorDir . '/vlucas/valitron/src'),
     'Twig_' => array($vendorDir . '/twig/twig/lib'),
-    'Prophecy\\' => array($vendorDir . '/phpspec/prophecy/src'),
     'Pimple' => array($vendorDir . '/pimple/pimple/src'),
     'HTMLPurifier' => array($vendorDir . '/ezyang/htmlpurifier/library'),
     'Doctrine\\Common\\Inflector\\' => array($vendorDir . '/doctrine/inflector/lib'),
     'Doctrine\\Common\\Collections\\' => array($vendorDir . '/doctrine/collections/lib'),
-    'Chumper\\Zipper' => array($vendorDir . '/chumper/zipper/src'),
 );

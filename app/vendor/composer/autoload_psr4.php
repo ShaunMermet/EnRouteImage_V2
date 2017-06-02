@@ -6,9 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'phpDocumentor\\Reflection\\' => array($vendorDir . '/phpdocumentor/reflection-common/src', $vendorDir . '/phpdocumentor/type-resolver/src', $vendorDir . '/phpdocumentor/reflection-docblock/src'),
     'Wikimedia\\Composer\\' => array($vendorDir . '/wikimedia/composer-merge-plugin/src'),
-    'Webmozart\\Assert\\' => array($vendorDir . '/webmozart/assert/src'),
     'UserFrosting\\Support\\' => array($vendorDir . '/userfrosting/support/Support'),
     'UserFrosting\\Sprinkle\\Site\\' => array($baseDir . '/sprinkles/site/src'),
     'UserFrosting\\Sprinkle\\Core\\' => array($baseDir . '/sprinkles/core/src'),
@@ -55,9 +53,7 @@ return array(
     'Illuminate\\Cache\\' => array($vendorDir . '/illuminate/cache'),
     'FastRoute\\' => array($vendorDir . '/nikic/fast-route/src'),
     'Dotenv\\' => array($vendorDir . '/vlucas/phpdotenv/src'),
-    'Doctrine\\Instantiator\\' => array($vendorDir . '/doctrine/instantiator/src/Doctrine/Instantiator'),
-    'DeepCopy\\' => array($vendorDir . '/myclabs/deep-copy/src/DeepCopy'),
     'Carbon\\' => array($vendorDir . '/nesbot/carbon/src/Carbon'),
-    'Birke\\' => array($vendorDir . '/birke/rememberme/src'),
+    'Birke\\Rememberme\\' => array($vendorDir . '/birke/rememberme/src'),
     'Alchemy\\Zippy\\' => array($vendorDir . '/alchemy/zippy/src'),
 );

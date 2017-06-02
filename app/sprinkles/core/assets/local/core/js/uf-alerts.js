@@ -26,7 +26,7 @@
  * == METHODS ==
  *
  * `fetch()`: gets messages from the server.
- * `push(type, message)`: adds a message of a specified type (danger, warning, info, success) to the internal collection of alerts.
+ * `push(options)`: adds a message of a specified type (danger, warning, info, success) to the internal collection of alerts.
  * `clear()`: removes all messages from the internal collection.
  * `render()`: renders the collection of alerts to the container.
  *
@@ -121,6 +121,9 @@
         return base.$T;
     };
 
+    /**
+     * Completely destroy the ufAlerts plugin on the element.
+     */
     Plugin.prototype.destroy = function () {
         var base = this;
         var $el = base.$T;
@@ -170,13 +173,13 @@
      * Push a given message to the current uf-alerts collection.
      *
      */
-    Plugin.prototype.push = function (type, message)
+    Plugin.prototype.push = function (options)
     {
         var base = this;
 
         base.messages.push({
-            "type"   : type,
-            "message": message
+            "type"   : options[0],
+            "message": options[1]
         });
 
         return base.$T;
@@ -240,10 +243,10 @@
 
             base.$T.html(alertHtml);
 
-            // Scroll back to top of page
-            if (base.options.scrollToTop) {
+            // Scroll to alert location if new alerts output
+            if (base.options.scrollToTop && alertHtml != "") {
                 $("html, body").animate({
-                    scrollTop: 0
+                    scrollTop: base.$T.offset().top
                 }, "fast");
             }
 

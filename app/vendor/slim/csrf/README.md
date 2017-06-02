@@ -40,12 +40,12 @@ $container['csrf'] = function ($c) {
 // If you are implementing per-route checks you must not add this
 $app->add($container->get('csrf'));
 
-$app->get('/foo', function ($req, $res, $args) {
+$app->get('/foo', function ($request, $response, $args) {
     // CSRF token name and value
     $nameKey = $this->csrf->getTokenNameKey();
     $valueKey = $this->csrf->getTokenValueKey();
-    $name = $req->getAttribute($nameKey);
-    $value = $req->getAttribute($valueKey);
+    $name = $request->getAttribute($nameKey);
+    $value = $request->getAttribute($valueKey);
 
     // Render HTML form which POSTs to /bar with two hidden input fields for the
     // name and value:
@@ -53,7 +53,7 @@ $app->get('/foo', function ($req, $res, $args) {
     // <input type="hidden" name="<?= $valueKey ?>" value="<?= $value ?>">
 });
 
-$app->post('/bar', function ($req, $res, $args) {
+$app->post('/bar', function ($request, $response, $args) {
     // CSRF protection successful if you reached
     // this far.
 });
@@ -75,11 +75,11 @@ $container['csrf'] = function ($c) {
     return new \Slim\Csrf\Guard;
 };
 
-$app->get('/api/myEndPoint',function ($req, $res, $args) {
+$app->get('/api/myEndPoint',function ($request, $response, $args) {
     $nameKey = $this->csrf->getTokenNameKey();
     $valueKey = $this->csrf->getTokenValueKey();
-    $name = $req->getAttribute($nameKey);
-    $value = $req->getAttribute($valueKey);
+    $name = $request->getAttribute($nameKey);
+    $value = $request->getAttribute($valueKey);
 
     $tokenArray = [
         $nameKey => $name,
@@ -89,11 +89,31 @@ $app->get('/api/myEndPoint',function ($req, $res, $args) {
     return $response->write(json_encode($tokenArray));
 })->add($container->get('csrf'));
 
-$app->post('/api/myEndPoint',function ($req, $res, $args) {
+$app->post('/api/myEndPoint',function ($request, $response, $args) {
     //Do my Things Securely!
 })->add($container->get('csrf'));
 
 $app->run();
+```
+
+### Manual usage
+
+If you are willing to use `Slim\Csrf\Guard` outside a `Slim\App` or not as a middleware, be careful to validate the storage:
+
+```php
+// Start PHP session
+session_start();
+
+$slimGuard = new \Slim\Csrf\Guard;
+$slimGuard->validateStorage();
+
+// Generate new tokens
+$csrfNameKey = $slimGuard->getTokenNameKey();
+$csrfValueKey = $slimGuard->getTokenValueKey();
+$keyPair = $slimGuard->generateToken();
+
+// Validate retrieved tokens
+$slimGuard->validateToken($_POST[$csrfNameKey], $_POST[$csrfValueKey]);
 ```
 
 ## Token persistence
@@ -101,6 +121,60 @@ $app->run();
 By default, `Slim\Csrf\Guard` will generate a fresh name/value pair after each request.  This is an important security measure for [certain situations](http://blog.ircmaxell.com/2013/02/preventing-csrf-attacks.html).  However, in many cases this is unnecessary, and [a single token throughout the user's session will suffice](https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)_Prevention_Cheat_Sheet#Synchronizer_.28CSRF.29_Tokens).  By using per-session requests it becomes easier, for example, to process AJAX requests without having to retrieve a new CSRF token (by reloading the page or making a separate request) after each request.  See issue #49.
 
 To use persistent tokens, set the sixth parameter of the constructor to `true`.  No matter what, the token will be regenerated after a failed CSRF check.  In this case, you will probably want to detect this condition and instruct your users to reload the page in their legitimate browser tab (or automatically reload on the next failed request).
+
+
+### Accessing the token pair in templates (Twig, etc)
+
+In many situations, you will want to access the token pair without needing to go through the request object.  In these cases, you can use `getTokenName()` and `getTokenValue()` directly on the `Guard` middleware instance.  This can be useful, for example in a [Twig extension](http://twig.sensiolabs.org/doc/advanced.html#creating-an-extension):
+
+```php
+class CsrfExtension extends \Twig_Extension
+{
+
+    /**
+     * @var \Slim\Csrf\Guard
+     */
+    protected $csrf;
+    
+    public function __construct(\Slim\Csrf\Guard $csrf)
+    {
+        $this->csrf = $csrf;
+    }
+
+    public function getGlobals()
+    {
+        // CSRF token name and value
+        $csrfNameKey = $this->csrf->getTokenNameKey();
+        $csrfValueKey = $this->csrf->getTokenValueKey();
+        $csrfName = $this->csrf->getTokenName();
+        $csrfValue = $this->csrf->getTokenValue();
+        
+        return [
+            'csrf'   => [
+                'keys' => [
+                    'name'  => $csrfNameKey,
+                    'value' => $csrfValueKey
+                ],
+                'name'  => $csrfName,
+                'value' => $csrfValue
+            ]
+        ];
+    }
+
+    public function getName()
+    {
+        return 'slim/csrf';
+    }
+}
+```
+
+Once you have registered your extension, you may access the token pair in any template:
+
+```twig
+<input type="hidden" name="{{csrf.keys.name}}" value="{{csrf.name}}">
+<input type="hidden" name="{{csrf.keys.value}}" value="{{csrf.value}}">
+```
+
 
 ## Handling validation failure
 

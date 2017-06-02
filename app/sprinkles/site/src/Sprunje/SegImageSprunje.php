@@ -9,6 +9,16 @@ class SegImageSprunje extends Sprunje
 {
     protected $name = 'SegImage';
 
+    protected $sortable = [
+        'validated_at'
+    ];
+
+    protected $filterable = [
+        'group',
+        'category',
+        'state'
+    ];
+
     /**
      * Set the initial query used by your Sprunje.
      */

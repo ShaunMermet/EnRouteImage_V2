@@ -4,7 +4,7 @@
     "description": "Configuration module for UserFrosting",
     "keywords": ["userfrosting", "config", "configuration"],
     "homepage": "https://github.com/userfrosting/config",
-    "license" : "MIT",    
+    "license" : "MIT",
     "authors" : [
         {
             "name": "Alexander Weissman",
@@ -12,9 +12,9 @@
         }
     ],
     "require": {
-        "illuminate/config": "5.2.*",
+        "illuminate/config": "^5.2",
         "php": ">=5.5.9",
-        "userfrosting/support": "1.0",
+        "userfrosting/support": "^4.0.0",
         "vlucas/phpdotenv": "2.2.0"
     },
     "autoload": {

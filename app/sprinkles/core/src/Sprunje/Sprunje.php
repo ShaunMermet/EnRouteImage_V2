@@ -13,6 +13,8 @@ use League\Csv\Writer;
 use Psr\Http\Message\ResponseInterface as Response;
 use UserFrosting\Sprinkle\Core\Facades\Debug;
 use UserFrosting\Sprinkle\Core\Util\ClassMapper;
+use UserFrosting\Support\Exception\BadRequestException;
+use Valitron\Validator;
 
 /**
  * Sprunje
@@ -37,6 +39,9 @@ abstract class Sprunje
         'format' => 'json'
     ];
 
+    /**
+     * Separator to use when splitting filter values to treat them as ORs.
+     */
     protected $orSeparator = '||';
 
     protected $query;
@@ -53,10 +58,27 @@ abstract class Sprunje
     {
         $this->classMapper = $classMapper;
 
+        // Validation on input data
+        $v = new Validator($options);
+        $v->rule('array', ['sorts', 'filters']);
+        $v->rule('regex', 'sorts.*', '/asc|desc/i');
+        $v->rule('regex', 'size', '/all|[0-9]+/i');
+        $v->rule('integer', 'page');
+        $v->rule('regex', 'format', '/json|csv/i');
+
+        // TODO: translated rules
+        if(!$v->validate()) {
+            $e = new BadRequestException();
+            foreach ($v->errors() as $idx => $field) {
+                foreach($field as $eidx => $error) {
+                    $e->addUserMessage($error);
+                }
+            }
+            throw $e;
+        }
+
         $this->options = array_replace_recursive($this->options, $options);
 
-        // TODO: validation on input data
-        
         $this->query = $this->baseQuery();
     }
 
@@ -109,7 +131,9 @@ abstract class Sprunje
         $collection->each(function ($item) use ($csv, $columnNames) {
             $row = [];
             foreach ($columnNames as $itemKey) {
-                if (isset($item[$itemKey])) {
+                // Only add the value if it is set and not an array.  Laravel's array_dot sometimes creates empty child arrays :(
+                // See https://github.com/laravel/framework/pull/13009
+                if (isset($item[$itemKey]) && !is_array($item[$itemKey])) {
                     $row[] = $item[$itemKey];
                 } else {
                     $row[] = '';
@@ -142,13 +166,13 @@ abstract class Sprunje
     public function getResults()
     {
         // Count unfiltered total
-        $total = $this->query->count();
+        $total = $this->count();
 
         // Apply filters
         $this->applyFilters();
 
         // Count filtered total
-        $totalFiltered = $this->query->count();
+        $totalFiltered = $this->countFiltered();
 
         // Apply sorts
         $this->applySorts();
@@ -205,6 +229,13 @@ abstract class Sprunje
     protected function applyFilters()
     {
         foreach ($this->options['filters'] as $name => $value) {
+            // Check that this filter is allowed
+            if (!in_array($name, $this->filterable)) {
+                $e = new BadRequestException();
+                $e->addUserMessage('VALIDATE.SPRUNJE.BAD_FILTER', ['name' => $name]);
+                throw $e;
+            }
+
             // Determine if a custom filter method has been defined
             $filterMethodName = 'filter'.studly_case($name);
 
@@ -213,6 +244,7 @@ abstract class Sprunje
             } else {
                 // Split value on separator for OR queries
                 $values = explode($this->orSeparator, $value);
+
                 $this->query = $this->query->where(function ($query) use ($name, $values) {
                     foreach ($values as $value) {
                         $query = $query->orLike($name, $value);
@@ -233,6 +265,13 @@ abstract class Sprunje
     protected function applySorts()
     {
         foreach ($this->options['sorts'] as $name => $direction) {
+            // Check that this sort is allowed
+            if (!in_array($name, $this->sortable)) {
+                $e = new BadRequestException();
+                $e->addUserMessage('VALIDATE.SPRUNJE.BAD_SORT', ['name' => $name]);
+                throw $e;
+            }
+
             // Determine if a custom filter method has been defined
             $methodName = 'sort'.studly_case($name);
 
@@ -282,4 +321,24 @@ abstract class Sprunje
      * Set the initial query used by your Sprunje.
      */
     abstract protected function baseQuery();
+
+    /**
+     * Get the unpaginated count of items (before filtering) in this query.
+     *
+     * @return int
+     */
+    protected function count()
+    {
+        return $this->query->count();
+    }
+
+    /**
+     * Get the unpaginated count of items (after filtering) in this query.
+     *
+     * @return int
+     */
+    protected function countFiltered()
+    {
+        return $this->query->count();
+    }
 }
