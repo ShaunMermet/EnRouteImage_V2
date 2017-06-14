@@ -1,5 +1,5 @@
-var validated_imgPath = "../../img/thumbnail/";
-var validated_segImgPath = "../../img/segmentation/thumbnail/";
+var validated_imgPath = "../img/thumbnail/";
+var validated_segImgPath = "../img/segmentation/thumbnail/";
 
 var dataHandler = {};
 
