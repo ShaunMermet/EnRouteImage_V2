@@ -855,3 +855,7 @@ ALTER TABLE `segimages` ADD `cprs_rate` INT NOT NULL DEFAULT '-1' COMMENT 'Rate 
 --------------------------------
 --- Changes for Beta 0.3.4 ----
 --------------------------------
+
+--------------------------------
+--- Changes for Beta 0.3.5 ----
+--------------------------------
