@@ -1,6 +1,13 @@
 {# This extend the same file from core to add links to the "home page" nav menu. #}
 {% extends "@account/components/default/main-nav.html.twig" %}
 
+{% block navbar_logo %}
+<a href="{{site.uri.public}}" class="navbar-brand">
+	<!-- logo for regular state and mobile devices -->
+  <span class="logo-lg"><img src="{{ assets.url('assets://local/core/img/LogoTitle.png') }}" style="max-width:150px;max-height:35px"></span>
+</a>
+{% endblock %}
+
 {% block main_nav %}
 	{% if checkAuthenticated() %}
 		{% if checkAccess('uri_label') %}

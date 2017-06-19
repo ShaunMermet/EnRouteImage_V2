@@ -7,18 +7,18 @@
     return [
         'address_book' => [
             'admin' => [
-                'name'  => 'Labelligent'
+                'name'  => ''
             ]
         ],    
         'debug' => [
-            'auth' => true
+            'auth' => false
         ],
         'site' => [
-            'author'    =>      'Labelligent',
+            'author'    =>      '',
             'title'     =>      'Labelligent',
             // URLs
             'uri' => [
-                'author' => 'http://enroute1.com/'
+                'author' => ''
             ],
             'registration' => [
                 'user_defaults' => [

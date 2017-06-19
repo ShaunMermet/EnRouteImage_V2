@@ -4,9 +4,9 @@
 {% block navbar_logo %}
   <a href="{{site.uri.public}}" class="logo">
   <!-- mini logo for sidebar mini 50x50 pixels -->
-  <span class="logo-mini"><img src="http://enroute1.com/wp-content/uploads/2016/09/favicon_b.ico" width="35" alt=""></span>
+  <span class="logo-mini"><img src="{{ assets.url('assets://local/core/img/LogoTitleSquare.png') }}" style="max-width:35px;max-height:35px"></span>
   <!-- logo for regular state and mobile devices -->
-  <span class="logo-lg"><img src="http://enroute1.com/wp-content/uploads/2016/09/favicon_b.ico" width="35" alt="">{{site.title}}</span>
+  <span class="logo-lg"><img src="{{ assets.url('assets://local/core/img/LogoTitle.png') }}" style="max-width:150px;max-height:35px"></span>
 </a>
 {% endblock %}
 
