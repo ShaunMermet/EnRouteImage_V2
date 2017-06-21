@@ -863,3 +863,15 @@ ALTER TABLE `segimages` ADD `cprs_rate` INT NOT NULL DEFAULT '-1' COMMENT 'Rate 
 --------------------------------
 --- Changes for Beta 0.3.6 ----
 --------------------------------
+
+--------------------------------
+--- Changes for Beta 0.3.7 ----
+--------------------------------
+
+--For Japanese categories (feature canceled)
+--ALTER TABLE `labelimgcategories` CHANGE `Category` `Category` CHAR(25) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL;
+--ALTER TABLE `segcategories` CHANGE `Category` `Category` CHAR(25) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL;
+
+
+--Possible bug correction
+--UPDATE `labelimglinks` SET `group`=1 WHERE `group`is NULL
