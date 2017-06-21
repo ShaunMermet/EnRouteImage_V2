@@ -229,23 +229,23 @@ class AreaController extends SimpleController
     public function getAreasByIds($request, $response, $args)
     {
         /** @var UserFrosting\Sprinkle\Account\Authenticate\Authenticator $authenticator */
-        $authenticator = $this->ci->authenticator;
-        if (!$authenticator->check()) {
-            $loginPage = $this->ci->router->pathFor('login');
-            return $response->withRedirect($loginPage, 400);
-        }
+    //    $authenticator = $this->ci->authenticator;
+    //    if (!$authenticator->check()) {
+    //        $loginPage = $this->ci->router->pathFor('login');
+    //        return $response->withRedirect($loginPage, 400);
+    //    }
 
         /** @var UserFrosting\Sprinkle\Account\Authorize\AuthorizationManager */
-        $authorizer = $this->ci->authorizer;
+    //    $authorizer = $this->ci->authorizer;
 
         /** @var UserFrosting\Sprinkle\Account\Model\User $currentUser */
-        $currentUser = $this->ci->currentUser;
+    //    $currentUser = $this->ci->currentUser;
 
         // Access-controlled page
-        if (!$authorizer->checkAccess($currentUser, 'uri_validate')) {
-            $loginPage = $this->ci->router->pathFor('login');
-           return $response->withRedirect($loginPage, 400);
-        }
+    //    if (!$authorizer->checkAccess($currentUser, 'uri_validate')) {
+    //        $loginPage = $this->ci->router->pathFor('login');
+    //       return $response->withRedirect($loginPage, 400);
+    //    }
 
         // GET parameters
         $params = $request->getQueryParams();
@@ -448,7 +448,8 @@ class AreaController extends SimpleController
 
         if (!empty($data))
         {
-           $rects= $data->rects;
+            $this->deleteAreas($data->dataSrc,TRUE);
+            $rects= $data->rects;
             foreach ($rects as $num => $rect) {//for each rectangle
                 $area = new ImgArea;
                 $area->source = $data->dataSrc;

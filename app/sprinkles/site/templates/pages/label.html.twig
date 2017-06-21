@@ -18,13 +18,13 @@
 		<div id="filler"></div>
 		<div id="leftMenu" style ="display: flex;flex-direction: column;">
 			<select class="js-basic-single" id="combo" style="max-width:90%;" style="width: 150px;"></select>
-			<button id="nextButton"class="button" type="button" onclick="label_onNextClicked()">Next image</button>
-			<button id="moreButton"class="button" type="button" onclick="label_onMoreClicked() " style="display:none;">More image</button>
-			<button id="drawButton" class="btn-mode" type="button"onclick="label_onDrawClicked()">Draw</button>
-			<button id="eraseButton"class="btn-mode" type="button" onclick="label_onEraseClicked()">Delete</button>
+			<button id="nextButton"class="button" type="button" onclick="label_onNextClicked()">{{translate("BUTTON.NEXT_IMAGE")}}</button>
+			<button id="moreButton"class="button" type="button" onclick="label_onMoreClicked() " style="display:none;">{{translate("BUTTON.MORE_IMAGE")}}</button>
+			<button id="drawButton" class="btn-mode" type="button"onclick="label_onDrawClicked()">{{translate("BUTTON.DRAW")}}</button>
+			<button id="eraseButton"class="btn-mode" type="button" onclick="label_onEraseClicked()">{{translate("BUTTON.DELETE")}}</button>
 			<!--<button id="moveButton"class="btn-mode" type="button" onclick="label_onMoveClicked()">Move</button>-->
-			<div id="imgCounter">No image</div>
-			<div id="value1" max-width= "100px"></div>
+			<div id="imgCounter" style="max-width: 100px">{{translate("FEEDBACK.NO_IMAGE")}}</div>
+			<div style="max-width: 100px">{{translate("LEGEND.LABEL.NBR_BBOX")}}<span id="value1"></span></div>
 			<div id="value2" max-width= "100px"></div>
 			<div id="value3" max-width= "100px"></div>
 			<div id="value4" max-width= "100px"></div>
@@ -35,15 +35,15 @@
 			<div id="value9" max-width= "100px"></div>
 			<br>
 			<!-- Rounded switch -->
-			<div>Edit</div>
-			<div id="editValue">Nbr images : </div>
+			<div>{{translate("LEGEND.EDIT")}}</div>
+			<div>{{translate("LEGEND.EDIT_NBR_IMAGE")}}<span id="editValue"></span></div>
 			<label class="switch" title="Edit images that has been tagged but not yet checked">
 			  <input type="checkbox" onchange ="label_onReworkClicked(this)">
 			  <div class="slider round"></div>
 			</label>
 		</div>
 	</div>
-	<div class="column column-four">
+	<div class="column column-four" id="columnFour">
 		<div id="preview" class="imgcontainer" ondragstart="return false;" ondrop="return false;"  style="position: relative;overflow: auto;white-space: nowrap;height:100%;">
 			<img id='image' unselectable='on' onresize='onImgResize()' src=''  ontouchend="label_onTouchEnd(event)"
 			ontouchcancel="label_onTouchCancel(event)" ontouchmove="label_onTouchMove(event)" ontouchstart="label_onTouchStart(event)"/>

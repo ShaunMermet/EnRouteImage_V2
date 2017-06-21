@@ -76,16 +76,19 @@ function label_addImage(){
 		var nativeWidth = label_imgPathList[label_imgPathListIndex].naturalWidth;
 		var nativeHeight = label_imgPathList[label_imgPathListIndex].naturalHeight;
 		var img = document.getElementById('image');
+		var columnFour = document.getElementById('columnFour');
 		var imgContainer = document.getElementsByClassName('labelimg-container');
 		if(nativeWidth/nativeHeight > 16/9){
 			console.log("wide image");
 			img.style.height = "100%";
 			img.style.width = "";
+			columnFour.style.width= "calc(100% - 110px)";
 			imgContainer[0].style.height = "calc(100vh - 168px)";
 		}else{
 			console.log("classic image");
 			img.style.height = "";
 			img.style.width = "100%";
+			columnFour.style.width= "100%";
 			imgContainer[0].style.height = "";
 		}
 		label_srcName = label_imgPathList[label_imgPathListIndex].id;
@@ -379,7 +382,7 @@ lastY = 0;
 
 
 function updateNbrAreas(){
-	document.getElementById('value1').innerHTML = "Areas : "+dataAreas.length;
+	document.getElementById('value1').innerHTML = dataAreas.length;
 	label_drawLegend(label_srcName);
 }	
 function label_initDraw(canvas) {
@@ -611,7 +614,7 @@ function label_getCountEdit(){
 	);
 }
 function label_updateEditNbr(data){
-	document.getElementById('editValue').innerHTML = "Nbr images :  "+data.pendingSegImg;
+	document.getElementById('editValue').innerHTML = data.pendingSegImg;
 }
 
 function label_onMoreClicked(){

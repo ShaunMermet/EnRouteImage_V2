@@ -748,4 +748,21 @@ class SiteController extends SimpleController
             }
         }
     }
+
+    public function setTranslate($request, $response, $args){
+
+        // Get parameters
+        $params = $request->getParsedBody();
+        $data = json_decode(json_encode($params), FALSE);
+
+
+        $config = $this->ci->config;
+        $config['site.locales.selector'] = $data->locale;
+
+
+        $translator = $this->ci->translator;
+        
+        return $this->ci->view->render($response, 'pages/index.html.twig');
+        
+    }
 }

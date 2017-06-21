@@ -580,3 +580,13 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
+
+
+
+
+
+.navbar-nav{
+    display: flex;
+    align-items: center;
+}

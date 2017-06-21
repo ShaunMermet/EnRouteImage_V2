@@ -163,7 +163,14 @@ $app->group('/freeimageNA', function () {
 
 });//->add('authGuard');
 
-//Overrides
+$app->group('/translate', function () {
+	$this->post('/set', 'UserFrosting\Sprinkle\Site\Controller\SiteController:setTranslate');
+
+});//->add('authGuard');
+
+//////////////////////////////////////////////////////////
+////////////      OVERRIDES     //////////////////////////
+//////////////////////////////////////////////////////////
 
 $app->group('/account', function () {
     $this->post('/register', 'UserFrosting\Sprinkle\Site\Controller\Overrides\AccountController:register');

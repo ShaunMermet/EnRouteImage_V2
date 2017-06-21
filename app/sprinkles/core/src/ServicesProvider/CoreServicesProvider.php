@@ -572,8 +572,19 @@ class CoreServicesProvider
                 throw new \UnexpectedValueException("The locale config is not a valid string.");
             }
 
+            $locale = locale_accept_from_http($_SERVER['HTTP_ACCEPT_LANGUAGE']);
+            
             // Load the base locale file(s) as specified in the configuration
             $locales = explode(',', $config['site.locales.default']);
+            // Load browser default
+            if($locale == 'ja' || $locale == 'ja_JP'){
+                //$config['site.locales.default'] = "en_US,ja_JP";
+                $locales = explode(',', "en_US,ja_JP");
+            }
+            // Load user selection
+            if($config['site.locales.selector']){
+                $locales = explode(',', "en_US,".$config['site.locales.selector']);
+            }
             foreach ($locales as $locale) {
 
                 // Make sure it's a valid string before loading

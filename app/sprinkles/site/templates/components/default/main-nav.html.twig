@@ -1,5 +1,5 @@
 {# This extend the same file from core to add links to the "home page" nav menu. #}
-{% extends "@account/components/default/main-nav.html.twig" %}
+{% extends "@core/components/default/main-nav.html.twig" %}
 
 {% block navbar_logo %}
 <a href="{{site.uri.public}}" class="navbar-brand">
@@ -30,5 +30,23 @@
 				<a href="{{site.uri.public}}/segment/validate">{{translate("SEG_VALIDATE")}}</a>
 			</li>
 		{% endif %}	
+    {% endif %}
+{% endblock %}
+
+{% block secondary_nav %}
+    {{parent()}}
+    {% if not checkAuthenticated() %}
+    	<li>
+            <a href="{{site.uri.public}}/account/sign-in" class="nav-highlight">{{translate("SIGNIN")}}</a>
+        </li>
+        <li>
+		<select class="js-basic-lang" style="display:none">
+		  <option value="en_US">English</option>
+		  <option value="ja_JP">日本語</option>
+		</select>
+		</li>
+		<div id="locale" data-locale={{translate("LOCALE.SAVE")}}></div>
+    {% else %}
+        {% include "components/user-card.html.twig" %}
     {% endif %}
 {% endblock %}
