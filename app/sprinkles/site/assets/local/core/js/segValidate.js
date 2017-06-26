@@ -7,15 +7,126 @@ var validate_srcId = 0;
 var validate_AreasList = [];
 var validate_currentRectangle = null;
 
-////////////GET IMG FROM SERVER//////
-validate_loadImages();
 
-function validate_loadImages(){
+///  COMBO    //////////////////
+//creating categories 
+
+var validate_catId = [];
+var validate_catText=[];
+var validate_catColor= [];
+
+
+
+function validate_loadCategories(){
 	// Fetch and render the categories
-	var url = site.uri.public + '/segImages/annotated';
+	var url = site.uri.public + '/segCategory/all';
 	$.ajax({
 	  type: "GET",
 	  url: url
+	})
+	.then(
+	    // Fetch successful
+	    function (data) {
+	        //var res = JSON.parse(data);
+	        var res = data.rows;
+				for(i = 0; i < res.length; i++){
+					validate_catId[i] = parseInt(res[i].id);
+					validate_catText[i] = res[i].Category;
+					validate_catColor[i] = res[i].Color;
+				}
+				validate_initCombo();
+				validate_loadGroups();
+	    },
+	    // Fetch failed
+	    function (data) {
+	        
+	    }
+	);
+}
+function validate_loadGroups(){
+	// Fetch the groups
+	var url = site.uri.public + '/api/groups/mygroups';
+	$.ajax({
+	  type: "GET",
+	  url: url
+	})
+	.then(
+	    // Fetch successful
+	    function (data) {
+	        var res = data.rows;
+        	validate_grpId = [];
+			validate_grpText = [];
+			for(i = 0; i < res.length; i++){
+				validate_grpId[i] = parseInt(res[i].id);
+				validate_grpText[i] = res[i].name;
+			}
+			validate_initComboGrp();
+			validate_loadImages();
+	    },
+	    // Fetch failed
+	    function (data) {
+	        
+	    }
+	);
+}
+
+function validate_initCombo(){
+	for (i = 0; i < validate_catId.length; i++) {
+		appendToCombo(validate_catText[i],validate_catId[i]);
+	}
+
+
+	function appendToCombo(category,type){
+		//console.log("creating "+category)
+		$("#combo").append("<option value=\""+type+"\">"+category+"</option>");
+		$("#combo2").append("<option value=\""+type+"\">"+category+"</option>");
+	}
+
+
+	$("#combo").select2({ width: '100px'});
+	$("#combo2").select2({allowClear: true});
+	$("#combo2").val(-1).trigger("change");
+}
+function validate_initComboGrp(){
+	for (i = 0; i < validate_grpId.length; i++) {
+		appendToCombo(validate_grpText[i],validate_grpId[i]);
+	}
+
+
+	function appendToCombo(text,value){
+		//console.log("creating "+category)
+		$("#combo3").append("<option value=\""+value+"\">"+text+"</option>");
+	}
+
+
+	$("#combo3").select2({width: '100px',placeholder: 'Select a group'});
+}
+///////////////////////////////
+
+
+////////////GET IMG FROM SERVER//////
+//validate_loadImages();
+validate_loadCategories();
+
+function validate_loadImages(){
+	// Fetch and render the categories
+	var combo2 = document.getElementById("combo2");
+	var imgCat;
+	if(combo2.selectedIndex == -1)
+		imgCat = null;
+	else
+		imgCat = combo2.options[combo2.selectedIndex].value;
+	var combo3 = document.getElementById("combo3");
+	var imgGrp;
+	imgGrp = combo3.options[combo3.selectedIndex].value;
+	var data= {};
+	data["catID"]=imgCat;
+	data["grpID"]=imgGrp;
+	var url = site.uri.public + '/segImages/annotated';
+	$.ajax({
+	  type: "GET",
+	  url: url,
+	  data: data
 	})
 	.then(
 	    // Fetch successful
@@ -24,6 +135,10 @@ function validate_loadImages(){
 	    		validate_imgPathList = data;//res;
 			}
 			else validate_imgPathList = [];
+			if(validate_imgPathList.length == 0){
+				document.getElementById('imgCounter').style = "DISPLAY: initial;";
+				updateNbrAreas();
+			}
 			validate_imgPathListIndex = 0;
 			validate_loadRects();
 	    },
@@ -111,7 +226,7 @@ function validate_addImage(){
 	  img.addEventListener('error', error)
 	}
 	
-	document.getElementById('imgCounter').innerHTML = "";//"Image "+(validate_imgPathListIndex+1)+" of "+validate_imgPathList.length;
+	document.getElementById('imgCounter').style = "DISPLAY: none;";//"Image "+(validate_imgPathListIndex+1)+" of "+validate_imgPathList.length;
 	document.getElementById("moreButton").style = "DISPLAY: none;";
 	document.getElementById("RejectButton").style = "DISPLAY: initial;";
 	document.getElementById("ValidateButton").style = "DISPLAY: initial;";
@@ -206,6 +321,8 @@ function validate_nextImage(){
 			//document.getElementById("ValidateButton").style = "DISPLAY: none;";
 			validate_loadImages();
 		}
+	}else{
+		validate_loadImages();
 	}
 }
 
@@ -290,7 +407,9 @@ function validate_onModalClicked(){
 	modal.style.display = "none";
 	validate_nextImage();
 }
-
+function validate_onNextClicked(){
+	validate_nextImage();
+}
 function validate_onMoreClicked(){
 	validate_loadImages();
 	console.log("Load more");
@@ -303,7 +422,7 @@ window.onbeforeunload = function(e) {
 };
 function updateNbrAreas(){
 	//var elements = document.getElementsByClassName("rectangle");
-	document.getElementById('value1').innerHTML = "Area(s) : "+validate_AreasList.length;
+	document.getElementById('value1').innerHTML = validate_AreasList.length;
 }
 window.onscroll = function(){
 	var top  = window.pageYOffset || document.documentElement.scrollTop;

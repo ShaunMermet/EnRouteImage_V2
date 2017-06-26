@@ -287,5 +287,13 @@ return [
     "USER_OR_EMAIL_INVALID" => "ユーザー名もしくはEmailが見つかりません",
     "USER_OR_PASS_INVALID"  => "ユーザー名もしくはパスワードが正しくありません",
 
-    "WELCOME" => "おかえりなさい, {{first_name}}"
+    "WELCOME" => "おかえりなさい, {{first_name}}",
+    "COMBOTITLE" => [
+        "CATEGORY"        => "イメージカテゴリー",
+        "GROUP"        => "イメージグループ",
+    ],
+    "COMBOPLACEHOLDER" => [
+        "NONE"        => "なし
+",
+    ]
 ];

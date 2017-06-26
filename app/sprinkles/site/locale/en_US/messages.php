@@ -135,5 +135,12 @@ return [
     ],
     "ERROR" => [
         "IMG_OUTDATED"        => "Sorry the image is outdated, you will be forward to the next one.",
+    ],
+    "COMBOTITLE" => [
+        "CATEGORY"        => "Image category",
+        "GROUP"        => "Image group",
+    ],
+    "COMBOPLACEHOLDER" => [
+        "NONE"        => "None",
     ]
 ];

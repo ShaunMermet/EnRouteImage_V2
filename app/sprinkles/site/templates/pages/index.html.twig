@@ -20,7 +20,10 @@
     <div class="column column-one" style="position:sticky;">
       <div id="filler"></div>
       <div id="leftMenu" style ="display: flex;flex-direction: column;">
+        <div style="max-width: 100px">{{translate("BB_LABEL_FULL")}}</div>
         <select class="js-basic-single" id="combo" style="max-width:90%;" style="width: 150px;"></select>
+        <div style="max-width: 100px">{{translate("COMBOTITLE.CATEGORY")}}</div>
+        <select class="js-basic-single" id="combo2" style="max-width:90%;" style="width: 150px;" data-placeholder={{translate("COMBOPLACEHOLDER.NONE")}}></select>
         <button id="nextButton"class="button" type="button" onclick="label_onNextClicked()">{{translate("BUTTON.NEXT_IMAGE")}}</button>
         <button id="moreButton"class="button" type="button" onclick="label_onMoreClicked()">{{translate("BUTTON.MORE_IMAGE")}}</button>
         <button id="drawButton" class="btn-mode" type="button"onclick="label_onDrawClicked()">{{translate("BUTTON.DRAW")}}</button>

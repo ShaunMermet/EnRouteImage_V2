@@ -8,9 +8,22 @@ var label_AreasList = [];
 
 ////////////GET IMG FROM SERVER//////
 label_getCountEdit();
-label_loadImages();
+
 function label_loadImages(){
 	label_imgPathList = [];
+	var combo2 = document.getElementById("combo2");
+	var imgCat;
+	if(combo2.selectedIndex == -1)
+		imgCat = null;
+	else
+		imgCat = combo2.options[combo2.selectedIndex].value;
+	var combo3 = document.getElementById("combo3");
+	var imgGrp;
+	imgGrp = combo3.options[combo3.selectedIndex].value;
+	
+	var data= {};
+	data["catID"]=imgCat;
+	data["grpID"]=imgGrp;
 	// Fetch and render the images
 	if(reworkMode)
 		var url = site.uri.public + '/segImages/myedit';
@@ -18,7 +31,8 @@ function label_loadImages(){
 		var url = site.uri.public + '/segImages/clean';
 	$.ajax({
 	  type: "GET",
-	  url: url
+	  url: url,
+	  data: data
 	})
 	.then(
 	    // Fetch successful
@@ -30,6 +44,7 @@ function label_loadImages(){
 				console.log(data);
 			}
 			else label_imgPathList = [];
+			if(label_imgPathList.length == 0){document.getElementById('imgCounter').style = "DISPLAY: initial;max-width: 100px;";}
 			label_imgPathListIndex = 0;
 			label_loadRects();
 	    },
@@ -96,7 +111,7 @@ function label_addImage(){
 		var imgToAdd = label_imgPath+imgName;
 		document.getElementById('image').src = imgToAdd;
 		label_initSelection();
-		document.getElementById('imgCounter').innerHTML = "";//"Image "+(label_imgPathListIndex+1)+" / "+label_imgPathList.length;
+		document.getElementById('imgCounter').style = "DISPLAY: none;";//"Image "+(label_imgPathListIndex+1)+" / "+label_imgPathList.length;
 		document.getElementById("moreButton").style = "DISPLAY: none;";
 		document.getElementById("nextButton").style = "DISPLAY: initial;";
 
@@ -223,6 +238,8 @@ function label_nextImage(){
 			//document.getElementById("nextButton").style = "DISPLAY: none;";
 			label_loadImages();
 		}
+	}else{
+		label_loadImages();
 	}
 }
 
@@ -274,6 +291,33 @@ function label_loadCategories(){
 					label_catObject[label_catId[i]] = {Category :label_catText[i], Color:label_catColor[i]}
 				}
 				label_initCombo();
+				label_loadGroups();
+	    },
+	    // Fetch failed
+	    function (data) {
+	        
+	    }
+	);
+}
+function label_loadGroups(){
+	// Fetch the groups
+	var url = site.uri.public + '/api/groups/mygroups';
+	$.ajax({
+	  type: "GET",
+	  url: url
+	})
+	.then(
+	    // Fetch successful
+	    function (data) {
+	        var res = data.rows;
+        	label_grpId = [];
+			label_grpText = [];
+			for(i = 0; i < res.length; i++){
+				label_grpId[i] = parseInt(res[i].id);
+				label_grpText[i] = res[i].name;
+			}
+			label_initComboGrp();
+			label_loadImages();
 	    },
 	    // Fetch failed
 	    function (data) {
@@ -290,10 +334,27 @@ function label_initCombo(){
 
 	function appendToCombo(category,type){
 		$("#combo").append("<option value=\""+type+"\">"+category+"</option>");
+		$("#combo2").append("<option value=\""+type+"\">"+category+"</option>");
 	}
 
 
-	$(".js-basic-single").select2({ width: '100px' });
+	$("#combo").select2({ width: '100px'});
+	$("#combo2").select2({allowClear: true});
+	$("#combo2").val(-1).trigger("change");
+}
+function label_initComboGrp(){
+	for (i = 0; i < label_grpId.length; i++) {
+		appendToCombo(label_grpText[i],label_grpId[i]);
+	}
+
+
+	function appendToCombo(text,value){
+		//console.log("creating "+category)
+		$("#combo3").append("<option value=\""+value+"\">"+text+"</option>");
+	}
+
+
+	$("#combo3").select2({width: '100px',placeholder: 'Select a group'});
 }
 ///////////////////////////////
 

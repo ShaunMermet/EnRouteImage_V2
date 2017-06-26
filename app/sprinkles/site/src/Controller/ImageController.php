@@ -69,6 +69,11 @@ class ImageController extends SimpleController
         
         $maxImageRequested = getenv('MAX_IMAGE_REQUESTED');
 
+        // GET parameters
+        $params = $request->getQueryParams();
+        $requestedGrp = $params["grpID"];
+        $requestedCat = $params["catID"];
+        
         $imgLinks = ImgLinks::where(function ($imgLinks){
                     $imgLinks->where ('state', '=', 1)
                             ->orWhere ('state', '=', 4);
@@ -78,7 +83,23 @@ class ImageController extends SimpleController
                     $imgLinks->whereIn('group', $validGroup)
                             ->orWhereNull('group');
                     })
-                    ->orderBy('group', 'desc')
+                    ->where(function ($imgLinks) use ($requestedGrp){
+                        if($requestedGrp == 1){
+                            $imgLinks->where ('group', '=', $requestedGrp)
+                                     ->orWhereNull('group');
+                        }
+                        else{
+                            $imgLinks->where ('group', '=', $requestedGrp);
+                        }
+                    })
+                    ->where(function ($imgLinks) use ($requestedCat){
+                        if($requestedCat == null){
+                            $imgLinks->WhereNull('category');
+                        }
+                        else{
+                            $imgLinks->where ('category', '=', $requestedCat);
+                        }
+                    })
                     ->inRandomOrder()
                     ->limit($maxImageRequested)
                     ->with('group')
@@ -140,6 +161,11 @@ class ImageController extends SimpleController
 
         $maxImageRequested = getenv('MAX_IMAGE_REQUESTED');
 
+        // GET parameters
+        $params = $request->getQueryParams();
+        $requestedGrp = $params["grpID"];
+        $requestedCat = $params["catID"];
+
         $segImg = SegImage::where(function ($imgLinks){
                 $imgLinks->where ('state', '=', 1)
                         ->orWhere ('state', '=', 4);
@@ -148,7 +174,23 @@ class ImageController extends SimpleController
                 $imgLinks->whereIn('group', $validGroup)
                         ->orWhereNull('group');
                 })
-                ->orderBy('group', 'desc')
+                ->where(function ($imgLinks) use ($requestedGrp){
+                    if($requestedGrp == 1){
+                        $imgLinks->where ('group', '=', $requestedGrp)
+                                 ->orWhereNull('group');
+                    }
+                    else{
+                        $imgLinks->where ('group', '=', $requestedGrp);
+                    }
+                })
+                ->where(function ($imgLinks) use ($requestedCat){
+                    if($requestedCat == null){
+                        $imgLinks->WhereNull('category');
+                    }
+                    else{
+                        $imgLinks->where ('category', '=', $requestedCat);
+                    }
+                })
                 ->inRandomOrder()
                 ->limit($maxImageRequested)
                 ->with('group')
@@ -181,6 +223,11 @@ class ImageController extends SimpleController
         /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
         $classMapper = $this->ci->classMapper;
 
+        // GET parameters
+        $params = $request->getQueryParams();
+        $requestedGrp = $params["grpID"];
+        $requestedCat = $params["catID"];
+
         $imgLinks = ImgLinks::where(function ($imgLinks){
                     $imgLinks->where ('state', '=', 1)
                             ->orWhere ('state', '=', 4);
@@ -190,7 +237,23 @@ class ImageController extends SimpleController
                     $imgLinks->whereIn('group', $validGroup)
                             ->orWhereNull('group');
                     })
-                    ->orderBy('group', 'desc')
+                    ->where(function ($imgLinks) use ($requestedGrp){
+                        if($requestedGrp == 1){
+                            $imgLinks->where ('group', '=', $requestedGrp)
+                                     ->orWhereNull('group');
+                        }
+                        else{
+                            $imgLinks->where ('group', '=', $requestedGrp);
+                        }
+                    })
+                    ->where(function ($imgLinks) use ($requestedCat){
+                        if($requestedCat == null){
+                            $imgLinks->WhereNull('category');
+                        }
+                        else{
+                            $imgLinks->where ('category', '=', $requestedCat);
+                        }
+                    })
                     ->inRandomOrder()
                     ->limit($maxImageRequested)
                     ->with('group')
@@ -252,13 +315,34 @@ class ImageController extends SimpleController
 
         $maxImageRequested = getenv('MAX_IMAGE_REQUESTED');
 
+        // GET parameters
+        $params = $request->getQueryParams();
+        $requestedGrp = $params["grpID"];
+        $requestedCat = $params["catID"];
+
         $imgLinks = ImgLinks::where ('available', '=', 1)
                     ->where ('state', '=', 2)
                     ->where(function ($imgLinks) use ($validGroup){
                     $imgLinks->whereIn('group', $validGroup)
                             ->orWhereNull('group');
                     })
-                    ->orderBy('group', 'desc')
+                    ->where(function ($imgLinks) use ($requestedGrp){
+                        if($requestedGrp == 1){
+                            $imgLinks->where ('group', '=', $requestedGrp)
+                                     ->orWhereNull('group');
+                        }
+                        else{
+                            $imgLinks->where ('group', '=', $requestedGrp);
+                        }
+                    })
+                    ->where(function ($imgLinks) use ($requestedCat){
+                        if($requestedCat == null){
+                            $imgLinks->whereNull('category');
+                        }
+                        else{
+                            $imgLinks->where ('category', '=', $requestedCat);
+                        }
+                    })
                     ->inRandomOrder()
                     ->limit($maxImageRequested)
                     ->with('group')
@@ -320,12 +404,33 @@ class ImageController extends SimpleController
 
         $maxImageRequested = getenv('MAX_IMAGE_REQUESTED');
 
+        // GET parameters
+        $params = $request->getQueryParams();
+        $requestedGrp = $params["grpID"];
+        $requestedCat = $params["catID"];
+
         $segImg = SegImage::where ('state', '=', 2)
                     ->where(function ($segImg) use ($validGroup){
                     $segImg->whereIn('group', $validGroup)
                             ->orWhereNull('group');
                     })
-                    ->orderBy('group', 'desc')
+                    ->where(function ($imgLinks) use ($requestedGrp){
+                        if($requestedGrp == 1){
+                            $imgLinks->where ('group', '=', $requestedGrp)
+                                     ->orWhereNull('group');
+                        }
+                        else{
+                            $imgLinks->where ('group', '=', $requestedGrp);
+                        }
+                    })
+                    ->where(function ($imgLinks) use ($requestedCat){
+                        if($requestedCat == null){
+                            $imgLinks->WhereNull('category');
+                        }
+                        else{
+                            $imgLinks->where ('category', '=', $requestedCat);
+                        }
+                    })
                     ->inRandomOrder()
                     ->limit($maxImageRequested)
                     ->with('group')
@@ -383,6 +488,11 @@ class ImageController extends SimpleController
 
         $maxImageRequested = getenv('MAX_IMAGE_REQUESTED');
 
+        // GET parameters
+        $params = $request->getQueryParams();
+        $requestedGrp = $params["grpID"];
+        $requestedCat = $params["catID"];
+
         $imgLinks = ImgLinks::whereHas('areas', function ($query) use ($currentUser){
                                 $query->where('user', '=', $currentUser->id);
                             })
@@ -392,7 +502,23 @@ class ImageController extends SimpleController
                     $imgLinks->whereIn('group', $validGroup)
                             ->orWhereNull('group');
                     })
-                    ->orderBy('group', 'desc')
+                    ->where(function ($imgLinks) use ($requestedGrp){
+                        if($requestedGrp == 1){
+                            $imgLinks->where ('group', '=', $requestedGrp)
+                                     ->orWhereNull('group');
+                        }
+                        else{
+                            $imgLinks->where ('group', '=', $requestedGrp);
+                        }
+                    })
+                    ->where(function ($imgLinks) use ($requestedCat){
+                        if($requestedCat == null){
+                            $imgLinks->WhereNull('category');
+                        }
+                        else{
+                            $imgLinks->where ('category', '=', $requestedCat);
+                        }
+                    })
                     //->limit($maxImageRequested)
                     ->with('group')
                     ->get();
@@ -453,6 +579,11 @@ class ImageController extends SimpleController
 
         $maxImageRequested = getenv('MAX_IMAGE_REQUESTED');
 
+        // GET parameters
+        $params = $request->getQueryParams();
+        $requestedGrp = $params["grpID"];
+        $requestedCat = $params["catID"];
+
         $segImg = SegImage::whereHas('areas', function ($query) use ($currentUser){
                                 $query->where('user', '=', $currentUser->id);
                             })
@@ -461,7 +592,23 @@ class ImageController extends SimpleController
                     $segImg->whereIn('group', $validGroup)
                             ->orWhereNull('group');
                     })
-                    ->orderBy('group', 'desc')
+                    ->where(function ($imgLinks) use ($requestedGrp){
+                        if($requestedGrp == 1){
+                            $imgLinks->where ('group', '=', $requestedGrp)
+                                     ->orWhereNull('group');
+                        }
+                        else{
+                            $imgLinks->where ('group', '=', $requestedGrp);
+                        }
+                    })
+                    ->where(function ($imgLinks) use ($requestedCat){
+                        if($requestedCat == null){
+                            $imgLinks->WhereNull('category');
+                        }
+                        else{
+                            $imgLinks->where ('category', '=', $requestedCat);
+                        }
+                    })
                     //->limit($maxImageRequested)
                     ->with('group')
                     ->get();

@@ -6,8 +6,10 @@ $(document).ready(function() {
   });
 
   var localeElem = document.getElementById('locale');
-  var locale = localeElem.getAttribute("data-locale");
-  $(".js-basic-lang").val(locale).trigger('change.select2');
+  if(localeElem){
+    var locale = localeElem.getAttribute("data-locale");
+    $(".js-basic-lang").val(locale).trigger('change.select2');
+  }
 });
 $(".js-basic-lang").on('change', function (evt) {
   var locale = evt.target.value;
