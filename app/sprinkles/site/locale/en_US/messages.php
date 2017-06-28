@@ -73,6 +73,7 @@ return [
     "LEGEND"              => [
         "LABEL" =>[
             "NBR_BBOX" => "Bbox : ",
+            "SWITCH" => "Show bbox type",
         ],
         "SEG" =>[
             "NBR_AREA" => "Areas : ",

@@ -261,6 +261,7 @@ function validate_drawRects(idImage){
 			var text = document.createElement('div');
 			var t = document.createTextNode(str);
 			text.className = 'rectangleText';
+			if (!$('#labelShowSwitch').is(":checked")){text.style.display = "none";}
 			text.appendChild(t);
 			validate_currentRectangle.appendChild(text);
 			validate_currentRectangle.style.width = (reviewedRect.rectRight - reviewedRect.rectLeft)*initRatio + 'px';
@@ -415,3 +416,23 @@ window.onscroll = function(){
 		filler.style.height = (intendedHeight)+ 'px';
 };
 ////////////////////////////////////////////
+function validate_onViewLabelClicked(element){
+	if (element.checked){
+		validate_showBboxLabel(true);
+	}
+	else{
+		validate_showBboxLabel(false);
+	}
+}
+function validate_showBboxLabel(bool){
+	var eye = $(".rectangleText");
+	if(bool){
+		$(".rectangleText").each(function(){
+			this.style.display = "initial"
+		});
+	}else{
+		$(".rectangleText").each(function(){
+			this.style.display = "none"
+		});
+	}
+}

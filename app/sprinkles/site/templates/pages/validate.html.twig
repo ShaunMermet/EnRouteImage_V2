@@ -27,6 +27,12 @@
 				<button id="moreButton"class="button" type="button" onclick="validate_onMoreClicked()">More image</button>
 				<div id="imgCounter">{{translate("FEEDBACK.NO_IMAGE")}}</div>
 				<div>{{translate("LEGEND.SEG.NBR_AREA")}}<span id="value1"></span></div>
+				<br>
+				<div>{{translate("LEGEND.LABEL.SWITCH")}}</div>
+				<label class="switch" title="Show / Hide label">
+				  <input id="labelShowSwitch" type="checkbox" checked onchange ="validate_onViewLabelClicked(this)">
+				  <div class="slider round"></div>
+				</label>
 			</div>
 		</div>
 		<div class="column column-four">

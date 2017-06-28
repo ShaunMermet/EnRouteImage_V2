@@ -192,6 +192,7 @@ function label_drawRects(idImage){
 			var text = document.createElement('div');
 			var t = document.createTextNode(str);
 			text.className = 'rectangleText';
+			if (!$('#labelShowSwitch').is(":checked")){text.style.display = "none";}
 			text.appendChild(t);
 			element.appendChild(text);
 			text.style.pointerEvents = "none";
@@ -753,6 +754,7 @@ function onDownHandler(e) {
 		var text = document.createElement('div');
 		var t = document.createTextNode(str);
 		text.className = 'rectangleText';
+		if (!$('#labelShowSwitch').is(":checked")){text.style.display = "none";}
 		text.appendChild(t);
 		text.style.pointerEvents = "none";
 		text.style.position = "absolute";
@@ -1077,6 +1079,25 @@ function label_onReworkClicked(element){
 		reworkMode = false;
 	label_freeRemainingImages();
 	label_loadImages();
+}
+function label_onViewLabelClicked(element){
+	if (element.checked){
+		label_showBboxLabel(true);
+	}
+	else{
+		label_showBboxLabel(false);
+	}
+}
+function label_showBboxLabel(bool){
+	if(bool){
+		$(".rectangleText").each(function(){
+			this.style.display = "initial"
+		});
+	}else{
+		$(".rectangleText").each(function(){
+			this.style.display = "none"
+		});
+	}
 }
 
 

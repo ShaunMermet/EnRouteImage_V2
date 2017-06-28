@@ -69,6 +69,7 @@ return [
     "LEGEND"              => [
         "LABEL" =>[
             "NBR_BBOX" => "バウンドボックス : ",
+            "SWITCH" => "バウンドボックスタイプお見せる",
         ],
         "SEG" =>[
             "NBR_AREA" => "エリア : ",

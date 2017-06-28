@@ -14,7 +14,7 @@
 {% block body_matter %}
 <section>
 <div class="labelimg-container">
-	<div class="column column-one" style="position:sticky;max-width: 100px">
+	<div class="column column-one" style="position:sticky;max-width: 100px;">
 		<div id="filler"></div>
 		<div id="leftMenu" style ="display: flex;flex-direction: column;">
 			<div style="max-width: 100px">{{translate("BB_LABEL_FULL")}}</div>
@@ -44,6 +44,12 @@
 			<div>{{translate("LEGEND.EDIT_NBR_IMAGE")}}<span id="editValue"></span></div>
 			<label class="switch" title="Edit images that has been tagged but not yet checked">
 			  <input type="checkbox" onchange ="label_onReworkClicked(this)">
+			  <div class="slider round"></div>
+			</label>
+			<br>
+			<div>{{translate("LEGEND.LABEL.SWITCH")}}</div>
+			<label class="switch" title="Show / Hide label">
+			  <input id="labelShowSwitch" type="checkbox" checked onchange ="label_onViewLabelClicked(this)">
 			  <div class="slider round"></div>
 			</label>
 		</div>
