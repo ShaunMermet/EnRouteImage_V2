@@ -59,14 +59,24 @@ function upl_loadCategories(){
 	);
 }
 
-function upl_initCombos(){
-	var x = document.getElementsByClassName("js-basic-single");
+function upl_initComboClass(className){
+	var x = document.getElementsByClassName(className);
 	var i;
 	for (i = 0; i < x.length; i++) {
 		upl_initCombo(x[i]);
 	}
 }
-
+function upl_initCombos(){
+	upl_initComboClass("js-basic-single");
+}
+function upl_onAddInitCombos(){
+	var groupAll = document.getElementById("grpAssignAll");
+	var catAll = document.getElementById("catAssignAll");
+	upl_initCombo(groupAll);
+	upl_initCombo(catAll);
+	upl_initComboClass("js-basic-single grp");
+	upl_initComboClass("js-basic-single cat");
+}
 function upl_initCombo(comboElem){
 	preValue = comboElem.value;
 	emptyCombo(comboElem);
@@ -76,7 +86,7 @@ function upl_initCombo(comboElem){
 	else if(comboElem.id == "catAssignUp"){
 		initCatCombo(comboElem,preValue);
 	}
-	else if(comboElem.id == "grpAssignAll" || comboElem.id == "grpAssignEx"){
+	else if(comboElem.id == "grpAssignAll" || comboElem.id == "grpAssignEx" || comboElem.id == "grpAssignFolder"){
 		initGrpAllCombo(comboElem,preValue);
 	}
 	else
@@ -186,4 +196,36 @@ function emptyCombo(comboElem){
 	if(comboElem.id == "catAssignUp" || comboElem.id == "grpAssignUp"){
 		comboElem.parentElement.parentElement.children[0].value = "";
 	}
+}
+function onDownloadImageGrpChanged(){
+	upl_GetImg();
+}
+function onDownloadImageCatChanged(){
+	upl_GetImg();
+}
+function upl_GetImg(){
+	var form = document.getElementById("fileupload");
+	var dlTable = document.getElementById("downloadTable");
+	var url = site.uri.public + '/admin/segUpload/upload';
+	var data= {};
+	data["group"]= $("#grpAssignFolder")[0].value;
+	data["category"]= $("#catAssignFolder")[0].value;
+	$.ajax({
+	  type: "GET",
+	  url: url,
+	  dataType: 'json',
+	  data: data
+	})
+	.then(
+	    // Fetch successful
+	    function (data) {
+	    dlTable.children[0].innerHTML = "";
+        $(form).fileupload('option', 'done')
+            .call(form, $.Event('done'), {result: data});
+	    },
+	    // Fetch failed
+	    function (data) {
+	        
+	    }
+	);
 }

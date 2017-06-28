@@ -181,13 +181,13 @@ class UploadHandler
         }
         if ($options) {
             $this->options = $options + $this->options;
-            if($options['script_url']){
+            if(array_key_exists('script_url',$options)){
                 $this->options['script_url'] = $this->get_full_url().$options['script_url'];
             }
-            if($options['upload_dir']){
+            if(array_key_exists('upload_dir',$options)){
                 $this->options['upload_dir'] = dirname($this->get_server_var('SCRIPT_FILENAME')).$options['upload_dir'];
             }
-            if($options['upload_url']){
+            if(array_key_exists('upload_url',$options)){
                 $this->options['upload_url'] = $this->get_full_url().$options['upload_url'];
             }
             if(array_key_exists('groups',$options)){
@@ -329,6 +329,20 @@ class UploadHandler
         $result = $getGrp->toArray();
         return $result['group']['name'];
     }
+    protected function get_file_groupID($file_name){
+        if($this->options['imageMode'] == 'segmentation'){
+            $getGrp = SegImage::where('path',  $file_name)
+                ->with('group')
+                ->first();
+        }else{
+            $getGrp = ImgLinks::where('path',  $file_name)
+                ->with('group')
+                ->first();
+        }
+        if(!$getGrp) return '';
+        $result = $getGrp->toArray();
+        return $result['group']['id'];
+    }
     protected function get_file_category($file_name){
         /** @var UserFrosting\Config\Config $config */
         $config = $this->ci->config['db.default'];
@@ -352,6 +366,31 @@ class UploadHandler
         $catRes = $cat->fetch_object();
         if($catRes)
             return $catRes->category;
+        else return "";
+    }
+    protected function get_file_categoryID($file_name){
+        /** @var UserFrosting\Config\Config $config */
+        $config = $this->ci->config['db.default'];
+        $db = mysqli_connect($config['host'],$config['username'],$config['password'],$config['database']);
+
+        if ($db->connect_error) {
+            die("Connection failed: " . $db->connect_error);
+        }
+        $filename = mysqli_real_escape_string($db,$file_name);
+        if($this->options['imageMode'] == 'segmentation'){
+            $sql = "SELECT cat.id FROM segcategories cat LEFT JOIN segImages lnk ON lnk.category =cat.id
+                WHERE lnk.path = '$filename'";
+        }else{
+            $sql = "SELECT cat.id FROM labelimgcategories cat LEFT JOIN labelimglinks lnk ON lnk.category =cat.id
+                WHERE lnk.path = '$filename'";
+        }
+        
+        $cat = $db->query($sql);
+        if(!$cat)
+            return "";
+        $catRes = $cat->fetch_object();
+        if($catRes)
+            return $catRes->id;
         else return "";
     }
     protected function get_file_size($file_path, $clear_stat_cache = false) {
@@ -394,6 +433,8 @@ class UploadHandler
             $file->name = $file_name;
             $file->category = $this->get_file_category($file_name);
             $file->group = $this->get_file_group($file_name);
+            $file->categoryID = $this->get_file_categoryID($file_name);
+            $file->groupID = $this->get_file_groupID($file_name);
             $file->size = $this->get_file_size(
                 $this->get_upload_path($file_name)
             );
@@ -1172,7 +1213,9 @@ class UploadHandler
 			if($returnMsg == "OK"){
                 $file->category = $this->get_file_category($file->name);
                 $file->group = $this->get_file_group($file->name);
-				$upload_dir = $this->get_upload_path();
+				$file->categoryID = $this->get_file_categoryID($file_name);
+                $file->groupID = $this->get_file_groupID($file_name);
+                $upload_dir = $this->get_upload_path();
 				if (!is_dir($upload_dir)) {
 					mkdir($upload_dir, $this->options['mkdir_mode'], true);
 				}
@@ -1565,6 +1608,8 @@ class UploadHandler
     }
 
     public function get($print_response = true) {
+        $params["paramGroup"] = $this->get_query_param('group');
+        $params["paramCategory"] = $this->get_query_param('category');
         if ($print_response && $this->get_query_param('download')) {
             return $this->download();
         }
@@ -1578,7 +1623,27 @@ class UploadHandler
                 $this->options['param_name'] => $this->get_file_objects()
             );
         }
+        $response = $this->_filterResponse($response,$params);
         return $this->generate_response($response, $print_response);
+    }
+
+    private function _filterResponse($response,$params){
+        $oldResponseLength = count($response['files']);
+        foreach ($response['files'] as $img) {
+            if(array_key_exists('paramGroup',$params) && $params["paramGroup"]!= null){
+                if(!property_exists($img,'groupID') || $img->groupID != $params['paramGroup']){
+                    array_splice($response['files'],array_search($img,$response['files']),1);
+                    continue;
+                }
+            }
+            if(array_key_exists('paramCategory',$params) && $params["paramCategory"]!= null){
+                if(!property_exists($img,'categoryID') || $img->categoryID != $params['paramCategory']){
+                    array_splice($response['files'],array_search($img,$response['files']),1);
+                    continue;
+                }
+            }
+        }
+        return $response;
     }
 
     public function post($print_response = true) {

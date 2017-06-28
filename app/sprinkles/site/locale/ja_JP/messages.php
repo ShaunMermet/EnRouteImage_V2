@@ -140,9 +140,10 @@ return [
     "UPLOAD" =>[
         "@TRANSLATION" => "アップロード",
         "TITLE" => [
-        "EXPORT"        =>"エクスポート",
-        "CATEGORY"      =>"カテゴリーの編集",
-        "UPLOAD"        =>"イメージのアップロード",
+            "EXPORT"        =>"エクスポート",
+            "CATEGORY"      =>"カテゴリーの編集",
+            "UPLOAD"        =>"イメージのアップロード",
+            "FOLDER"        =>"イメージのリスト",
         ]
     ],
     "BB_UPLOAD"               =>"バウンドボックス",

@@ -65,6 +65,7 @@
             // The container for the list of files. If undefined, it is set to
             // an element with class "files" inside of the widget element:
             filesContainer: undefined,
+            filesContainerDOWN:'#downloadTable',
             // By default, files are appended to the files container.
             // Set the following option to true, to prepend files instead:
             prependFiles: true,
@@ -137,7 +138,7 @@
                         });
                     }
                 });
-                upl_initCombos();
+                upl_onAddInitCombos();
             },
             // Callback for the start of each file upload request:
             send: function (e, data) {
@@ -188,7 +189,7 @@
                                 that._forceReflow(template);
                                 that._transition(template).done(
                                     function () {
-                                        upl_initCombos();
+                                        //upl_initCombos();
                                         data.context = $(this);
                                         that._trigger('completed', e, data);
                                         that._trigger('finished', e, data);
@@ -201,12 +202,11 @@
                 } else {
                     template = that._renderDownload(files)[
                         that.options.prependFiles ? 'prependTo' : 'appendTo'
-                    ](that.options.filesContainer);
+                    ](that.options.filesContainerDOWN);
                     that._forceReflow(template);
                     deferred = that._addFinishedDeferreds();
                     that._transition(template).done(
                         function () {
-                            upl_initCombos();
                             data.context = $(this);
                             that._trigger('completed', e, data);
                             that._trigger('finished', e, data);
@@ -637,6 +637,11 @@
                 'click .cancel': this._cancelHandler,
                 'click .delete': this._deleteHandler
             });
+            this._on(this.options.filesContainerDOWN, {
+                'click .start': this._startHandler,
+                'click .cancel': this._cancelHandler,
+                'click .delete': this._deleteHandler
+            });
             this._initButtonBarEventHandlers();
         },
 
@@ -679,6 +684,9 @@
                 options.filesContainer = this.element.find('.files');
             } else if (!(options.filesContainer instanceof $)) {
                 options.filesContainer = $(options.filesContainer);
+            }
+            if(options.filesContainerDOWN){
+                options.filesContainerDOWN = this.element.find('.filesA');
             }
         },
 

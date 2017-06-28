@@ -111,9 +111,10 @@ return [
     "UPLOAD" =>[
         "@TRANSLATION" => "Upload",
         "TITLE" => [
-        "EXPORT"        =>"Export",
-        "CATEGORY"      =>"Categories editor",
-        "UPLOAD"        =>"Images uploader",
+            "EXPORT"        =>"Export",
+            "CATEGORY"      =>"Categories editor",
+            "UPLOAD"        =>"Images uploader",
+            "FOLDER"        =>"Images list",
         ]
     ],
     "BB_UPLOAD"               =>"Bbox",
