@@ -1188,7 +1188,7 @@ class UploadHandler
         $file->name = $this->get_file_name($uploaded_file, $name, $size, $type, $error,
             $index, $content_range);
 		error_log('in before insert func '.$uploaded_file.' name '.$name );
-		
+		$file->originalName = $name;
         $addData = $this->handle_form_data($name, $index);
         $file->categoryValue = $addData['category'];
         $file->groupValue = $addData['group'];
@@ -1213,8 +1213,8 @@ class UploadHandler
 			if($returnMsg == "OK"){
                 $file->category = $this->get_file_category($file->name);
                 $file->group = $this->get_file_group($file->name);
-				$file->categoryID = $this->get_file_categoryID($file_name);
-                $file->groupID = $this->get_file_groupID($file_name);
+				$file->categoryID = $this->get_file_categoryID($file->name);
+                $file->groupID = $this->get_file_groupID($file->name);
                 $upload_dir = $this->get_upload_path();
 				if (!is_dir($upload_dir)) {
 					mkdir($upload_dir, $this->options['mkdir_mode'], true);
@@ -1279,6 +1279,7 @@ class UploadHandler
         $area = $file->areaData;
         $naturalWidth = $file->naturalWidth;
         $naturalHeight = $file->naturalHeight;
+        $originalName = $file->originalName;
         if($this->options['imageMode'] == 'segmentation'){
             if ($category == '') $category = 0;
             if ($group == '') $group = 1;
@@ -1288,6 +1289,7 @@ class UploadHandler
             $SegImg->group = $group;
             $SegImg->naturalWidth = $naturalWidth;
             $SegImg->naturalHeight = $naturalHeight;
+            $SegImg->originalName = $originalName;
             
             try{
                 $SegImg->save();
@@ -1350,6 +1352,7 @@ class UploadHandler
             $BboxImg->group = $group;
             $BboxImg->naturalWidth = $naturalWidth;
             $BboxImg->naturalHeight = $naturalHeight;
+            $BboxImg->originalName = $originalName;
 
             try{
                 $BboxImg->save();
@@ -1628,7 +1631,6 @@ class UploadHandler
     }
 
     private function _filterResponse($response,$params){
-        $oldResponseLength = count($response['files']);
         foreach ($response['files'] as $img) {
             if(array_key_exists('paramGroup',$params) && $params["paramGroup"]!= null){
                 if(!property_exists($img,'groupID') || $img->groupID != $params['paramGroup']){

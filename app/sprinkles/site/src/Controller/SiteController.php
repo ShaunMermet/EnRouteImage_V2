@@ -282,7 +282,8 @@ class SiteController extends SimpleController
                 
                 $zip = new \ZipArchive();
                 $zip->open($filename, \ZipArchive::CREATE);
-                
+                $allfilenamePath = "tmp/".$tmpFolder."/filename.txt";
+                $allFilename = fopen($allfilenamePath, "w") or die("Unable to open file!");
                 /* fetch object array */
                 foreach ($imgToExport as $NImage) {
                     $imgToExportPath = "img/".$NImage->path;
@@ -308,10 +309,10 @@ class SiteController extends SimpleController
                     //Completing Zip
                     $zip->addFile($txtpath, $path_parts['filename'] .".txt");
                     $zip->addFile($imgToExportPath, $path_parts['filename'].".jpeg");
+                    fwrite($allFilename, $NImage->path.",".$NImage->originalName."\n");
                 }
-
-                
-                /* free result set */
+                fclose($allFilename);
+                $zip->addFile($allfilenamePath, "filename.txt");
                 $zip->close();
                
 
@@ -405,6 +406,9 @@ class SiteController extends SimpleController
                 $zip = new \ZipArchive();
                 $zip->open($filename, \ZipArchive::CREATE);
                 
+                $allfilenamePath = "tmp/".$tmpFolder."/filename.txt";
+                $allFilename = fopen($allfilenamePath, "w") or die("Unable to open file!");
+                
                 /* fetch object array */
                 foreach ($imgToExport as $NImage) {
                     $imgToExportPath = "img/segmentation/".$NImage->path;
@@ -462,10 +466,11 @@ class SiteController extends SimpleController
                     $zip->addFile($txtpath, $path_parts['filename'] .".txt");
                     $zip->addFile($pngpath, $path_parts['filename'] .".png");
                     $zip->addFile($imgToExportPath, $path_parts['filename'].".jpeg");
+                    fwrite($allFilename, $NImage->path.",".$NImage->originalName."\n");
                 }
 
-                
-                /* free result set */
+                fclose($allFilename);
+                $zip->addFile($allfilenamePath, "filename.txt");
                 $zip->close();
                
 

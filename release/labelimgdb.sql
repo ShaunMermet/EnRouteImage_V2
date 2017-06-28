@@ -873,5 +873,5 @@ ALTER TABLE `segimages` ADD `cprs_rate` INT NOT NULL DEFAULT '-1' COMMENT 'Rate 
 --ALTER TABLE `segcategories` CHANGE `Category` `Category` CHAR(25) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL;
 
 
---Possible bug correction
---UPDATE `labelimglinks` SET `group`=1 WHERE `group`is NULL
+ALTER TABLE `labelimglinks` ADD `originalName` CHAR(250) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL COMMENT 'Original name of the image' AFTER `naturalHeight`;
+ALTER TABLE `segimages` ADD `originalName` CHAR(250) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL COMMENT 'Original name of the image' AFTER `naturalHeight`;
