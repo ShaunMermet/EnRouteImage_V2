@@ -875,3 +875,7 @@ ALTER TABLE `segimages` ADD `cprs_rate` INT NOT NULL DEFAULT '-1' COMMENT 'Rate 
 
 ALTER TABLE `labelimglinks` ADD `originalName` CHAR(250) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL COMMENT 'Original name of the image' AFTER `naturalHeight`;
 ALTER TABLE `segimages` ADD `originalName` CHAR(250) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL COMMENT 'Original name of the image' AFTER `naturalHeight`;
+
+--------------------------------
+--- Changes for Beta 0.3.8 ----
+--------------------------------
