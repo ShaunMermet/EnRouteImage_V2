@@ -47,12 +47,6 @@ class GroupController extends SimpleController
         /** @var UserFrosting\Sprinkle\Account\Model\User $currentUser */
         $currentUser = $this->ci->currentUser;
 
-        // Access-controlled page
-        if (!$authorizer->checkAccess($currentUser, 'uri_group')) {
-            $loginPage = $this->ci->router->pathFor('login');
-           return $response->withRedirect($loginPage, 400);
-        }
-
         /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
         $classMapper = $this->ci->classMapper;
 
