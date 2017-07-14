@@ -883,3 +883,7 @@ ALTER TABLE `segimages` ADD `originalName` CHAR(250) CHARACTER SET latin1 COLLAT
 --------------------------------
 --- Changes for Beta 0.3.9 ----
 --------------------------------
+
+--------------------------------
+--- Changes for Beta 0.3.10 ----
+--------------------------------
