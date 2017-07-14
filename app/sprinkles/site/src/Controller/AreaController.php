@@ -143,6 +143,14 @@ class AreaController extends SimpleController
 
         $user = $classMapper->staticMethod('user', 'where', 'id', $currentUser->id)
                                 ->first();
+        $UserWGrp = $classMapper->staticMethod('user', 'where', 'id', $currentUser->id)
+                                ->with('group')
+                                ->first();
+
+        $validGroup = ['NULL'];
+        foreach ($UserWGrp->group as $group) {
+            array_push($validGroup, $group->id);
+        }
 
         $count = [];
         
@@ -518,7 +526,9 @@ class AreaController extends SimpleController
             
             $source = mysqli_real_escape_string($db,($data->dataSrc));
             $validated = mysqli_real_escape_string($db,($data->validated));
-            $user = $classMapper->staticMethod('user', 'where', 'id', $currentUser->id)
+            $oneArea = ImgArea::where('source', '=', $source)->first();
+            $userThatSubmitId = $oneArea->user;
+            $user = $classMapper->staticMethod('user', 'where', 'id', $userThatSubmitId)
                                 ->first();
             $state = 4;
             if ($validated == 1){
@@ -589,8 +599,11 @@ class AreaController extends SimpleController
         }
 
         $segimg = SegImage::where('id', $data->dataSrc)->first();
-        $user = $classMapper->staticMethod('user', 'where', 'id', $currentUser->id)
+        $oneArea = SegArea::where('source', '=', $source)->first();
+        $userThatSubmitId = $oneArea->user;
+        $user = $classMapper->staticMethod('user', 'where', 'id', $userThatSubmitId)
                                 ->first();
+                                
         if($data->validated == 0){
             $segimg->state = 4;
             $user->stats_rejected_seg = $user->stats_rejected_seg+1;
