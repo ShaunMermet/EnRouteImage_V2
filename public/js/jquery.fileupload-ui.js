@@ -128,6 +128,7 @@
                             data.autoUpload !== false) {
                         data.submit();
                     }
+                    upl_onAddInitRowCombos(data.context[0]);
                 }).fail(function () {
                     if (data.files.error) {
                         data.context.each(function (index) {
@@ -138,7 +139,6 @@
                         });
                     }
                 });
-                upl_onAddInitCombos();
             },
             // Callback for the start of each file upload request:
             send: function (e, data) {
@@ -189,11 +189,11 @@
                                 that._forceReflow(template);
                                 that._transition(template).done(
                                     function () {
-                                        //upl_initCombos();
                                         data.context = $(this);
                                         that._trigger('completed', e, data);
                                         that._trigger('finished', e, data);
                                         deferred.resolve();
+                                        upl_hideTemplateDonwnInUpload();
                                     }
                                 );
                             }
@@ -321,6 +321,9 @@
                         'width',
                         progress + '%'
                     );
+                if(data.loaded == data.total){
+                    upl_GetImg();
+                }
             },
             // Callback for uploads start, equivalent to the global ajaxStart event:
             start: function (e) {

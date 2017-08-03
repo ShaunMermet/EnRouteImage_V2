@@ -17,6 +17,8 @@ use UserFrosting\Sprinkle\Site\Model\ImgLinks;
 use UserFrosting\Sprinkle\Site\Model\SegImage;
 use UserFrosting\Sprinkle\Site\Model\SegCategory;
 use UserFrosting\Sprinkle\Site\Model\SegArea;
+use UserFrosting\Sprinkle\Site\Model\Set;
+use UserFrosting\Sprinkle\Site\Model\SegSet;
 use Illuminate\Database\QueryException;
 
 class UploadHandler
@@ -316,82 +318,35 @@ class UploadHandler
         return $size;
     }
     protected function get_file_group($file_name){
+        $bddFile = $this->get_file_bdd($file_name);
+        $setID = $bddFile['set_id'];
         if($this->options['imageMode'] == 'segmentation'){
-            $getGrp = SegImage::where('path',  $file_name)
-                ->with('group')
-                ->first();
+            $getGrp = SegSet::where('id',  $bddFile['set_id'])
+                    ->with('group')
+                    ->first();
         }else{
-            $getGrp = ImgLinks::where('path',  $file_name)
-                ->with('group')
-                ->first();
+            $getGrp = Set::where('id',  $bddFile['set_id'])
+                    ->with('group')
+                    ->first();
         }
         if(!$getGrp) return '';
         $result = $getGrp->toArray();
         return $result['group']['name'];
-    }
-    protected function get_file_groupID($file_name){
-        if($this->options['imageMode'] == 'segmentation'){
-            $getGrp = SegImage::where('path',  $file_name)
-                ->with('group')
-                ->first();
-        }else{
-            $getGrp = ImgLinks::where('path',  $file_name)
-                ->with('group')
-                ->first();
-        }
-        if(!$getGrp) return '';
-        $result = $getGrp->toArray();
-        return $result['group']['id'];
-    }
-    protected function get_file_category($file_name){
-        /** @var UserFrosting\Config\Config $config */
-        $config = $this->ci->config['db.default'];
-        $db = mysqli_connect($config['host'],$config['username'],$config['password'],$config['database']);
-
-        if ($db->connect_error) {
-            die("Connection failed: " . $db->connect_error);
-        }
-        $filename = mysqli_real_escape_string($db,$file_name);
-        if($this->options['imageMode'] == 'segmentation'){
-            $sql = "SELECT cat.category FROM segcategories cat LEFT JOIN segImages lnk ON lnk.category =cat.id
-                WHERE lnk.path = '$filename'";
-        }else{
-            $sql = "SELECT cat.category FROM labelimgcategories cat LEFT JOIN labelimglinks lnk ON lnk.category =cat.id
-                WHERE lnk.path = '$filename'";
-        }
         
-        $cat = $db->query($sql);
-        if(!$cat)
-            return "";
-        $catRes = $cat->fetch_object();
-        if($catRes)
-            return $catRes->category;
-        else return "";
     }
-    protected function get_file_categoryID($file_name){
-        /** @var UserFrosting\Config\Config $config */
-        $config = $this->ci->config['db.default'];
-        $db = mysqli_connect($config['host'],$config['username'],$config['password'],$config['database']);
-
-        if ($db->connect_error) {
-            die("Connection failed: " . $db->connect_error);
-        }
-        $filename = mysqli_real_escape_string($db,$file_name);
+    protected function get_file_bdd($file_name){
         if($this->options['imageMode'] == 'segmentation'){
-            $sql = "SELECT cat.id FROM segcategories cat LEFT JOIN segImages lnk ON lnk.category =cat.id
-                WHERE lnk.path = '$filename'";
+            $getSet = SegImage::where('path',  $file_name)
+                                ->with('set')
+                                ->first();
         }else{
-            $sql = "SELECT cat.id FROM labelimgcategories cat LEFT JOIN labelimglinks lnk ON lnk.category =cat.id
-                WHERE lnk.path = '$filename'";
+            $getSet = ImgLinks::where('path',  $file_name)
+                                ->with('set')
+                                ->first();
         }
-        
-        $cat = $db->query($sql);
-        if(!$cat)
-            return "";
-        $catRes = $cat->fetch_object();
-        if($catRes)
-            return $catRes->id;
-        else return "";
+        if(!$getSet) return '';
+        $result = $getSet->toArray();
+        return $result;
     }
     protected function get_file_size($file_path, $clear_stat_cache = false) {
         if ($clear_stat_cache) {
@@ -431,10 +386,11 @@ class UploadHandler
 
             $file = new \stdClass();
             $file->name = $file_name;
-            $file->category = $this->get_file_category($file_name);
+            $bddFile = $this->get_file_bdd($file_name);
+            $file->imgID = $bddFile['id'];
+            $file->set = $bddFile['set']['name'];
+            $file->setID = $bddFile['set_id'];
             $file->group = $this->get_file_group($file_name);
-            $file->categoryID = $this->get_file_categoryID($file_name);
-            $file->groupID = $this->get_file_groupID($file_name);
             $file->size = $this->get_file_size(
                 $this->get_upload_path($file_name)
             );
@@ -1188,14 +1144,18 @@ class UploadHandler
         $file->name = $this->get_file_name($uploaded_file, $name, $size, $type, $error,
             $index, $content_range);
 		error_log('in before insert func '.$uploaded_file.' name '.$name );
-		$file->originalName = $name;
-        $addData = $this->handle_form_data($name, $index);
+		$addData = $this->handle_form_data($name, $index);
         $file->categoryValue = $addData['category'];
         $file->groupValue = $addData['group'];
         $file->areaData = $addData['data'];
-
+        $file->setValue = $addData['set'];
+        $file->originalName = $addData['Oname'];
+        if($file->originalName == "")
+            $file->originalName = $name;
+        
         error_log('in before insert func cat '.$file->categoryValue);
         error_log('in before insert func grp '.$file->groupValue);
+        error_log($file->setValue);
 		$tmpHashName = sha1_file($uploaded_file);
 		$file->name = $this->fix_file_extension($uploaded_file, $tmpHashName, $size, $type, $error,
             $index, $content_range);
@@ -1210,12 +1170,14 @@ class UploadHandler
 		if ($this->validate($uploaded_file, $file, $error, $index)) {
             
 			$returnMsg = $this->insertInDB($file);
+            error_log($returnMsg);
 			if($returnMsg == "OK"){
-                $file->category = $this->get_file_category($file->name);
+                $bddFile = $this->get_file_bdd($file->name);
+                $file->imgID = $bddFile['id'];
+                $file->set = $bddFile['set']['name'];
+                $file->setID = $bddFile['set_id'];
                 $file->group = $this->get_file_group($file->name);
-				$file->categoryID = $this->get_file_categoryID($file->name);
-                $file->groupID = $this->get_file_groupID($file->name);
-                $upload_dir = $this->get_upload_path();
+				$upload_dir = $this->get_upload_path();
 				if (!is_dir($upload_dir)) {
 					mkdir($upload_dir, $this->options['mkdir_mode'], true);
 				}
@@ -1268,7 +1230,7 @@ class UploadHandler
 				return $file;
 			}
 		}
-		return $file;
+        return $file;
 		
         
     }
@@ -1277,16 +1239,15 @@ class UploadHandler
         $category = $file->categoryValue;
         $group = $file->groupValue;
         $area = $file->areaData;
+        $set = $file->setValue;
         $naturalWidth = $file->naturalWidth;
         $naturalHeight = $file->naturalHeight;
         $originalName = $file->originalName;
         if($this->options['imageMode'] == 'segmentation'){
-            if ($category == '') $category = 0;
-            if ($group == '') $group = 1;
+            if ($set == '') $set = 1;
             $SegImg = new SegImage;
             $SegImg->path = $filename;
-            $SegImg->category = $category;
-            $SegImg->group = $group;
+            $SegImg->set_id = $set;
             $SegImg->naturalWidth = $naturalWidth;
             $SegImg->naturalHeight = $naturalHeight;
             $SegImg->originalName = $originalName;
@@ -1313,8 +1274,7 @@ class UploadHandler
                     if($checkCat){
                         $areaType = $checkCat->id;
                     } 
-                    //Creation cat if doesn't exist
-                    if(!$checkCat){
+                    else{//Creation cat if doesn't exist
                         $catColor = $this->rand_color();
                         $CatToInsert = new SegCategories;
                         $CatToInsert->Category = $areaCategory;
@@ -1344,12 +1304,10 @@ class UploadHandler
             }
             return "OK";
         }else{
-            if ($category == '') $category = 0;
-            if ($group == '') $group = 1;
+            if ($set == '') $set = 1;
             $BboxImg = new ImgLinks;
             $BboxImg->path = $filename;
-            $BboxImg->category = $category;
-            $BboxImg->group = $group;
+            $BboxImg->set_id = $set;
             $BboxImg->naturalWidth = $naturalWidth;
             $BboxImg->naturalHeight = $naturalHeight;
             $BboxImg->originalName = $originalName;
@@ -1367,21 +1325,18 @@ class UploadHandler
                 foreach ($areas as $key => $value) {
                     $farea = explode(" ", $value);
                     //Get Values
-                    $rectCategory = $farea[0];
+                    $rectType = $farea[0];
                     $rectLeft = $farea[4];
                     $rectTop = $farea[5];
                     $rectRight = $farea[6];
                     $rectBottom = $farea[7];
                     //Check category
-                    $checkCat = ImgCategories::where('Category',  $rectCategory)
+                    $checkCat = ImgCategories::where('Category',  $rectType)
                        ->first();
                     if($checkCat){
                         $rectType = $checkCat->id;
                     }
-
-
-                    //Creation cat if doesn't exist
-                    if(!$checkCat){
+                    else{//Creation cat if doesn't exist
                         $catColor = $this->rand_color();
                         $CatToInsert = new ImgCategories;
                         $CatToInsert->Category = $rectCategory;
@@ -1391,7 +1346,7 @@ class UploadHandler
                     }
                     //insert areas
                     $areaToInsert = new ImgArea;
-                    $areaToInsert->source = $imgID;
+                    $areaToInsert->source = $BboxImg->id;
                     $areaToInsert->rectType = $rectType;
                     $areaToInsert->rectLeft = $rectLeft;
                     $areaToInsert->rectTop = $rectTop;
@@ -1462,9 +1417,11 @@ class UploadHandler
         // Handle form data, e.g. $_POST['description'][$index]
         $result = [];
         foreach ($_POST['name'] as $key => $value) {
-            $result[$_POST['name'][$key]]['category'] = $_POST['category'][$key];
-            $result[$_POST['name'][$key]]['group'] = $_POST['group'][$key];
+            //$result[$_POST['name'][$key]]['category'] = $_POST['category'][$key];
+            //$result[$_POST['name'][$key]]['group'] = $_POST['group'][$key];
             $result[$_POST['name'][$key]]['data'] = $_POST['data'][$key];
+            $result[$_POST['name'][$key]]['set'] = $_POST['set'][$key];
+            $result[$_POST['name'][$key]]['Oname'] = $_POST['Oname'][$key];
         }
         error_log(print_r($_POST,true));
         error_log(print_r($result,true));
@@ -1613,6 +1570,7 @@ class UploadHandler
     public function get($print_response = true) {
         $params["paramGroup"] = $this->get_query_param('group');
         $params["paramCategory"] = $this->get_query_param('category');
+        $params["paramSet"] = $this->get_query_param('set');
         if ($print_response && $this->get_query_param('download')) {
             return $this->download();
         }
@@ -1640,6 +1598,12 @@ class UploadHandler
             }
             if(array_key_exists('paramCategory',$params) && $params["paramCategory"]!= null){
                 if(!property_exists($img,'categoryID') || $img->categoryID != $params['paramCategory']){
+                    array_splice($response['files'],array_search($img,$response['files']),1);
+                    continue;
+                }
+            }
+            if(array_key_exists('paramSet',$params) && $params["paramSet"]!= null){
+                if(!property_exists($img,'setID') || $img->setID != $params['paramSet']){
                     array_splice($response['files'],array_search($img,$response['files']),1);
                     continue;
                 }

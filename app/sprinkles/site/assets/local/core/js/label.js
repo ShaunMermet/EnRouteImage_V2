@@ -31,26 +31,14 @@ function label_loadImages(){
 	// Fetch and render the images
 	label_freeRemainingImages();
 	label_imgPathList = [];
-	var combo2 = document.getElementById("combo2");
-	var imgCat;
-	if(combo2.selectedIndex == -1)
-		imgCat = null;
-	else
-		imgCat = combo2.options[combo2.selectedIndex].value;
-	var combo3 = document.getElementById("combo3");
-	var imgGrp;
-	if(label_pagemode == "label"){
-		imgGrp = combo3.options[combo3.selectedIndex].value;
-	}else if(label_pagemode == "homepage"){
-		imgGrp = 1;
-	}
+	
+	var combo4 = document.getElementById("combo4");
+	var imgSet;
+	imgSet = combo4.options[combo4.selectedIndex].value;
+	
 	
 	var data= {};
-	data["catID"]=imgCat;
-	data["grpID"]=imgGrp;
-	console.log(imgCat);
-	console.log(imgGrp);
-
+	data["setID"]=imgSet;
 	if(label_pagemode == "label"){
 		if(reworkMode)
 			var url = site.uri.public + '/images/myedit';
@@ -346,14 +334,8 @@ function label_loadCategories(){
 					label_catText[i] = res[i].Category;
 					label_catColor[i] = res[i].Color;
 				}
-				label_initCombo();
-				if(label_pagemode == "label"){
-					label_loadGroups();
-				}
-				else if (label_pagemode == "homepage"){
-					label_loadImages();
-				}
-				
+				label_initComboCat();
+				label_loadset();
 	    },
 	    // Fetch failed
 	    function (data) {
@@ -361,9 +343,15 @@ function label_loadCategories(){
 	    }
 	);
 }
-function label_loadGroups(){
-	// Fetch the groups
-	var url = site.uri.public + '/api/groups/mygroups';
+
+function label_loadset(){
+	// Fetch the sets
+	if(label_pagemode == "label"){
+		var url = site.uri.public + '/api/sets/mysets';
+	}
+	else if (label_pagemode == "homepage"){
+		var url = site.uri.public + '/api/sets/mysetsNA';
+	}
 	$.ajax({
 	  type: "GET",
 	  url: url
@@ -371,14 +359,16 @@ function label_loadGroups(){
 	.then(
 	    // Fetch successful
 	    function (data) {
-	        var res = data.rows;
-        	label_grpId = [];
-			label_grpText = [];
+	        var res = data;
+	        label_set = [];
 			for(i = 0; i < res.length; i++){
-				label_grpId[i] = parseInt(res[i].id);
-				label_grpText[i] = res[i].name;
+				label_set[i] = {};
+				label_set[i]['id'] = parseInt(res[i].id);
+				label_set[i]['name'] = res[i].name;
+				label_set[i]['group'] = res[i].group;
 			}
-			label_initComboGrp();
+			label_set.sort(function(a, b){return a.id-b.id})
+			label_initComboSet();
 			label_loadImages();
 	    },
 	    // Fetch failed
@@ -388,7 +378,7 @@ function label_loadGroups(){
 	);
 }
 
-function label_initCombo(){
+function label_initComboCat(){
 	for (i = 0; i < label_catId.length; i++) {
 		appendToCombo(label_catText[i],label_catId[i]);
 	}
@@ -397,27 +387,19 @@ function label_initCombo(){
 	function appendToCombo(category,type){
 		//console.log("creating "+category)
 		$("#combo").append("<option value=\""+type+"\">"+category+"</option>");
-		$("#combo2").append("<option value=\""+type+"\">"+category+"</option>");
 	}
 
 
 	$("#combo").select2({ width: '100px'});
-	$("#combo2").select2({allowClear: true});
-	$("#combo2").val(-1).trigger("change");
 }
-function label_initComboGrp(){
-	for (i = 0; i < label_grpId.length; i++) {
-		appendToCombo(label_grpText[i],label_grpId[i]);
+function label_initComboSet(){
+	for (i = 0; i < label_set.length; i++) {
+		appendToCombo(label_set[i]['name']+" ("+label_set[i]['group'].name+")",label_set[i]['id']);
 	}
-
-
 	function appendToCombo(text,value){
-		//console.log("creating "+category)
-		$("#combo3").append("<option value=\""+value+"\">"+text+"</option>");
+		$("#combo4").append("<option value=\""+value+"\">"+text+"</option>");
 	}
-
-
-	$("#combo3").select2({width: '100px',placeholder: 'Select a group'});
+	$("#combo4").select2({width: '100px',placeholder: 'Select a set'});
 }
 ///////////////////////////////
 

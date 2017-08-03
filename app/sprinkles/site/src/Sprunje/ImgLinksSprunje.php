@@ -16,7 +16,8 @@ class ImgLinksSprunje extends Sprunje
     protected $filterable = [
         'group',
         'category',
-        'state'
+        'state',
+        'set_id'
     ];
 
     /**
@@ -41,5 +42,11 @@ class ImgLinksSprunje extends Sprunje
             }
             $query = $query->orWhereNull('group');
         });
+    }
+    protected function filterSetId($query, $value)
+    {
+        // Split value on separator for OR queries
+        $values = explode($this->orSeparator, $value);
+        return $query->where('set_id','=' , $value);
     }
 }

@@ -887,3 +887,83 @@ ALTER TABLE `segimages` ADD `originalName` CHAR(250) CHARACTER SET latin1 COLLAT
 --------------------------------
 --- Changes for Beta 0.3.10 ----
 --------------------------------
+
+ALTER TABLE `labelimglinks` ADD `set_id` INT(1) NOT NULL DEFAULT '1' COMMENT 'Id of the set the image belongs to' AFTER `requested`;
+
+
+--
+-- Table structure for table `sets`
+--
+CREATE TABLE `sets` (
+  `id` int(1) NOT NULL,
+  `name` char(50) NOT NULL,
+  `group_id` int(1) NOT NULL DEFAULT '1'
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Indexes for table `sets`
+--
+ALTER TABLE `sets`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Dumping data for table `sets`
+--
+
+  INSERT INTO `sets` (`id`, `name`, `group_id`) VALUES
+(1, 'Default', 1);
+
+--
+-- AUTO_INCREMENT for table `sets`
+--
+ALTER TABLE `sets`
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+  INSERT INTO `permissions` (`id`, `slug`, `name`, `conditions`, `description`, `created_at`, `updated_at`) VALUES (NULL, 'uri_setEdit', 'Edit set', 'always()', 'Grant access to edit set of images', NULL, NULL);
+  INSERT INTO `permission_roles` (`permission_id`, `role_id`, `created_at`, `updated_at`) VALUES ('36', '2', NULL, NULL);
+  INSERT INTO `permission_roles` (`permission_id`, `role_id`, `created_at`, `updated_at`) VALUES ('36', '3', NULL, NULL);
+
+
+
+ALTER TABLE `segimages` ADD `set_id` INT(1) NOT NULL DEFAULT '1' COMMENT 'Id of the set the image belongs to' AFTER `requested`;
+
+
+--
+-- Table structure for table `segsets`
+--
+CREATE TABLE `segsets` (
+  `id` int(1) NOT NULL,
+  `name` char(50) NOT NULL,
+  `group_id` int(1) NOT NULL DEFAULT '1'
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Indexes for table `segsets`
+--
+ALTER TABLE `segsets`
+  ADD PRIMARY KEY (`id`);
+  
+--
+-- Dumping data for table `segsets`
+--
+
+  INSERT INTO `segsets` (`id`, `name`, `group_id`) VALUES
+(1, 'Default', 1);
+
+--
+-- AUTO_INCREMENT for table `segsets`
+--
+ALTER TABLE `segsets`
+  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+
+
+
+--To be run after the script initImageSetColumn.php and initSegImageColumn are runned
+
+--  ALTER TABLE `labelimglinks`
+--  DROP `category`,
+--  DROP `group`;
+--  ALTER TABLE `segimages`
+--  DROP `category`,
+--  DROP `group`;

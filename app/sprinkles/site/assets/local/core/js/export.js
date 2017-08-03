@@ -1,62 +1,33 @@
 var export_token = "";
+var export_pagemode = "";//"bbox","segmentation"
+
+function export_initExport(pagemode){
+	export_pagemode = pagemode;
+}
+
 
 function export_onComboChanged(){
-	export_getNbrInCat();
+	export_getNbrInSet();
 }
 
-function export_onAddClicked(){
-	addInput("comboColumn", "" , "js-basic-single export cat");
-}
-function export_onGrpAddClicked(){
-	addInput("comboColumnGrp","grpAssignEx","js-basic-single export group");
-}
-function addInput(divName,id,className) {
-    var newDiv = document.createElement('select');
-    newDiv.className = className;
-    newDiv.onchange = export_onComboChanged;
-    newDiv.id = id;
-    document.getElementById(divName).appendChild(newDiv);
-    upl_initCombo(newDiv);
-}
-function export_onRemoveClicked(){
-	removeInput("comboColumn");
-}
-function export_onGrpRemoveClicked(){
-	removeInput("comboColumnGrp");
-}
-function removeInput(divName){
-	var comboColumn = document.getElementById(divName);
-	if(comboColumn.lastElementChild){
-		comboColumn.removeChild(comboColumn.lastElementChild);
-		comboColumn.removeChild(comboColumn.lastElementChild);
-		export_getNbrInCat();
-	}
-}
 
-function export_getNbrInCat(){
+function export_getNbrInSet(){
 	console.log("combo detected");
 	var data= {};
-	data["ids"]=[];
-	data["groups"]=[];
-	var x = document.getElementsByClassName("js-basic-single export cat");
-	for (i = 0; i < x.length; i++) {
-		if(x[i].value){
-	   		console.log("Category "+x[i].value);
-	   		data["ids"].push(x[i].value);
-	   }
-	}
-	var y = document.getElementsByClassName("js-basic-single export group");
-	for (i = 0; i < y.length; i++) {
-		if(y[i].value){
-	   		console.log("group "+y[i].value);
-	   		data["groups"].push(y[i].value);
-	   }
-	}
+	var setCombo = document.getElementById("setAssignEx");
+	var setRequestedId = setCombo.options[setCombo.selectedIndex].value;
+	data["setID"]=setRequestedId;
 	
 	data[site.csrf.keys.name] = site.csrf.name;
 	data[site.csrf.keys.value] = site.csrf.value;
 
-	var url = site.uri.public + '/images/nbrBYcategory';
+	console.log(data);
+	if(export_pagemode == "bbox"){
+		var url = site.uri.public + '/images/nbrBYset';
+	}else if(export_pagemode == "segmentation"){
+		var url = site.uri.public + '/segImages/nbrBYset';
+	}
+	
 	$.ajax({
 	  type: "GET",
 	  url: url,
@@ -67,7 +38,7 @@ function export_getNbrInCat(){
 	    function (data) {
 	    	console.log(data);
 	    	var res = data;
-			document.getElementById('imgCounter').innerHTML = res['countByCat']+" Image(s) found";
+			document.getElementById('imgCounter').innerHTML = res['countBySet']+" Image(s) found";
 	    },
 	    // Fetch failed
 	    function (data) {
@@ -79,27 +50,18 @@ function export_getNbrInCat(){
 
 function export_onExportClicked(){
 	var data= {};
-	data["category"]=[];
-	data["groups"]=[];
-	var x = document.getElementsByClassName("js-basic-single export cat");
-	for (i = 0; i < x.length; i++) {
-		if(x[i].value){
-	   		console.log("Category "+x[i].value);
-	   		data["category"].push(x[i].value);
-	   }
-	}
-	var y = document.getElementsByClassName("js-basic-single export group");
-	for (i = 0; i < y.length; i++) {
-		if(y[i].value){
-	   		console.log("group "+y[i].value);
-	   		data["groups"].push(y[i].value);
-	   }
-	}
+	var setCombo = document.getElementById("setAssignEx");
+	var setRequestedId = setCombo.options[setCombo.selectedIndex].value;
+	data["setID"]=setRequestedId;
+
 	data[site.csrf.keys.name] = site.csrf.name;
 	data[site.csrf.keys.value] = site.csrf.value;
 
-
-	var url = site.uri.public + '/export';
+	if(export_pagemode == "bbox"){
+		var url = site.uri.public + '/export';
+	}else if(export_pagemode == "segmentation"){
+		var url = site.uri.public + '/segExport';
+	}
 	$.ajax({
 	  type: "POST",
 	  url: url,

@@ -147,7 +147,7 @@ class CategoryController extends SimpleController
         $currentUser = $this->ci->currentUser;
 
         // Access-controlled page
-        if (!$authorizer->checkAccess($currentUser, 'uri_upload')) {
+        if (!$authorizer->checkAccess($currentUser, 'uri_catEdit')) {
             $loginPage = $this->ci->router->pathFor('login');
            return $response->withRedirect($loginPage, 400);
         }
@@ -238,7 +238,7 @@ class CategoryController extends SimpleController
         $currentUser = $this->ci->currentUser;
 
         // Access-controlled page
-        if (!$authorizer->checkAccess($currentUser, 'uri_upload')) {
+        if (!$authorizer->checkAccess($currentUser, 'uri_catEdit')) {
             $loginPage = $this->ci->router->pathFor('login');
            return $response->withRedirect($loginPage, 400);
         }
@@ -257,7 +257,6 @@ class CategoryController extends SimpleController
                 error_log ("no label");
                 echo "FAIL";
                 exit;
-                
             }
             
             //TODO Insert
@@ -289,6 +288,5 @@ class CategoryController extends SimpleController
             error_log ("wrong mode");
             echo "FAIL";
         }
-        
     }
 }

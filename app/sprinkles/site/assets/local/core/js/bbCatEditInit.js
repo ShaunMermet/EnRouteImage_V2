@@ -1,0 +1,1 @@
+catEdit_initEdit("bbox");

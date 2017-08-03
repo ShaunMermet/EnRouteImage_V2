@@ -34,7 +34,8 @@ class ImgLinks extends UFModel
         "validated",
         "available",
         "requested",
-        "category"
+        "category",
+        "set_id"
     ];
 
 
@@ -52,5 +53,13 @@ class ImgLinks extends UFModel
     public function group()
     {
         return $this->belongsTo('UserFrosting\Sprinkle\Site\Model\Group','group');
+    }
+
+    /**
+     * Get the group where the set belongs.
+     */
+    public function set()
+    {
+        return $this->belongsTo('UserFrosting\Sprinkle\Site\Model\Set');
     }
 }

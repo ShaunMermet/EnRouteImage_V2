@@ -19,6 +19,8 @@ use UserFrosting\Sprinkle\Site\Sprunje\ImgLinksSprunje;
 use UserFrosting\Sprinkle\Site\Sprunje\SegImageSprunje;
 use UserFrosting\Sprinkle\Site\Model\ImgLinks;
 use UserFrosting\Sprinkle\Site\Model\SegImage;
+use UserFrosting\Sprinkle\Site\Model\Set;
+use UserFrosting\Sprinkle\Site\Model\SegSet;
 
 /**
  * Controller class for category-related requests.
@@ -62,44 +64,30 @@ class ImageController extends SimpleController
                                 ->with('group')
                                 ->first();
 
-        $validGroup = ['NULL'];
+        $validSet = [];
         foreach ($UserWGrp->group as $group) {
-            array_push($validGroup, $group->id);
+            $sets = Set::where('group_id', '=', $group->id)
+                    ->get();
+            foreach ($sets as $set) {
+                array_push($validSet, $set->id);
+            }
         }
+
         
         $maxImageRequested = getenv('MAX_IMAGE_REQUESTED');
 
         // GET parameters
         $params = $request->getQueryParams();
-        $requestedGrp = $params["grpID"];
-        $requestedCat = $params["catID"];
+        $requestedSet = $params["setID"];
+        if($requestedSet == null) $requestedSet = 1;
         
         $imgLinks = ImgLinks::where(function ($imgLinks){
                     $imgLinks->where ('state', '=', 1)
                             ->orWhere ('state', '=', 4);
                     })
                     ->where ('available', '=', 1)
-                    ->where(function ($imgLinks) use ($validGroup){
-                    $imgLinks->whereIn('group', $validGroup)
-                            ->orWhereNull('group');
-                    })
-                    ->where(function ($imgLinks) use ($requestedGrp){
-                        if($requestedGrp == 1){
-                            $imgLinks->where ('group', '=', $requestedGrp)
-                                     ->orWhereNull('group');
-                        }
-                        else{
-                            $imgLinks->where ('group', '=', $requestedGrp);
-                        }
-                    })
-                    ->where(function ($imgLinks) use ($requestedCat){
-                        if($requestedCat == null){
-                            $imgLinks->WhereNull('category');
-                        }
-                        else{
-                            $imgLinks->where ('category', '=', $requestedCat);
-                        }
-                    })
+                    ->whereIn('set_id', $validSet)
+                    ->where ('set_id', '=', $requestedSet)
                     ->inRandomOrder()
                     ->limit($maxImageRequested)
                     ->with('group')
@@ -154,43 +142,30 @@ class ImageController extends SimpleController
                                 ->with('group')
                                 ->first();
 
-        $validGroup = ['NULL'];
+        $validSet = [];
         foreach ($UserWGrp->group as $group) {
-            array_push($validGroup, $group->id);
+            $sets = SegSet::where('group_id', '=', $group->id)
+                    ->get();
+            foreach ($sets as $set) {
+                array_push($validSet, $set->id);
+            }
         }
 
         $maxImageRequested = getenv('MAX_IMAGE_REQUESTED');
 
         // GET parameters
         $params = $request->getQueryParams();
-        $requestedGrp = $params["grpID"];
-        $requestedCat = $params["catID"];
+        $requestedSet = $params["setID"];
+        if($requestedSet == null) $requestedSet = 1;
+        
+        if($requestedSet == null) $requestedSet = 1;
 
         $segImg = SegImage::where(function ($imgLinks){
                 $imgLinks->where ('state', '=', 1)
                         ->orWhere ('state', '=', 4);
                 })
-                ->where(function ($imgLinks) use ($validGroup){
-                $imgLinks->whereIn('group', $validGroup)
-                        ->orWhereNull('group');
-                })
-                ->where(function ($imgLinks) use ($requestedGrp){
-                    if($requestedGrp == 1){
-                        $imgLinks->where ('group', '=', $requestedGrp)
-                                 ->orWhereNull('group');
-                    }
-                    else{
-                        $imgLinks->where ('group', '=', $requestedGrp);
-                    }
-                })
-                ->where(function ($imgLinks) use ($requestedCat){
-                    if($requestedCat == null){
-                        $imgLinks->WhereNull('category');
-                    }
-                    else{
-                        $imgLinks->where ('category', '=', $requestedCat);
-                    }
-                })
+                ->whereIn('set_id', $validSet)
+                ->where ('set_id', '=', $requestedSet)
                 ->inRandomOrder()
                 ->limit($maxImageRequested)
                 ->with('group')
@@ -216,44 +191,30 @@ class ImageController extends SimpleController
      */
     public function getImagesCNoAuth($request, $response, $args)
     {
-        $validGroup = [NULL,1];
-
         $maxImageRequested = getenv('MAX_IMAGE_REQUESTED');
 
         /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
         $classMapper = $this->ci->classMapper;
 
+        $validSet = [];
+        $sets = Set::where('group_id', '=', 1)
+                ->get();
+        foreach ($sets as $set) {
+            array_push($validSet, $set->id);
+        }
+
         // GET parameters
         $params = $request->getQueryParams();
-        $requestedGrp = $params["grpID"];
-        $requestedCat = $params["catID"];
+        $requestedSet = $params["setID"];
+        if($requestedSet == null) $requestedSet = 1;
 
         $imgLinks = ImgLinks::where(function ($imgLinks){
                     $imgLinks->where ('state', '=', 1)
                             ->orWhere ('state', '=', 4);
                     })
                     ->where ('available', '=', 1)
-                    ->where(function ($imgLinks) use ($validGroup){
-                    $imgLinks->whereIn('group', $validGroup)
-                            ->orWhereNull('group');
-                    })
-                    ->where(function ($imgLinks) use ($requestedGrp){
-                        if($requestedGrp == 1){
-                            $imgLinks->where ('group', '=', $requestedGrp)
-                                     ->orWhereNull('group');
-                        }
-                        else{
-                            $imgLinks->where ('group', '=', $requestedGrp);
-                        }
-                    })
-                    ->where(function ($imgLinks) use ($requestedCat){
-                        if($requestedCat == null){
-                            $imgLinks->WhereNull('category');
-                        }
-                        else{
-                            $imgLinks->where ('category', '=', $requestedCat);
-                        }
-                    })
+                    ->whereIn('set_id', $validSet)
+                    ->where ('set_id', '=', $requestedSet)
                     ->inRandomOrder()
                     ->limit($maxImageRequested)
                     ->with('group')
@@ -308,41 +269,26 @@ class ImageController extends SimpleController
                                 ->with('group')
                                 ->first();
 
-        $validGroup = ['NULL'];
+        $validSet = [];
         foreach ($UserWGrp->group as $group) {
-            array_push($validGroup, $group->id);
+            $sets = Set::where('group_id', '=', $group->id)
+                    ->get();
+            foreach ($sets as $set) {
+                array_push($validSet, $set->id);
+            }
         }
 
         $maxImageRequested = getenv('MAX_IMAGE_REQUESTED');
 
         // GET parameters
         $params = $request->getQueryParams();
-        $requestedGrp = $params["grpID"];
-        $requestedCat = $params["catID"];
+        $requestedSet = $params["setID"];
+        if($requestedSet == null) $requestedSet = 1;
 
         $imgLinks = ImgLinks::where ('available', '=', 1)
                     ->where ('state', '=', 2)
-                    ->where(function ($imgLinks) use ($validGroup){
-                    $imgLinks->whereIn('group', $validGroup)
-                            ->orWhereNull('group');
-                    })
-                    ->where(function ($imgLinks) use ($requestedGrp){
-                        if($requestedGrp == 1){
-                            $imgLinks->where ('group', '=', $requestedGrp)
-                                     ->orWhereNull('group');
-                        }
-                        else{
-                            $imgLinks->where ('group', '=', $requestedGrp);
-                        }
-                    })
-                    ->where(function ($imgLinks) use ($requestedCat){
-                        if($requestedCat == null){
-                            $imgLinks->whereNull('category');
-                        }
-                        else{
-                            $imgLinks->where ('category', '=', $requestedCat);
-                        }
-                    })
+                    ->whereIn('set_id', $validSet)
+                    ->where ('set_id', '=', $requestedSet)
                     ->inRandomOrder()
                     ->limit($maxImageRequested)
                     ->with('group')
@@ -397,40 +343,25 @@ class ImageController extends SimpleController
                                 ->with('group')
                                 ->first();
 
-        $validGroup = ['NULL'];
+       $validSet = [];
         foreach ($UserWGrp->group as $group) {
-            array_push($validGroup, $group->id);
+            $sets = SegSet::where('group_id', '=', $group->id)
+                    ->get();
+            foreach ($sets as $set) {
+                array_push($validSet, $set->id);
+            }
         }
 
         $maxImageRequested = getenv('MAX_IMAGE_REQUESTED');
 
         // GET parameters
         $params = $request->getQueryParams();
-        $requestedGrp = $params["grpID"];
-        $requestedCat = $params["catID"];
+        $requestedSet = $params["setID"];
+        if($requestedSet == null) $requestedSet = 1;
 
         $segImg = SegImage::where ('state', '=', 2)
-                    ->where(function ($segImg) use ($validGroup){
-                    $segImg->whereIn('group', $validGroup)
-                            ->orWhereNull('group');
-                    })
-                    ->where(function ($imgLinks) use ($requestedGrp){
-                        if($requestedGrp == 1){
-                            $imgLinks->where ('group', '=', $requestedGrp)
-                                     ->orWhereNull('group');
-                        }
-                        else{
-                            $imgLinks->where ('group', '=', $requestedGrp);
-                        }
-                    })
-                    ->where(function ($imgLinks) use ($requestedCat){
-                        if($requestedCat == null){
-                            $imgLinks->WhereNull('category');
-                        }
-                        else{
-                            $imgLinks->where ('category', '=', $requestedCat);
-                        }
-                    })
+                    ->whereIn('set_id', $validSet)
+                    ->where ('set_id', '=', $requestedSet)
                     ->inRandomOrder()
                     ->limit($maxImageRequested)
                     ->with('group')
@@ -671,11 +602,7 @@ class ImageController extends SimpleController
                                 $query->where('user', '=', $currentUser->id);
                             })
                             ->where ('state', '=', 2)
-                            ->where(function ($imgLinks) use ($validGroup){
-                            $imgLinks->whereIn('group', $validGroup)
-                                    ->orWhereNull('group');
-                            })
-                            ->count();
+                             ->count();
 
         // Be careful how you consume this data - it has not been escaped and contains untrusted user-supplied content.
         // For example, if you plan to insert it into an HTML DOM, you must escape it on the client side (or use client-side templating).
@@ -821,12 +748,12 @@ class ImageController extends SimpleController
 
     }
     /**
-     * Get the number of images corresponding to one category (area based).
+     * Get the number of images corresponding to one set (set based / validated).
      *
      * This page requires authentication.
      * Request type: GET
      */
-    public function getNbrImagesByCat($request, $response, $args)
+    public function getNbrImagesBySet($request, $response, $args)
     {
         /** @var UserFrosting\Sprinkle\Account\Authenticate\Authenticator $authenticator */
         $authenticator = $this->ci->authenticator;
@@ -841,35 +768,51 @@ class ImageController extends SimpleController
         /** @var UserFrosting\Sprinkle\Account\Model\User $currentUser */
         $currentUser = $this->ci->currentUser;
 
+        /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
+        $classMapper = $this->ci->classMapper;
+
         // Access-controlled page
         if (!$authorizer->checkAccess($currentUser, 'uri_export')) {
             $loginPage = $this->ci->router->pathFor('login');
            return $response->withRedirect($loginPage, 400);
         }
 
+        $UserWGrp = $classMapper->staticMethod('user', 'where', 'id', $currentUser->id)
+                                ->with('group')
+                                ->first();
+
+        $validSet = [];
+        foreach ($UserWGrp->group as $group) {
+            $sets = Set::where('group_id', '=', $group->id)
+                    ->get();
+            foreach ($sets as $set) {
+                array_push($validSet, $set->id);
+            }
+        }
+
         // GET parameters
         $params = $request->getQueryParams();
-        if (!array_key_exists("ids",$params)) $params["ids"] = [];
-        if (!array_key_exists("groups",$params)) $params["groups"] = [1];
+        $requestedSet = $params["setID"];
+        if($requestedSet == null) $requestedSet = 1;
         
-        $count['countByCat'] = ImgLinks::whereHas('areas', function ($query) use($params) {
-                                    $query->whereIn('rectType', $params["ids"]);
-                                })
-                                ->where ('state', '=', 3)
-                                ->where(function ($imgLinks) use ($params){
-                                    if(in_array(1, $params["groups"])){
-                                    $imgLinks->whereIn('group', $params["groups"])
-                                            ->orWhereNull('group');
-                                    }
-                                    else{
-                                        $imgLinks->whereIn('group', $params["groups"]);
-                                    }
-                                })
+        $count['countBySet'] = ImgLinks::where ('state', '=', 3)
+                                ->whereIn('set_id', $validSet)
+                                ->where ('set_id', '=', $requestedSet)
                                 ->count();
 
         // Be careful how you consume this data - it has not been escaped and contains untrusted user-supplied content.
         // For example, if you plan to insert it into an HTML DOM, you must escape it on the client side (or use client-side templating).
         return $response->withJson($count, 200, JSON_PRETTY_PRINT);
+
+
+        $imgLinks = ImgLinks::where ('available', '=', 1)
+                    ->where ('state', '=', 2)
+                    ->whereIn('set_id', $validSet)
+                    ->where ('set_id', '=', $requestedSet)
+                    ->inRandomOrder()
+                    ->limit($maxImageRequested)
+                    ->with('group')
+                    ->get();
     }
 
     /**
@@ -878,7 +821,7 @@ class ImageController extends SimpleController
      * This page requires authentication.
      * Request type: GET
      */
-    public function getNbrSegImagesByCat($request, $response, $args)
+    public function getNbrSegImagesBySet($request, $response, $args)
     {
         /** @var UserFrosting\Sprinkle\Account\Authenticate\Authenticator $authenticator */
         $authenticator = $this->ci->authenticator;
@@ -893,33 +836,38 @@ class ImageController extends SimpleController
         /** @var UserFrosting\Sprinkle\Account\Model\User $currentUser */
         $currentUser = $this->ci->currentUser;
 
+        /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
+        $classMapper = $this->ci->classMapper;
+
         // Access-controlled page
         if (!$authorizer->checkAccess($currentUser, 'uri_export')) {
             $loginPage = $this->ci->router->pathFor('login');
            return $response->withRedirect($loginPage, 400);
         }
 
-        
+        $UserWGrp = $classMapper->staticMethod('user', 'where', 'id', $currentUser->id)
+                                ->with('group')
+                                ->first();
+
+        $validSet = [];
+        foreach ($UserWGrp->group as $group) {
+            $sets = SegSet::where('group_id', '=', $group->id)
+                    ->get();
+            foreach ($sets as $set) {
+                array_push($validSet, $set->id);
+            }
+        }
+
+
         // GET parameters
         $params = $request->getQueryParams();
-        if (!array_key_exists("ids",$params)) $params["ids"] = [];
-        if (!array_key_exists("groups",$params)) $params["groups"] = [1];
+        $requestedSet = $params["setID"];
+        if($requestedSet == null) $requestedSet = 1;
         
-        $count['countByCat'] = SegImage::whereHas('areas', function ($query) use($params) {
-                                    $query->whereIn('areaType', $params["ids"]);
-                                })
-                                ->where ('state', '=', 3)
-                                ->where(function ($imgLinks) use ($params){
-                                    if(in_array(1, $params["groups"])){
-                                    $imgLinks->whereIn('group', $params["groups"])
-                                            ->orWhereNull('group');
-                                    }
-                                    else{
-                                        $imgLinks->whereIn('group', $params["groups"]);
-                                    }
-                                })
+        $count['countBySet'] = SegImage::where ('state', '=', 3)
+                                ->whereIn('set_id', $validSet)
+                                ->where ('set_id', '=', $requestedSet)
                                 ->count();
-                                    
 
         // Be careful how you consume this data - it has not been escaped and contains untrusted user-supplied content.
         // For example, if you plan to insert it into an HTML DOM, you must escape it on the client side (or use client-side templating).
@@ -962,11 +910,15 @@ class ImageController extends SimpleController
                                 ->with('group')
                                 ->first();
 
-        $validGroup = [];
+        $validSet = [];
         foreach ($UserWGrp->group as $group) {
-            array_push($validGroup, $group->id);
+            $sets = Set::where('group_id', '=', $group->id)
+                    ->get();
+            foreach ($sets as $set) {
+                array_push($validSet, $set->id);
+            }
         }
-        $params['filters']['group'] = implode("||",$validGroup);
+        //$params['filters']['set_id'] = implode("||",$validSet);
 
         $sprunje = new ImgLinksSprunje($classMapper, $params);
 
@@ -1011,18 +963,131 @@ class ImageController extends SimpleController
                                 ->with('group')
                                 ->first();
 
-        $validGroup = [];
+        $validSet = [];
         foreach ($UserWGrp->group as $group) {
-            array_push($validGroup, $group->id);
+             $sets = SegSet::where('group_id', '=', $group->id)
+                    ->get();
+            foreach ($sets as $set) {
+                array_push($validSet, $set->id);
+            }
         }
-        $params['filters']['group'] = implode("||",$validGroup);
-
+        
         $sprunje = new SegImageSprunje($classMapper, $params);
 
         // Be careful how you consume this data - it has not been escaped and contains untrusted user-supplied content.
         // For example, if you plan to insert it into an HTML DOM, you must escape it on the client side (or use client-side templating).
         return $sprunje->toResponse($response);
     }
+
+    /**
+     * Edit an image.
+     *
+     * This function requires authentication.
+     * Request type: PUT
+     */
+    public function editImage($request, $response, $args)
+    {
+        /** @var UserFrosting\Sprinkle\Account\Authenticate\Authenticator $authenticator */
+        $authenticator = $this->ci->authenticator;
+        if (!$authenticator->check()) {
+            $loginPage = $this->ci->router->pathFor('login');
+            return $response->withRedirect($loginPage, 400);
+        }
+        /** @var UserFrosting\Sprinkle\Account\Authorize\AuthorizationManager */
+        $authorizer = $this->ci->authorizer;
+        /** @var UserFrosting\Sprinkle\Account\Model\User $currentUser */
+        $currentUser = $this->ci->currentUser;
+        // Access-controlled page
+        if (!$authorizer->checkAccess($currentUser, 'uri_upload')) {
+            $loginPage = $this->ci->router->pathFor('login');
+           return $response->withRedirect($loginPage, 400);
+        }
+
+        // Get PUT parameters: (name, slug, icon, description)
+        $params = $request->getParsedBody();
+        $data = json_decode(json_encode($params), FALSE);
+
+        if(!array_key_exists('imgId',$data)){
+            error_log ("no image id");
+            echo "FAIL";
+            exit;
+        }
+        $imgId = $data->imgId;
+        if($data->imgSet){
+            $imgSet = $data->imgSet;
+        }
+        
+        
+        if ($data->imgId == ""){
+            error_log ("no image");
+            echo "FAIL";
+            exit;
+        }
+        
+        //TODO Insert
+        $img = ImgLinks::where ('id', '=', $imgId)
+                    ->first();
+        if($imgSet){
+            //error_log("change set id");
+            $img->set_id = $imgSet;
+        }
+        $img->save();
+    }
+    /**
+     * Edit a segimage.
+     *
+     * This function requires authentication.
+     * Request type: PUT
+     */
+    public function editSegImage($request, $response, $args)
+    {
+        /** @var UserFrosting\Sprinkle\Account\Authenticate\Authenticator $authenticator */
+        $authenticator = $this->ci->authenticator;
+        if (!$authenticator->check()) {
+            $loginPage = $this->ci->router->pathFor('login');
+            return $response->withRedirect($loginPage, 400);
+        }
+        /** @var UserFrosting\Sprinkle\Account\Authorize\AuthorizationManager */
+        $authorizer = $this->ci->authorizer;
+        /** @var UserFrosting\Sprinkle\Account\Model\User $currentUser */
+        $currentUser = $this->ci->currentUser;
+        // Access-controlled page
+        if (!$authorizer->checkAccess($currentUser, 'uri_upload')) {
+            $loginPage = $this->ci->router->pathFor('login');
+           return $response->withRedirect($loginPage, 400);
+        }
+
+        // Get PUT parameters: (name, slug, icon, description)
+        $params = $request->getParsedBody();
+        $data = json_decode(json_encode($params), FALSE);
+
+        if(!array_key_exists('imgId',$data)){
+            error_log ("no image id");
+            echo "FAIL";
+            exit;
+        }
+        $imgId = $data->imgId;
+        if($data->imgSet){
+            $imgSet = $data->imgSet;
+        }
+        
+        
+        if ($data->imgId == ""){
+            error_log ("no image");
+            echo "FAIL";
+            exit;
+        }
+        
+        //TODO Insert
+        $img = SegImage::where ('id', '=', $imgId)
+                    ->first();
+        if($imgSet){
+            //error_log("change set id");
+            $img->set_id = $imgSet;
+        }
+        $img->save();
+    }
+
     protected function createLightImgBbox($imgName){
         /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
         $classMapper = $this->ci->classMapper;

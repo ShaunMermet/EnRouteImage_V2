@@ -35,7 +35,8 @@ class SegImage extends UFModel
         "validated",
         "available",
         "requested",
-        "category"
+        "category",
+        "set_id"
     ];
 
 
@@ -53,5 +54,12 @@ class SegImage extends UFModel
     public function group()
     {
         return $this->belongsTo('UserFrosting\Sprinkle\Site\Model\Group','group');
+    }
+    /**
+     * Get the group where the set belongs.
+     */
+    public function set()
+    {
+        return $this->belongsTo('UserFrosting\Sprinkle\Site\Model\SegSet');
     }
 }

@@ -17,11 +17,9 @@
 		<div class="column column-one" style="position:sticky;max-width: 100px;">
 			<div id="filler"></div>
 			<div id="leftMenu" style ="display: flex;flex-direction: column;">
-				<div style="max-width: 100px">{{translate("COMBOTITLE.CATEGORY")}}</div>
-				<select class="js-basic-single" id="combo2" style="max-width:90%;" style="width: 150px;" data-placeholder={{translate("COMBOPLACEHOLDER.NONE")}}></select>
-				<div style="max-width: 100px">{{translate("COMBOTITLE.GROUP")}}</div>
-				<select class="js-basic-single" id="combo3" style="max-width:90%;" style="width: 150px;"></select>
-				<button id="nextButton"class="button" type="button" onclick="validate_onNextClicked()">{{translate("BUTTON.NEXT_IMAGE")}}</button>
+				<div style="max-width: 100px">{{translate("COMBOTITLE.SET")}}</div>
+        		<select class="js-basic-single" id="combo4" style="max-width:90%;" style="width: 150px;"></select>
+        		<button id="nextButton"class="button" type="button" onclick="validate_onNextClicked()">{{translate("BUTTON.NEXT_IMAGE")}}</button><button id="nextButton"class="button" type="button" onclick="validate_onNextClicked()">{{translate("BUTTON.NEXT_IMAGE")}}</button>
 				<button id="ValidateButton"class="button-validate" type="button" onclick="validate_onValidateClicked()">Validate</button>
 				<button id="RejectButton"class="button-reject" type="button" onclick="validate_onRejectClicked()">Reject</button>
 				<button id="moreButton"class="button" type="button" onclick="validate_onMoreClicked()" style = "DISPLAY: none;">More image</button>

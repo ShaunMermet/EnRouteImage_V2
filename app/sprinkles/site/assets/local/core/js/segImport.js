@@ -1,33 +1,47 @@
 function import_onOtherChanged(){
-	//var otherInput = document.getElementById("fileOtherImport");
-	//otherInput.value = "";
-	//return;
-	//TDOD : Finish import
 	var imgArray = [];
 	
 	var promisedImages = document.getElementsByClassName("template-upload fade");
 	for(i = 0; i < promisedImages.length; i++){	
-		imgArray.push(promisedImages[i].children[4].innerText.split(".")[0]);
+		fullName = promisedImages[i].getElementsByClassName("hiddenName")[0].value;
+		imgArray.push(fullName.split(".")[0]);
 	}
 	var otherInput = document.getElementById("fileOtherImport");
 	var otherList = otherInput.files;
 	for(i = 0; i < otherList.length; i++){
 		console.log(otherList[i].name);
-		if(imgArray.indexOf(otherList[i].name.split(".")[0]) == -1){
+		if(otherList[i].name == 'filename.txt'){
+			console.log('name file detected');
+			getFileData(otherList[i],"",function(data,row){
+				var names = [];
+				for(k = 0; k < data.length; k++){
+					line = data[k].split(",");
+					names[line[0]] = line[1];
+				}
+				for(j = 0; j < promisedImages.length; j++){
+					row = promisedImages[j];
+					nameSlot = row.getElementsByClassName("name")[0];
+					oldname = nameSlot.innerText;
+					nameSlot.innerText = names[oldname];
+					nameSlot.title = oldname;
+					oNameSlot = row.getElementsByClassName("hiddenOname")[0];
+					oNameSlot.value = names[oldname];
+				}
+			});
+		}
+		else if(imgArray.indexOf(otherList[i].name.split(".")[0]) == -1){
 			console.log("Error no corresponding img found");
 		}
 		else{
 			for(j = 0; j < promisedImages.length; j++){	
-				if(promisedImages[j].children[4].innerText.split(".")[0] == otherList[i].name.split(".")[0]){
+				promisedImageName = promisedImages[j].getElementsByClassName("hiddenName")[0].value;
+				if(promisedImageName.split(".")[0] == otherList[i].name.split(".")[0]){
 					
 					//var data = getFileData(otherList[i]);
 					var rowFound = promisedImages[j];
 					getFileData(otherList[i],rowFound,function(data,row){
-						row.children[1].value = data;
-						polyCalc = data.split("\n");
-						polyCalc = polyCalc.filter(Boolean);
-						row.children[5].innerText = "Poly : "+polyCalc.length;
-						
+						row.getElementsByClassName("hiddenData")[0].value = data;
+						row.getElementsByClassName("data")[0].innerText = "Poly : "+data.length;
 					});
 				}
 			}
@@ -43,8 +57,8 @@ function import_onOtherChanged(){
             reader.onload = function(e) {
                 console.log (reader.result);
                 res = reader.result;
-                //res = reader.result.split("\n");
-                //res = res.filter(Boolean);
+                res = reader.result.split("\n");
+                res = res.filter(Boolean);
                 console.log(res);
                 callback(res,row);
             }

@@ -94,6 +94,9 @@
     color: #fff;
     border: 0;
 }
+.select2-container--default {
+    min-width: 100px;
+}
 
 
 

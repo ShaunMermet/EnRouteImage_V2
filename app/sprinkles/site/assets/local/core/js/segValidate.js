@@ -34,8 +34,7 @@ function validate_loadCategories(){
 					validate_catText[i] = res[i].Category;
 					validate_catColor[i] = res[i].Color;
 				}
-				validate_initCombo();
-				validate_loadGroups();
+				validate_loadset();
 	    },
 	    // Fetch failed
 	    function (data) {
@@ -43,9 +42,9 @@ function validate_loadCategories(){
 	    }
 	);
 }
-function validate_loadGroups(){
-	// Fetch the groups
-	var url = site.uri.public + '/api/groups/mygroups';
+function validate_loadset(){
+	// Fetch the sets
+	var url = site.uri.public + '/api/segSets/mysets';
 	$.ajax({
 	  type: "GET",
 	  url: url
@@ -53,14 +52,16 @@ function validate_loadGroups(){
 	.then(
 	    // Fetch successful
 	    function (data) {
-	        var res = data.rows;
-        	validate_grpId = [];
-			validate_grpText = [];
+	        var res = data;
+	        validate_set = [];
 			for(i = 0; i < res.length; i++){
-				validate_grpId[i] = parseInt(res[i].id);
-				validate_grpText[i] = res[i].name;
+				validate_set[i] = {};
+				validate_set[i]['id'] = parseInt(res[i].id);
+				validate_set[i]['name'] = res[i].name;
+				validate_set[i]['group'] = res[i].group;
 			}
-			validate_initComboGrp();
+			validate_set.sort(function(a, b){return a.id-b.id})
+			validate_initComboSet();
 			validate_loadImages();
 	    },
 	    // Fetch failed
@@ -70,58 +71,32 @@ function validate_loadGroups(){
 	);
 }
 
-function validate_initCombo(){
-	for (i = 0; i < validate_catId.length; i++) {
-		appendToCombo(validate_catText[i],validate_catId[i]);
-	}
-
-
-	function appendToCombo(category,type){
-		//console.log("creating "+category)
-		$("#combo").append("<option value=\""+type+"\">"+category+"</option>");
-		$("#combo2").append("<option value=\""+type+"\">"+category+"</option>");
-	}
-
-
-	$("#combo").select2({ width: '100px'});
-	$("#combo2").select2({allowClear: true});
-	$("#combo2").val(-1).trigger("change");
-}
-function validate_initComboGrp(){
-	for (i = 0; i < validate_grpId.length; i++) {
-		appendToCombo(validate_grpText[i],validate_grpId[i]);
+function validate_initComboSet(){
+	for (i = 0; i < validate_set.length; i++) {
+		appendToCombo(validate_set[i]['name']+" ("+validate_set[i]['group'].name+")",validate_set[i]['id']);
 	}
 
 
 	function appendToCombo(text,value){
-		//console.log("creating "+category)
-		$("#combo3").append("<option value=\""+value+"\">"+text+"</option>");
+		$("#combo4").append("<option value=\""+value+"\">"+text+"</option>");
 	}
 
 
-	$("#combo3").select2({width: '100px',placeholder: 'Select a group'});
+	$("#combo4").select2({width: '100px',placeholder: 'Select a set'});
 }
 ///////////////////////////////
 
 
 ////////////GET IMG FROM SERVER//////
-//validate_loadImages();
 validate_loadCategories();
 
 function validate_loadImages(){
-	// Fetch and render the categories
-	var combo2 = document.getElementById("combo2");
-	var imgCat;
-	if(combo2.selectedIndex == -1)
-		imgCat = null;
-	else
-		imgCat = combo2.options[combo2.selectedIndex].value;
-	var combo3 = document.getElementById("combo3");
-	var imgGrp;
-	imgGrp = combo3.options[combo3.selectedIndex].value;
+	// Fetch and render the images
+	var combo4 = document.getElementById("combo4");
+	var imgSet;
+	imgSet = combo4.options[combo4.selectedIndex].value;
 	var data= {};
-	data["catID"]=imgCat;
-	data["grpID"]=imgGrp;
+	data["setID"]=imgSet;
 	var url = site.uri.public + '/segImages/annotated';
 	$.ajax({
 	  type: "GET",

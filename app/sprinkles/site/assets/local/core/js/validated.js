@@ -34,8 +34,48 @@ function validated_loadCategories(){
 	.then(
 	    // Fetch successful
 	    function (data) {
-	        validated_initCombos(data.rows);
+	        validated_loadSegSets(data.rows);
 	        dataHandler.bboxCategories = data.rows;
+	    },
+	    // Fetch failed
+	    function (data) {
+	        
+	    }
+	);
+}
+function validated_loadSegSets(){
+	// Fetch and render the sets
+	var url = site.uri.public + '/api/segSets/mysets';
+	$.ajax({
+	  type: "GET",
+	  url: url
+	})
+	.then(
+	    // Fetch successful
+	    function (data) {
+	        data.sort(function(a, b){return a.id-b.id})
+	        validated_loadSets(data.rows);
+	        dataHandler.segsets = data;
+	    },
+	    // Fetch failed
+	    function (data) {
+	        
+	    }
+	);
+}
+function validated_loadSets(){
+	// Fetch and render the sets
+	var url = site.uri.public + '/api/sets/mysets';
+	$.ajax({
+	  type: "GET",
+	  url: url
+	})
+	.then(
+	    // Fetch successful
+	    function (data) {
+	        data.sort(function(a, b){return a.id-b.id})
+	        validated_initCombos(data);
+	        dataHandler.sets = data;
 	    },
 	    // Fetch failed
 	    function (data) {
@@ -56,10 +96,9 @@ function validated_initCombo(comboElem,data){
 	emptyCombo(comboElem);
 	
 
-	if(comboElem.id == 'comboValidatedCategory'){
-		$(comboElem).append("<option value=-1>ALL</option>");
+	if(comboElem.id == 'comboValidatedSet'){
 		for (i = 0; i < data.length; i++) {
-			appendToCombo(data[i].Category,data[i].id);
+			appendToCombo(data[i].name+" ("+data[i].group.name+")",data[i].id);
 		}
 
 		function appendToCombo(category,type){
@@ -67,11 +106,7 @@ function validated_initCombo(comboElem,data){
 		}
 
 		dataHandler.categories = catReworked(data);
-		$(comboElem).select2(/*{placeholder: 'Select a category'}*/)
-		//.on("change", function(e) {
-	    //      console.log(comboElem.value+ " selected");
-	          //validated_loadImages(cat);
-        //});
+		$(comboElem).select2()
 	}else if(comboElem.id == 'comboValidatedValidated'){
 		$(comboElem).append("<option value=-1>ALL</option>");
 		$(comboElem).append("<option value=1>New</option>");
@@ -110,21 +145,16 @@ function catReworked(catSprunje){
 }
 
 function onComboModeChanged(){
-	var catCombo = document.getElementById('comboValidatedCategory');
+	var catCombo = document.getElementById('comboValidatedSet');
 	emptyCombo(catCombo);
 
 	
 	var imgType = document.getElementById('comboValidatedMode');
-	if(imgType.value == 1){
-		var data = dataHandler.segCategories;
-	}else if(imgType.value == 0){
-		var data = dataHandler.bboxCategories;
-	}
-
-	$(catCombo).append("<option value=-1>ALL</option>");
+	if(imgType.value == 1){var data = dataHandler.segsets;}
+	else if(imgType.value == 0){var data = dataHandler.sets;}
 	for (i = 0; i < data.length; i++) {
-		appendToCombo(data[i].Category,data[i].id);
-	}
+			appendToCombo(data[i].name+" ("+data[i].group.name+")",data[i].id);
+		}
 
 	function appendToCombo(category,type){
 		$(catCombo).append("<option value=\""+type+"\">"+category+"</option>");
@@ -636,11 +666,9 @@ function validated_sendSearch(page = null){
 	if(validatedType != -1 ){
 		filter['filters']['state'] = validatedType;
 	}
-	categoryType = document.getElementById("comboValidatedCategory").value;
-	if(categoryType != -1 ){
-	    filter['filters']['category'] = categoryType;
-	}
-
+	set = document.getElementById("comboValidatedSet").value;
+    filter['filters']['set_id'] = set;
+	
 	dataHandler.filter = filter;
 	validated_loadImages(dataHandler.categories,filter);
 }

@@ -12,6 +12,8 @@ use UserFrosting\Sprinkle\Site\Model\SegImage;
 use UserFrosting\Sprinkle\Site\Model\SegArea;
 use UserFrosting\Sprinkle\Site\Model\ImgArea;
 use UserFrosting\Sprinkle\Site\Model\ImgLinks;
+use UserFrosting\Sprinkle\Site\Model\Set;
+use UserFrosting\Sprinkle\Site\Model\SegSet;
 
 /**
  * Controller class for site-related requests.
@@ -233,39 +235,47 @@ class SiteController extends SimpleController
         $authorizer = $this->ci->authorizer;
         /** @var UserFrosting\Sprinkle\Account\Model\User $currentUser */
         $currentUser = $this->ci->currentUser;
+        /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
+        $classMapper = $this->ci->classMapper;
         // Access-controlled page
         if (!$authorizer->checkAccess($currentUser, 'uri_export')) {
             $loginPage = $this->ci->router->pathFor('login');
            return $response->withRedirect($loginPage, 400);
         }
 
+        $UserWGrp = $classMapper->staticMethod('user', 'where', 'id', $currentUser->id)
+                                ->with('group')
+                                ->first();
+
+        $validSet = [];
+        foreach ($UserWGrp->group as $group) {
+            $sets = Set::where('group_id', '=', $group->id)
+                    ->get();
+            foreach ($sets as $set) {
+                array_push($validSet, $set->id);
+            }
+        }
+
         // Get parameters: 
         $params = $request->getParsedBody();
         $data = json_decode(json_encode($params), FALSE);
-
+        error_log(print_r($data,true));
+        
         /** @var UserFrosting\Config\Config $config */
         $config = $this->ci->config['db.default'];
         $db = mysqli_connect($config['host'],$config['username'],$config['password'],$config['database']);
 
         if(!array_key_exists ('category',$data)) $data->category = [];
         if(!array_key_exists ('groups',$data)) $data->groups = [1];
+        $requestedSet = $data->setID;
+        if($requestedSet == null) $requestedSet = 1;
         error_log(print_r($data,true));
         if (!empty($data))
         {
-            $imgToExport = ImgLinks::whereHas('areas', function ($query) use($data) {
-                                $query->whereIn('rectType', $data->category);//->where('areaType', '=', $data->category);
-                            })
-                            ->where ('state', '=', 3)
-                            ->where(function ($imgLinks) use ($data){
-                                if(in_array(1, $data->groups)){
-                                $imgLinks->whereIn('group', $data->groups)
-                                        ->orWhereNull('group');
-                                }
-                                else{
-                                    $imgLinks->whereIn('group', $data->groups);
-                                }
-                            })
-                            ->get();
+            $imgToExport = ImgLinks::where ('state', '=', 3)
+                                ->whereIn('set_id', $validSet)
+                                ->where ('set_id', '=', $requestedSet)
+                                ->get();
             
             if (count($imgToExport) > 0) {
             
@@ -354,10 +364,25 @@ class SiteController extends SimpleController
         $authorizer = $this->ci->authorizer;
         /** @var UserFrosting\Sprinkle\Account\Model\User $currentUser */
         $currentUser = $this->ci->currentUser;
+        /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
+        $classMapper = $this->ci->classMapper;
         // Access-controlled page
         if (!$authorizer->checkAccess($currentUser, 'uri_export')) {
             $loginPage = $this->ci->router->pathFor('login');
            return $response->withRedirect($loginPage, 400);
+        }
+
+        $UserWGrp = $classMapper->staticMethod('user', 'where', 'id', $currentUser->id)
+                                ->with('group')
+                                ->first();
+
+        $validSet = [];
+        foreach ($UserWGrp->group as $group) {
+            $sets = SegSet::where('group_id', '=', $group->id)
+                    ->get();
+            foreach ($sets as $set) {
+                array_push($validSet, $set->id);
+            }
         }
 
         // Get parameters: 
@@ -370,25 +395,15 @@ class SiteController extends SimpleController
 
         if(!array_key_exists ('category',$data)) $data->category = [];
         if(!array_key_exists ('groups',$data)) $data->groups = [1];
+        $requestedSet = $data->setID;
+        if($requestedSet == null) $requestedSet = 1;
         error_log(print_r($data,true));
         if (!empty($data))
         {
-            $imgToExport = SegImage::whereHas('areas', function ($query) use($data) {
-                                $query->whereIn('areaType', $data->category);//->where('areaType', '=', $data->category);
-                            })
-                            ->where ('state', '=', 3)
-                            ->where(function ($imgLinks) use ($data){
-                                if(in_array(1, $data->groups)){
-                                $imgLinks->whereIn('group', $data->groups)
-                                        ->orWhereNull('group');
-                                        error_log("first ");
-                                }
-                                else{
-                                    $imgLinks->whereIn('group', $data->groups);
-                                    error_log("second");
-                                }
-                            })
-                            ->get();
+            $imgToExport = SegImage::where ('state', '=', 3)
+                                ->whereIn('set_id', $validSet)
+                                ->where ('set_id', '=', $requestedSet)
+                                ->get();
             
             if (count($imgToExport) > 0) {
             
@@ -424,7 +439,6 @@ class SiteController extends SimpleController
                     //Building segmentation image 
                     $imgAreas = SegArea::with('category')
                                 ->where('source', $NImage->id)
-                                ->whereIn('areaType', $data->category)
                                 ->get();
       
                     foreach ($imgAreas as $imgArea) {

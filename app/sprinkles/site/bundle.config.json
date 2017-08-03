@@ -26,7 +26,8 @@
         },
         "js/export": {
             "scripts": [
-                "local/core/js/export.js"
+                "local/core/js/export.js",
+                "local/core/js/bbExportInit.js"
             ],
             "options": {
                 "result": {
@@ -38,7 +39,8 @@
         },
         "js/segExport": {
             "scripts": [
-                "local/core/js/segExport.js"
+                "local/core/js/export.js",
+                "local/core/js/segExportInit.js"
             ],
             "options": {
                 "result": {
@@ -86,7 +88,8 @@
         },
         "js/upload": {
             "scripts": [
-                "local/core/js/upload.js"
+                "local/core/js/upload.js",
+                "local/core/js/uploadInit.js"
             ],
             "options": {
                 "result": {
@@ -98,7 +101,8 @@
         },
         "js/segUpload": {
             "scripts": [
-                "local/core/js/segUpload.js"
+                "local/core/js/upload.js",
+                "local/core/js/segUploadInit.js"
             ],
             "options": {
                 "result": {
@@ -122,7 +126,8 @@
         },
         "js/categoriesEditor": {
             "scripts": [
-                "local/core/js/categoriesEditor.js"
+                "local/core/js/categoriesEditor.js",
+                "local/core/js/bbCatEditInit.js"
             ],
             "options": {
                 "result": {
@@ -134,7 +139,34 @@
         },
         "js/segCategoriesEditor": {
             "scripts": [
-                "local/core/js/segCategoriesEditor.js"
+                "local/core/js/categoriesEditor.js",
+                "local/core/js/segCatEditInit.js"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "scripts": "plain"
+                    }
+                }
+            }
+        },
+        "js/setsEditor": {
+            "scripts": [
+                "local/core/js/setsEditor.js",
+                "local/core/js/bbSetEditInit.js"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "scripts": "plain"
+                    }
+                }
+            }
+        },
+        "js/segSetsEditor": {
+            "scripts": [
+                "local/core/js/setsEditor.js",
+                "local/core/js/segSetEditInit.js"
             ],
             "options": {
                 "result": {

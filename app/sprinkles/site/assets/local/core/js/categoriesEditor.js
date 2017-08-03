@@ -1,6 +1,10 @@
 ////  COMBO    //////////////////
 var catEdit_phpPath = "../../php/";
+var catEdit_pagemode = "";//"bbox","segmentation"
 
+function catEdit_initEdit(pagemode){
+	catEdit_pagemode = pagemode;
+}
 function catEdit_onEditClicked(){
 	
 	catEdit_fillCateditPanel();
@@ -11,7 +15,7 @@ function catEdit_onEditClicked(){
 }
 
 function catEdit_fillCateditPanel(){
-	var combo = document.getElementById("comboEdit");
+	var combo = document.getElementById("catEditList");
 	var str = combo.options[combo.selectedIndex].text;
 	var type = combo.options[combo.selectedIndex].value;
 	var color = upl_catColor[upl_catId.indexOf(parseInt(type))];
@@ -20,14 +24,12 @@ function catEdit_fillCateditPanel(){
 		catEditText.value = str;
 		catEditText.catType = type;
 		document.getElementById('colorPicker').jscolor.fromString(color);
-		document.getElementById('saveCatButton').innerHTML = "Edit";
 	}
 	else{
 		catEditText.value = "";
 		type = -1;//New category
 		catEditText.catType = type;
 		document.getElementById('colorPicker').jscolor.fromString("#FFFFFF");
-		document.getElementById('saveCatButton').innerHTML = "Create";
 	}
 }
 
@@ -37,7 +39,6 @@ function catEdit_onAddClicked(){
 	catEditText.value = "";
 	type = -1;//New category
 	catEditText.catType = type;
-	document.getElementById('saveCatButton').innerHTML = "Create";
 	document.getElementById('colorPicker').jscolor.fromString("#FFFFFF");
 		
 	if(document.getElementById("editCatPanel")){
@@ -46,9 +47,9 @@ function catEdit_onAddClicked(){
 }
 
 function catEdit_onCloseCatEditClicked(){
-	hideEditRow();
+	catEdit_hideEditRow();
 }
-function hideEditRow(){
+function catEdit_hideEditRow(){
 	document.getElementById("editCatPanel").style = "DISPLAY: none;";
 }
 function onComboEditChanged(){
@@ -61,14 +62,14 @@ function catEdit_onSaveCatClicked(){
 		}else{//Edit
 		catEdit_sendServerEdit("EDIT",catEditText.catType,catEditText.value,colorPicker.value);
 		}
-		hideEditRow();
+		catEdit_hideEditRow();
 }
 function catEdit_onDeleteClicked(){
 		if(catEditText.catType == -1){
 		}else{
 			catEdit_sendServerEdit("DELETE",catEditText.catType,"","");
 		}
-		hideEditRow();
+		catEdit_hideEditRow();
 }
 
 function catEdit_sendServerEdit(mode,catId,catText = "",catColor = ""){
@@ -86,7 +87,11 @@ function catEdit_sendServerEdit(mode,catId,catText = "",catColor = ""){
 	data[site.csrf.keys.name] = site.csrf.name;
 	data[site.csrf.keys.value] = site.csrf.value;
 
-	var url = site.uri.public + '/admin/upload/catedit';
+	if(catEdit_pagemode == "bbox"){
+		var url = site.uri.public + '/admin/upload/catedit';
+	}else if(catEdit_pagemode == "segmentation"){
+		var url = site.uri.public + '/admin/segUpload/catedit';
+	}
 	$.ajax({
 	  type: "PUT",
 	  url: url,

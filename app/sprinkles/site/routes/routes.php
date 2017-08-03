@@ -47,6 +47,8 @@ $app->group('/admin', function () {
 
 	$this->put('/upload/catedit', 'UserFrosting\Sprinkle\Site\Controller\CategoryController:editCategory');
 
+	$this->put('/upload/setEdit', 'UserFrosting\Sprinkle\Site\Controller\SetController:editSet');
+
 	$this->get('/upload/upload', 'UserFrosting\Sprinkle\Site\Controller\SiteController:uploadHandler');
 
 	$this->post('/upload/upload', 'UserFrosting\Sprinkle\Site\Controller\SiteController:uploadHandler');
@@ -58,6 +60,8 @@ $app->group('/admin', function () {
 
 	$this->put('/segUpload/catedit', 'UserFrosting\Sprinkle\Site\Controller\CategoryController:editSegCategory');
 
+	$this->put('/segUpload/setEdit', 'UserFrosting\Sprinkle\Site\Controller\SetController:editSegSet');
+	
 	$this->get('/segUpload/upload', 'UserFrosting\Sprinkle\Site\Controller\SiteController:segUploadHandler');
 
 	$this->post('/segUpload/upload', 'UserFrosting\Sprinkle\Site\Controller\SiteController:segUploadHandler');
@@ -106,9 +110,11 @@ $app->group('/images', function () {
 
     //$this->get('/validated', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getImagesV');
 
- 	$this->get('/nbrBYcategory', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getNbrImagesByCat');
+ 	$this->get('/nbrBYset', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getNbrImagesBySet');
 
  	$this->get('/imgSprunje', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getImageSprunje');
+
+ 	$this->put('/imgEdit', 'UserFrosting\Sprinkle\Site\Controller\ImageController:editImage');
 
 });//->add('authGuard');
 
@@ -124,9 +130,11 @@ $app->group('/segImages', function () {
 
     //$this->get('/validated', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getImagesV');
 
- 	$this->get('/nbrBYcategory', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getNbrSegImagesByCat');
+ 	$this->get('/nbrBYset', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getNbrSegImagesBySet');
 
  	$this->get('/imgSprunje', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getSegImageSprunje');
+
+ 	$this->put('/imgEdit', 'UserFrosting\Sprinkle\Site\Controller\ImageController:editSegImage');
 
 });//->add('authGuard');
 
@@ -205,6 +213,19 @@ $app->group('/api/groups', function () {
 	$this->get('', 'UserFrosting\Sprinkle\Site\Controller\Overrides\GroupController:getMyGroups');
 
 })->add('authGuard');
+
+$app->group('/api/sets', function () {
+
+	$this->get('/mysets', 'UserFrosting\Sprinkle\Site\Controller\SetController:getMySets');
+
+	$this->get('/mysetsNA', 'UserFrosting\Sprinkle\Site\Controller\SetController:getMySetsNA');
+
+});//->add('authGuard');
+$app->group('/api/segSets', function () {
+
+	$this->get('/mysets', 'UserFrosting\Sprinkle\Site\Controller\SetController:getMysegSets');
+
+});//->add('authGuard');
 
 //$app->group('/group', function () {
 //	$this->get('/all', 'UserFrosting\Sprinkle\Site\Controller\Overrides\GroupController:getAllGroup');

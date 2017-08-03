@@ -43,22 +43,9 @@
     <div class="panel-body">
     <div class="labelimg-container">
     	<div class="column column-two" style="max-width: 100px;">
-            <b>Group</b>
-            <select class="js-basic-single export group" id="grpAssignEx" onchange="export_onComboChanged()"></select>
-            <div  id="comboColumnGrp"></div>
-            <div>
-                <button id="addButton" class="small-btn" type="button" onclick="export_onGrpAddClicked()">+</button>
-                <button id="removeButton" class="small-btn" type="button" onclick="export_onGrpRemoveClicked()">-</button>
-            </div>
-        </div>
-        <div class="column column-two" style="max-width: 100px;">
-            <b>Category</b>
-            <select class="js-basic-single export cat" onchange="export_onComboChanged()"></select>
-            <div  id="comboColumn"></div>
-            <div>
-                <button id="addButton" class="small-btn" type="button" onclick="export_onAddClicked()">+</button>
-                <button id="removeButton" class="small-btn" type="button" onclick="export_onRemoveClicked()">-</button>
-            </div>
+            <b>Set</b>
+            <select class="js-basic-single export set" id="setAssignEx" onchange="export_onComboChanged()"></select>
+            <div  id="comboColumnSet"></div>
         </div>
     	<div class="column column-three">
     		<button id="exportButton"class="button" type="button" onclick="export_onExportClicked()">Export</button>
@@ -72,6 +59,43 @@
     </div>
 </div>
 {% endif %} 
+{% if checkAccess('uri_setEdit') %}
+<div class="col-lg-6">
+    <div class="box-header">
+        <h3 class="box-title"><i class="fa fa-edit"></i> {{translate("UPLOAD.TITLE.SETEDITOR")}}</h3>
+    </div>
+    <div class="panel-body">
+    <div class="labelimg-container">
+        <div class="column column-two">
+            <select class="js-basic-single" id="setEditList" style="max-width:90%;" style="width: 150px;" onchange="onSetListChanged()"></select>
+            <br/>
+        </div>
+        <div class="column column-two">
+            <button id="editButton"class="small-btn" type="button" onclick="setEdit_onEditClicked()" title="Edit"><i class="fa fa-edit"></i></button>
+        </div>
+        <div class="column column-three">
+            <button id="addButton"class="small-btn" type="button" onclick="setEdit_onAddClicked()" title="Add"><i class="fa fa-plus"></i></button>
+        </div>
+        
+    </div>
+    <div class="labelimg-container" id="editSetPanel" style="DISPLAY:none;">
+        <div class="column column-two">
+            <!-- Textfield -->
+            <input type="text" name="Set name" id="setEditText">
+        </div>
+        <div class="column column-two">
+            <!-- combo my group list -->
+            <select class="js-basic-single" id="setGrpList" style="max-width:90%;" style="width: 150px;"></select>
+        </div>
+        <div class="column column-three">
+            <button id="saveCatButton"class="small-btn" type="button" onclick="setEdit_onSaveCatClicked()" title="Save"><i class="fa fa-save"></i></button>
+            <button id="deleteCatButton"class="small-btn" type="button" onclick="setEdit_onDeleteClicked()" title="Delete"><i class="fa fa-trash"></i></button>
+            <button id="closeCatEditButton"class="small-btn" type="button" onclick="setEdit_onCloseSetEditClicked()" title="Close"><i class="fa fa-close"></i></button>
+        </div>
+    </div>
+    </div>
+</div>
+{% endif %}
 {% if checkAccess('uri_catEdit') %}
 <div class="col-lg-6">
     <div class="box-header">
@@ -80,15 +104,15 @@
     <div class="panel-body">
     <div class="labelimg-container">
         <div class="column column-two">
-            <select class="js-basic-single" id="comboEdit" style="max-width:90%;" style="width: 150px;" onchange="onComboEditChanged()"></select>
+            <select class="js-basic-single" id="catEditList" style="max-width:90%;" style="width: 150px;" onchange="onComboEditChanged()"></select>
             <br/>
             <div id="comboFeedback"></div>
         </div>
         <div class="column column-two">
-            <button id="editButton"class="btn-mode2" type="button" onclick="catEdit_onEditClicked()">Edit</button>
+            <button id="editButton"class="small-btn" type="button" onclick="catEdit_onEditClicked()" title="Edit"><i class="fa fa-edit"></i></button>
         </div>
         <div class="column column-three">
-            <button id="addButton"class="btn-mode2" type="button" onclick="catEdit_onAddClicked()">Add</button>
+            <button id="addButton"class="small-btn" type="button" onclick="catEdit_onAddClicked()" title="Add"><i class="fa fa-plus"></i></button>
         </div>
         
     </div>
@@ -102,9 +126,9 @@
             <input class="jscolor" id="colorPicker">
         </div>
         <div class="column column-three">
-            <button id="saveCatButton"class="btn-mode2" type="button" onclick="catEdit_onSaveCatClicked()">Save</button>
-            <button id="deleteCatButton"class="btn-mode2" type="button" onclick="catEdit_onDeleteClicked()">Delete</button>
-            <button id="closeCatEditButton"class="btn-mode2" type="button" onclick="catEdit_onCloseCatEditClicked()">Close</button>
+            <button id="saveCatButton"class="small-btn" type="button" onclick="catEdit_onSaveCatClicked()" title="Save"><i class="fa fa-save"></i></button>
+            <button id="deleteCatButton"class="small-btn" type="button" onclick="catEdit_onDeleteClicked()" title="Delete"><i class="fa fa-trash"></i></button>
+            <button id="closeCatEditButton"class="small-btn" type="button" onclick="catEdit_onCloseCatEditClicked()" title="Close"><i class="fa fa-close"></i></button>
         </div>
     </div>
     </div>
@@ -148,10 +172,7 @@
 				<span>Start upload</span>
 			</button>
             <span style="width:200px">
-                <select class="js-basic-single" id="grpAssignAll" style="max-width:90%;" style="width: 150px;" onchange="onGrpAssignAllChanged()"></select>
-            </span>
-            <span style="width:200px">
-                <select class="js-basic-single" id="catAssignAll" style="max-width:90%;" style="width: 150px;" onchange="onCatAssignAllChanged()"></select>
+                <select class="js-basic-single" id="setAssignAll" style="max-width:90%;" style="width: 150px;" onchange="onSetAssignAllChanged()"></select>
             </span>
 			<!-- The global file processing state -->
 			<span class="fileupload-process"></span>
@@ -177,10 +198,7 @@
         <div class="row fileupload-buttonbar">
             <div class="col-lg-7" style="display: flex;justify-content: space-around;flex-wrap: wrap;width:100%;float:none">
                 <span style="width:200px">
-                    <select class="js-basic-single" id="grpAssignFolder" style="max-width:90%;" style="width: 150px;" onchange="onDownloadImageGrpChanged()"></select>
-                </span>
-                <span style="width:200px">
-                    <select class="js-basic-single" id="catAssignFolder" style="max-width:90%;" style="width: 150px;" onchange="onDownloadImageCatChanged()"></select>
+                    <select class="js-basic-single" id="setAssignFolder" style="max-width:90%;" style="width: 150px;" onchange="onDownloadImageSetChanged()"></select>
                 </span>
             </div>
         </div>
@@ -208,10 +226,9 @@
 {% verbatim %}{% for (var i=0, file; file=o.files[i]; i++) { %} 
 
     <tr class="template-upload fade">
-        <input type="hidden" name="category[]">
-        <input type="hidden" name="data[]">
-        <input type="hidden" name="name[]" value="{%=file.name%}">
-        <input type="hidden" name="group[]">
+        <input class="hiddenData {%=file.imgID%}" type="hidden" name="data[]">
+        <input class="hiddenName {%=file.imgID%}" type="hidden" name="name[]" value="{%=file.name%}">
+        <input class="hiddenOname {%=file.imgID%}" type="hidden" name="Oname[]" value="{%=file.Oname%}">
         <td>
             <span class="preview"></span>
         </td>
@@ -222,11 +239,9 @@
         <td>
             <p class="data"></p>
         </td>
+        <input class="hiddenSet {%=file.name%}" type="hidden" name="set[]" id="setData">
         <td>
-            <select class="js-basic-single grp" id="grpAssignUp" style="max-width:90%;" style="width: 150px;"></select>
-        </td>
-        <td>
-            <select class="js-basic-single cat" id="catAssignUp" style="max-width:90%;" style="width: 150px;"></select>
+            <select class="js-basic-single set" id="setAssignUp" style="max-width:90%;" style="width: 150px;" data-imgID="{%=file.name%}"></select>
         </td>
         <td>
             <p class="size">Processing...</p>
@@ -248,9 +263,8 @@
 </script>
 <!-- The template to display files available for download -->
 <script id="template-download" type="text/x-tmpl">
-{% if checkAccess('delete_img') %}
 {% verbatim %}{% for (var i=0, file; file=o.files[i]; i++) { %}
-    <tr class="template-download fade">
+    <tr class="template-download fade {%=file.imgID%}" data-deleteURL="{%=file.deleteUrl%}">
         <td>
             <span class="preview">
                 {% if (file.thumbnailUrl) { %}
@@ -270,23 +284,27 @@
                 <div><span class="label label-danger">Error</span> {%=file.error%}</div>
             {% } %}
         </td>
-        <td>
+        <td class="TD-settd">
+            <span class="TD set id {%=file.imgID%}" data-setID="{%=file.setID%}"> {%=file.set%} ({%=file.group%})</span>
+            <span class="TD spanSelect {%=file.imgID%}" style="display:none">
+                <select class="js-basic-single setDown {%=file.imgID%}" id="setAssignDown" style="max-width:90%;" style="display:none" data-imgID="{%=file.imgID%}"></select>
+            </span>
         </td>
-        <td>
-            <span> {%=file.group%}</span>
-        </td>
-        <td>
-            <span> {%=file.category%}</span>
+        <td class="TD-button">
+            <span class="TD editButton {%=file.imgID%}" style="display:initial"><button class="small-btn" type="button" onclick="onDownSetEditClicked(this)" title="Edit set" data-imgID="{%=file.imgID%}"><i class="fa fa-edit"></i></button></span>
+            <span class="TD closeButton {%=file.imgID%}" style="display:none"><button class="small-btn" type="button" onclick="onDownSetCloseClicked(this)" title="Close edit set" data-imgID="{%=file.imgID%}"><i class="fa fa-close"></i></button></span>
         </td>
         <td>
             <span class="size"> {%=o.formatFileSize(file.size)%}</span>
         </td>
 		<td>
             {% if (file.deleteUrl) { %}
-                <button class="btn btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}" {% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
-                    <i class="glyphicon glyphicon-trash"></i>
-                    <span>Delete</span>
-                </button>
+                {% endverbatim %}{% if checkAccess('delete_img') %}{% verbatim %}
+                    <button class="btn btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}" data-imgID="{%=file.imgID%}" onclick="upl_onDeleteClicked(this)" {% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
+                        <i class="glyphicon glyphicon-trash"></i>
+                        <span>Delete</span>
+                    </button>
+                {% endverbatim %}{% endif %}{% verbatim %}
             {% } else { %}
                 <button class="btn btn-warning cancel">
                     <i class="glyphicon glyphicon-ban-circle"></i>
@@ -297,48 +315,6 @@
     </tr>
 {% } %}
 {% endverbatim %}
-{% else %}
-{% verbatim %}{% for (var i=0, file; file=o.files[i]; i++) { %}
-    <tr class="template-download fade">
-        <td>
-            <span class="preview">
-                {% if (file.thumbnailUrl) { %}
-                    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" data-gallery><img src="{%=file.thumbnailUrl%}"></a>
-                {% } %}
-            </span>
-        </td>
-        <td>
-            <p class="name">
-                {% if (file.url) { %}
-                    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" {%=file.thumbnailUrl?'data-gallery':''%}> {%=file.name%} </a>
-                {% } else { %}
-                    <span> {%=file.name%}</span>
-                {% } %}
-            </p>
-            {% if (file.error) { %}
-                <div><span class="label label-danger">Error</span> {%=file.error%}</div>
-            {% } %}
-        </td>
-        <td>
-            <span> {%=file.category%}</span>
-        </td>
-        <td>
-            <span class="size"> {%=o.formatFileSize(file.size)%}</span>
-        </td>
-        <td>
-            {% if (file.deleteUrl) { %}
-                
-            {% } else { %}
-                <button class="btn btn-warning cancel">
-                    <i class="glyphicon glyphicon-ban-circle"></i>
-                    <span>Cancel</span>
-                </button>
-            {% } %}
-        </td>
-    </tr>
-{% } %}
-{% endverbatim %}
-{% endif %}
 </script>
 </div>
 {% endif %} 
@@ -402,6 +378,7 @@
     {% if checkAccess('uri_export') %}
     {{ assets.js('js/jscolor') | raw }}
     {{ assets.js('js/categoriesEditor') | raw }}
+    {{ assets.js('js/setsEditor') | raw }}
     {% endif %} 
     {{ assets.js('js/import') | raw }}
     {{ assets.js('js/upload') | raw }}
