@@ -24,7 +24,6 @@ var mouse = {
 function label_initpage(pagemode){
 	label_pagemode = pagemode;
 	label_loadCategories();
-	label_getCountEdit();
 }
 ////////////GET IMG FROM SERVER//////
 function label_loadImages(){
@@ -40,10 +39,7 @@ function label_loadImages(){
 	var data= {};
 	data["setID"]=imgSet;
 	if(label_pagemode == "label"){
-		if(reworkMode)
-			var url = site.uri.public + '/images/myedit';
-		else
-			var url = site.uri.public + '/images/clean';
+		var url = site.uri.public + '/images/clean';
 	}
 	else if (label_pagemode == "homepage"){
 		var url = site.uri.public + '/images/cleanNA';
@@ -990,8 +986,7 @@ function label_onNextClicked(){
 		    // Fetch successful
 		    function (data) {
 				label_nextImage();
-				label_getCountEdit();
-		    },
+			},
 		    // Fetch failed
 		    function (data) {
 		        
@@ -1001,27 +996,6 @@ function label_onNextClicked(){
 	else{
 		label_nextImage();
 	}
-}
-function label_getCountEdit(){
-	if(label_pagemode == "homepage") return;
-	var url = site.uri.public + '/images/myeditCount';
-	$.ajax({
-	  type: "GET",
-	  url: url
-	})
-	.then(
-	    // Fetch successful
-	    function (data) {
-			label_updateEditNbr(data);
-	    },
-	    // Fetch failed
-	    function (data) {
-	        
-	    }
-	);
-}
-function label_updateEditNbr(data){
-	document.getElementById('editValue').innerHTML = data.pendingImg;
 }
 
 function label_onMoreClicked(){
@@ -1052,16 +1026,6 @@ window.onscroll = function(){
 };
 ////////////////////////////////////////////
 
-var reworkMode = false;
-
-function label_onReworkClicked(element){
-	if (element.checked)
-		reworkMode = true;
-	else
-		reworkMode = false;
-	label_freeRemainingImages();
-	label_loadImages();
-}
 function label_onViewLabelClicked(element){
 	if (element.checked){
 		label_showBboxLabel(true);

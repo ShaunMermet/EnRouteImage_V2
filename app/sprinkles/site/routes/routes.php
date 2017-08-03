@@ -104,13 +104,7 @@ $app->group('/images', function () {
 
     $this->get('/annotated', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getImagesA');
 
-    $this->get('/myedit', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getImagesAbyMe');
-
-    $this->get('/myeditCount', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getCountImagesAbyMe');
-
-    //$this->get('/validated', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getImagesV');
-
- 	$this->get('/nbrBYset', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getNbrImagesBySet');
+    $this->get('/nbrBYset', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getNbrImagesBySet');
 
  	$this->get('/imgSprunje', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getImageSprunje');
 
@@ -124,13 +118,7 @@ $app->group('/segImages', function () {
 
     $this->get('/annotated', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getSegImagesA');
 
-    $this->get('/myedit', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getSegImagesAbyMe');
-
-    $this->get('/myeditCount', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getCountSegImagesAbyMe');
-
-    //$this->get('/validated', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getImagesV');
-
- 	$this->get('/nbrBYset', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getNbrSegImagesBySet');
+    $this->get('/nbrBYset', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getNbrSegImagesBySet');
 
  	$this->get('/imgSprunje', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getSegImageSprunje');
 

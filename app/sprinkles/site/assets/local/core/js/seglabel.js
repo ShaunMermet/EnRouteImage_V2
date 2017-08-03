@@ -7,7 +7,6 @@ var label_AreasList = [];
 
 
 ////////////GET IMG FROM SERVER//////
-label_getCountEdit();
 
 function label_loadImages(){
 	label_imgPathList = [];
@@ -18,10 +17,7 @@ function label_loadImages(){
 	var data= {};
 	data["setID"]=imgSet;
 	// Fetch and render the images
-	if(reworkMode)
-		var url = site.uri.public + '/segImages/myedit';
-	else
-		var url = site.uri.public + '/segImages/clean';
+	var url = site.uri.public + '/segImages/clean';
 	$.ajax({
 	  type: "GET",
 	  url: url,
@@ -634,8 +630,7 @@ function label_onNextClicked(){
 		    // Fetch successful
 		    function (data) {
 				label_nextImage();
-				label_getCountEdit();
-		    },
+			},
 		    // Fetch failed
 		    function (data) {
 		    	modal.style.display = "block";
@@ -646,27 +641,6 @@ function label_onNextClicked(){
 	else{
 		label_nextImage();
 	}
-}
-
-function label_getCountEdit(){
-	var url = site.uri.public + '/segImages/myeditCount';
-	$.ajax({
-	  type: "GET",
-	  url: url
-	})
-	.then(
-	    // Fetch successful
-	    function (data) {
-			label_updateEditNbr(data);
-	    },
-	    // Fetch failed
-	    function (data) {
-	        
-	    }
-	);
-}
-function label_updateEditNbr(data){
-	document.getElementById('editValue').innerHTML = data.pendingSegImg;
 }
 
 function label_onMoreClicked(){
@@ -685,13 +659,4 @@ window.onscroll = function(){
 };
 
 ///////////////////////////////
-var reworkMode = false;
-
-function label_onReworkClicked(element){
-	if (element.checked)
-		reworkMode = true;
-	else
-		reworkMode = false;
-	label_loadImages();
-}
 
