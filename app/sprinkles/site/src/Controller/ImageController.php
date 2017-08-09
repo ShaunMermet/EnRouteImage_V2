@@ -90,7 +90,6 @@ class ImageController extends SimpleController
                     ->where ('set_id', '=', $requestedSet)
                     ->inRandomOrder()
                     ->limit($maxImageRequested)
-                    ->with('group')
                     ->get();
         //Reserve Images
         foreach ($imgLinks as $img) {
@@ -168,7 +167,6 @@ class ImageController extends SimpleController
                 ->where ('set_id', '=', $requestedSet)
                 ->inRandomOrder()
                 ->limit($maxImageRequested)
-                ->with('group')
                 ->get();
 
         foreach ($segImg as $img) {
@@ -217,7 +215,6 @@ class ImageController extends SimpleController
                     ->where ('set_id', '=', $requestedSet)
                     ->inRandomOrder()
                     ->limit($maxImageRequested)
-                    ->with('group')
                     ->get();
         //Reserve Images
         foreach ($imgLinks as $img) {
@@ -291,7 +288,6 @@ class ImageController extends SimpleController
                     ->where ('set_id', '=', $requestedSet)
                     ->inRandomOrder()
                     ->limit($maxImageRequested)
-                    ->with('group')
                     ->get();
         //Reserve Images
         foreach ($imgLinks as $img) {
@@ -364,7 +360,6 @@ class ImageController extends SimpleController
                     ->where ('set_id', '=', $requestedSet)
                     ->inRandomOrder()
                     ->limit($maxImageRequested)
-                    ->with('group')
                     ->get();
         
         foreach ($segImg as $img) {
@@ -489,16 +484,6 @@ class ImageController extends SimpleController
         // Be careful how you consume this data - it has not been escaped and contains untrusted user-supplied content.
         // For example, if you plan to insert it into an HTML DOM, you must escape it on the client side (or use client-side templating).
         return $response->withJson($count, 200, JSON_PRETTY_PRINT);
-
-
-        $imgLinks = ImgLinks::where ('available', '=', 1)
-                    ->where ('state', '=', 2)
-                    ->whereIn('set_id', $validSet)
-                    ->where ('set_id', '=', $requestedSet)
-                    ->inRandomOrder()
-                    ->limit($maxImageRequested)
-                    ->with('group')
-                    ->get();
     }
 
     /**

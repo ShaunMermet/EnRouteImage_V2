@@ -967,3 +967,7 @@ ALTER TABLE `segsets`
 --  ALTER TABLE `segimages`
 --  DROP `category`,
 --  DROP `group`;
+
+
+ALTER TABLE `labelimgarea` CHANGE `user` `user` INT(4) NOT NULL DEFAULT '0' COMMENT 'id of the user that submitted the area' AFTER `source`;
+ALTER TABLE `labelimgarea` ADD `state` INT(1) NOT NULL DEFAULT '2' COMMENT '1 : none, 2 : wating for validation - Yellow, 3 : Validated - Green, 4 : Rejected - Red' AFTER `user`;

@@ -10,15 +10,15 @@ var label_rectanglesList = [];
 
 
 var mouse = {
-		x: 0,
-		y: 0,
-		// coord in image ref
-		startX: 0,
-		startY: 0
-	};
+	x: 0,
+	y: 0,
+	// coord in image ref
+	startX: 0,
+	startY: 0
+};
 
-	var element = null;
-	var minSize = 10;
+var element = null;
+var minSize = 10;
 
 
 function label_initpage(pagemode){
@@ -148,7 +148,7 @@ function label_addImage(){
 		label_removeImage();
 }
 
-function label_drawRects(idImage){
+function label_drawRects(idImage){//Existing rects
 	for(var i = 0; i < label_rectanglesList.length; ++i){
 		reviewedRect = label_rectanglesList[i];
 
@@ -465,19 +465,18 @@ function label_initSelection(){
 function label_initDraw() {
 	var canvas = document.getElementById('preview');
 	/////  CLICK  ///////////////////////////
-	document.onmousemove = function (e) {
-		onMoveHandler(e);
-	}
-	canvas.onclick = function(e){
-		onClickHandler(e);
-	}
 	canvas.onmousedown = function(e){
 		onDownHandler(e);
+	}
+	document.onmousemove = function (e) {
+		onMoveHandler(e);
 	}
 	document.onmouseup = function(e){
 		onUpHandler(e);
 	}
-	
+	canvas.onclick = function(e){
+		onClickHandler(e);
+	}
 }
 
 /////  TOUCH  ////////////////////////////
@@ -487,6 +486,11 @@ function label_onTouchStart(e){
 	onClickHandler(e);
 	onDownHandler(e);
 }
+function label_onTouchMove(e){
+	if(!moveMode)
+		e.preventDefault();
+	onMoveHandler(e);
+}
 function label_onTouchEnd(e){
 	if(!moveMode)
 		e.preventDefault();
@@ -495,17 +499,15 @@ function label_onTouchEnd(e){
 function label_onTouchCancel(e){
 	e.preventDefault();
 }
-function label_onTouchMove(e){
-	if(!moveMode)
-		e.preventDefault();
-	onMoveHandler(e);
-}
-///////////////////////////////////////////
 
-function onMoveHandler(e) {
+///////////////////////////////////////////
+function onDownHandler(e) {
 	var refImage = document.getElementById('image');
-	var refPreview = document.getElementById('preview');
-	
+	if(drawMode== true && element == null && refImage !== null){
+		createElement(e);
+	}
+}
+function onMoveHandler(e) {
 	if(drawMode== true){
 		if(resizeMode)
 			resizeElement(e, element);
@@ -513,74 +515,104 @@ function onMoveHandler(e) {
 			moveElement(e, element);
 		}
 		else if (element !== null) {
-
-		
-			if(e.type == "mousemove"){
-				var pageX = e.pageX + refPreview.scrollLeft;
-				var pageY = e.pageY;
-			}
-			else if(e.type == "touchmove" && e.targetTouches){
-				var pageX = e.targetTouches[0].pageX + refPreview.scrollLeft;
-				var pageY = e.targetTouches[0].pageY;
-			}
-			else{
-				var pageX = 0;
-				var pageY = 0;
-				console.log("no event recognized");
-				return;
-			}
-			//document.getElementById('value4').innerHTML = "pageX "+parseInt(pageX)+" pageY "+parseInt(pageY);
-			//document.getElementById('value6').innerHTML = "mX "+mouse.startX+" mY "+mouse.startX;
-			//document.getElementById('value7').innerHTML = "e.X "+e.offsetX+" e.Y "+e.offsetY;
-			////////   X   /////////////////////////
-			var leftImage = refPreview.parentElement.offsetLeft;//distance between window border and the left of the image
-			var currentDistanceX = pageX - (leftImage + mouse.startX);//distance between initial mouse and mouse
-			var tmpWidth = Math.abs(currentDistanceX);//width of rect
-			var normalLeft = mouse.startX;//when going to the right, distance between left of image and the border of rect (initial pos of mouse)
-			var reverseLeft = pageX - leftImage;//when going to the left, distance between left of image and the mouse (current mouse)
-			if(currentDistanceX > 0)
-				var reverseX = false; else var reverseX = true;
-			
-			if (reverseX == false && ((normalLeft + tmpWidth) <= refImage.width))//going right, offset + rect.width can't be bigger than img.width
-				element.style.width = tmpWidth + 'px';
-			if (reverseX == true && reverseLeft >= 0)//going left, when going under 0 we stop expending the box
-				element.style.width = tmpWidth + 'px';
-													//On some case we don't actualise width
-			
-			if(reverseX == true && reverseLeft >= 0)//Rectangle is moved if going on left, when going out of image we stop moiving rect ( width expand is also stopped)
-				element.style.left = reverseLeft + 'px';
-			if(reverseX == false)
-				element.style.left = normalLeft + 'px';//when going right, starting point is always the same 
-			
-			
-			////////   Y   /////////////////////////
-			var topImage = refPreview.parentElement.offsetTop ;
-			var currentDistanceY = pageY - (topImage + mouse.startY);
-			var tmpHeight = Math.abs(currentDistanceY);
-			var normalTop = mouse.startY;
-			var reverseTop = pageY - topImage;
-			if(currentDistanceY > 0)
-				var reverseY = false; else var reverseY = true;
-			
-			if (reverseY == false && ((normalTop + tmpHeight) <= refImage.height))
-				element.style.height = tmpHeight + 'px';
-			if (reverseY == true && reverseTop >= 0)
-				element.style.height = tmpHeight + 'px';
-			//Rectangle is moved if going on top
-			if(reverseY == true && reverseTop >= 0)
-				element.style.top = reverseTop + 'px';
-			if(reverseY == false)
-				element.style.top = normalTop + 'px';
-			//Mimimum size of rect
-			if(parseFloat(element.style.width) >= minSize && parseFloat(element.style.height) >= minSize)
-				refPreview.appendChild(element);
-			else if(element.parentElement)
-				refPreview.removeChild(element);
-			//document.getElementById('value5').innerHTML = "left "+element.style.left+" top "+element.style.top;
-			adaptText(element);
-			drawAnchor(element);
+			sizeElement(e, element);
 		}
 	}
+}
+function onUpHandler(e) {
+	var canvas = document.getElementById('preview');
+	if(drawMode== true){
+		endCreateElement(e);
+	}
+	resizeMode = false;
+	elemMoveMode = false;
+	updateNbrAreas();
+}
+function onClickHandler(e) {
+	if(eraseMode== true){
+		//console.log("go pour effacement"+e.target);
+		if(e.target.className == "rectangle"){
+			//console.log("effacement");
+			e.target.remove();
+		}
+		else if(e.target.className == "rectangleText"){
+			e.target.parentElement.remove();
+		}
+	}
+	else{
+		e.target.parentElement.appendChild(e.target);
+	}
+	updateNbrAreas();
+}
+
+
+function sizeElement(e, element){
+	var refImage = document.getElementById('image');
+	var refPreview = document.getElementById('preview');
+	if(e.type == "mousemove"){
+		var pageX = e.pageX + refPreview.scrollLeft;
+		var pageY = e.pageY;
+	}
+	else if(e.type == "touchmove" && e.targetTouches){
+		var pageX = e.targetTouches[0].pageX + refPreview.scrollLeft;
+		var pageY = e.targetTouches[0].pageY;
+	}
+	else{
+		var pageX = 0;
+		var pageY = 0;
+		console.log("no event recognized");
+		return;
+	}
+	//document.getElementById('value4').innerHTML = "pageX "+parseInt(pageX)+" pageY "+parseInt(pageY);
+	//document.getElementById('value6').innerHTML = "mX "+mouse.startX+" mY "+mouse.startX;
+	//document.getElementById('value7').innerHTML = "e.X "+e.offsetX+" e.Y "+e.offsetY;
+	////////   X   /////////////////////////
+	var leftImage = refPreview.parentElement.offsetLeft;//distance between window border and the left of the image
+	var currentDistanceX = pageX - (leftImage + mouse.startX);//distance between initial mouse and mouse
+	var tmpWidth = Math.abs(currentDistanceX);//width of rect
+	var normalLeft = mouse.startX;//when going to the right, distance between left of image and the border of rect (initial pos of mouse)
+	var reverseLeft = pageX - leftImage;//when going to the left, distance between left of image and the mouse (current mouse)
+	if(currentDistanceX > 0)
+		var reverseX = false; else var reverseX = true;
+	
+	if (reverseX == false && ((normalLeft + tmpWidth) <= refImage.width))//going right, offset + rect.width can't be bigger than img.width
+		element.style.width = tmpWidth + 'px';
+	if (reverseX == true && reverseLeft >= 0)//going left, when going under 0 we stop expending the box
+		element.style.width = tmpWidth + 'px';
+											//On some case we don't actualise width
+	
+	if(reverseX == true && reverseLeft >= 0)//Rectangle is moved if going on left, when going out of image we stop moiving rect ( width expand is also stopped)
+		element.style.left = reverseLeft + 'px';
+	if(reverseX == false)
+		element.style.left = normalLeft + 'px';//when going right, starting point is always the same 
+	
+	
+	////////   Y   /////////////////////////
+	var topImage = refPreview.parentElement.offsetTop ;
+	var currentDistanceY = pageY - (topImage + mouse.startY);
+	var tmpHeight = Math.abs(currentDistanceY);
+	var normalTop = mouse.startY;
+	var reverseTop = pageY - topImage;
+	if(currentDistanceY > 0)
+		var reverseY = false; else var reverseY = true;
+	
+	if (reverseY == false && ((normalTop + tmpHeight) <= refImage.height))
+		element.style.height = tmpHeight + 'px';
+	if (reverseY == true && reverseTop >= 0)
+		element.style.height = tmpHeight + 'px';
+	//Rectangle is moved if going on top
+	if(reverseY == true && reverseTop >= 0)
+		element.style.top = reverseTop + 'px';
+	if(reverseY == false)
+		element.style.top = normalTop + 'px';
+	//Mimimum size of rect
+	if(parseFloat(element.style.width) >= minSize && parseFloat(element.style.height) >= minSize)
+		refPreview.appendChild(element);
+	else if(element.parentElement)
+		refPreview.removeChild(element);
+	//document.getElementById('value5').innerHTML = "left "+element.style.left+" top "+element.style.top;
+	adaptText(element);
+	drawAnchor(element);
 }
 
 function resizeElement(e, element){
@@ -674,189 +706,168 @@ function moveElement(e, element){
 	drawAnchor(element);
 }
 
-
-function onClickHandler(e) {
-	if(eraseMode== true){
-		//console.log("go pour effacement"+e.target);
-		if(e.target.className == "rectangle"){
-			//console.log("effacement");
-			e.target.remove();
-		}
-		else if(e.target.className == "rectangleText"){
-			e.target.parentElement.remove();
-		}
+function createElement(e){
+	var refPreview = document.getElementById('preview');
+	if(e.type == "mousedown"){
+		var pageX = e.pageX + refPreview.scrollLeft;
+		var pageY = e.pageY;
+	}
+	else if(e.type == "touchstart"){
+		var pageX = e.targetTouches[0].pageX + refPreview.scrollLeft;
+		var pageY = e.targetTouches[0].pageY;
 	}
 	else{
-		e.target.parentElement.appendChild(e.target);
+		var pageX = 0;
+		var pageY = 0;
+		console.log("no event recognized");
 	}
-	updateNbrAreas();
-}
+	//In image coord (relative to img)
+	//mouse.startX = (pageX - refImage.offsetLeft);
+	//mouse.startY = (pageY - refImage.offsetTop);
+	mouse.startX = (pageX - refPreview.parentElement.offsetLeft);
+	mouse.startY = (pageY - refPreview.parentElement.offsetTop);
+	element = document.createElement('div');
+	element.className = 'rectangle';
+	var combo = document.getElementById("combo");
+	var str = combo.options[combo.selectedIndex].text;
+	var type = combo.options[combo.selectedIndex].value;
+	var color = label_catColor[label_catId.indexOf(parseInt(type))];
+	element.rectType = type;
+	//Don't use it as we do not display rect when too small (it's a dot at the start)
+	//element.style.left = pageX + 'px';
+	//element.style.top = pageY + 'px';
+	element.style.border= "3px solid "+color;
+	element.style.color= color;
+	var canvas = document.createElement('canvas');
+	canvas.style.pointerEvents = "none";
+		canvas.style.margin = "-5px";//(anchorScale-3)/2 +3
+	var text = document.createElement('div');
+	var t = document.createTextNode(str);
+	text.className = 'rectangleText';
+	if (!$('#labelShowSwitch').is(":checked")){text.style.display = "none";}
+	text.appendChild(t);
+	text.style.pointerEvents = "none";
+	text.style.position = "absolute";
+	element.appendChild(text);
+	element.appendChild(canvas);
+	//refPreview.appendChild(element);
+	//adaptText();
+	element.style.width = 0;
+	element.style.height = 0;
+	//refPreview.style.cursor = "crosshair";
 
-function onDownHandler(e) {
-	var refImage = document.getElementById('image');
-	var refPreview = document.getElementById('preview');
-	if(drawMode== true && element == null && refImage !== null){
-		if(e.type == "mousedown"){
-			var pageX = e.pageX + refPreview.scrollLeft;
-			var pageY = e.pageY;
-		}
-		else if(e.type == "touchstart"){
-			var pageX = e.targetTouches[0].pageX + refPreview.scrollLeft;
-			var pageY = e.targetTouches[0].pageY;
-		}
-		else{
-			var pageX = 0;
-			var pageY = 0;
-			console.log("no event recognized");
-		}
-		//In image coord (relative to img)
-		//mouse.startX = (pageX - refImage.offsetLeft);
-		//mouse.startY = (pageY - refImage.offsetTop);
-		mouse.startX = (pageX - refPreview.parentElement.offsetLeft);
-		mouse.startY = (pageY - refPreview.parentElement.offsetTop);
-		element = document.createElement('div');
-		element.className = 'rectangle';
-		var combo = document.getElementById("combo");
-		var str = combo.options[combo.selectedIndex].text;
-		var type = combo.options[combo.selectedIndex].value;
-		var color = label_catColor[label_catId.indexOf(parseInt(type))];
-		element.rectType = type;
-		//Don't use it as we do not display rect when too small (it's a dot at the start)
-		//element.style.left = pageX + 'px';
-		//element.style.top = pageY + 'px';
-		element.style.border= "3px solid "+color;
-		element.style.color= color;
-		var canvas = document.createElement('canvas');
-		canvas.style.pointerEvents = "none";
-  		canvas.style.margin = "-5px";//(anchorScale-3)/2 +3
-		var text = document.createElement('div');
-		var t = document.createTextNode(str);
-		text.className = 'rectangleText';
-		if (!$('#labelShowSwitch').is(":checked")){text.style.display = "none";}
-		text.appendChild(t);
-		text.style.pointerEvents = "none";
-		text.style.position = "absolute";
-		element.appendChild(text);
-		element.appendChild(canvas);
-		//refPreview.appendChild(element);
-		//adaptText();
-		element.style.width = 0;
-		element.style.height = 0;
-		//refPreview.style.cursor = "crosshair";
-
-		element.onmousedown = function(e){
-			onElementDownHandler(e,$(this));
-		}
-		element.onmousemove = function(e){
-			onElementMoveHandler(e,$(this));
-		}
-		
-
+	element.onmousedown = function(e){
+		onElementDownHandler(e,$(this));
+	}
+	element.onmousemove = function(e){
+		onElementMoveHandler(e,$(this));
 	}
 }
-
-function onUpHandler(e) {
+function endCreateElement(e){
 	var canvas = document.getElementById('preview');
-	if(drawMode== true){
-		if(element != null){
-			element.rectSetLeft = element.offsetLeft;
-			element.rectSetTop = element.offsetTop;
-			element.rectSetWidth = element.offsetWidth;
-			element.rectSetHeight = element.offsetHeight;
-			element.rectSetRatio = label_getImgRatio();
-			element = null;
-		}
-		canvas.style.cursor = "default";
-
-		$(".rectangle").on('touchstart',function(e,data) {
-			e.preventDefault();  
-			onElementDownHandler(e,$(this));
-		});
-		$(".rectangle").on('touchmove',function(e,data) {
-			e.preventDefault();
-			onMoveHandler(e); 
-		});
-		$(".rectangle").on('touchend',function(e,data) {
-			onClickHandler(e);
-			e.preventDefault(); 
-			resizeMode = false;
-			elemMoveMode = false;
-			element = null;
-		});
+	if(element != null){
+		element.rectSetLeft = element.offsetLeft;
+		element.rectSetTop = element.offsetTop;
+		element.rectSetWidth = element.offsetWidth;
+		element.rectSetHeight = element.offsetHeight;
+		element.rectSetRatio = label_getImgRatio();
+		element = null;
 	}
-	resizeMode = false;
-	elemMoveMode = false;
-	updateNbrAreas();
+	canvas.style.cursor = "default";
+
+	$(".rectangle").on('touchstart',function(e,data) {
+		e.preventDefault();  
+		onElementDownHandler(e,$(this));
+	});
+	$(".rectangle").on('touchmove',function(e,data) {
+		e.preventDefault();
+		onMoveHandler(e); 
+	});
+	$(".rectangle").on('touchend',function(e,data) {
+		onClickHandler(e);
+		e.preventDefault(); 
+		resizeMode = false;
+		elemMoveMode = false;
+		element = null;
+	});
 }
+
+
 function onElementDownHandler(e,selection){
 	if(drawMode){
-		var refPreview = document.getElementById('preview');
-		if(e.type == "mousedown"){
-			var offsetX = e.offsetX;
-			var offsetY = e.offsetY;
-			var reactiveLength = parseInt(selection.css('borderLeftWidth'));
-			var pageX = e.pageX;
-			var pageY = e.pageY;
-		}
-		else if(e.type == "touchstart"){
-			var offsetX = e.originalEvent.targetTouches[0].pageX - e.originalEvent.currentTarget.offsetLeft - refPreview.parentElement.offsetLeft  + refPreview.scrollLeft;
-			var offsetY = e.originalEvent.targetTouches[0].pageY - e.originalEvent.currentTarget.offsetTop - refPreview.parentElement.offsetTop;
-			var reactiveLength = parseInt(selection.css('borderLeftWidth')) +10;
-			var pageX = e.originalEvent.targetTouches[0].pageX;
-			var pageY = e.originalEvent.targetTouches[0].pageY;
-		}
-		else{
-			var offsetX = 0;
-			var offsetY = 0;
-			console.log("no event recognized");
-			return;
-		}
-		element = e.target;
-
-		if( (  offsetX <= reactiveLength  ) && (  offsetY <= reactiveLength  ) ){// Top-left
-	    	resizeMode = "Top-left";
-	    }
-	    else if( (  offsetX >= (e.target.clientWidth - reactiveLength)  ) && (  offsetY >= (e.target.clientHeight - reactiveLength)  ) ){// Bottom-right
-	    	resizeMode = "Bottom-right";
-		}
-
-		else if( (  offsetX <= reactiveLength  ) && (  offsetY >= (e.target.clientHeight - reactiveLength)  ) ){// Bottom-left
-	    	resizeMode = "Bottom-left";
-	    }
-	    else if( (  offsetX >= (e.target.clientWidth - reactiveLength)  ) && (  offsetY <= reactiveLength  ) ){// Top-right
-	    	resizeMode = "Top-right";
-		}
-
-		else if(  offsetX <= reactiveLength){
-	       	resizeMode = "Left";
-	       	mouse.startWidth = element.offsetWidth;
-	    }
-	    else if(  offsetY <= reactiveLength){
-       		resizeMode = "Top";
-       		mouse.startHeight = element.offsetHeight;
-	    }
-	    else if(  offsetX >= (e.target.clientWidth - reactiveLength) ){
-	       	resizeMode = "Right";
-	    }
-	    else if(  offsetY >= (e.target.clientHeight - reactiveLength) ){
-	       	resizeMode = "Bottom";
-	    }
-	    else{
-	    	elemMoveMode = true;
-	    }
-	    if(elemMoveMode){
-	    	mouse.startX = pageX - element.offsetLeft - refPreview.parentElement.offsetLeft;
-	    	mouse.startY = pageY - element.offsetTop - refPreview.parentElement.offsetTop;
-	    }
-	    else{
-	    	mouse.startX = element.offsetLeft;
-			mouse.startY = element.offsetTop;
-			mouse.startWidth = element.offsetWidth;
-			mouse.startHeight = element.offsetHeight;
-	    }
+		initElementAction(e, selection);
 	}
 }
 function onElementMoveHandler(e,selection){
+	onOverChangeCursor(e, selection);
+}
+function initElementAction(e, selection){
+	var refPreview = document.getElementById('preview');
+	if(e.type == "mousedown"){
+		var offsetX = e.offsetX;
+		var offsetY = e.offsetY;
+		var reactiveLength = parseInt(selection.css('borderLeftWidth'));
+		var pageX = e.pageX;
+		var pageY = e.pageY;
+	}
+	else if(e.type == "touchstart"){
+		var offsetX = e.originalEvent.targetTouches[0].pageX - e.originalEvent.currentTarget.offsetLeft - refPreview.parentElement.offsetLeft  + refPreview.scrollLeft;
+		var offsetY = e.originalEvent.targetTouches[0].pageY - e.originalEvent.currentTarget.offsetTop - refPreview.parentElement.offsetTop;
+		var reactiveLength = parseInt(selection.css('borderLeftWidth')) +10;
+		var pageX = e.originalEvent.targetTouches[0].pageX;
+		var pageY = e.originalEvent.targetTouches[0].pageY;
+	}
+	else{
+		var offsetX = 0;
+		var offsetY = 0;
+		console.log("no event recognized");
+		return;
+	}
+	element = e.target;
+
+	if( (  offsetX <= reactiveLength  ) && (  offsetY <= reactiveLength  ) ){// Top-left
+    	resizeMode = "Top-left";
+    }
+    else if( (  offsetX >= (e.target.clientWidth - reactiveLength)  ) && (  offsetY >= (e.target.clientHeight - reactiveLength)  ) ){// Bottom-right
+    	resizeMode = "Bottom-right";
+	}
+
+	else if( (  offsetX <= reactiveLength  ) && (  offsetY >= (e.target.clientHeight - reactiveLength)  ) ){// Bottom-left
+    	resizeMode = "Bottom-left";
+    }
+    else if( (  offsetX >= (e.target.clientWidth - reactiveLength)  ) && (  offsetY <= reactiveLength  ) ){// Top-right
+    	resizeMode = "Top-right";
+	}
+
+	else if(  offsetX <= reactiveLength){
+       	resizeMode = "Left";
+       	mouse.startWidth = element.offsetWidth;
+    }
+    else if(  offsetY <= reactiveLength){
+   		resizeMode = "Top";
+   		mouse.startHeight = element.offsetHeight;
+    }
+    else if(  offsetX >= (e.target.clientWidth - reactiveLength) ){
+       	resizeMode = "Right";
+    }
+    else if(  offsetY >= (e.target.clientHeight - reactiveLength) ){
+       	resizeMode = "Bottom";
+    }
+    else{
+    	elemMoveMode = true;
+    }
+    if(elemMoveMode){
+    	mouse.startX = pageX - element.offsetLeft - refPreview.parentElement.offsetLeft;
+    	mouse.startY = pageY - element.offsetTop - refPreview.parentElement.offsetTop;
+    }
+    else{
+    	mouse.startX = element.offsetLeft;
+		mouse.startY = element.offsetTop;
+		mouse.startWidth = element.offsetWidth;
+		mouse.startHeight = element.offsetHeight;
+    }
+}
+function onOverChangeCursor(e,selection){
 	var reactiveLength = parseInt(selection.css('borderLeftWidth'));
 	if(eraseMode){
 		e.target.style.cursor = "default";

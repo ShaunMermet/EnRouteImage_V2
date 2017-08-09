@@ -376,16 +376,23 @@
     user-select: none;
 	position: absolute;
 }
-.rectangle:hover {
-	-webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-	position: absolute;
-	box-shadow:0 0 25px #1dfcfc;
-	text-shadow: 0 0 5px #1dfcfc;
+.simpleHover {
+  box-shadow:0 0 15px 3px white inset ;
+  text-shadow: 0 0 3px white;
+}
+.green {
+	box-shadow:0 0 0px 5px green ;
+}
+.greenHovered {
+  box-shadow:0 0 15px 3px white inset,0 0 0px 5px green ;
+  text-shadow: 0 0 3px white;
+}
+.red {
+  box-shadow:0 0 0px 5px red ;
+}
+.redHovered {
+  box-shadow:0 0 15px 3px white inset,0 0 0px 5px red ;
+  text-shadow: 0 0 3px white;
 }
 .rectangleText {
 	-webkit-touch-callout: none;

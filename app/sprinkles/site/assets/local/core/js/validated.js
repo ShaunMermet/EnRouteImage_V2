@@ -469,7 +469,7 @@ function validated_loadImages(categories,filter){
 	  	if( link.getAttribute("data-action") == "Delete"){
 	    	var data= {};
 			data["dataSrc"]=taskItemInContext.getAttribute("data-id");
-			data["validated"]=0;
+			data["validateType"]=0;
 			data[site.csrf.keys.name] = site.csrf.name;
 			data[site.csrf.keys.value] = site.csrf.value;
 			var mode = taskItemInContext.getAttribute("data-mode");

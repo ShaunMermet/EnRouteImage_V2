@@ -362,6 +362,7 @@ class AreaController extends SimpleController
                 }else{
                     $area->user = 0;
                 }
+                $area->state = 2;
                 $area->save();
             }
             $targetImg = ImgLinks::where('id', $data->dataSrc)->first();
@@ -471,6 +472,7 @@ class AreaController extends SimpleController
                 }else{
                     $area->user = 0;
                 }
+                $area->state = 2;
                 $area->save();
             }
             $targetImg = ImgLinks::where('id', $data->dataSrc)->first();
@@ -517,6 +519,76 @@ class AreaController extends SimpleController
         $params = $request->getParsedBody();
         $data = json_decode(json_encode($params), FALSE);
 
+        error_log(print_r($data,true));
+        if($data->validateType == 1) $state = 1;
+        else if($data->validateType == 2) $state =3;
+        else if($data->validateType == 0){
+            $state = 1;
+            $data->areas = [];
+        }
+
+        $img = imgLinks::where('id', $data->dataSrc)->first();
+        //$Areas = ImgArea::where('source', '=', $img->id)->get();
+        $areaReceived = [];
+        foreach ($data->areas as $area) {//for each area submitted
+            error_log(print_r($area,true));
+            array_push($areaReceived, $area->id);
+            if(!isset($area->id))$area->id = -1;
+            if(!isset($area->selected))$area->selected = 0;
+            if($area->id > 0 && $area->selected == 1){//if id && selected update area
+                //Save area
+                $bddArea = ImgArea::where('id', '=', $area->id)->first();
+                $bddArea->rectType = $area->rectType;
+                $bddArea->rectLeft  = $area->rectLeft;
+                $bddArea->rectTop  = $area->rectTop;
+                $bddArea->rectRight  = $area->rectRight;
+                $bddArea->rectBottom  = $area->rectBottom;
+                if($state) $bddArea->state  = 3;
+                $bddArea->save();
+            }elseif($area->id <= 0 && $area->selected == 1){//if !id && selected create area
+                //Create area
+                $bddArea = new ImgArea;
+                $bddArea->source = $data->dataSrc;
+                $bddArea->rectType = $area->rectType;
+                $bddArea->rectLeft  = $area->rectLeft;
+                $bddArea->rectTop  = $area->rectTop;
+                $bddArea->rectRight  = $area->rectRight;
+                $bddArea->rectBottom  = $area->rectBottom;
+                $bddArea->user = $currentUser->id;
+                if($state) $bddArea->state  = 3;
+                $bddArea->save();
+            }elseif($area->id > 0 && !$area->selected){//if id && !selected delete area
+                //delete area
+                $bddArea = ImgArea::where('id', '=', $area->id)->first();
+                $bddArea->state  = 4;
+                $bddArea->save();
+                $bddArea->delete();
+            }else{//if !id && !selected ignore
+                //ignore
+            }
+        }
+        //delete area in dbb with no updated infos (ie removed from image)
+        $prevBddAreas = ImgArea::where ('source', '=', $data->dataSrc)->get();
+        error_log(print_r($areaReceived,true));
+        foreach ($prevBddAreas as $prevBddArea) {
+            if(array_search($prevBddArea->id, $areaReceived) !== false){
+                error_log("area found ".$prevBddArea->id);
+            }
+            else{
+                error_log("area NOT found ". $prevBddArea->id);
+                $prevBddArea->state =4;
+                $prevBddArea->save();
+                $prevBddArea->delete();
+            }
+        }
+        if($state) $img->state = $state;
+        $img->save();
+        //2nd check (for) to delete the area that are not in new areas
+        return;
+        $userThatSubmitId = $oneArea->user;
+        $user = $classMapper->staticMethod('user', 'where', 'id', $userThatSubmitId)
+                                ->first();
+
         /** @var UserFrosting\Config\Config $config */
         $config = $this->ci->config['db.default'];
         $db = mysqli_connect($config['host'],$config['username'],$config['password'],$config['database']);
@@ -530,7 +602,6 @@ class AreaController extends SimpleController
             $userThatSubmitId = $oneArea->user;
             $user = $classMapper->staticMethod('user', 'where', 'id', $userThatSubmitId)
                                 ->first();
-            $state = 4;
             if ($validated == 1){
                 $state = 3;
                 $user->stats_validated = $user->stats_validated+1;
@@ -594,17 +665,17 @@ class AreaController extends SimpleController
             return $response->withJson([], 408, JSON_PRETTY_PRINT);
         }
 
-        if($data->validated == 0){
+        if($data->validateType == 0){
             //$this->deleteSegAreas($data->dataSrc,FALSE);
         }
 
         $segimg = SegImage::where('id', $data->dataSrc)->first();
-        $oneArea = SegArea::where('source', '=', $source)->first();
+        $oneArea = SegArea::where('source', '=', $segimg->id)->first();
         $userThatSubmitId = $oneArea->user;
         $user = $classMapper->staticMethod('user', 'where', 'id', $userThatSubmitId)
                                 ->first();
                                 
-        if($data->validated == 0){
+        if($data->validateType == 0){
             $segimg->state = 4;
             $user->stats_rejected_seg = $user->stats_rejected_seg+1;
         }

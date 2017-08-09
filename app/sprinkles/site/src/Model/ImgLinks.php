@@ -46,14 +46,6 @@ class ImgLinks extends UFModel
     {
         return $this->hasMany('UserFrosting\Sprinkle\Site\Model\ImgArea','source');
     }
-    
-    /**
-     * Get the group where the image belongs.
-     */
-    public function group()
-    {
-        return $this->belongsTo('UserFrosting\Sprinkle\Site\Model\Group','group');
-    }
 
     /**
      * Get the group where the set belongs.
@@ -61,5 +53,13 @@ class ImgLinks extends UFModel
     public function set()
     {
         return $this->belongsTo('UserFrosting\Sprinkle\Site\Model\Set');
+    }
+
+    /**
+     * Get the group where the image belongs.
+     */
+    public function group()
+    {
+        return $this->set->belongsTo('UserFrosting\Sprinkle\Site\Model\Group');
     }
 }
