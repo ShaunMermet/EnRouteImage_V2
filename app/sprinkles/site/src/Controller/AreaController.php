@@ -28,6 +28,21 @@ use UserFrosting\Sprinkle\Site\Model\SegImage;
  */
 class AreaController extends SimpleController
 {
+    var $IMG_STATE_FORTAG = 1;
+    var $IMG_STATE_PENDING = 2;
+    var $IMG_STATE_VALIDATED = 3;
+    var $IMG_STATE_REJECTED = 4;
+    
+    var $IMG_VALIDATION_TOTAG = 0;
+    var $IMG_VALIDATION_SAVEANDTOTAG = 1;
+    var $IMG_VALIDATION_SAVEANDVALID = 2;
+    
+    var $AREA_STATE_PENDING = 2;
+    var $AREA_STATE_VALIDATED = 3;
+    var $AREA_STATE_REJECTED = 4;
+
+    var $USER_ID_UNIVERSAL = -3;
+    
     /**
      * Get the areas corresponding to sprunje filter.
      *
@@ -247,7 +262,7 @@ class AreaController extends SimpleController
     //    $authorizer = $this->ci->authorizer;
 
         /** @var UserFrosting\Sprinkle\Account\Model\User $currentUser */
-    //    $currentUser = $this->ci->currentUser;
+        $currentUser = $this->ci->currentUser;
 
         // Access-controlled page
     //    if (!$authorizer->checkAccess($currentUser, 'uri_validate')) {
@@ -264,10 +279,18 @@ class AreaController extends SimpleController
                             ->get();
         
         $result = $imgAreas->toArray();
-
+        //Added editable or not info
+        $result2 = [];
+        foreach ($result as $area) {
+            if($area["user"] == $currentUser->id || $area["user"] == $this->USER_ID_UNIVERSAL)
+                $area["owned"] = 1;
+            else $area["owned"] = 0;
+            array_push($result2, $area);
+        }
+        
         // Be careful how you consume this data - it has not been escaped and contains untrusted user-supplied content.
         // For example, if you plan to insert it into an HTML DOM, you must escape it on the client side (or use client-side templating).
-        return $response->withJson($result, 200, JSON_PRETTY_PRINT);
+        return $response->withJson($result2, 200, JSON_PRETTY_PRINT);
     }
 
     /**
@@ -345,34 +368,57 @@ class AreaController extends SimpleController
         $params = $request->getParsedBody();
         $data = json_decode(json_encode($params), FALSE);
 
-        if (!empty($data))
-        {
-            $this->deleteAreas($data->dataSrc,TRUE);
-            $rects= $data->rects;
-            foreach ($rects as $num => $rect) {//for each rectangle
-                $area = new ImgArea;
-                $area->source = $data->dataSrc;
-                $area->rectType = $rect->type;
-                $area->rectLeft = $rect->rectLeft;
-                $area->rectTop = $rect->rectTop;
-                $area->rectRight = $rect->rectRight;
-                $area->rectBottom = $rect->rectBottom;
-                if($currentUser){
-                    $area->user = $currentUser->id;
-                }else{
-                    $area->user = 0;
+        error_log(print_r($data,true));
+
+        $areaReceived = [];
+        foreach ($data->areas as $area) {//for each area submitted
+            if(!isset($area->id))$area->id = -1;
+            array_push($areaReceived, $area->id);
+            if($area->id > 0){
+                $bddArea = ImgArea::where ('id', '=', $area->id)
+                        ->first();
+                if($bddArea->user == $currentUser->id && $bddArea->state == $this->AREA_STATE_PENDING){
+                    $bddArea->rectType = $area->rectType;
+                    $bddArea->rectLeft  = $area->rectLeft;
+                    $bddArea->rectTop  = $area->rectTop;
+                    $bddArea->rectRight  = $area->rectRight;
+                    $bddArea->rectBottom  = $area->rectBottom;
+                    $bddArea->save();
+                    array_push($areaReceived, $bddArea->id);
                 }
-                $area->state = 2;
-                $area->save();
+            }else if($area->id <= 0){
+                //Create area
+                $bddArea = new ImgArea;
+                $bddArea->source = $data->dataSrc;
+                $bddArea->rectType = $area->rectType;
+                $bddArea->rectLeft  = $area->rectLeft;
+                $bddArea->rectTop  = $area->rectTop;
+                $bddArea->rectRight  = $area->rectRight;
+                $bddArea->rectBottom  = $area->rectBottom;
+                $bddArea->user = $currentUser->id;
+                $bddArea->state = $this->AREA_STATE_PENDING;
+                $bddArea->save();
+                array_push($areaReceived, $bddArea->id);
             }
-            $targetImg = ImgLinks::where('id', $data->dataSrc)->first();
-            $targetImg->state = 2;
-            $targetImg->save();
         }
-        else // $_POST is empty.
-        {
-            error_log("No data") ;
+        $prevBddAreas = ImgArea::where ('source', '=', $data->dataSrc)
+                        ->where ('user', '=', $currentUser->id)
+                        ->where('state', '=', $this->AREA_STATE_PENDING)
+                        ->get();
+        foreach ($prevBddAreas as $prevBddArea) {
+            if(array_search($prevBddArea->id, $areaReceived) !== false){
+                error_log("area found ".$prevBddArea->id);
+                //update area in other loop
+            }
+            else{
+                error_log("area NOT found ". $prevBddArea->id);
+                $prevBddArea->forceDelete();
+            }
         }
+        $img = imgLinks::where('id', $data->dataSrc)->first();
+        $img->state = $this->IMG_STATE_PENDING;
+        $img->save();
+        return;
     }
 
     /**
@@ -455,34 +501,68 @@ class AreaController extends SimpleController
         /** @var UserFrosting\Sprinkle\Account\Model\User $currentUser */
         $currentUser = $this->ci->currentUser;
 
-        if (!empty($data))
-        {
-            $this->deleteAreas($data->dataSrc,TRUE);
-            $rects= $data->rects;
-            foreach ($rects as $num => $rect) {//for each rectangle
-                $area = new ImgArea;
-                $area->source = $data->dataSrc;
-                $area->rectType = $rect->type;
-                $area->rectLeft = $rect->rectLeft;
-                $area->rectTop = $rect->rectTop;
-                $area->rectRight = $rect->rectRight;
-                $area->rectBottom = $rect->rectBottom;
-                if($currentUser){
-                    $area->user = $currentUser->id;
-                }else{
-                    $area->user = 0;
+        if(!$currentUser){
+            $currentUser = new \stdClass();
+            $currentUser->id = -1;
+        }
+
+        $areaReceived = [];
+        foreach ($data->areas as $area) {//for each area submitted
+            if(!isset($area->id))$area->id = -1;
+            array_push($areaReceived, $area->id);
+            if($area->id > 0){
+                $bddArea = ImgArea::where ('id', '=', $area->id)
+                        ->first();
+                if(($bddArea->user == $currentUser->id || $bddArea->user == $this->USER_ID_UNIVERSAL)&& $bddArea->state == $this->AREA_STATE_PENDING){
+                    $bddArea->rectType = $area->rectType;
+                    $bddArea->rectLeft  = $area->rectLeft;
+                    $bddArea->rectTop  = $area->rectTop;
+                    $bddArea->rectRight  = $area->rectRight;
+                    $bddArea->rectBottom  = $area->rectBottom;
+                    if($bddArea->user == $this->USER_ID_UNIVERSAL){
+                        $bddArea->user = $currentUser->id;
+                    }
+                    $bddArea->save();
+                    array_push($areaReceived, $bddArea->id);
                 }
-                $area->state = 2;
-                $area->save();
+            }else if($area->id <= 0){
+                //Create area
+                $bddArea = new ImgArea;
+                $bddArea->source = $data->dataSrc;
+                $bddArea->rectType = $area->rectType;
+                $bddArea->rectLeft  = $area->rectLeft;
+                $bddArea->rectTop  = $area->rectTop;
+                $bddArea->rectRight  = $area->rectRight;
+                $bddArea->rectBottom  = $area->rectBottom;
+                if($currentUser->id >= 0){
+                    $bddArea->user = $currentUser->id;
+                }else{
+                    $unknownUser = -2;//-2 : unknowm user | -1 : non-log user
+                    $bddArea->user = $unknownUser;
+                }
+
+                $bddArea->state = $this->AREA_STATE_PENDING;
+                $bddArea->save();
+                array_push($areaReceived, $bddArea->id);
             }
-            $targetImg = ImgLinks::where('id', $data->dataSrc)->first();
-            $targetImg->state = 2;
-            $targetImg->save();
         }
-        else // $_POST is empty.
-        {
-            error_log("No data") ;
+        $prevBddAreas = ImgArea::where ('source', '=', $data->dataSrc)
+                        ->where ('user', '=', $currentUser->id)
+                        ->where('state', '=', $this->AREA_STATE_PENDING)
+                        ->get();
+        foreach ($prevBddAreas as $prevBddArea) {
+            if(array_search($prevBddArea->id, $areaReceived) !== false){
+                //update area in other loop
+            }
+            else{
+                error_log("area NOT found ". $prevBddArea->id);
+                $prevBddArea->forceDelete();
+            }
         }
+        $img = imgLinks::where('id', $data->dataSrc)->first();
+        $img->state = $this->IMG_STATE_PENDING;
+        $img->save();
+        return;
     }
 
     /**
@@ -519,34 +599,30 @@ class AreaController extends SimpleController
         $params = $request->getParsedBody();
         $data = json_decode(json_encode($params), FALSE);
 
-        error_log(print_r($data,true));
-        if($data->validateType == 1) $state = 1;
-        else if($data->validateType == 2) $state =3;
-        else if($data->validateType == 0){
-            $state = 1;
+        if($data->validateType == $this->IMG_VALIDATION_SAVEANDTOTAG) $state = $this->IMG_STATE_FORTAG;
+        else if($data->validateType == $this->IMG_VALIDATION_SAVEANDVALID) $state = $this->IMG_STATE_VALIDATED;
+        else if($data->validateType == $this->IMG_VALIDATION_TOTAG){
+            $state = $this->IMG_STATE_FORTAG;
             $data->areas = [];
         }
 
-        $img = imgLinks::where('id', $data->dataSrc)->first();
-        //$Areas = ImgArea::where('source', '=', $img->id)->get();
         $areaReceived = [];
         foreach ($data->areas as $area) {//for each area submitted
             error_log(print_r($area,true));
-            array_push($areaReceived, $area->id);
             if(!isset($area->id))$area->id = -1;
             if(!isset($area->selected))$area->selected = 0;
             if($area->id > 0 && $area->selected == 1){//if id && selected update area
-                //Save area
+                //Save area validated
                 $bddArea = ImgArea::where('id', '=', $area->id)->first();
                 $bddArea->rectType = $area->rectType;
                 $bddArea->rectLeft  = $area->rectLeft;
                 $bddArea->rectTop  = $area->rectTop;
                 $bddArea->rectRight  = $area->rectRight;
                 $bddArea->rectBottom  = $area->rectBottom;
-                if($state) $bddArea->state  = 3;
+                if($state) $bddArea->state  = $this->AREA_STATE_VALIDATED;
                 $bddArea->save();
             }elseif($area->id <= 0 && $area->selected == 1){//if !id && selected create area
-                //Create area
+                //Create area validated
                 $bddArea = new ImgArea;
                 $bddArea->source = $data->dataSrc;
                 $bddArea->rectType = $area->rectType;
@@ -555,74 +631,55 @@ class AreaController extends SimpleController
                 $bddArea->rectRight  = $area->rectRight;
                 $bddArea->rectBottom  = $area->rectBottom;
                 $bddArea->user = $currentUser->id;
-                if($state) $bddArea->state  = 3;
+                if($state) $bddArea->state  = $this->AREA_STATE_VALIDATED;
                 $bddArea->save();
             }elseif($area->id > 0 && !$area->selected){//if id && !selected delete area
-                //delete area
+                //Save area pending
                 $bddArea = ImgArea::where('id', '=', $area->id)->first();
-                $bddArea->state  = 4;
+                $bddArea->rectType = $area->rectType;
+                $bddArea->rectLeft  = $area->rectLeft;
+                $bddArea->rectTop  = $area->rectTop;
+                $bddArea->rectRight  = $area->rectRight;
+                $bddArea->rectBottom  = $area->rectBottom;
+                $bddArea->state  = $this->AREA_STATE_PENDING;
                 $bddArea->save();
-                $bddArea->delete();
             }else{//if !id && !selected ignore
-                //ignore
+                //Create area pending
+                $bddArea = new ImgArea;
+                $bddArea->source = $data->dataSrc;
+                $bddArea->rectType = $area->rectType;
+                $bddArea->rectLeft  = $area->rectLeft;
+                $bddArea->rectTop  = $area->rectTop;
+                $bddArea->rectRight  = $area->rectRight;
+                $bddArea->rectBottom  = $area->rectBottom;
+                $bddArea->user = $this->USER_ID_UNIVERSAL;
+                if($state) $bddArea->state  = $this->AREA_STATE_PENDING;
+                $bddArea->save();
             }
+            array_push($areaReceived, $bddArea->id);
         }
         //delete area in dbb with no updated infos (ie removed from image)
-        $prevBddAreas = ImgArea::where ('source', '=', $data->dataSrc)->get();
-        error_log(print_r($areaReceived,true));
-        foreach ($prevBddAreas as $prevBddArea) {
-            if(array_search($prevBddArea->id, $areaReceived) !== false){
-                error_log("area found ".$prevBddArea->id);
-            }
-            else{
-                error_log("area NOT found ". $prevBddArea->id);
-                $prevBddArea->state =4;
-                $prevBddArea->save();
-                $prevBddArea->delete();
+        //2nd check (for) to delete the area that are not in new areas
+        if($data->validateType != $this->IMG_VALIDATION_TOTAG){
+            $prevBddAreas = ImgArea::where ('source', '=', $data->dataSrc)->get();
+            error_log(print_r($areaReceived,true));
+            foreach ($prevBddAreas as $prevBddArea) {
+                if(array_search($prevBddArea->id, $areaReceived) !== false){
+                    error_log("area found ".$prevBddArea->id);
+                }
+                else{
+                    error_log("area NOT found ". $prevBddArea->id);
+                    $prevBddArea->state = $this->AREA_STATE_REJECTED;
+                    $prevBddArea->save();
+                    $prevBddArea->delete();
+                }
             }
         }
+        $img = imgLinks::where('id', $data->dataSrc)->first();
         if($state) $img->state = $state;
         $img->save();
-        //2nd check (for) to delete the area that are not in new areas
-        return;
-        $userThatSubmitId = $oneArea->user;
-        $user = $classMapper->staticMethod('user', 'where', 'id', $userThatSubmitId)
-                                ->first();
-
-        /** @var UserFrosting\Config\Config $config */
-        $config = $this->ci->config['db.default'];
-        $db = mysqli_connect($config['host'],$config['username'],$config['password'],$config['database']);
         
-        if (!empty($data))
-        {
-            
-            $source = mysqli_real_escape_string($db,($data->dataSrc));
-            $validated = mysqli_real_escape_string($db,($data->validated));
-            $oneArea = ImgArea::where('source', '=', $source)->first();
-            $userThatSubmitId = $oneArea->user;
-            $user = $classMapper->staticMethod('user', 'where', 'id', $userThatSubmitId)
-                                ->first();
-            if ($validated == 1){
-                $state = 3;
-                $user->stats_validated = $user->stats_validated+1;
-            }else{
-                //$this->deleteAreas($source,FALSE);
-                $state = 4;
-                $user->stats_rejected = $user->stats_rejected+1;
-            }
-            $user->save();
-            $sql = "UPDATE `labelimglinks` SET `state` = $state ,`validated_at`= NOW() WHERE `labelimglinks`.`id` = '$source'";
-            if ($db->query($sql) === TRUE) {
-                
-            } else {
-                error_log("Error: " . $sql . "<br>" . $db->error) ;
-            }
-            $db->close();
-        }
-        else // $_POST is empty.
-        {
-            error_log("No data") ;
-        }
+        return;
     }
 
     /**

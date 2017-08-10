@@ -83,6 +83,7 @@ function label_loadRects(){
 	.then(
 	    // Fetch successful
 	    function (data) {
+	    	console.log(data);
 	    	if(data!=""){
 				label_rectanglesList = data;
 			}
@@ -131,6 +132,8 @@ function label_addImage(){
 		function loaded() {
 		  //draw rect
 		  label_drawRects(label_srcName);//initSelection();
+		  rectsApplyState();
+		  rectsApplyAnchor();
 		  img.removeEventListener('load', loaded);
 		  img.removeEventListener('load', error);
 		}
@@ -160,7 +163,8 @@ function label_drawRects(idImage){//Existing rects
 			var str = reviewedRect.category.Category;
 			var type = reviewedRect.rectType;
 			var color = reviewedRect.category.Color;
-			element.rectType = type;
+			element.rectData = reviewedRect;
+			//element.rectType = type;
 			element.rectSetRatio = 1;
 			element.rectSetLeft = parseInt(reviewedRect.rectLeft);
 			element.rectSetTop = parseInt(reviewedRect.rectTop);
@@ -187,32 +191,135 @@ function label_drawRects(idImage){//Existing rects
 			(document.getElementById('preview')).appendChild(element);
 			adaptText(element);
 			updateNbrAreas();
-			drawAnchor(element);
+			//drawAnchor(element);
+			//rectAttacheEvents(element);
+
 		
-			element.onmousedown = function(e){
-				onElementDownHandler(e,$(this));
-			}
-			element.onmousemove = function(e){
-				onElementMoveHandler(e,$(this));
-			}
-			$(".rectangle").on('touchstart',function(e,data) {
-				e.preventDefault();  
-				onElementDownHandler(e,$(this));
-			});
-			$(".rectangle").on('touchmove',function(e,data) {
-				e.preventDefault();  
-				onMoveHandler(e); 
-			});
-			$(".rectangle").on('touchend',function(e,data) { 
-				e.preventDefault();  
-				resizeMode = false;
-				elemMoveMode = false;
-				element = null;
-			});
+			
 		}
 	}
 }
+function rectAttacheEvents(element){
+	element.onmousedown = function(e){
+		onElementDownHandler(e,$(this));
+	}
+	element.onmousemove = function(e){
+		onElementMoveHandler(e,$(this));
+	}
+	element.onmouseover = function(e){
+		onElementOverHandler(e,$(this));
+	}
+	element.onmouseout = function(e){
+		onElementOutHandler(e,$(this));
+	}
+	element.onclick = function(e){
+		onClickHandler(e);
+	}
+	$(".rectangle").on('touchstart',function(e,data) {
+		e.preventDefault();  
+		onElementDownHandler(e,$(this));
+	});
+	$(".rectangle").on('touchmove',function(e,data) {
+		e.preventDefault();  
+		onMoveHandler(e); 
+	});
+	$(".rectangle").on('touchend',function(e,data) { 
+		e.preventDefault();
+		//onClickHandler(e);
+		resizeMode = false;
+		elemMoveMode = false;
+		element = null;
+	});
+}
+function rectsApplyState(){
+	var elements = document.getElementsByClassName("rectangle");
+	for (var i = 0; i < elements.length; ++i){
+		if(elements[i].rectData.state == 3){
+			//Display green
+			displayStateColor(elements[i], 3);
+		}else if(elements[i].rectData.state == 2){
+			//Display yellow
+			displayStateColor(elements[i], 2);
+		}
+	}
+}
+function displayStateColor(element, state){
+	//Check for hovered
+	if(element.classList.contains("redHovered") || element.classList.contains("greenHovered") || element.classList.contains("yellowHovered") || element.classList.contains("simpleHover")){
+		hovered = true;
+	}else hovered = false;
+	//remove all rect classes
+	cleanRectClasses(element);
+	//apply new
+	if(state == 2){
+		if(hovered){
+			element.classList.toggle("YellowHovered",true);
+		}else{
+			element.classList.toggle("yellow",true);
+		}
+	}else if (state == 3){
+		if(hovered){
+			element.classList.toggle("greenHovered",true);
+		}else{
+			element.classList.toggle("green",true);
+		}
+	}
 
+}
+function cleanRectClasses(element){
+	element.classList.toggle("redHovered",false);
+	element.classList.toggle("greenHovered",false);
+	element.classList.toggle("yellowHovered",false);
+	element.classList.toggle("simpleHover",false);
+	element.classList.toggle("red",false);
+	element.classList.toggle("green",false);
+	element.classList.toggle("yellow",false);
+}
+function onElementOverHandler(e,selection){
+	toggleOverClass(selection.context);
+}
+function onElementOutHandler(e,selection){
+	toggleOutClass(selection.context);
+}
+function toggleOverClass(element){
+	cleanRectClasses(element);
+	if(element.rectData)
+    	state = element.rectData.state;
+    else state = -1;
+    if(state == 2){
+    	element.classList.toggle("yellowHovered",true);
+    }else if (state == 3){
+    	element.classList.toggle("greenHovered",true);
+    }else{
+    	element.classList.toggle("simpleHover",true);
+    }
+}
+function toggleOutClass(element){
+    cleanRectClasses(element);
+    if(element.rectData)
+    	state = element.rectData.state;
+    else state = -1;
+    if(state == 2){
+    	element.classList.toggle("yellow",true);
+    }else if (state == 3){
+    	element.classList.toggle("green",true);
+    }
+}
+function rectsApplyAnchor(){
+	var elements = document.getElementsByClassName("rectangle");
+	for (var i = 0; i < elements.length; ++i){
+		if(elements[i].rectData.owned == 1){
+			//Can display anchor
+			if(elements[i].rectData.state == 2){
+				drawAnchor(elements[i]);
+				rectAttacheEvents(elements[i]);
+			}
+		}else if(elements[i].rectData.owned == 0){
+			//dont't display anchor
+			
+		}
+	}
+}
 function label_onImgResize(){
 	console.log("resize");
 }
@@ -395,7 +502,12 @@ function label_initComboSet(){
 	function appendToCombo(text,value){
 		$("#combo4").append("<option value=\""+value+"\">"+text+"</option>");
 	}
-	$("#combo4").select2({width: '100px',placeholder: 'Select a set'});
+	$("#combo4").select2({width: '100px',placeholder: 'Select a set'})
+	.on("change", function(e) {
+    	//console.log("set changed "+ this.value);
+    	label_loadImages();
+    	//upl_setImgSet(this.getAttribute("data-imgID"), this.value);
+    });
 }
 ///////////////////////////////
 
@@ -531,11 +643,11 @@ function onUpHandler(e) {
 function onClickHandler(e) {
 	if(eraseMode== true){
 		//console.log("go pour effacement"+e.target);
-		if(e.target.className == "rectangle"){
+		if(e.target.classList.contains("rectangle")){
 			//console.log("effacement");
 			e.target.remove();
 		}
-		else if(e.target.className == "rectangleText"){
+		else if(e.target.classList.contains("rectangleText")){
 			e.target.parentElement.remove();
 		}
 	}
@@ -732,7 +844,8 @@ function createElement(e){
 	var str = combo.options[combo.selectedIndex].text;
 	var type = combo.options[combo.selectedIndex].value;
 	var color = label_catColor[label_catId.indexOf(parseInt(type))];
-	element.rectType = type;
+	element.rectData = {};
+	element.rectData.rectType = type;
 	//Don't use it as we do not display rect when too small (it's a dot at the start)
 	//element.style.left = pageX + 'px';
 	//element.style.top = pageY + 'px';
@@ -755,13 +868,8 @@ function createElement(e){
 	element.style.width = 0;
 	element.style.height = 0;
 	//refPreview.style.cursor = "crosshair";
+	rectAttacheEvents(element);
 
-	element.onmousedown = function(e){
-		onElementDownHandler(e,$(this));
-	}
-	element.onmousemove = function(e){
-		onElementMoveHandler(e,$(this));
-	}
 }
 function endCreateElement(e){
 	var canvas = document.getElementById('preview');
@@ -774,22 +882,6 @@ function endCreateElement(e){
 		element = null;
 	}
 	canvas.style.cursor = "default";
-
-	$(".rectangle").on('touchstart',function(e,data) {
-		e.preventDefault();  
-		onElementDownHandler(e,$(this));
-	});
-	$(".rectangle").on('touchmove',function(e,data) {
-		e.preventDefault();
-		onMoveHandler(e); 
-	});
-	$(".rectangle").on('touchend',function(e,data) {
-		onClickHandler(e);
-		e.preventDefault(); 
-		resizeMode = false;
-		elemMoveMode = false;
-		element = null;
-	});
 }
 
 
@@ -963,27 +1055,19 @@ function drawAnchor(element){
 
 
 function label_onNextClicked(){
-	var elements = document.getElementsByClassName("rectangle");
-	if(elements.length>0){
-		console.log("prepare request");
+	areaList = getRectInfoToSend();
+	if(areaList.length>0){
 		var data= {};
-		data["rects"]=[];
-		for (var i = 0; i < elements.length; ++i) {
-			var rectLeft = elements[i].rectSetLeft/elements[i].rectSetRatio;
-			var rectTop = elements[i].rectSetTop/elements[i].rectSetRatio;
-			var rectRight = (elements[i].rectSetLeft + elements[i].rectSetWidth)/elements[i].rectSetRatio;
-			var rectBottom = (elements[i].rectSetTop + elements[i].rectSetHeight)/elements[i].rectSetRatio;
-			var rectType = elements[i].rectType;
-			data["rects"][i]={type:rectType,rectLeft:rectLeft,rectTop:rectTop,rectRight:rectRight,rectBottom:rectBottom}
-		}
 		data["dataSrc"]=label_srcName;
-		console.log(data);
+		data["areas"]=areaList;
 		data[site.csrf.keys.name] = site.csrf.name;
 		data[site.csrf.keys.value] = site.csrf.value;
 
+		console.log(data);
+		
 		// submit rects
 		if(label_pagemode == "label"){
-			var url = site.uri.public + '/bbox/annotate';
+			var url = site.uri.public + '/bbox/annotateNA';
 		}
 		else if (label_pagemode == "homepage"){
 			var url = site.uri.public + '/bbox/annotateNA';
@@ -1007,6 +1091,22 @@ function label_onNextClicked(){
 	else{
 		label_nextImage();
 	}
+}
+function getRectInfoToSend(){
+	var fullAreaList = document.getElementsByClassName("rectangle");
+	var areaList = [];
+	for(var i = 0; i < fullAreaList.length; ++i){
+		area = {};
+		area.id = fullAreaList[i].rectData.id;
+		area.rectType = fullAreaList[i].rectData.rectType;
+		area.rectLeft = fullAreaList[i].rectSetLeft/fullAreaList[i].rectSetRatio;
+		area.rectTop = fullAreaList[i].rectSetTop/fullAreaList[i].rectSetRatio;
+		area.rectRight = (fullAreaList[i].rectSetLeft + fullAreaList[i].rectSetWidth)/fullAreaList[i].rectSetRatio;
+		area.rectBottom = (fullAreaList[i].rectSetTop + fullAreaList[i].rectSetHeight)/fullAreaList[i].rectSetRatio;
+		area.selected = fullAreaList[i].rectSelected;
+		areaList.push(area);
+	}
+	return areaList;
 }
 
 function label_onMoreClicked(){

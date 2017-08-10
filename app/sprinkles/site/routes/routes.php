@@ -18,7 +18,7 @@
 $app->group('/bbox', function () {
 	$this->get('', 'UserFrosting\Sprinkle\Site\Controller\SiteController:pageLabel');
 
-	$this->post('/annotate', 'UserFrosting\Sprinkle\Site\Controller\AreaController:saveAreas');
+	//$this->post('/annotate', 'UserFrosting\Sprinkle\Site\Controller\AreaController:saveAreas');
 
 	$this->post('/annotateNA', 'UserFrosting\Sprinkle\Site\Controller\AreaController:saveAreasNoAuth');
 

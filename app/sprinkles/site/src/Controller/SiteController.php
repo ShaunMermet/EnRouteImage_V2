@@ -301,9 +301,10 @@ class SiteController extends SimpleController
                     $txtpath = "tmp/".$tmpFolder."/".$path_parts['filename'] .".txt";
                     $txtfile = fopen($txtpath, "w") or die("Unable to open file!");
 
-                    //Building txt file with polygon data
+                    //Building txt file with area data
                     $imgAreas = ImgArea::with('category')
                                 ->where('source', $NImage->id)
+                                ->where('state', 3)
                                 ->get();
       
                     foreach ($imgAreas as $imgArea) {

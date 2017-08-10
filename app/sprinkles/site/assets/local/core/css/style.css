@@ -381,17 +381,24 @@
   text-shadow: 0 0 3px white;
 }
 .green {
-	box-shadow:0 0 0px 5px green ;
+	box-shadow:0 0 0px 3px green ;
 }
 .greenHovered {
-  box-shadow:0 0 15px 3px white inset,0 0 0px 5px green ;
+  box-shadow:0 0 15px 3px white inset,0 0 0px 3px green ;
   text-shadow: 0 0 3px white;
 }
 .red {
-  box-shadow:0 0 0px 5px red ;
+  box-shadow:0 0 0px 3px red ;
 }
 .redHovered {
-  box-shadow:0 0 15px 3px white inset,0 0 0px 5px red ;
+  box-shadow:0 0 15px 3px white inset,0 0 0px 3px red ;
+  text-shadow: 0 0 3px white;
+}
+.yellow {
+  box-shadow:0 0 0px 3px yellow ;
+}
+.yellowHovered {
+  box-shadow:0 0 15px 3px white inset,0 0 0px 3px yellow ;
   text-shadow: 0 0 3px white;
 }
 .rectangleText {
