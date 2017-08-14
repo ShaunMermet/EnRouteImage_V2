@@ -9,18 +9,25 @@ function accountSettings_getAreasValidated(){
 	    // Fetch successful
 	    function (data) {
 	    	if(data!=""){
-	    		document.getElementById("account_submitted_textBox").textContent = data['pendingImg'];
-	    		document.getElementById("account_submitted_textBox").title = data['pendingImg'];
+	    		$bboxRejected = data["rejectedArea"];
+	    		$bboxValidated = data["validatedArea"];
+	    		$bboxPending = data["pendingArea"];
+	    		$segRejected = data["segRejectedImg"];
+	    		$segValidated = data["segValidatedImg"];
+	    		$segPending = data["segPendingImg"];
+	    		
+	    		document.getElementById("account_submitted_textBox").textContent = $bboxPending;
+	    		document.getElementById("account_submitted_textBox").title = $bboxPending;
 
-	    		document.getElementById("account_rejected_textBox").textContent = data['rejectedImg'];
-	    		document.getElementById("account_rejected_textBox").title = data['rejectedImg'];
+	    		document.getElementById("account_rejected_textBox").textContent = $bboxRejected;
+	    		document.getElementById("account_rejected_textBox").title = $bboxRejected;
 
-	    		document.getElementById("account_validated_textBox").textContent = data['validatedImg'];
-	    		document.getElementById("account_validated_textBox").title = data['validatedImg'];
+	    		document.getElementById("account_validated_textBox").textContent = $bboxValidated;
+	    		document.getElementById("account_validated_textBox").title = $bboxValidated;
 
 	    		var success = 0;
-	    		if((data['validatedImg'] + data['rejectedImg']) != 0){
-	    			success = 100*data['validatedImg']/(data['validatedImg'] + data['rejectedImg'])
+	    		if(($bboxValidated + $bboxRejected) != 0){
+	    			success = 100*$bboxValidated/($bboxValidated + $bboxRejected)
 	    		}
 	    		success = Math.floor(success * 100) / 100;
 	    		var rate = success + "%";
@@ -48,18 +55,18 @@ function accountSettings_getAreasValidated(){
 
 
 
-	    		document.getElementById("account_segSubmitted_textBox").textContent = data['segPendingImg'];
-	    		document.getElementById("account_segSubmitted_textBox").title = data['pendingImg'];
+	    		document.getElementById("account_segSubmitted_textBox").textContent = $segPending;
+	    		document.getElementById("account_segSubmitted_textBox").title = $segPending;
 
-	    		document.getElementById("account_segRejected_textBox").textContent = data['segRejectedImg'];
-	    		document.getElementById("account_segRejected_textBox").title = data['segRejectedImg'];
+	    		document.getElementById("account_segRejected_textBox").textContent = $segRejected;
+	    		document.getElementById("account_segRejected_textBox").title = $segRejected;
 
-	    		document.getElementById("account_segValidated_textBox").textContent = data['segValidatedImg'];
-	    		document.getElementById("account_segValidated_textBox").title = data['segValidatedImg'];
+	    		document.getElementById("account_segValidated_textBox").textContent = $segValidated;
+	    		document.getElementById("account_segValidated_textBox").title = $segValidated;
 
 	    		var success = 0;
-	    		if((data['segValidatedImg'] + data['segRejectedImg']) != 0){
-	    			success = 100*data['segValidatedImg']/(data['segValidatedImg'] + data['segRejectedImg'])
+	    		if(($segValidated + $segRejected) != 0){
+	    			success = 100*$segValidated/($segValidated + $segRejected)
 	    		}
 	    		success = Math.floor(success * 100) / 100;
 	    		var rate = success + "%";

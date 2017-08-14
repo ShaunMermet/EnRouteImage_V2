@@ -337,7 +337,7 @@ function validate_sendData(validated){
 
 	var data= {};
 	data["dataSrc"]=validate_srcId;
-	data["validated"]=validated;
+	data["validateType"]=validated;
 	data["updated"]= validate_imgPathList[validate_imgPathListIndex].updated_at;
 	data[site.csrf.keys.name] = site.csrf.name;
 	data[site.csrf.keys.value] = site.csrf.value;

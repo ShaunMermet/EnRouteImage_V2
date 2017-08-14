@@ -168,35 +168,28 @@ class AreaController extends SimpleController
         }
 
         $count = [];
-        
-        $count['rejectedImg'] = $user->stats_rejected;
-        
-        $count['validatedImg'] = $user->stats_validated;
 
-        $count['pendingImg'] = ImgLinks::whereHas('areas', function ($query) use ($currentUser){
-                                $query->where('user', '=', $currentUser->id);
-                                })
-                                ->where ('state', '=', 2)
-                                ->where(function ($imgLinks) use ($validGroup){
-                                $imgLinks->whereIn('group', $validGroup)
-                                        ->orWhereNull('group');
-                                })
+        $count["segRejectedImg"] = SegArea::onlyTrashed()
+                                ->where('user', '=', $currentUser->id)
+                                ->where('state', '=', 4)
+                                ->count();
+        $count["segValidatedImg"] = SegArea::where('user', '=', $currentUser->id)
+                                ->where('state', '=', 3)
+                                ->count();
+        $count["segPendingImg"] = SegArea::where('user', '=', $currentUser->id)
+                                ->where('state', '=', 2)
                                 ->count();
 
-        
-        $count['segRejectedImg'] = $user->stats_rejected_seg;
-        
-        $count['segValidatedImg'] = $user->stats_validated_seg;
-
-        $count['segPendingImg'] = SegImage::whereHas('areas', function ($query) use ($currentUser){
-                                    $query->where('user', '=', $currentUser->id);
-                                })
-                                ->where ('state', '=', 2)
-                                ->where(function ($imgLinks) use ($validGroup){
-                                $imgLinks->whereIn('group', $validGroup)
-                                        ->orWhereNull('group');
-                                })
-                                ->count();                               
+        $count["rejectedArea"] = ImgArea::onlyTrashed()
+                                ->where('user', '=', $currentUser->id)
+                                ->where('state', '=', 4)
+                                ->count();
+        $count["validatedArea"] = ImgArea::where('user', '=', $currentUser->id)
+                                ->where('state', '=', 3)
+                                ->count();
+        $count["pendingArea"] = ImgArea::where('user', '=', $currentUser->id)
+                                ->where('state', '=', 2)
+                                ->count();
 
 
         // Be careful how you consume this data - it has not been escaped and contains untrusted user-supplied content.
@@ -462,7 +455,7 @@ class AreaController extends SimpleController
 
         if (!empty($data))
         {
-            $this->deleteSegAreas($data->dataSrc,TRUE);
+            $this->deleteSegAreas($data->dataSrc,FALSE);
             $areas= $data->areas;
             foreach ($areas as $num => $area) {//for each rectangle
                 $SegArea = new SegArea;
@@ -474,6 +467,7 @@ class AreaController extends SimpleController
                 }else{
                     $SegArea->user = 0;
                 }
+                $segArea->state = $this->AREA_STATE_PENDING;
                 $SegArea->save();
             }
             $targetImg = SegImage::where('id', $data->dataSrc)->first();
@@ -727,21 +721,20 @@ class AreaController extends SimpleController
         }
 
         $segimg = SegImage::where('id', $data->dataSrc)->first();
-        $oneArea = SegArea::where('source', '=', $segimg->id)->first();
-        $userThatSubmitId = $oneArea->user;
-        $user = $classMapper->staticMethod('user', 'where', 'id', $userThatSubmitId)
-                                ->first();
+        $Areas = SegArea::where('source', '=', $segimg->id)->get();
                                 
         if($data->validateType == 0){
-            $segimg->state = 4;
-            $user->stats_rejected_seg = $user->stats_rejected_seg+1;
+            $state = 4;
         }
         else{
-            $segimg->state = 3;
-            $user->stats_validated_seg = $user->stats_validated_seg+1;
+            $state = 3;
+        }
+        $segimg->state = $state;
+        foreach ($Areas as $Area) {
+            $Area->state = $state;
+            $Area->save();
         }
         $segimg->save();
-        $user->save();
     }
 
     private function deleteAreas($source = NULL,$forcedelete){
@@ -756,8 +749,12 @@ class AreaController extends SimpleController
         if(!is_null($source)){
             if($forcedelete)
                 $rowsToDelete = SegArea::where('source', '=', $source)->forceDelete();
-            else
+            else{
+                $area = SegArea::where('source', '=', $source)->first();
+                $area->state = $this->AREA_STATE_REJECTED;
+                $area->save();
                 $rowsToDelete = SegArea::where('source', '=', $source)->delete();
+            }
         }
     }
 }
