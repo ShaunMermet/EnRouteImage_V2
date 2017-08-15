@@ -408,9 +408,11 @@ class AreaController extends SimpleController
                 $prevBddArea->forceDelete();
             }
         }
-        $img = imgLinks::where('id', $data->dataSrc)->first();
-        $img->state = $this->IMG_STATE_PENDING;
-        $img->save();
+        if($data->validImage === true){
+            $img = imgLinks::where('id', $data->dataSrc)->first();
+            $img->state = $this->IMG_STATE_PENDING;
+            $img->save();
+        }   
         return;
     }
 
@@ -521,7 +523,14 @@ class AreaController extends SimpleController
                 }
             }else if($area->id <= 0){
                 //Create area
-                $bddArea = new ImgArea;
+                $bddArea = ImgArea::firstOrCreate(
+                            ['source' => $data->dataSrc,
+                            'rectType' => $area->rectType,
+                            'rectLeft' => round($area->rectLeft),
+                            'rectTop' => round($area->rectTop),
+                            'rectRight' => round($area->rectRight),
+                            'rectBottom' => round($area->rectBottom)]);
+                //$bddArea = new ImgArea;
                 $bddArea->source = $data->dataSrc;
                 $bddArea->rectType = $area->rectType;
                 $bddArea->rectLeft  = $area->rectLeft;
@@ -553,9 +562,12 @@ class AreaController extends SimpleController
                 $prevBddArea->forceDelete();
             }
         }
-        $img = imgLinks::where('id', $data->dataSrc)->first();
-        $img->state = $this->IMG_STATE_PENDING;
-        $img->save();
+        error_log(print_r($data,true));
+        if($data->validImage == 1){
+            $img = imgLinks::where('id', $data->dataSrc)->first();
+            $img->state = $this->IMG_STATE_PENDING;
+            $img->save();
+        }
         return;
     }
 
@@ -615,6 +627,7 @@ class AreaController extends SimpleController
                 $bddArea->rectBottom  = $area->rectBottom;
                 if($state) $bddArea->state  = $this->AREA_STATE_VALIDATED;
                 $bddArea->save();
+                array_push($areaReceived, $bddArea->id);
             }elseif($area->id <= 0 && $area->selected == 1){//if !id && selected create area
                 //Create area validated
                 $bddArea = new ImgArea;
@@ -627,30 +640,33 @@ class AreaController extends SimpleController
                 $bddArea->user = $currentUser->id;
                 if($state) $bddArea->state  = $this->AREA_STATE_VALIDATED;
                 $bddArea->save();
+                array_push($areaReceived, $bddArea->id);
             }elseif($area->id > 0 && !$area->selected){//if id && !selected delete area
                 //Save area pending
                 $bddArea = ImgArea::where('id', '=', $area->id)->first();
-                $bddArea->rectType = $area->rectType;
-                $bddArea->rectLeft  = $area->rectLeft;
-                $bddArea->rectTop  = $area->rectTop;
-                $bddArea->rectRight  = $area->rectRight;
-                $bddArea->rectBottom  = $area->rectBottom;
-                $bddArea->state  = $this->AREA_STATE_PENDING;
+                //$bddArea->rectType = $area->rectType;
+                //$bddArea->rectLeft  = $area->rectLeft;
+                //$bddArea->rectTop  = $area->rectTop;
+                //$bddArea->rectRight  = $area->rectRight;
+                //$bddArea->rectBottom  = $area->rectBottom;
+                $bddArea->state  = $this->AREA_STATE_REJECTED;
                 $bddArea->save();
+                $bddArea->delete();
             }else{//if !id && !selected ignore
-                //Create area pending
-                $bddArea = new ImgArea;
-                $bddArea->source = $data->dataSrc;
-                $bddArea->rectType = $area->rectType;
-                $bddArea->rectLeft  = $area->rectLeft;
-                $bddArea->rectTop  = $area->rectTop;
-                $bddArea->rectRight  = $area->rectRight;
-                $bddArea->rectBottom  = $area->rectBottom;
-                $bddArea->user = $this->USER_ID_UNIVERSAL;
-                if($state) $bddArea->state  = $this->AREA_STATE_PENDING;
-                $bddArea->save();
+                //ignore
+                                            //Create area pending
+                                            //$bddArea = new ImgArea;
+                                            //$bddArea->source = $data->dataSrc;
+                                            //$bddArea->rectType = $area->rectType;
+                                            //$bddArea->rectLeft  = $area->rectLeft;
+                                            //$bddArea->rectTop  = $area->rectTop;
+                                            //$bddArea->rectRight  = $area->rectRight;
+                                            //$bddArea->rectBottom  = $area->rectBottom;
+                                            //$bddArea->user = $this->USER_ID_UNIVERSAL;
+                                            //if($state) $bddArea->state  = $this->AREA_STATE_PENDING;
+                                            //$bddArea->save();
             }
-            array_push($areaReceived, $bddArea->id);
+            
         }
         //delete area in dbb with no updated infos (ie removed from image)
         //2nd check (for) to delete the area that are not in new areas
@@ -756,5 +772,38 @@ class AreaController extends SimpleController
                 $rowsToDelete = SegArea::where('source', '=', $source)->delete();
             }
         }
+    }
+
+
+    /**
+     * Request areas (stream)
+     *
+     * This page do not requires authentication.
+     * Request type: GET
+     */
+    public function areaKeepUpdated($request, $response, $args){
+
+        /** @var UserFrosting\Sprinkle\Account\Model\User $currentUser */
+        $currentUser = $this->ci->currentUser;
+
+        $Areas = ImgArea::where('source', '=', $args['img_id'])
+                        ->with('category')
+                        ->get();
+        $array = $Areas->toArray();
+
+        $array2 = [];
+        foreach ($array as $area) {
+            if($area["user"] == $currentUser->id || $area["user"] == $this->USER_ID_UNIVERSAL)
+                $area["owned"] = 1;
+            else $area["owned"] = 0;
+            array_push($array2, $area);
+        }
+
+        $data = json_encode($array2);
+        
+        return $response
+            ->withHeader("Content-Type", "text/event-stream")
+            ->withHeader("Cache-Control", "no-cache")
+            ->write("retry: 3000\ndata: {$data}\n\n");
     }
 }

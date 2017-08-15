@@ -5,6 +5,7 @@ var label_phpPath = "../../php/";
 var label_srcName = 0;
 var label_pagemode = "";//"label", "homepage",//"segmentation"
 var label_rectanglesList = [];
+var mainContainer = {};
 //if(document.getElementById("openButton"))
 //	document.getElementById("openButton").style = "DISPLAY: none;";
 
@@ -29,6 +30,7 @@ function label_initpage(pagemode){
 function label_loadImages(){
 	// Fetch and render the images
 	label_freeRemainingImages();
+	closeEventSource(mainContainer.KUEvent);
 	label_imgPathList = [];
 	
 	var combo4 = document.getElementById("combo4");
@@ -131,11 +133,15 @@ function label_addImage(){
 		///Load complete
 		function loaded() {
 		  //draw rect
-		  label_drawRects(label_srcName);//initSelection();
-		  rectsApplyState();
-		  rectsApplyAnchor();
+		  label_addRectsList(label_rectanglesList);
+		  //var elements = label_drawRects(label_rectanglesList);//initSelection();
+		  //rectsApplyState(elements);
+		  //rectsApplyAnchor(elements);
 		  img.removeEventListener('load', loaded);
 		  img.removeEventListener('load', error);
+		  //Listen to rect add by other users
+		  listenRectsAddedByOther(label_srcName);
+
 		}
 		function error() {
 			//alert('error');
@@ -150,54 +156,58 @@ function label_addImage(){
 	else
 		label_removeImage();
 }
+function label_addRectsList(rectList){
+	if(rectList.length == 0) return;
+	var elements = label_drawRects(rectList);
+	rectsApplyState(elements);
+  	rectsApplyAnchor(elements);
+}
 
-function label_drawRects(idImage){//Existing rects
-	for(var i = 0; i < label_rectanglesList.length; ++i){
-		reviewedRect = label_rectanglesList[i];
+function label_drawRects(rectList){//Existing rects
+	var elementsList = [];
+	for(var i = 0; i < rectList.length; ++i){
+		reviewedRect = rectList[i];
 
-		if(parseInt(reviewedRect.source) == idImage){
-			var refImage = document.getElementById('image');
-			var initRatio = label_getImgRatio();
-			var element = document.createElement('div');
-			element.className = 'rectangle';
-			var str = reviewedRect.category.Category;
-			var type = reviewedRect.rectType;
-			var color = reviewedRect.category.Color;
-			element.rectData = reviewedRect;
-			//element.rectType = type;
-			element.rectSetRatio = 1;
-			element.rectSetLeft = parseInt(reviewedRect.rectLeft);
-			element.rectSetTop = parseInt(reviewedRect.rectTop);
-			element.rectSetWidth = reviewedRect.rectRight - reviewedRect.rectLeft;
-			element.rectSetHeight = reviewedRect.rectBottom - reviewedRect.rectTop;
-			element.style.left = /*(leftImage+*/parseInt(reviewedRect.rectLeft)*initRatio/*)*/ + 'px';
-			element.style.top = /*(topImage+*/parseInt(reviewedRect.rectTop)*initRatio/*)*/ + 'px';
-			element.style.border= "3px solid "+color;
-			element.style.color= color;
-			var canvas = document.createElement('canvas');
-			canvas.style.pointerEvents = "none";
-	  		canvas.style.margin = "-5px";//(anchorScale-3)/2 +3
-			var text = document.createElement('div');
-			var t = document.createTextNode(str);
-			text.className = 'rectangleText';
-			if (!$('#labelShowSwitch').is(":checked")){text.style.display = "none";}
-			text.appendChild(t);
-			element.appendChild(text);
-			text.style.pointerEvents = "none";
-			text.style.position = "absolute";
-			element.appendChild(canvas);
-			element.style.width = (reviewedRect.rectRight - reviewedRect.rectLeft)*initRatio + 'px';
-			element.style.height = (reviewedRect.rectBottom - reviewedRect.rectTop)*initRatio + 'px';
-			(document.getElementById('preview')).appendChild(element);
-			adaptText(element);
-			updateNbrAreas();
-			//drawAnchor(element);
-			//rectAttacheEvents(element);
-
-		
-			
-		}
+		var refImage = document.getElementById('image');
+		var initRatio = label_getImgRatio();
+		var element = document.createElement('div');
+		element.className = 'rectangle';
+		var str = reviewedRect.category.Category;
+		var type = reviewedRect.rectType;
+		var color = reviewedRect.category.Color;
+		element.rectData = reviewedRect;
+		//element.rectType = type;
+		element.rectSetRatio = 1;
+		element.rectSetLeft = parseInt(reviewedRect.rectLeft);
+		element.rectSetTop = parseInt(reviewedRect.rectTop);
+		element.rectSetWidth = reviewedRect.rectRight - reviewedRect.rectLeft;
+		element.rectSetHeight = reviewedRect.rectBottom - reviewedRect.rectTop;
+		element.style.left = /*(leftImage+*/parseInt(reviewedRect.rectLeft)*initRatio/*)*/ + 'px';
+		element.style.top = /*(topImage+*/parseInt(reviewedRect.rectTop)*initRatio/*)*/ + 'px';
+		element.style.border= "3px solid "+color;
+		element.style.color= color;
+		var canvas = document.createElement('canvas');
+		canvas.style.pointerEvents = "none";
+  		canvas.style.margin = "-5px";//(anchorScale-3)/2 +3
+		var text = document.createElement('div');
+		var t = document.createTextNode(str);
+		text.className = 'rectangleText';
+		if (!$('#labelShowSwitch').is(":checked")){text.style.display = "none";}
+		text.appendChild(t);
+		element.appendChild(text);
+		text.style.pointerEvents = "none";
+		text.style.position = "absolute";
+		element.appendChild(canvas);
+		element.style.width = (reviewedRect.rectRight - reviewedRect.rectLeft)*initRatio + 'px';
+		element.style.height = (reviewedRect.rectBottom - reviewedRect.rectTop)*initRatio + 'px';
+		(document.getElementById('preview')).appendChild(element);
+		adaptText(element);
+		updateNbrAreas();
+		//drawAnchor(element);
+		//rectAttacheEvents(element);
+		elementsList.push(element);
 	}
+	return elementsList;
 }
 function rectAttacheEvents(element){
 	element.onmousedown = function(e){
@@ -215,24 +225,23 @@ function rectAttacheEvents(element){
 	element.onclick = function(e){
 		onClickHandler(e);
 	}
-	$(".rectangle").on('touchstart',function(e,data) {
+	$(element).on('touchstart',function(e,data) {
 		e.preventDefault();  
 		onElementDownHandler(e,$(this));
 	});
-	$(".rectangle").on('touchmove',function(e,data) {
+	$(element).on('touchmove',function(e,data) {
 		e.preventDefault();  
 		onMoveHandler(e); 
 	});
-	$(".rectangle").on('touchend',function(e,data) { 
+	$(element).on('touchend',function(e,data) { 
 		e.preventDefault();
-		//onClickHandler(e);
+		onClickHandler(e);
 		resizeMode = false;
 		elemMoveMode = false;
 		element = null;
 	});
 }
-function rectsApplyState(){
-	var elements = document.getElementsByClassName("rectangle");
+function rectsApplyState(elements){
 	for (var i = 0; i < elements.length; ++i){
 		if(elements[i].rectData.state == 3){
 			//Display green
@@ -305,8 +314,7 @@ function toggleOutClass(element){
     	element.classList.toggle("green",true);
     }
 }
-function rectsApplyAnchor(){
-	var elements = document.getElementsByClassName("rectangle");
+function rectsApplyAnchor(elements){
 	for (var i = 0; i < elements.length; ++i){
 		if(elements[i].rectData.owned == 1){
 			//Can display anchor
@@ -319,6 +327,109 @@ function rectsApplyAnchor(){
 			
 		}
 	}
+}
+function listenRectsAddedByOther(imgId){
+	var url = site.uri.public + '/areas/keepUpdated';
+	var source = new EventSource(url+"/"+imgId);
+	source.onmessage = function(event) {
+	    console.log(JSON.parse(event.data));
+	    var newRectList = JSON.parse(event.data)
+	    toDelRectList = getRemovedRect(newRectList);
+	    removeRect(toDelRectList);
+	    toAddRectList = getAddedRect(newRectList);
+	    label_addRectsList(toAddRectList);
+	    toResizeRectList = getToResizeRect(newRectList);
+	    updateRectSize(toResizeRectList);
+	};
+	mainContainer.KUEvent = source;
+}
+function closeEventSource(source){
+	if(source)
+		source.close();
+}
+function removeRect(elementsList){
+	for(var i = 0; i < elementsList.length; i++){
+		elementsList[i].remove();
+	}
+}
+function updateRectSize(elementsList){
+	for(var i = 0; i < elementsList.length; i++){
+		console.log("resize rect border");
+		console.log(elementsList[i]);
+		var initRatio = label_getImgRatio();
+		elementsList[i].style.left = /*(leftImage+*/parseInt(elementsList[i].rectData.rectLeft)*initRatio/*)*/ + 'px';
+		elementsList[i].style.top = /*(topImage+*/parseInt(elementsList[i].rectData.rectTop)*initRatio/*)*/ + 'px';
+		elementsList[i].style.width = (elementsList[i].rectData.rectRight - elementsList[i].rectData.rectLeft)*initRatio + 'px';
+		elementsList[i].style.height = (elementsList[i].rectData.rectBottom - elementsList[i].rectData.rectTop)*initRatio + 'px';
+	}
+}
+function getAddedRect(newRectList){
+	var toAddList = [];
+	var oldElements = document.getElementsByClassName('rectangle');
+	for(var j = 0; j < newRectList.length; j++){
+		var currentNewRectID = newRectList[j].id;
+		var addRect = true;
+		for(var i = 0; i < oldElements.length; i++){
+			if(oldElements[i].rectData.id === currentNewRectID){
+				addRect = false;
+			}
+		}
+		if(addRect){
+			if(!newRectList[j].owned)
+				toAddList.push(newRectList[j]);
+		}
+	}
+	return toAddList;
+}
+function getRemovedRect(newRectList){
+	var toDeleteList = [];
+	var oldElements = document.getElementsByClassName('rectangle');
+	for(var i = 0; i < oldElements.length; i++){
+		var currentOldRectID = oldElements[i].rectData.id;
+		if(currentOldRectID){
+			var deleteRect = true;
+			for(var j = 0; j < newRectList.length; j++){
+				if(newRectList[j].id === currentOldRectID){
+					deleteRect = false;
+				}
+			}
+			if(deleteRect){
+				toDeleteList.push(oldElements[i]);
+			}
+		}
+	}
+	return toDeleteList;
+}
+function getToResizeRect(newRectList){
+	var toResizeList = [];
+	var oldElements = document.getElementsByClassName('rectangle');
+	for(var j = 0; j < newRectList.length; j++){
+		var currentNewRectID = newRectList[j].id;
+		var editRect = true;
+		for(var i = 0; i < oldElements.length; i++){
+			if(oldElements[i].rectData.id === currentNewRectID){
+				var currentRectData = newRectList[j];
+				var oldRectData = oldElements[i].rectData;
+				if(oldRectData.rectBottom == currentRectData.rectBottom && 
+					oldRectData.rectLeft == currentRectData.rectLeft &&
+					oldRectData.rectRight == currentRectData.rectRight &&
+					oldRectData.rectTop == currentRectData.rectTop ){
+					editRect = false;
+				}else{
+					console.log("update rect value");
+					oldElements[i].rectData.rectBottom = currentRectData.rectBottom;
+					oldElements[i].rectData.rectLeft = currentRectData.rectLeft;
+					oldElements[i].rectData.rectRight = currentRectData.rectRight;
+					oldElements[i].rectData.rectTop = currentRectData.rectTop;
+				}
+				if(editRect){
+					if(!newRectList[j].owned)
+						toResizeList.push(oldElements[i]);
+				}
+			}
+		}
+	}
+	return toResizeList;
 }
 function label_onImgResize(){
 	console.log("resize");
@@ -337,7 +448,9 @@ window.addEventListener("resize", function(){
 			elements[i].style.top = parseFloat(elements[i].rectSetTop*ratio/elements[i].rectSetRatio) + 'px';
 			elements[i].style.width = parseFloat(elements[i].rectSetWidth*ratio/elements[i].rectSetRatio) + 'px';
 			elements[i].style.height = parseFloat(elements[i].rectSetHeight*ratio/elements[i].rectSetRatio) + 'px';
-			drawAnchor(elements[i]);
+			if(elements[i].rectData.owned == 1 && elements[i].rectData.state == 2){
+				drawAnchor(elements[i]);
+			}
 		}
 
 	}
@@ -587,7 +700,7 @@ function label_initDraw() {
 		onUpHandler(e);
 	}
 	canvas.onclick = function(e){
-		onClickHandler(e);
+		//onClickHandler(e);
 	}
 }
 
@@ -595,7 +708,7 @@ function label_initDraw() {
 function label_onTouchStart(e){
 	if(!moveMode)
 		e.preventDefault();
-	onClickHandler(e);
+	//onClickHandler(e);
 	onDownHandler(e);
 }
 function label_onTouchMove(e){
@@ -650,6 +763,7 @@ function onClickHandler(e) {
 		else if(e.target.classList.contains("rectangleText")){
 			e.target.parentElement.remove();
 		}
+		sendSave(0);
 	}
 	else{
 		e.target.parentElement.appendChild(e.target);
@@ -880,6 +994,7 @@ function endCreateElement(e){
 		element.rectSetHeight = element.offsetHeight;
 		element.rectSetRatio = label_getImgRatio();
 		element = null;
+		sendSave(0);
 	}
 	canvas.style.cursor = "default";
 }
@@ -1057,36 +1172,7 @@ function drawAnchor(element){
 function label_onNextClicked(){
 	areaList = getRectInfoToSend();
 	if(areaList.length>0){
-		var data= {};
-		data["dataSrc"]=label_srcName;
-		data["areas"]=areaList;
-		data[site.csrf.keys.name] = site.csrf.name;
-		data[site.csrf.keys.value] = site.csrf.value;
-
-		console.log(data);
-		
-		// submit rects
-		if(label_pagemode == "label"){
-			var url = site.uri.public + '/bbox/annotateNA';
-		}
-		else if (label_pagemode == "homepage"){
-			var url = site.uri.public + '/bbox/annotateNA';
-		}
-		$.ajax({
-		  type: "POST",
-		  url: url,
-		  data: data
-		})
-		.then(
-		    // Fetch successful
-		    function (data) {
-				label_nextImage();
-			},
-		    // Fetch failed
-		    function (data) {
-		        
-		    }
-		);
+		sendSave(1);
 	}
 	else{
 		label_nextImage();
@@ -1108,12 +1194,45 @@ function getRectInfoToSend(){
 	}
 	return areaList;
 }
+function sendSave(validImage){
+	areaList = getRectInfoToSend();
+	var data= {};
+	data["dataSrc"]=label_srcName;
+	data["areas"]=areaList;
+	data["validImage"] = validImage;
+	data[site.csrf.keys.name] = site.csrf.name;
+	data[site.csrf.keys.value] = site.csrf.value;
 
+	// submit rects
+	if(label_pagemode == "label"){
+		var url = site.uri.public + '/bbox/annotateNA';
+	}
+	else if (label_pagemode == "homepage"){
+		var url = site.uri.public + '/bbox/annotateNA';
+	}
+	$.ajax({
+	  type: "POST",
+	  url: url,
+	  data: data
+	})
+	.then(
+	    // Fetch successful
+	    function (data) {
+	    	if(validImage == 1)
+				label_nextImage();
+		},
+	    // Fetch failed
+	    function (data) {
+	        
+	    }
+	);
+}
 function label_onMoreClicked(){
 	label_loadImages();
 }
 window.onbeforeunload = function(e) {
 	label_freeRemainingImages();
+	closeEventSource(mainContainer.KUEvent);
 };
 function label_freeRemainingImages(){
 	for(var i = label_imgPathListIndex; i < label_imgPathList.length; ++i){

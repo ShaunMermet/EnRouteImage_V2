@@ -74,7 +74,7 @@ class ImageController extends SimpleController
         }
 
         
-        $maxImageRequested = getenv('MAX_IMAGE_REQUESTED');
+        $maxImageRequested = 1;//getenv('MAX_IMAGE_REQUESTED');
 
         // GET parameters
         $params = $request->getQueryParams();
@@ -85,7 +85,7 @@ class ImageController extends SimpleController
                     $imgLinks->where ('state', '=', 1)
                             ->orWhere ('state', '=', 4);
                     })
-                    ->where ('available', '=', 1)
+                    //->where ('available', '=', 1)
                     ->whereIn('set_id', $validSet)
                     ->where ('set_id', '=', $requestedSet)
                     ->inRandomOrder()
@@ -98,6 +98,8 @@ class ImageController extends SimpleController
             $img->save();
 
             $this->createLightImgBbox($img->path);
+
+            //$UserWGrp->requestedImgId = $img->id;
         }
 
         $result = $imgLinks->toArray();
@@ -210,7 +212,7 @@ class ImageController extends SimpleController
                     $imgLinks->where ('state', '=', 1)
                             ->orWhere ('state', '=', 4);
                     })
-                    ->where ('available', '=', 1)
+                    //->where ('available', '=', 1)
                     ->whereIn('set_id', $validSet)
                     ->where ('set_id', '=', $requestedSet)
                     ->inRandomOrder()
@@ -282,8 +284,8 @@ class ImageController extends SimpleController
         $requestedSet = $params["setID"];
         if($requestedSet == null) $requestedSet = 1;
 
-        $imgLinks = ImgLinks::where ('available', '=', 1)
-                    ->where ('state', '=', 2)
+        $imgLinks = ImgLinks::where ('state', '=', 2)
+                    //->where ('available', '=', 1)
                     ->whereIn('set_id', $validSet)
                     ->where ('set_id', '=', $requestedSet)
                     ->inRandomOrder()

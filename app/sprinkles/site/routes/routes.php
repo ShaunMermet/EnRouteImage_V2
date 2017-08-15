@@ -135,6 +135,8 @@ $app->group('/areas', function () {
 
 	$this->get('/areauserstats', 'UserFrosting\Sprinkle\Site\Controller\AreaController:getAreaUserStats');
 
+	$this->get('/keepUpdated/{img_id}', 'UserFrosting\Sprinkle\Site\Controller\AreaController:areaKeepUpdated');
+
 });//->add('authGuard');
 
 $app->group('/segAreas', function () {
