@@ -32,5 +32,11 @@ class ImgCategories extends UFModel
     ];
 
 
-    
+    /**
+     * Get the group where the set belongs.
+     */
+    public function set()
+    {
+        return $this->belongsTo('UserFrosting\Sprinkle\Site\Model\Set')->with('group');
+    }
 }

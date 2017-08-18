@@ -9,19 +9,15 @@ var validate_rectanglesLoaded = false;
 var validate_rectanglesList = [];
 var validate_currentRectangle = null;
 
+var mainContainer = {};
 
 ///  COMBO    //////////////////
 //creating categories 
 
-var validate_catId = [];
-var validate_catText=[];
-var validate_catColor= [];
-
-
 
 function validate_loadCategories(){
 	// Fetch and render the categories
-	var url = site.uri.public + '/category/all2';
+	var url = site.uri.public + '/category/all';
 	$.ajax({
 	  type: "GET",
 	  url: url
@@ -29,15 +25,9 @@ function validate_loadCategories(){
 	.then(
 	    // Fetch successful
 	    function (data) {
-	        //var res = JSON.parse(data);
-	        var res = data.rows;
-				for(i = 0; i < res.length; i++){
-					validate_catId[i] = parseInt(res[i].id);
-					validate_catText[i] = res[i].Category;
-					validate_catColor[i] = res[i].Color;
-				}
-				validate_initComboCat();
-				validate_loadset();
+	        mainContainer.catData = data;
+			validate_updateComboCat();
+			validate_loadset();
 	    },
 	    // Fetch failed
 	    function (data) {
@@ -75,18 +65,20 @@ function validate_loadset(){
 	);
 }
 
-function validate_initComboCat(){
-	for (i = 0; i < validate_catId.length; i++) {
-		appendToCombo(validate_catText[i],validate_catId[i]);
+function validate_updateComboCat(){
+	function appendToCombo(text,data){
+		$("#combo").append("<option value=\""+data+"\">"+text+"</option>");
 	}
-
-
-	function appendToCombo(category,type){
-		//console.log("creating "+category)
-		$("#combo").append("<option value=\""+type+"\">"+category+"</option>");
+	emptyCombo($("#combo")[0]);
+	var setCombo = $("#combo4")[0];
+	var setSelectedID = setCombo.value;
+	if(setSelectedID == "") setSelectedID = 1;
+	for (i = 0; i < mainContainer.catData.length; i++) {
+		var cat = mainContainer.catData[i];
+		if(cat.set_id == setSelectedID){
+			appendToCombo(cat.Category,cat.id);
+		}
 	}
-
-
 	$("#combo").select2({ width: '100px'});
 }
 function validate_initComboSet(){
@@ -96,7 +88,16 @@ function validate_initComboSet(){
 	function appendToCombo(text,value){
 		$("#combo4").append("<option value=\""+value+"\">"+text+"</option>");
 	}
-	$("#combo4").select2({width: '100px',placeholder: 'Select a set'});
+	$("#combo4").select2({width: '100px',placeholder: 'Select a set'})
+	.on("change", function(e) {
+    	validate_updateComboCat();
+    	validate_loadImages();
+    });
+}
+function emptyCombo(comboElem){
+	while (comboElem.childElementCount != 0){
+		comboElem.removeChild(comboElem.firstChild);
+	}
 }
 ///////////////////////////////
 
@@ -165,6 +166,7 @@ function validate_loadImages(){
 }
 
 function validate_addImage(){
+	validate_removeImage();
 	if(validate_imgPathList.length == 0){
 		document.getElementById("moreButton").style = "DISPLAY: initial;";
 		document.getElementById("ImgValidButton").style = "DISPLAY: none;";
@@ -334,7 +336,8 @@ function createElement(e){
 	var combo = document.getElementById("combo");
 	var str = combo.options[combo.selectedIndex].text;
 	var type = combo.options[combo.selectedIndex].value;
-	var color = validate_catColor[validate_catId.indexOf(parseInt(type))];
+	var selectedCat = mainContainer.catData[mainContainer.catData.findIndex(x => x.id==type)];
+	var color = selectedCat.Color;
 	element.rectType = type;
 	//Don't use it as we do not display rect when too small (it's a dot at the start)
 	//element.style.left = pageX + 'px';
@@ -470,6 +473,7 @@ function validate_nextImage(){
 }
 
 function validate_removeImage(){
+	validate_wipeRectangle();
 	var refImage = document.getElementById('image');
 	if(refImage){
 		//refImage.remove();

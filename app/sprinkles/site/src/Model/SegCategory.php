@@ -32,5 +32,11 @@ class SegCategory extends UFModel
     ];
 
 
-    
+    /**
+     * Get the group where the set belongs.
+     */
+    public function set()
+    {
+        return $this->belongsTo('UserFrosting\Sprinkle\Site\Model\SegSet')->with('group');
+    }
 }

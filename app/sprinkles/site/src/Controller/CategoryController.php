@@ -15,7 +15,10 @@ use UserFrosting\Support\Exception\ForbiddenException;
 use UserFrosting\Sprinkle\Account\Authenticate\Authenticator;
 use UserFrosting\Sprinkle\Site\Sprunje\ImgCategoriesSprunje;
 use UserFrosting\Sprinkle\Site\Sprunje\SegCategorySprunje;
+use UserFrosting\Sprinkle\Site\Model\ImgCategories;
 use UserFrosting\Sprinkle\Site\Model\SegCategory;
+use UserFrosting\Sprinkle\Site\Model\Set;
+use UserFrosting\Sprinkle\Site\Model\SegSet;
 
 /**
  * Controller class for category-related requests.
@@ -32,7 +35,7 @@ class CategoryController extends SimpleController
      * This page requires authentication.
      * Request type: GET
      */
-    public function getAllCategory2($request, $response, $args)
+    public function getAllCategory($request, $response, $args)
     {
         // GET parameters
         $params = $request->getQueryParams();
@@ -59,11 +62,30 @@ class CategoryController extends SimpleController
         /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
         $classMapper = $this->ci->classMapper;
 
-        $sprunje = new ImgCategoriesSprunje($classMapper, $params);
+
+        $UserWGrp = $classMapper->staticMethod('user', 'where', 'id', $currentUser->id)
+                                ->with('group')
+                                ->first();
+
+        $validGroup = [];
+        foreach ($UserWGrp->group as $group) {
+            array_push($validGroup, $group->id);
+        }
+        $sets = Set::whereIn('group_id', $validGroup)
+                    ->with('group')
+                    ->get();
+        $validSet = [];
+        foreach ($sets as $set) {
+            array_push($validSet, $set->id);
+        }      
+        $cats = ImgCategories::whereIn('set_id', $validSet)
+                    ->with('set')
+                    ->get();
+        $result = $cats->toArray();
 
         // Be careful how you consume this data - it has not been escaped and contains untrusted user-supplied content.
         // For example, if you plan to insert it into an HTML DOM, you must escape it on the client side (or use client-side templating).
-        return $sprunje->toResponse($response);
+        return $response->withJson($result, 200, JSON_PRETTY_PRINT);
     }
     /**
      * Returns all categories.
@@ -73,17 +95,23 @@ class CategoryController extends SimpleController
      */
     public function getAllCategoryNoAuth($request, $response, $args)
     {
-
-        $params = [];
-
-        /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
-        $classMapper = $this->ci->classMapper;
-
-        $sprunje = new ImgCategoriesSprunje($classMapper, $params);
+        $validGroup = [1];
+        
+        $sets = Set::whereIn('group_id', $validGroup)
+                    ->with('group')
+                    ->get();
+        $validSet = [];
+        foreach ($sets as $set) {
+            array_push($validSet, $set->id);
+        }      
+        $cats = ImgCategories::whereIn('set_id', $validSet)
+                    ->with('set')
+                    ->get();
+        $result = $cats->toArray();
 
         // Be careful how you consume this data - it has not been escaped and contains untrusted user-supplied content.
         // For example, if you plan to insert it into an HTML DOM, you must escape it on the client side (or use client-side templating).
-        return $sprunje->toResponse($response);
+        return $response->withJson($result, 200, JSON_PRETTY_PRINT);
     }
     /**
      * Returns all segmetation categories.
@@ -118,11 +146,29 @@ class CategoryController extends SimpleController
         /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
         $classMapper = $this->ci->classMapper;
 
-        $sprunje = new SegCategorySprunje($classMapper, $params);
+        $UserWGrp = $classMapper->staticMethod('user', 'where', 'id', $currentUser->id)
+                                ->with('group')
+                                ->first();
+
+        $validGroup = [];
+        foreach ($UserWGrp->group as $group) {
+            array_push($validGroup, $group->id);
+        }
+        $sets = SegSet::whereIn('group_id', $validGroup)
+                    ->with('group')
+                    ->get();
+        $validSet = [];
+        foreach ($sets as $set) {
+            array_push($validSet, $set->id);
+        }      
+        $cats = SegCategory::whereIn('set_id', $validSet)
+                    ->with('set')
+                    ->get();
+        $result = $cats->toArray();
 
         // Be careful how you consume this data - it has not been escaped and contains untrusted user-supplied content.
         // For example, if you plan to insert it into an HTML DOM, you must escape it on the client side (or use client-side templating).
-        return $sprunje->toResponse($response);
+        return $response->withJson($result, 200, JSON_PRETTY_PRINT);
     }
 
     /**

@@ -18,7 +18,8 @@ function catEdit_fillCateditPanel(){
 	var combo = document.getElementById("catEditList");
 	var str = combo.options[combo.selectedIndex].text;
 	var type = combo.options[combo.selectedIndex].value;
-	var color = upl_catColor[upl_catId.indexOf(parseInt(type))];
+	var selectedCat = mainContainer.catData[mainContainer.catData.findIndex(x => x.id==type)];
+	var color = selectedCat.Color;
 	
 	if(type){//Edit existing category
 		catEditText.value = str;

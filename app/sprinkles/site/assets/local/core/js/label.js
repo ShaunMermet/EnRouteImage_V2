@@ -522,16 +522,11 @@ function updateNbrAreas(){
 ////  COMBO    //////////////////
 //creating categories 
 
-var label_catId = [];
-var label_catText=[];
-var label_catColor= [];
-
-
 
 function label_loadCategories(){
 	// Fetch and render the categories
 	if(label_pagemode == "label"){
-		var url = site.uri.public + '/category/all2';
+		var url = site.uri.public + '/category/all';
 	}
 	else if (label_pagemode == "homepage"){
 		var url = site.uri.public + '/category/allNA';
@@ -543,15 +538,9 @@ function label_loadCategories(){
 	.then(
 	    // Fetch successful
 	    function (data) {
-	        //var res = JSON.parse(data);
-	        var res = data.rows;
-				for(i = 0; i < res.length; i++){
-					label_catId[i] = parseInt(res[i].id);
-					label_catText[i] = res[i].Category;
-					label_catColor[i] = res[i].Color;
-				}
-				label_initComboCat();
-				label_loadset();
+	        mainContainer.catData = data;
+        	label_updateComboCat();
+			label_loadset();
 	    },
 	    // Fetch failed
 	    function (data) {
@@ -594,18 +583,20 @@ function label_loadset(){
 	);
 }
 
-function label_initComboCat(){
-	for (i = 0; i < label_catId.length; i++) {
-		appendToCombo(label_catText[i],label_catId[i]);
+function label_updateComboCat(){
+	function appendToCombo(text,data){
+		$("#combo").append("<option value=\""+data+"\">"+text+"</option>");
 	}
-
-
-	function appendToCombo(category,type){
-		//console.log("creating "+category)
-		$("#combo").append("<option value=\""+type+"\">"+category+"</option>");
+	emptyCombo($("#combo")[0]);
+	var setCombo = $("#combo4")[0];
+	var setSelectedID = setCombo.value;
+	if(setSelectedID == "") setSelectedID = 1;
+	for (i = 0; i < mainContainer.catData.length; i++) {
+		var cat = mainContainer.catData[i];
+		if(cat.set_id == setSelectedID){
+			appendToCombo(cat.Category,cat.id);
+		}
 	}
-
-
 	$("#combo").select2({ width: '100px'});
 }
 function label_initComboSet(){
@@ -617,10 +608,14 @@ function label_initComboSet(){
 	}
 	$("#combo4").select2({width: '100px',placeholder: 'Select a set'})
 	.on("change", function(e) {
-    	//console.log("set changed "+ this.value);
+    	label_updateComboCat();
     	label_loadImages();
-    	//upl_setImgSet(this.getAttribute("data-imgID"), this.value);
     });
+}
+function emptyCombo(comboElem){
+	while (comboElem.childElementCount != 0){
+		comboElem.removeChild(comboElem.firstChild);
+	}
 }
 ///////////////////////////////
 
@@ -955,9 +950,10 @@ function createElement(e){
 	element = document.createElement('div');
 	element.className = 'rectangle';
 	var combo = document.getElementById("combo");
-	var str = combo.options[combo.selectedIndex].text;
 	var type = combo.options[combo.selectedIndex].value;
-	var color = label_catColor[label_catId.indexOf(parseInt(type))];
+	var selectedCat = mainContainer.catData[mainContainer.catData.findIndex(x => x.id==type)];
+	var color = selectedCat.Color;
+	var str = selectedCat.Category;
 	element.rectData = {};
 	element.rectData.rectType = type;
 	//Don't use it as we do not display rect when too small (it's a dot at the start)

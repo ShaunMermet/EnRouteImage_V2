@@ -642,29 +642,12 @@ class AreaController extends SimpleController
                 $bddArea->save();
                 array_push($areaReceived, $bddArea->id);
             }elseif($area->id > 0 && !$area->selected){//if id && !selected delete area
-                //Save area pending
                 $bddArea = ImgArea::where('id', '=', $area->id)->first();
-                //$bddArea->rectType = $area->rectType;
-                //$bddArea->rectLeft  = $area->rectLeft;
-                //$bddArea->rectTop  = $area->rectTop;
-                //$bddArea->rectRight  = $area->rectRight;
-                //$bddArea->rectBottom  = $area->rectBottom;
                 $bddArea->state  = $this->AREA_STATE_REJECTED;
                 $bddArea->save();
                 $bddArea->delete();
             }else{//if !id && !selected ignore
                 //ignore
-                                            //Create area pending
-                                            //$bddArea = new ImgArea;
-                                            //$bddArea->source = $data->dataSrc;
-                                            //$bddArea->rectType = $area->rectType;
-                                            //$bddArea->rectLeft  = $area->rectLeft;
-                                            //$bddArea->rectTop  = $area->rectTop;
-                                            //$bddArea->rectRight  = $area->rectRight;
-                                            //$bddArea->rectBottom  = $area->rectBottom;
-                                            //$bddArea->user = $this->USER_ID_UNIVERSAL;
-                                            //if($state) $bddArea->state  = $this->AREA_STATE_PENDING;
-                                            //$bddArea->save();
             }
             
         }
@@ -767,8 +750,10 @@ class AreaController extends SimpleController
                 $rowsToDelete = SegArea::where('source', '=', $source)->forceDelete();
             else{
                 $area = SegArea::where('source', '=', $source)->first();
-                $area->state = $this->AREA_STATE_REJECTED;
-                $area->save();
+                if($area) {
+                    $area->state = $this->AREA_STATE_REJECTED;
+                    $area->save();
+                }
                 $rowsToDelete = SegArea::where('source', '=', $source)->delete();
             }
         }

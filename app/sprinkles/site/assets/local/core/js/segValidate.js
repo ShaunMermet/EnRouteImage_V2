@@ -11,10 +11,6 @@ var validate_currentRectangle = null;
 ///  COMBO    //////////////////
 //creating categories 
 
-var validate_catId = [];
-var validate_catText=[];
-var validate_catColor= [];
-
 
 
 function validate_loadCategories(){
@@ -27,14 +23,7 @@ function validate_loadCategories(){
 	.then(
 	    // Fetch successful
 	    function (data) {
-	        //var res = JSON.parse(data);
-	        var res = data.rows;
-				for(i = 0; i < res.length; i++){
-					validate_catId[i] = parseInt(res[i].id);
-					validate_catText[i] = res[i].Category;
-					validate_catColor[i] = res[i].Color;
-				}
-				validate_loadset();
+			validate_loadset();
 	    },
 	    // Fetch failed
 	    function (data) {
@@ -88,7 +77,8 @@ function validate_initComboSet(){
 
 
 ////////////GET IMG FROM SERVER//////
-validate_loadCategories();
+//validate_loadCategories();
+validate_loadset();
 
 function validate_loadImages(){
 	// Fetch and render the images

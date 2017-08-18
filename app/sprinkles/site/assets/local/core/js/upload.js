@@ -1,11 +1,9 @@
-var upl_catId = [];
-var upl_catText=[];
-var upl_catColor= [];
 var upl_comboInitialized = [];
 var upl_grpId = [];
 var upl_grpText=[];
 var upl_set = [];
 var upl_pagemode = "";//"bbox","segmentation"
+var mainContainer = {};
 
 function upl_initPage(pagemode){
 	upl_pagemode = pagemode;
@@ -41,7 +39,7 @@ function upl_loadGroups(){
 function upl_loadCategories(){
 	// Fetch and render the categories
 	if(upl_pagemode == "bbox"){
-		var url = site.uri.public + '/category/all2';
+		var url = site.uri.public + '/category/all';
 	}else if(upl_pagemode == "segmentation"){
 		var url = site.uri.public + '/segCategory/all';
 	}
@@ -52,16 +50,7 @@ function upl_loadCategories(){
 	.then(
 	    // Fetch successful
 	    function (data) {
-	    	console.log(data);
-	        var res = data.rows;
-        	upl_catId = [];
-			upl_catText = [];
-			upl_catColor = [];
-			for(i = 0; i < res.length; i++){
-				upl_catId[i] = parseInt(res[i].id);
-				upl_catText[i] = res[i].Category;
-				upl_catColor[i] = res[i].Color;
-			}
+	    	mainContainer.catData = data;
 			upl_initCombos();
 	    },
 	    // Fetch failed
@@ -216,8 +205,9 @@ function initCombo(comboElem, value, type, allowClear = false, mode = "", row=nu
 		}
 	}
 	else if (type == "CAT"){
-		for (i = 0; i < upl_catId.length; i++) {
-			appendToCombo(upl_catText[i],upl_catId[i]);
+		for (i = 0; i < mainContainer.catData.length; i++) {
+			var cat = mainContainer.catData[i];
+			appendToCombo(cat.Category+" - "+cat.set.name+" ("+cat.set.group.name+")", cat.id);
 		}
 		if(mode == "SLAVE"){
 			$(comboElem).select2({allowClear: allowClear,placeholder: 'Select a category'})
