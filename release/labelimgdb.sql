@@ -984,3 +984,10 @@ alter table `segcategories` drop index Color;
 ALTER TABLE `segcategories` ADD `set_id` INT(1) NOT NULL DEFAULT '1' AFTER `Color`;
 
 --then run the scripts, initCategoriesSetColumn.php and initSegcategoriesSetColumn.php
+
+ALTER TABLE `labelimglinks`
+alter table `labelimglinks` drop index path;
+ADD CONSTRAINT `1ImgBySet` UNIQUE (path,set_id);
+ALTER TABLE `segimages`
+alter table `segimages` drop index path;
+ADD CONSTRAINT `1ImgBySet` UNIQUE (path,set_id);

@@ -266,6 +266,10 @@ class UploadHandler
         return $this->options['upload_dir'].$this->get_user_path()
             .$version_path.$file_name;
     }
+    protected function get_upload_path_custom($file_id) {
+        $bddFile = $this->get_file_bdd_by_id($file_id);
+        return $bddFile['path'];
+    }
 
     protected function get_query_separator($url) {
         return strpos($url, '?') === false ? '?' : '&';
@@ -299,7 +303,7 @@ class UploadHandler
         $file->deleteUrl = $this->options['script_url']
             .$this->get_query_separator($this->options['script_url'])
             .$this->get_singular_param_name()
-            .'='.rawurlencode($file->name);
+            .'='.rawurlencode($file->imgID);
         $file->deleteType = $this->options['delete_type'];
         if ($file->deleteType !== 'DELETE') {
             $file->deleteUrl .= '&_method=DELETE';
@@ -341,6 +345,20 @@ class UploadHandler
                                 ->first();
         }else{
             $getSet = ImgLinks::where('path',  $file_name)
+                                ->with('set')
+                                ->first();
+        }
+        if(!$getSet) return '';
+        $result = $getSet->toArray();
+        return $result;
+    }
+    protected function get_file_bdd_by_id($file_id){
+        if($this->options['imageMode'] == 'segmentation'){
+            $getSet = SegImage::where('id',  $file_id)
+                                ->with('set')
+                                ->first();
+        }else{
+            $getSet = ImgLinks::where('id',  $file_id)
                                 ->with('set')
                                 ->first();
         }
@@ -410,6 +428,47 @@ class UploadHandler
         }
         return null;
     }
+    protected function get_file_object_by_id($file_id) {
+        //check grp, if not in allowed grp, return null
+        if($this->options['imageMode'] == 'segmentation'){
+            $getGrp = SegImage::where('id',  $file_id)
+                ->with('group')
+                ->first();
+        }else{
+            $getGrp = ImgLinks::where('id',  $file_id)
+                ->with('group')
+                ->first();
+        }
+        if(!$getGrp)return;
+        $result = $getGrp->toArray();
+        if($result['group'] &&  !in_array($result['group']['id'], $this->options['groups'])  )
+            return null;
+        ///////
+
+        $file = new \stdClass();
+        $bddFile = $this->get_file_bdd_by_id($file_id);
+        $file->name = $bddFile['path'];
+        $file->imgID = $bddFile['id'];
+        $file->set = $bddFile['set']['name'];
+        $file->setID = $bddFile['set_id'];
+        $file->group = $this->get_file_group($file->name);
+        $file->size = $this->get_file_size(
+            $this->get_upload_path($file->name)
+        );
+        $file->url = $this->get_download_url($file->name);
+        foreach ($this->options['image_versions'] as $version => $options) {
+            if (!empty($version)) {
+                if (is_file($this->get_upload_path($file->name, $version))) {
+                    $file->{$version.'Url'} = $this->get_download_url(
+                        $file->name,
+                        $version
+                    );
+                }
+            }
+        }
+        $this->set_additional_file_properties($file);
+        return $file;
+    }
 
     protected function get_file_objects($iteration_method = 'get_file_object') {
         $upload_dir = $this->get_upload_path();
@@ -419,6 +478,23 @@ class UploadHandler
         return array_values(array_filter(array_map(
             array($this, $iteration_method),
             scandir($upload_dir)
+        )));
+    }
+    protected function get_file_objects_custom() {
+        if($this->options['imageMode'] == 'segmentation'){
+            $getImg = SegImage::orderBy('id', 'desc')
+                        ->get();
+        }else{
+            $getImg = ImgLinks::orderBy('id', 'desc')
+                        ->get();
+        }
+        $result = [];
+        foreach ($getImg as $img) {
+            array_push($result, $img->id);
+        }
+        return array_values(array_filter(array_map(
+            array($this, 'get_file_object_by_id'),
+            $result
         )));
     }
 
@@ -1581,7 +1657,7 @@ class UploadHandler
             );
         } else {
             $response = array(
-                $this->options['param_name'] => $this->get_file_objects()
+                $this->options['param_name'] => $this->get_file_objects_custom()
             );
         }
         $response = $this->_filterResponse($response,$params);
@@ -1676,34 +1752,43 @@ class UploadHandler
     }
 
     public function delete($print_response = true) {
-        $file_names = $this->get_file_names_params();
-        if (empty($file_names)) {
-            $file_names = array($this->get_file_name_param());
+        error_log("passage dans le delete");
+        $file_ids = $this->get_file_names_params();
+        if (empty($file_ids)) {
+            $file_ids = array($this->get_file_name_param());
         }
         $response = array();
-        foreach ($file_names as $file_name) {
-            $file_path = $this->get_upload_path($file_name);
-            $success = is_file($file_path) && $file_name[0] !== '.' && unlink($file_path);
-            if ($success) {
-				$this->deleteInDB($file_name);
+        error_log(print_r($file_ids,true));
+        foreach ($file_ids as $file_id) {
+            $file_path = $this->get_upload_path_custom($file_id);
+            error_log(print_r($file_path,true));
+            $this->deleteInDB($file_id);
+            $imgcheck = $this->get_file_bdd($file_path);
+            if(!$imgcheck){
+                $file = $this->get_upload_path($file_path);
+                if (is_file($file)) {
+                    unlink($file);
+                }
                 foreach ($this->options['image_versions'] as $version => $options) {
                     if (!empty($version)) {
-                        $file = $this->get_upload_path($file_name, $version);
+                        $file = $this->get_upload_path($file_path, $version);
                         if (is_file($file)) {
                             unlink($file);
                         }
                     }
                 }
             }
-            $response[$file_name] = $success;
+            $response[$file_id] = True;
         }
         return $this->generate_response($response, $print_response);
     }
-	protected function deleteInDB($filename){
+	protected function deleteInDB($fileid){
+        error_log(print_r($fileid,true));
         if($this->options['imageMode'] == 'segmentation'){
             //TODO delete table segImage
-            $imgToDel = SegImage::where('path',  $filename)
+            $imgToDel = SegImage::where('id',  $fileid)
                    ->first();
+            if(!$imgToDel)return;      
             $areaToDel = SegArea::where('source',  $imgToDel->id)
                    ->get();
             foreach ($areaToDel as $area) {
@@ -1712,8 +1797,9 @@ class UploadHandler
             $imgToDel->delete();
 
         }else{
-            $imgToDel = ImgLinks::where('path',  $filename)
+            $imgToDel = ImgLinks::where('id',  $fileid)
                    ->first();
+            if(!$imgToDel)return;
             $areaToDel = ImgArea::where('source',  $imgToDel->id)
                    ->get();
             foreach ($areaToDel as $area) {
