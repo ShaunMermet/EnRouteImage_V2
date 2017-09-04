@@ -23,6 +23,24 @@ use UserFrosting\Sprinkle\Site\Model\SegSet;
 class SiteController extends SimpleController
 {
 	/**
+     * Renders a simple "index" page for Users.
+     *
+     * Request type: GET
+     */
+
+
+    public function pageIndex($request, $response, $args)
+    {
+
+        $config = $this->ci->config;
+        $config['site.locales.selector'] = $args['locale'];
+
+        $translator = $this->ci->translator;
+
+        return $this->ci->view->render($response, 'pages/index.html.twig');
+    }
+
+    /**
      * Renders a simple "label" page for Users.
      *
      * Request type: GET
@@ -32,22 +50,10 @@ class SiteController extends SimpleController
     public function pageLabel($request, $response, $args)
     {
 
-        /** @var UserFrosting\Sprinkle\Account\Authenticate\Authenticator $authenticator */
-        $authenticator = $this->ci->authenticator;
-        if (!$authenticator->check()) {
-            $loginPage = $this->ci->router->pathFor('login');
-            return $response->withRedirect($loginPage, 400);
-        }
+        $config = $this->ci->config;
+        $config['site.locales.selector'] = $args['locale'];
 
-        /** @var UserFrosting\Sprinkle\Account\Authorize\AuthorizationManager */
-        $authorizer = $this->ci->authorizer;
-        /** @var UserFrosting\Sprinkle\Account\Model\User $currentUser */
-        $currentUser = $this->ci->currentUser;
-        // Access-controlled page
-        if (!$authorizer->checkAccess($currentUser, 'uri_label')) {
-            $loginPage = $this->ci->router->pathFor('login');
-           return $response->withRedirect($loginPage, 400);
-        }
+        $translator = $this->ci->translator;
 
         return $this->ci->view->render($response, 'pages/label.html.twig');
     }
@@ -215,6 +221,21 @@ class SiteController extends SimpleController
         }
 
         return $this->ci->view->render($response, 'pages/validated.html.twig');
+    }
+
+    /**
+     * Renders a simple "validated" page for Users.
+     *
+     * Request type: GET
+     */
+    public function pageTutorial($request, $response, $args)
+    {
+        $config = $this->ci->config;
+        $config['site.locales.selector'] = $args['locale'];
+
+        $translator = $this->ci->translator;
+
+        return $this->ci->view->render($response, 'pages/tutorial.html.twig');
     }
 
     /**
@@ -769,7 +790,39 @@ class SiteController extends SimpleController
         }
     }
 
-    public function setTranslate($request, $response, $args){
+    public function tutoTranslate($request, $response, $args){
+
+        // Get parameters
+        $params = $request->getParsedBody();
+        $data = json_decode(json_encode($params), FALSE);
+
+
+        $config = $this->ci->config;
+        $config['site.locales.selector'] = $data->locale;
+
+
+        $translator = $this->ci->translator;
+        
+        return $this->ci->view->render($response, 'pages/tutorial.html.twig');
+        
+    }
+    public function labelTranslate($request, $response, $args){
+
+        // Get parameters
+        $params = $request->getParsedBody();
+        $data = json_decode(json_encode($params), FALSE);
+
+
+        $config = $this->ci->config;
+        $config['site.locales.selector'] = $data->locale;
+
+
+        $translator = $this->ci->translator;
+        
+        return $this->ci->view->render($response, 'pages/label.html.twig');
+        
+    }
+    public function indexTranslate($request, $response, $args){
 
         // Get parameters
         $params = $request->getParsedBody();

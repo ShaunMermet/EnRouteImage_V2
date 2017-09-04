@@ -41,6 +41,7 @@ class AreaController extends SimpleController
     var $AREA_STATE_VALIDATED = 3;
     var $AREA_STATE_REJECTED = 4;
 
+    var $USER_ID_UNKNOWN = -2;
     var $USER_ID_UNIVERSAL = -3;
     
     /**
@@ -540,7 +541,7 @@ class AreaController extends SimpleController
                 if($currentUser->id >= 0){
                     $bddArea->user = $currentUser->id;
                 }else{
-                    $unknownUser = -2;//-2 : unknowm user | -1 : non-log user
+                    $unknownUser = $this->USER_ID_UNKNOWN;//-2 : unknowm user | -1 : non-log user
                     $bddArea->user = $unknownUser;
                 }
 

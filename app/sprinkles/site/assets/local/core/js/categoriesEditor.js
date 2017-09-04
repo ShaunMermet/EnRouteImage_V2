@@ -16,11 +16,14 @@ function catEdit_onEditClicked(){
 
 function catEdit_fillCateditPanel(){
 	var combo = document.getElementById("catEditList");
-	var str = combo.options[combo.selectedIndex].text;
 	var type = combo.options[combo.selectedIndex].value;
 	var selectedCat = mainContainer.catData[mainContainer.catData.findIndex(x => x.id==type)];
 	var color = selectedCat.Color;
+	var assignedSet = selectedCat.set_id;
+	var str = selectedCat.Category;
 	
+	$("#catEditSetList").val(assignedSet).trigger("change.select2");
+
 	if(type){//Edit existing category
 		catEditText.value = str;
 		catEditText.catType = type;
@@ -59,9 +62,9 @@ function onComboEditChanged(){
 
 function catEdit_onSaveCatClicked(){
 		if(catEditText.catType == -1){//Create
-			catEdit_sendServerEdit("CREATE",catEditText.catType,catEditText.value,colorPicker.value);
+			catEdit_sendServerEdit("CREATE",catEditText.catType,catEditText.value,colorPicker.value,catEditSetList.value);
 		}else{//Edit
-		catEdit_sendServerEdit("EDIT",catEditText.catType,catEditText.value,colorPicker.value);
+		catEdit_sendServerEdit("EDIT",catEditText.catType,catEditText.value,colorPicker.value,catEditSetList.value);
 		}
 		catEdit_hideEditRow();
 }
@@ -73,13 +76,14 @@ function catEdit_onDeleteClicked(){
 		catEdit_hideEditRow();
 }
 
-function catEdit_sendServerEdit(mode,catId,catText = "",catColor = ""){
+function catEdit_sendServerEdit(mode,catId,catText = "",catColor = "",catSetId){
 	var data= {};
 	if (mode == "CREATE" || mode == "EDIT" || mode == "DELETE"){
 		data["mode"]= mode;
 		data["catId"] = catId;
 		data["catText"] = catText;
 		data["catColor"] = catColor;
+		data["catSetId"] = catSetId;
 	}else{
 		exit;
 	}

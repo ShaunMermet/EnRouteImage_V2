@@ -208,6 +208,8 @@ class CategoryController extends SimpleController
         
         if (!empty($data))
         {
+            error_log(print_r($data,true));
+            
             // Set autocommit to off
             mysqli_autocommit($db,FALSE);
 
@@ -215,6 +217,8 @@ class CategoryController extends SimpleController
             $catId = mysqli_real_escape_string($db,($data->catId));
             $catText = mysqli_real_escape_string($db,($data->catText));
             $catColor = "#".mysqli_real_escape_string($db,($data->catColor));
+            $catSetId = mysqli_real_escape_string($db,($data->catSetId));
+
             if ($mode == "CREATE"){
                 if ($data->catText == ""){
                     error_log ("no label");
@@ -223,8 +227,8 @@ class CategoryController extends SimpleController
                     
                 }
                 $sql = "INSERT INTO `labelimgcategories`
-                        (`Category`, `Color`) 
-                VALUES ('$catText','$catColor')";
+                        (`Category`, `Color`, `set_id`) 
+                VALUES ('$catText','$catColor','$catSetId')";
                 
             }else if ($mode == "EDIT"){
                 if(intval($catId) < 1){
@@ -232,7 +236,7 @@ class CategoryController extends SimpleController
                     echo "FAIL";
                     exit;
                 }
-                $sql = "UPDATE `labelimgcategories` SET `Category`='$catText',`Color`='$catColor' WHERE id = '$catId'" ;
+                $sql = "UPDATE `labelimgcategories` SET `Category`='$catText',`Color`='$catColor',`set_id`='$catSetId' WHERE id = '$catId'" ;
             }else if ($mode == "DELETE"){
                 if(intval($catId) < 1){
                     error_log ("wrong ID");
@@ -297,6 +301,7 @@ class CategoryController extends SimpleController
         $catId = $data->catId;
         $catText = $data->catText;
         $catColor = "#".$data->catColor;
+        $catSetId = $data->catSetId;
 
         if ($mode == "CREATE"){
             if ($data->catText == ""){
@@ -309,6 +314,7 @@ class CategoryController extends SimpleController
             $cat = new SegCategory;
             $cat->Category = $catText;
             $cat->Color = $catColor;
+            $cat->set_id = $catSetId;
             $cat->save();
             
         }else if ($mode == "EDIT"){
@@ -320,6 +326,7 @@ class CategoryController extends SimpleController
             $cat = SegCategory::where('id', $catId)->first();
             $cat->Category = $catText;
             $cat->Color = $catColor;
+            $cat->set_id = $catSetId;
             $cat->save();
         }else if ($mode == "DELETE"){
             if(intval($catId) < 1){

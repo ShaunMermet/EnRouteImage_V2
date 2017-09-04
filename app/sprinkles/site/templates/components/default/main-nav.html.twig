@@ -2,19 +2,21 @@
 {% extends "@core/components/default/main-nav.html.twig" %}
 
 {% block navbar_logo %}
-<a href="{{site.uri.public}}" class="navbar-brand">
+<a href="{{site.uri.public}}/locale={{translate("LOCALE.SAVE")}}" class="navbar-brand">
 	<!-- logo for regular state and mobile devices -->
   <span class="logo-lg"><img src="{{ assets.url('assets://local/core/img/LogoTitle.png') }}" style="max-width:150px;max-height:35px"></span>
 </a>
 {% endblock %}
 
 {% block main_nav %}
+
+	<li>
+		<a href="{{site.uri.public}}/tutorial/locale={{translate("LOCALE.SAVE")}}">{{translate("TUTORIAL")}}</a>
+	</li>
+	<li>
+		<a href="{{site.uri.public}}/bbox/locale={{translate("LOCALE.SAVE")}}">{{translate("BB_LABEL")}}</a>
+	</li>
 	{% if checkAuthenticated() %}
-		{% if checkAccess('uri_label') %}
-			<li>
-				<a href="{{site.uri.public}}/bbox">{{translate("BB_LABEL")}}</a>
-			</li>
-		{% endif %}	
 		{% if checkAccess('uri_validate') %}
 			<li>
 				<a href="{{site.uri.public}}/bbox/validate">{{translate("BB_VALIDATE")}}</a>
@@ -39,7 +41,7 @@
     	<li>
             <a href="{{site.uri.public}}/account/sign-in" class="nav-highlight">{{translate("SIGNIN")}}</a>
         </li>
-        <li>
+        <li class="localeCombo">
 		<select class="js-basic-lang" style="display:none">
 		  <option value="en_US">English</option>
 		  <option value="ja_JP">日本語</option>

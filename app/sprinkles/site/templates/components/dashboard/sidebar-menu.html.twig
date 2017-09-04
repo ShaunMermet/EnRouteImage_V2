@@ -51,4 +51,27 @@
         <a href="{{site.uri.public}}/admin/segUpload"><i class="fa fa-arrow-circle-o-up" style="font-size:20px"></i><span>{{translate("SEG_UPLOAD", 2)}}</span></a>
     </li>
     {% endif %} 
+    <li>
+      <a href="{{site.uri.public}}/tutorial">{{translate("TUTORIAL")}}</a>
+    </li>
+    {% if checkAccess('uri_label') %}
+        <li>
+          <a href="{{site.uri.public}}/bbox">{{translate("BB_LABEL")}}</a>
+        </li>
+      {% endif %} 
+      {% if checkAccess('uri_validate') %}
+        <li>
+          <a href="{{site.uri.public}}/bbox/validate">{{translate("BB_VALIDATE")}}</a>
+        </li>
+      {% endif %} 
+      {% if checkAccess('uri_label') %}
+        <li>
+          <a href="{{site.uri.public}}/segment">{{translate("SEG_LABEL")}}</a>
+        </li>
+      {% endif %}
+      {% if checkAccess('uri_validate') %}
+        <li>
+          <a href="{{site.uri.public}}/segment/validate">{{translate("SEG_VALIDATE")}}</a>
+        </li>
+      {% endif %} 
 {% endblock %}

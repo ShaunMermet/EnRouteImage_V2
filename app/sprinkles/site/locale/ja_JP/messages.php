@@ -62,6 +62,7 @@ return [
         "DRAW" => "書込",
         "SIGN_UP" => "サインアップ",
         "RESET" => "リセット",
+        "SELECTALL"=>"全て選択"
     ],
     "FEEDBACK"              => [
         "NO_IMAGE" => "イメージがありません",
@@ -69,6 +70,7 @@ return [
     "LEGEND"              => [
         "LABEL" =>[
             "NBR_BBOX" => "バウンドボックス : ",
+            "NBR_SELECTED_BBOX" => "選択済 : ",
             "SWITCH" => "バウンドボックスタイプお見せる",
         ],
         "SEG" =>[
@@ -76,7 +78,12 @@ return [
         ],
         "EDIT" => "Edit",
         "EDIT_NBR_IMAGE" => "イメージの数 : ",
-        
+        "SRECT" =>[
+            "SWITCH" => "選択したものを表示",
+        ],
+        "URECT" =>[
+            "SWITCH" => "選択していないものを表示",
+        ],
     ],
     "LABEL"              => [
         "@TRANSLATION" => "ラベル",
@@ -145,6 +152,7 @@ return [
             "CATEGORY"      =>"カテゴリーの編集",
             "UPLOAD"        =>"イメージのアップロード",
             "FOLDER"        =>"イメージのリスト",
+            "SETEDITOR"        =>"画像セットの編集",
         ]
     ],
     "BB_UPLOAD"               =>"バウンドボックス",

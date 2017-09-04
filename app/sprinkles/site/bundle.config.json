@@ -250,6 +250,18 @@
                 }
             }
         },
+        "js/frontpage": {
+            "scripts": [
+                "local/core/js/FrontPage/creative.js"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "scripts": "plain"
+                    }
+                }
+            }
+        },
 		"js/blueimp": {
             "scripts": [
                 "local/core/js/blueimp/vendor/jquery.ui.widget.js",
@@ -279,6 +291,18 @@
         "css/site": {
             "styles": [
                 "local/core/css/style.css"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "styles": "plain"
+                    }
+                }
+            }
+        },
+        "css/frontpage": {
+            "styles": [
+                "local/core/css/FrontPage/creative.css"
             ],
             "options": {
                 "result": {

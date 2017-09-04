@@ -66,6 +66,7 @@ return [
         "DRAW" => "Draw",
         "SIGN_UP" => "Sign up",
         "RESET" => "Reset",
+        "SELECTALL" => "Select all",
     ],
     "FEEDBACK"              => [
         "NO_IMAGE" => "No image",
@@ -73,6 +74,7 @@ return [
     "LEGEND"              => [
         "LABEL" =>[
             "NBR_BBOX" => "Bbox : ",
+            "NBR_SELECTED_BBOX" => "Selected : ",
             "SWITCH" => "Show bbox type",
         ],
         "SEG" =>[
@@ -80,7 +82,12 @@ return [
         ],
         "EDIT" => "Edit",
         "EDIT_NBR_IMAGE" => "Nbr images : ",
-        
+        "SRECT" =>[
+            "SWITCH" => "Show selected",
+        ],
+        "URECT" =>[
+            "SWITCH" => "Show non-selected",
+        ],
     ],
     "LABEL"              => [
         "@TRANSLATION" => "Label",
@@ -116,6 +123,7 @@ return [
             "CATEGORY"      =>"Categories editor",
             "UPLOAD"        =>"Images uploader",
             "FOLDER"        =>"Images list",
+            "SETEDITOR"        =>"Sets editor",
         ]
     ],
     "BB_UPLOAD"               =>"Bbox",
@@ -141,8 +149,26 @@ return [
     "COMBOTITLE" => [
         "CATEGORY"        => "Image category",
         "GROUP"        => "Image group",
+        "SET"        => "Image set",
     ],
     "COMBOPLACEHOLDER" => [
         "NONE"        => "None",
+    ],
+    "TOPPAGE" => [
+        "MAIN"=>[
+            "BUTTON"=>"Get started !"
+
+        ],
+        "ABOUT"=>[
+            "BUTTON"=>"Get started !"
+        ],
+        "PORTFOLIO"=>[
+            "TUTORIAL"=>"Start easy with the tutorial !",
+            "SIGNIN"=> "Sign In and get access to advanced features !"
+        ],
+        "CONTACT"=>[
+            "TITLE"=>"Let's Get In Touch !",
+            
+        ]
     ]
 ];

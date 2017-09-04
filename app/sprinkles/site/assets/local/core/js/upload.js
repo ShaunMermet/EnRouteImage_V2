@@ -131,7 +131,7 @@ function upl_initCombo(comboElem, row){
 	else if(comboElem.id == "setGrpList"){
 		initCombo(comboElem, preValue, "GRP");
 	}
-	else if(comboElem.id == "setEditList" || comboElem.id == "setAssignEx"){
+	else if(comboElem.id == "setEditList" || comboElem.id == "setAssignEx" || comboElem.id == "catEditSetList"){
 		initCombo(comboElem, preValue, "SET");
 	}
 	else if(comboElem.id == "setAssignAll" || comboElem.id == "setAssignFolder"){

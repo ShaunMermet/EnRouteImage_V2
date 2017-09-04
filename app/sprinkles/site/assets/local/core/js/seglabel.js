@@ -172,7 +172,45 @@ function label_drawAreas(idImage){
 	}
 	updateNbrAreas();
 }
+function redrawArea(){
+	var areaCanvas = document.getElementById("areaCanvas");
+	var refImage = document.getElementById('image');
+	areaCanvas.width = refImage.width;
+	areaCanvas.height = refImage.height;
+	var lineCanvas = document.getElementById("lineCanvas");
+	lineCanvas.width = refImage.width;
+	lineCanvas.height = refImage.height;
+	var initRatio = label_getImgRatio();
+	for(var i = 0; i < dataAreas.length; ++i){
+		reviewedArea = dataAreas[i];
+		//if(parseInt(reviewedArea.source) == idImage){
 
+			areaCtx = areaCanvas.getContext("2d");
+			areaCtx.lineJoin = "round";
+			areaCtx.beginPath();
+			var coordList = JSON.parse( reviewedArea.points );
+			areaCtx.moveTo(coordList[0][0]*initRatio, coordList[0][1]*initRatio);
+
+			for(var j = 1; j < coordList.length; ++j){
+				areaCtx.lineTo(coordList[j][0]*initRatio, coordList[j][1]*initRatio);
+			}
+			
+			var color = reviewedArea.Color;
+			areaCtx.globalAlpha=0.5;
+	 		areaCtx.fillStyle = color;//"#ff0000";
+	 		areaCtx.lineWidth  = 3;
+	 		areaCtx.strokeStyle = "#ffffff";
+	 		areaCtx.closePath();
+			areaCtx.fill();
+			areaCtx.globalAlpha=1;
+			areaCtx.stroke();
+
+			currentPoly = {};
+			currentPoly.type = reviewedArea.type;
+			currentPoly.points = reviewedArea.points;
+		//}
+	}
+}
 function label_drawLegend(idImage){
 	var legendDiv = document.getElementById("legend");
 	legendDiv.innerHTML = "";
@@ -579,6 +617,7 @@ function onUpHandler(e) {
 			lineCtx.clearRect(0, 0, lineCanvas.width, lineCanvas.height);
 			if(currentPoly.points.length > 1){
 				currentPoly.points = JSON.stringify(currentPoly.points);
+				currentPoly.Color = color;
 				dataAreas.push(currentPoly);
 			}
 		}
@@ -664,4 +703,6 @@ window.onscroll = function(){
 };
 
 ///////////////////////////////
-
+window.addEventListener("resize", function(){
+  	redrawArea();
+});

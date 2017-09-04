@@ -19,7 +19,7 @@ $(".js-basic-lang").on('change', function (evt) {
   data[site.csrf.keys.value] = site.csrf.value;
   $.ajax({ 
     type: "POST",
-  	url: site.uri.public + '/translate/set',
+  	url: site.uri.public + '/translate/tuto',
   	data: data,
   	success: function(data) {
         var newDoc = document.open("text/html", "replace");

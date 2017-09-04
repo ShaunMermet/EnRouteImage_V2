@@ -206,7 +206,6 @@ function validate_drawAreas(idImage){
 		reviewedArea = validate_AreasList[i];
 		if(parseInt(reviewedArea.source) == idImage){
 
-			console.log(reviewedArea);
 			areaCtx = areaCanvas.getContext("2d");
 			areaCtx.lineJoin = "round";
 			areaCtx.beginPath();
@@ -400,3 +399,7 @@ window.onscroll = function(){
 		filler.style.height = (intendedHeight)+ 'px';
 };
 ////////////////////////////////////////////
+
+window.addEventListener("resize", function(){
+  	validate_drawAreas(validate_srcId);
+});

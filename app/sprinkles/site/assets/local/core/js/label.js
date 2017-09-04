@@ -1,6 +1,6 @@
 var label_imgPathList=[];
 var label_imgPathListIndex = 0;
-var label_imgPath = "img/light/";
+var label_imgPath = "../img/light/";
 var label_phpPath = "../../php/";
 var label_srcName = 0;
 var label_pagemode = "";//"label", "homepage",//"segmentation"
@@ -23,6 +23,13 @@ var minSize = 10;
 
 
 function label_initpage(pagemode){
+	var user = document.getElementsByClassName("dropdown user user-menu");
+	if(user.length > 0){
+		pagemode = "label";
+	}
+	else{
+		pagemode = "homepage";
+	}
 	label_pagemode = pagemode;
 	label_loadCategories();
 }
@@ -189,6 +196,8 @@ function label_drawRects(rectList){//Existing rects
 		var canvas = document.createElement('canvas');
 		canvas.style.pointerEvents = "none";
   		canvas.style.margin = "-5px";//(anchorScale-3)/2 +3
+  		canvas.width = 1;
+		canvas.height = 1;
 		var text = document.createElement('div');
 		var t = document.createTextNode(str);
 		text.className = 'rectangleText';
@@ -369,6 +378,9 @@ function getAddedRect(newRectList){
 	for(var j = 0; j < newRectList.length; j++){
 		var currentNewRectID = newRectList[j].id;
 		var addRect = true;
+		/*if(newRectList[j].user == -2 && label_pagemode == "homepage"){
+			addRect = false;
+		}*/
 		for(var i = 0; i < oldElements.length; i++){
 			if(oldElements[i].rectData.id === currentNewRectID){
 				addRect = false;
@@ -448,7 +460,7 @@ window.addEventListener("resize", function(){
 			elements[i].style.top = parseFloat(elements[i].rectSetTop*ratio/elements[i].rectSetRatio) + 'px';
 			elements[i].style.width = parseFloat(elements[i].rectSetWidth*ratio/elements[i].rectSetRatio) + 'px';
 			elements[i].style.height = parseFloat(elements[i].rectSetHeight*ratio/elements[i].rectSetRatio) + 'px';
-			if(elements[i].rectData.owned == 1 && elements[i].rectData.state == 2){
+			if(  ( elements[i].rectData.owned == 1 && elements[i].rectData.state == 2 )  ||  !( elements[i].rectData.hasOwnProperty('id') )  ){
 				drawAnchor(elements[i]);
 			}
 		}
@@ -758,7 +770,9 @@ function onClickHandler(e) {
 		else if(e.target.classList.contains("rectangleText")){
 			e.target.parentElement.remove();
 		}
-		sendSave(0);
+		if(label_pagemode == "label"){
+			sendSave(0);	
+		}
 	}
 	else{
 		e.target.parentElement.appendChild(e.target);
@@ -990,7 +1004,9 @@ function endCreateElement(e){
 		element.rectSetHeight = element.offsetHeight;
 		element.rectSetRatio = label_getImgRatio();
 		element = null;
-		sendSave(0);
+		if(label_pagemode == "label"){
+			sendSave(0);	
+		}
 	}
 	canvas.style.cursor = "default";
 }
@@ -1124,7 +1140,7 @@ function adaptText(element){
 }
 function drawAnchor(element){
 	var canvas = element.children[1];
-	var anchorScale = 7;//In px
+	var anchorScale = 5;//In px
 	canvas.width = element.offsetWidth+(anchorScale-3);
 	canvas.height = element.offsetHeight+(anchorScale-3);
 

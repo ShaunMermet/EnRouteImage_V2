@@ -418,7 +418,7 @@ function adaptText(element){
 }
 function drawAnchor(element){
 	var canvas = element.children[1];
-	var anchorScale = 7;//In px
+	var anchorScale = 5;//In px
 	canvas.width = element.offsetWidth+(anchorScale-3);
 	canvas.height = element.offsetHeight+(anchorScale-3);
 

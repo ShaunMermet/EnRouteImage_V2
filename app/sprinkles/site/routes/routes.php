@@ -14,9 +14,20 @@
 //Pages
 
 
+$app->group('', function () {
+
+	$this->get('', 'UserFrosting\Sprinkle\Site\Controller\SiteController:pageIndex');
+
+	$this->get('/locale={locale}', 'UserFrosting\Sprinkle\Site\Controller\SiteController:pageIndex');
+
+
+});//->add('authGuard');
 
 $app->group('/bbox', function () {
+
 	$this->get('', 'UserFrosting\Sprinkle\Site\Controller\SiteController:pageLabel');
+
+	$this->get('/locale={locale}', 'UserFrosting\Sprinkle\Site\Controller\SiteController:pageLabel');
 
 	//$this->post('/annotate', 'UserFrosting\Sprinkle\Site\Controller\AreaController:saveAreas');
 
@@ -162,7 +173,11 @@ $app->group('/freeimageNA', function () {
 });//->add('authGuard');
 
 $app->group('/translate', function () {
-	$this->post('/set', 'UserFrosting\Sprinkle\Site\Controller\SiteController:setTranslate');
+	$this->post('/tuto', 'UserFrosting\Sprinkle\Site\Controller\SiteController:tutoTranslate');
+
+	$this->post('/label', 'UserFrosting\Sprinkle\Site\Controller\SiteController:labelTranslate');
+
+	$this->post('/index', 'UserFrosting\Sprinkle\Site\Controller\SiteController:indexTranslate');
 
 });//->add('authGuard');
 
@@ -214,6 +229,14 @@ $app->group('/api/sets', function () {
 $app->group('/api/segSets', function () {
 
 	$this->get('/mysets', 'UserFrosting\Sprinkle\Site\Controller\SetController:getMysegSets');
+
+});//->add('authGuard');
+
+$app->group('/tutorial', function () {
+
+	$this->get('', 'UserFrosting\Sprinkle\Site\Controller\SiteController:pageTutorial');
+
+	$this->get('/locale={locale}', 'UserFrosting\Sprinkle\Site\Controller\SiteController:pageTutorial');
 
 });//->add('authGuard');
 

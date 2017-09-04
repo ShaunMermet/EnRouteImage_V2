@@ -1,69 +1,267 @@
 {% extends "@core/pages/index.html.twig" %}
 
 {% block stylesheets_page_group %}
-  {{ assets.css('css/site') | raw }}
+  
+  
+  
+    <!-- Bootstrap core CSS -->
+    <link href="app/vendor/bootstrap/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="app/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
+
+    <!-- Plugin CSS -->
+    <link href="app/vendor/magnific-popup/magnific-popup.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <!--<link href="css/creative.min.css" rel="stylesheet">-->
+    {{ assets.css('css/frontpage') | raw }}
+    {{ assets.css('css/site') | raw }}
 {% endblock %}
 
-{% set page_active = "home" %}
 
-{# Overrides blocks in head of base template #}
-{% block page_title %}{{translate("HOME")}}{% endblock %}
 
-{% block page_description %}{{translate("PORTAL.WELCOME")}}{% endblock %}
+{% block content %}
 
-{% block body_matter %}
-<div class="container">
-  {% include 'components/tutorial.html.twig' %}
-
-  <section>
-  <div class="labelimg-container">
-    <div class="column column-one" style="position:sticky;max-width: 100px;">
-      <div id="filler"></div>
-      <div id="leftMenu" style ="display: flex;flex-direction: column;">
-        <div style="max-width: 100px">{{translate("BB_LABEL_FULL")}}</div>
-        <select class="js-basic-single" id="combo" style="max-width:90%;" style="width: 150px;"></select>
-        <div style="max-width: 100px">{{translate("COMBOTITLE.SET")}}</div>
-        <select class="js-basic-single" id="combo4" style="max-width:90%;" style="width: 150px;"></select>
-        <button id="nextButton"class="button" type="button" onclick="label_onNextClicked()">{{translate("BUTTON.NEXT_IMAGE")}}</button>
-        <button id="moreButton"class="button" type="button" onclick="label_onMoreClicked()">{{translate("BUTTON.MORE_IMAGE")}}</button>
-        <button id="drawButton" class="btn-mode" type="button"onclick="label_onDrawClicked()">{{translate("BUTTON.DRAW")}}</button>
-        <button id="eraseButton"class="btn-mode" type="button" onclick="label_onEraseClicked()">{{translate("BUTTON.DELETE")}}</button>
-        <div id="imgCounter" style="max-width: 100px">{{translate("FEEDBACK.NO_IMAGE")}}</div>
-        <div style="max-width: 100px">{{translate("LEGEND.LABEL.NBR_BBOX")}}<span id="value1"></span></div>
-        <br>
-        <div>{{translate("LEGEND.LABEL.SWITCH")}}</div>
-        <label class="switch" title="Show / Hide label">
-          <input id="labelShowSwitch" type="checkbox" checked onchange ="label_onViewLabelClicked(this)">
-          <div class="slider round"></div>
-        </label>
+    
+<!-- Navigation -->
+    <!--<nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+      <a class="navbar-brand" href="#page-top">Labelligent</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="#about">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#portfolio">Projects</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#contact">Contact</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/account/sign-in">Sign In</a>
+          </li>
+        </ul>
       </div>
-    </div>
-    <div class="column column-four" id="columnFour">
-      <div id="preview" class="imgcontainer" ondragstart="return false;" ondrop="return false;" style="position: relative;overflow: auto;white-space: nowrap;height:100%;">
-        <img id='image' unselectable='on' src='' ontouchend="label_onTouchEnd(event)"
-      ontouchcancel="label_onTouchCancel(event)" ontouchmove="label_onTouchMove(event)" ontouchstart="label_onTouchStart(event)"/>
+    </nav>-->
+    <header class="main-header">
+      {% include "components/default/main-nav.html.twig" %}
+    </header>
+
+    <header class="masthead" id="page-top">
+      <div class="header-content">
+        <div class="header-content-inner">
+          <h1 id="homeHeading">{{translate("TOPPAGE.MAIN.TITLE")}}</h1>
+          <hr>
+          <p>{{translate("TOPPAGE.MAIN.SUBTITLE")}}</p>
+          <a class="btn btn-primary btn-xl" href="/tutorial">{{translate("TOPPAGE.MAIN.BUTTON")}}</a>
+        </div>
       </div>
-    </div>
-  </div>  
-  </section>
- 
+    </header>
 
-{% include 'components/tutorial2.html.twig' %}
+    <section class="bg-primary" id="about">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 mx-auto text-center">
+            <h2 class="section-heading text-white">{{translate("TOPPAGE.ABOUT.TITLE")}}</h2>
+            <hr class="light">
+            <p class="text-faded">{{translate("TOPPAGE.ABOUT.DESCRIPTION")}}</p>
+            <a class="btn btn-default btn-xl sr-button" href="/tutorial">{{translate("TOPPAGE.ABOUT.BUTTON")}}</a>
+          </div>
+        </div>
+      </div>
+    </section>
 
+    <!--<section id="services">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12 text-center">
+            <h2 class="section-heading">At Your Service</h2>
+            <hr class="primary">
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-3 col-md-6 text-center">
+            <div class="service-box">
+              <i class="fa fa-4x fa-diamond text-primary sr-icons"></i>
+              <h3>Sturdy Templates</h3>
+              <p class="text-muted">Our templates are updated regularly so they don't break.</p>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 text-center">
+            <div class="service-box">
+              <i class="fa fa-4x fa-paper-plane text-primary sr-icons"></i>
+              <h3>Ready to Ship</h3>
+              <p class="text-muted">You can use this theme as is, or you can make changes!</p>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 text-center">
+            <div class="service-box">
+              <i class="fa fa-4x fa-newspaper-o text-primary sr-icons"></i>
+              <h3>Up to Date</h3>
+              <p class="text-muted">We update dependencies to keep things fresh.</p>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 text-center">
+            <div class="service-box">
+              <i class="fa fa-4x fa-heart text-primary sr-icons"></i>
+              <h3>Made with Love</h3>
+              <p class="text-muted">You have to make your websites with love these days!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>-->
 
-    <button class="btn-signup" type="button" style="display: block; margin: 0 auto;" onclick=location.href="account/sign-in">{{translate("BUTTON.SIGN_UP")}}</button>
+    <section class="p-0" id="portfolio">
+      <div class="container-fluid">
+        <div class="row no-gutter">
+          <div class="col-lg-6 col-sm-6">
+            <a class="portfolio-box" href="/tutorial">
+              <img class="img-fluid" src="img/portfolio/thumbnails/tuto.jpg" alt="">
+              <div class="portfolio-box-caption">
+                <div class="portfolio-box-caption-content">
+                  <div class="project-category text-faded"></div>
+                  <div class="project-name">
+                    {{translate("TOPPAGE.PORTFOLIO.TUTORIAL")}}
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-6 col-sm-6">
+            <a class="portfolio-box" href="/account/sign-in">
+              <img class="img-fluid" src="img/portfolio/thumbnails/sign.jpg" alt="">
+              <div class="portfolio-box-caption">
+                <div class="portfolio-box-caption-content">
+                  <div class="project-category text-faded"></div>
+                  <div class="project-name">
+                    {{translate("TOPPAGE.PORTFOLIO.SIGNIN")}}
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <!--<div class="col-lg-4 col-sm-6">
+            <a class="portfolio-box" href="img/portfolio/fullsize/3.jpg">
+              <img class="img-fluid" src="img/portfolio/thumbnails/3.jpg" alt="">
+              <div class="portfolio-box-caption">
+                <div class="portfolio-box-caption-content">
+                  <div class="project-category text-faded">
+                    Category
+                  </div>
+                  <div class="project-name">
+                    Project Name
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-4 col-sm-6">
+            <a class="portfolio-box" href="img/portfolio/fullsize/4.jpg">
+              <img class="img-fluid" src="img/portfolio/thumbnails/4.jpg" alt="">
+              <div class="portfolio-box-caption">
+                <div class="portfolio-box-caption-content">
+                  <div class="project-category text-faded">
+                    Category
+                  </div>
+                  <div class="project-name">
+                    Project Name
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-4 col-sm-6">
+            <a class="portfolio-box" href="img/portfolio/fullsize/5.jpg">
+              <img class="img-fluid" src="img/portfolio/thumbnails/5.jpg" alt="">
+              <div class="portfolio-box-caption">
+                <div class="portfolio-box-caption-content">
+                  <div class="project-category text-faded">
+                    Category
+                  </div>
+                  <div class="project-name">
+                    Project Name
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-4 col-sm-6">
+            <a class="portfolio-box" href="img/portfolio/fullsize/6.jpg">
+              <img class="img-fluid" src="img/portfolio/thumbnails/6.jpg" alt="">
+              <div class="portfolio-box-caption">
+                <div class="portfolio-box-caption-content">
+                  <div class="project-category text-faded">
+                    Category
+                  </div>
+                  <div class="project-name">
+                    Project Name
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>-->
+        </div>
+      </div>
+    </section>
 
-<br>
-<br>
-<br>
-    </div>
+    <!--<div class="call-to-action bg-dark">
+      <div class="container text-center">
+        <h2>Free Download at Start Bootstrap!</h2>
+        <a class="btn btn-default btn-xl sr-button" href="http://startbootstrap.com/template-overviews/creative/">Download Now!</a>
+      </div>
+    </div>-->
+
+    <section id="contact">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 mx-auto text-center">
+            <h2 class="section-heading">{{translate("TOPPAGE.CONTACT.TITLE")}}</h2>
+            <hr class="primary">
+            <p>{{translate("TOPPAGE.CONTACT.DESCRIPTION")}}</p>
+          </div>
+        </div>
+        <div class="row">
+          <!--<div class="col-lg-4 ml-auto text-center">
+            <i class="fa fa-phone fa-3x sr-contact"></i>
+            <p>123-456-6789</p>
+          </div>-->
+          <div class="col-lg-12 mr-auto text-center">
+            <i class="fa fa-envelope-o fa-3x sr-contact"></i>
+            <p>
+              <a href="mailto:your-email@your-domain.com">{{translate("TOPPAGE.CONTACT.MAIL")}}</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="app/vendor/jquery/jquery.min.js"></script>
+    <script src="app/vendor/popper/popper.min.js"></script>
+    <script src="app/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="app/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="app/vendor/scrollreveal/scrollreveal.min.js"></script>
+    <script src="app/vendor/magnific-popup/jquery.magnific-popup.js"></script>
+
+    <!-- Custom scripts for this template -->
+    <!--<script src="js/creative.min.js"></script>-->
 {% endblock %}
 
 
 
 {% block scripts_page_group %}
-  {{ assets.js('js/tools') | raw }}
 {% endblock %}
 {% block scripts_page %}
-  {{ assets.js('js/homepage') | raw }}
+  {{ assets.js('js/frontpage') | raw }}
 {% endblock %}
