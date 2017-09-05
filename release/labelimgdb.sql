@@ -991,3 +991,8 @@ ADD CONSTRAINT `1ImgBySet` UNIQUE (path,set_id);
 ALTER TABLE `segimages`
 alter table `segimages` drop index path;
 ADD CONSTRAINT `1ImgBySet` UNIQUE (path,set_id);
+
+
+--------------------------------
+--- Changes for Beta 0.3.11 ----
+--------------------------------

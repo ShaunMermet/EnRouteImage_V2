@@ -26,7 +26,7 @@ function validated_loadSegCategories(){
 }
 function validated_loadCategories(){
 	// Fetch and render the categories
-	var url = site.uri.public + '/category/all2';
+	var url = site.uri.public + '/category/all';
 	$.ajax({
 	  type: "GET",
 	  url: url

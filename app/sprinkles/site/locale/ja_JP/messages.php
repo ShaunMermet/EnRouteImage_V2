@@ -301,6 +301,7 @@ return [
     "COMBOTITLE" => [
         "CATEGORY"        => "イメージカテゴリー",
         "GROUP"        => "イメージグループ",
+        "SET"        => "画像セット",
     ],
     "COMBOPLACEHOLDER" => [
         "NONE"        => "なし
