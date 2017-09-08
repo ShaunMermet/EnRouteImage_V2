@@ -16,7 +16,7 @@ function validated_loadSegCategories(){
 	    // Fetch successful
 	    function (data) {
 	        validated_loadCategories();
-	        dataHandler.segCategories = data.rows;
+	        dataHandler.segCategories = data;
 	    },
 	    // Fetch failed
 	    function (data) {
@@ -35,7 +35,7 @@ function validated_loadCategories(){
 	    // Fetch successful
 	    function (data) {
 	        validated_loadSegSets(data.rows);
-	        dataHandler.bboxCategories = data.rows;
+	        dataHandler.bboxCategories = data;
 	    },
 	    // Fetch failed
 	    function (data) {

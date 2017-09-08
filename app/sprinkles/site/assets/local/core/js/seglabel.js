@@ -217,7 +217,7 @@ function label_drawLegend(idImage){
 	var legend = {};
 	for(var i = 0; i < dataAreas.length; ++i){
 		var areaType = dataAreas[i].type;
-		legend[areaType] = mainContainer.catData[mainContainer.catData.findIndex(x => x.id==areaType)];;
+		legend[areaType] = mainContainer.catData[mainContainer.catData.findIndex(function(x){return x.id == type})];;
 	}
 	console.log(legend);
 	for (var key in legend){
@@ -604,7 +604,7 @@ function onUpHandler(e) {
 		if(painting){
 			var combo = document.getElementById("combo");
 			var type = combo.options[combo.selectedIndex].value;
-			var selectedCat = mainContainer.catData[mainContainer.catData.findIndex(x => x.id==type)];
+			var selectedCat = mainContainer.catData[mainContainer.catData.findIndex(function(x){return x.id == type})];
 			var color = selectedCat.Color;
 			areaCtx.globalAlpha=0.5;
 	 		areaCtx.fillStyle = color;//"#ff0000";

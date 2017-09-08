@@ -125,7 +125,6 @@ function validate_loadRects(){
 			}
 			else validate_rectanglesList = [];
 			validate_addImage();
-			updateNbrAreas();
 	    },
 	    // Fetch failed
 	    function (data) {
@@ -199,6 +198,8 @@ function validate_addImage(){
 	  validate_rectsApplyState();
 	  img.removeEventListener('load', loaded);
 	  img.removeEventListener('load', error);
+	  initSelectAll();
+	  updateNbrAreas();
 	}
 	function error() {
 		//alert('error');
@@ -336,7 +337,7 @@ function createElement(e){
 	var combo = document.getElementById("combo");
 	var str = combo.options[combo.selectedIndex].text;
 	var type = combo.options[combo.selectedIndex].value;
-	var selectedCat = mainContainer.catData[mainContainer.catData.findIndex(x => x.id==type)];
+	var selectedCat = mainContainer.catData[mainContainer.catData.findIndex(function(x){return x.id == type})];
 	var color = selectedCat.Color;
 	element.rectType = type;
 	//Don't use it as we do not display rect when too small (it's a dot at the start)
@@ -694,8 +695,22 @@ function label_updateButtons(){
 		$("#eraseButton").toggleClass("selected", false);
 }
 ///////////////////////////
-var selectAll = false;
+var selectAll = true;
+
+function initSelectAll(){
+	$("#selectAllButton").toggleClass("selected", selectAll);
+	var elements = document.getElementsByClassName("rectangle");
+	for (var i = 0; i < elements.length; ++i){
+		toggleSelection(elements[i], true);
+	}
+	$("#selectAllButton").toggleClass("selected", true);
+	selectAll = true;
+}
 function valdiate_onSelectAllClicked(){
+	selectAllfunction();
+}
+
+function selectAllfunction(){
 	var elements = document.getElementsByClassName("rectangle");
 	for (var i = 0; i < elements.length; ++i){
 		toggleSelection(elements[i], !selectAll);
@@ -975,16 +990,17 @@ function moveElement(e, element){
 
 function endCreateElement(e){
 	var canvas = document.getElementById('preview');
-	var endElement = e.target;
-	endElement.rectSetLeft = endElement.offsetLeft;
-	endElement.rectSetTop = endElement.offsetTop;
-	endElement.rectSetWidth = endElement.offsetWidth;
-	endElement.rectSetHeight = endElement.offsetHeight;
-	endElement.rectSetRatio = validate_getImgRatio();
-	resizeMode = false;
-	elemMoveMode = false;
-	element = null;
-	canvas.style.cursor = "default";
+	if(element != null){
+		element.rectSetLeft = element.offsetLeft;
+		element.rectSetTop = element.offsetTop;
+		element.rectSetWidth = element.offsetWidth;
+		element.rectSetHeight = element.offsetHeight;
+		element.rectSetRatio = validate_getImgRatio();
+		resizeMode = false;
+		elemMoveMode = false;
+		element = null;
+		canvas.style.cursor = "default";
+	}
 }
 
 

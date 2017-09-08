@@ -17,7 +17,7 @@ function catEdit_onEditClicked(){
 function catEdit_fillCateditPanel(){
 	var combo = document.getElementById("catEditList");
 	var type = combo.options[combo.selectedIndex].value;
-	var selectedCat = mainContainer.catData[mainContainer.catData.findIndex(x => x.id==type)];
+	var selectedCat = mainContainer.catData[mainContainer.catData.findIndex(function(x){return x.id == type})];
 	var color = selectedCat.Color;
 	var assignedSet = selectedCat.set_id;
 	var str = selectedCat.Category;

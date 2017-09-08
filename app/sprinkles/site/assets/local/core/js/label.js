@@ -965,7 +965,7 @@ function createElement(e){
 	element.className = 'rectangle';
 	var combo = document.getElementById("combo");
 	var type = combo.options[combo.selectedIndex].value;
-	var selectedCat = mainContainer.catData[mainContainer.catData.findIndex(x => x.id==type)];
+	var selectedCat = mainContainer.catData[mainContainer.catData.findIndex(function(x){return x.id == type})];
 	var color = selectedCat.Color;
 	var str = selectedCat.Category;
 	element.rectData = {};
