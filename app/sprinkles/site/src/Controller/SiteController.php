@@ -329,7 +329,9 @@ class SiteController extends SimpleController
                                 ->get();
       
                     foreach ($imgAreas as $imgArea) {
-                        $line = $imgArea->category->Category." 0 0 0 ".$imgArea->rectLeft." ".$imgArea->rectTop." ".$imgArea->rectRight." ".$imgArea->rectBottom." 0 0 0 0 0 0 0";
+                        $category = $imgArea->category->Category;
+                        $category_ = str_replace(" ", "_", $category);
+                        $line = $category_." 0 0 0 ".$imgArea->rectLeft." ".$imgArea->rectTop." ".$imgArea->rectRight." ".$imgArea->rectBottom." 0 0 0 0 0 0 0";
                         fwrite($txtfile, $line);
                         fwrite($txtfile, "\n");
                     }
@@ -489,7 +491,9 @@ class SiteController extends SimpleController
                                 ->get();
       
                     foreach ($imgAreas as $imgArea) {
-                        $line = $imgArea->category->Category." ".$imgArea->data;
+                        $category = $imgArea->category->Category;
+                        $category_ = str_replace(" ", "_", $category);
+                        $line = $category_." ".$imgArea->data;
                         fwrite($txtfile, $line);
                         fwrite($txtfile, "\n");
                     }
