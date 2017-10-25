@@ -175,7 +175,7 @@
 				<span>Start upload</span>
 			</button>
             <span style="width:200px">
-                <select class="js-basic-single" id="setAssignAll" style="max-width:90%;" style="width: 150px;" onchange="onSetAssignAllChanged()"></select>
+                <select class="js-basic-single" id="setAssignAll" style="max-width:90%;" style="width: 150px;"></select>
             </span>
 			<!-- The global file processing state -->
 			<span class="fileupload-process"></span>
@@ -199,10 +199,12 @@
         </div>
         <br>
         <div class="row fileupload-buttonbar">
-            <div class="col-lg-7" style="display: flex;justify-content: space-around;flex-wrap: wrap;width:100%;float:none">
+            <div class="col-lg-7" style="display: flex;justify-content: center;flex-wrap: wrap;width:100%;float:none">
                 <span style="width:200px">
                     <select class="js-basic-single" id="setAssignFolder" style="max-width:90%;" style="width: 150px;" onchange="onDownloadImageSetChanged()"></select>
                 </span>
+                <br>
+                <span class="stdLoaderSmall" style="margin-left: 20px;display:none" id="tableDownloadLoader"></span>
             </div>
         </div>
         <br>

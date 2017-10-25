@@ -156,10 +156,14 @@ return [
     ],
     "TOPPAGE" => [
         "MAIN"=>[
-            "BUTTON"=>"Get started !"
+            "TITLE"=>"Labelligent - A labeling tool",
+            "BUTTON"=>"Get started !",
+            "SUBTITLE"=>""
 
         ],
         "ABOUT"=>[
+            "TITLE"=>"Create your own dataset of images !",
+            "DESCRIPTION" => "",
             "BUTTON"=>"Get started !"
         ],
         "PORTFOLIO"=>[
@@ -169,6 +173,7 @@ return [
         "CONTACT"=>[
             "TITLE"=>"Let's Get In Touch !",
             "MAIL"=>"info@elab.co.jp",
+            "DESCRIPTION" => "",
         ]
     ]
 ];

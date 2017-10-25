@@ -49,3 +49,6 @@ Temporary Items
 app/.env
 app/.env.old
 .htaccess
+app/sprinkles/site/assets/local/core/img/LogoTitle_OLD.png
+app/sprinkles/site/assets/local/core/img/LogoTitleSignIn_OLD.png
+app/sprinkles/site/assets/local/core/img/LogoTitleSquare_OLD.png

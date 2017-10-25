@@ -55,7 +55,7 @@ $(function () {
             });
         }
     } else {
-        // Load existing files:
+        /*// Load existing files:
         $('#fileupload').addClass('fileupload-processing');
         var data= {};
         data[site.csrf.keys.name] = site.csrf.name;
@@ -72,7 +72,7 @@ $(function () {
             $(this).fileupload('option', 'done')
                 .call(this, $.Event('done'), {result: result});
              upl_initCombos();
-        });
+        });*/
     }
 
 });

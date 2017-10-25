@@ -117,6 +117,7 @@ function upl_onAddInitRowCombos(row){
 function upl_initRowCombos(row){
 	setCombo = row.getElementsByClassName("js-basic-single set");
 	upl_initCombo(setCombo[0], row);
+	upl_syncSetRowCombos(row);
 }
 function upl_initCombo(comboElem, row){
 	preValue = comboElem.value;
@@ -231,6 +232,11 @@ function onSetAssignAllChanged(){
 	   upl_syncSetRowCombos(row[i]);
 	}
 }
+$("#setAssignAll").on("select2:close", function(e) {
+	//Allow change trigger when already chosen option is selected
+	onSetAssignAllChanged();
+});
+
 function upl_syncSetRowCombos(row){
 	var masterCombo = document.getElementById("setAssignAll");
 	var combo = row.getElementsByClassName("js-basic-single set");
@@ -254,6 +260,15 @@ function emptyCombo(comboElem){
 function onDownloadImageSetChanged(){
 	upl_GetImg();
 }
+function displayTableDownloadLoader(bool){
+	var loader = document.getElementById("tableDownloadLoader");
+	if(bool){
+		loader.style.display = "";
+	}
+	else{
+		loader.style.display = "none";
+	}
+}
 function upl_GetImg(){
 	console.log("fetch image");
 	var form = document.getElementById("fileupload");
@@ -266,6 +281,7 @@ function upl_GetImg(){
 	
 	var data= {};
 	data["set"]= $("#setAssignFolder")[0].value;
+	displayTableDownloadLoader(true);
 	$.ajax({
 	  type: "GET",
 	  url: url,
@@ -275,6 +291,7 @@ function upl_GetImg(){
 	.then(
 	    // Fetch successful
 	    function (data) {
+	    	displayTableDownloadLoader(false);
 		    dlTable.children[0].innerHTML = "";
 	        $(form).fileupload('option', 'done')
 	            .call(form, $.Event('done'), {result: data});
@@ -282,7 +299,7 @@ function upl_GetImg(){
 	    },
 	    // Fetch failed
 	    function (data) {
-	        
+	        displayTableDownloadLoader(false);
 	    }
 	);
 }
