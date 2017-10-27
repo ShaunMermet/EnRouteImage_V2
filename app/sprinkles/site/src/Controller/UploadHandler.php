@@ -1346,7 +1346,8 @@ class UploadHandler
                     $areaString = $farea[1]; 
                     //Check category
                     $checkCat = SegCategory::where('Category',  $areaCategory)
-                       ->first();
+                                        ->where('set_id',$set)
+                                        ->first();
                     if($checkCat){
                         $areaType = $checkCat->id;
                     } 
@@ -1355,6 +1356,7 @@ class UploadHandler
                         $CatToInsert = new SegCategories;
                         $CatToInsert->Category = $areaCategory;
                         $CatToInsert->Color = $catColor;
+                        $CatToInsert->set_id = $set;
                         $CatToInsert->save();
                         $areaType = $CatToInsert->id;
                     } 
@@ -1368,8 +1370,7 @@ class UploadHandler
                 }
                 $imgToValid = SegImage::where('id',  $SegImg->id)
                    ->first();
-                $imgToValid->state = 3;
-                $imgToValid->category = $areaType;
+                $imgToValid->state = 2;
                 try{
                     $imgToValid->save();
                 }
@@ -1408,15 +1409,17 @@ class UploadHandler
                     $rectBottom = $farea[7];
                     //Check category
                     $checkCat = ImgCategories::where('Category',  $rectType)
-                       ->first();
+                                        ->where('set_id',$set)
+                                        ->first();
                     if($checkCat){
                         $rectType = $checkCat->id;
                     }
                     else{//Creation cat if doesn't exist
                         $catColor = $this->rand_color();
                         $CatToInsert = new ImgCategories;
-                        $CatToInsert->Category = $rectCategory;
+                        $CatToInsert->Category = $rectType;
                         $CatToInsert->Color = $catColor;
+                        $CatToInsert->set_id = $set;
                         $CatToInsert->save();
                         $rectType = $CatToInsert->id;
                     }
@@ -1434,8 +1437,7 @@ class UploadHandler
                 //Valid img
                 $imgToValid = ImgLinks::where('id',  $BboxImg->id)
                    ->first();
-                $imgToValid->state = 3;
-                $imgToValid->category = $rectType;
+                $imgToValid->state = 2;
                 try{
                     $imgToValid->save();
                 }

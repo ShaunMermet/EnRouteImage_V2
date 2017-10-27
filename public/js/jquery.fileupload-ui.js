@@ -322,7 +322,7 @@
                         progress + '%'
                     );
                 if(data.loaded == data.total){
-                    upl_GetImg();
+                    //upl_GetImg();
                 }
             },
             // Callback for uploads start, equivalent to the global ajaxStart event:
