@@ -261,4 +261,71 @@ class SetController extends SimpleController
             echo "FAIL";
         }
     }
+
+    /**
+     * Get the info corresponding to one set
+     *
+     * This page requires authentication.
+     * Request type: GET
+     */
+    public function getSetDlInfos($request, $response, $args)
+    {
+        /** @var UserFrosting\Sprinkle\Account\Authenticate\Authenticator $authenticator */
+        $authenticator = $this->ci->authenticator;
+        if (!$authenticator->check()) {
+            $loginPage = $this->ci->router->pathFor('login');
+            return $response->withRedirect($loginPage, 400);
+        }
+
+        /** @var UserFrosting\Sprinkle\Account\Authorize\AuthorizationManager */
+        $authorizer = $this->ci->authorizer;
+
+        /** @var UserFrosting\Sprinkle\Account\Model\User $currentUser */
+        $currentUser = $this->ci->currentUser;
+
+        /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
+        $classMapper = $this->ci->classMapper;
+
+        // Access-controlled page
+        if (!$authorizer->checkAccess($currentUser, 'uri_export')) {
+            $loginPage = $this->ci->router->pathFor('login');
+           return $response->withRedirect($loginPage, 400);
+        }
+        
+        $UserWGrp = $classMapper->staticMethod('user', 'where', 'id', $currentUser->id)
+                                ->with('group')
+                                ->first();
+        $validSet = [];
+        foreach ($UserWGrp->group as $group) {
+            $sets = Set::where('group_id', '=', $group->id)
+                    ->get();
+            foreach ($sets as $set) {
+                array_push($validSet, $set->id);
+            }
+        }
+        
+        // GET parameters
+        $params = $request->getQueryParams();
+        $requestedSet = $params["setID"];
+        $setMode = $params["setMode"];
+        
+        if($requestedSet == null) $requestedSet = 1;
+        if($setMode == "segmentation"){
+            $set = SegSet::where('id', '=', $requestedSet)
+                    ->with('token')
+                    ->first();
+        }else{
+            $set = Set::where('id', '=', $requestedSet)
+                    ->with('token')
+                    ->first();
+        }
+        
+        $dlInfos = $set->token;
+        $res=array("msg"=>"Download Ready","link"=>$dlInfos->token,"size"=>$dlInfos->size,"user"=>$dlInfos->user,"dateGen"=>$dlInfos->date_generated,
+            "nbrImgs"=>$dlInfos->nbrImages,"nbrAreas"=>$dlInfos->nbrAreas,"areaPerType"=>$dlInfos->nbrAreas_per_type);
+
+        // Be careful how you consume this data - it has not been escaped and contains untrusted user-supplied content.
+        // For example, if you plan to insert it into an HTML DOM, you must escape it on the client side (or use client-side templating).
+        return $response->withJson($res, 200, JSON_PRETTY_PRINT);
+    }
 }

@@ -19,32 +19,18 @@ use UserFrosting\Sprinkle\Core\Model\UFModel;
  * @property string name
  * @property string group_id
  */
-class SegSet extends UFModel
+class token extends UFModel
 {
     /**
      * @var string The name of the table for the current model.
      */
-    protected $table = "segsets";
+    protected $table = "labelimgexportlinks";
 
     protected $fillable = [
-        "name",
-        "group_id"
+        "segset_id",
+        "token",
+        "archivePath",
+        "expires",
     ];
 
-
-    /**
-     * Get the group where the set belongs.
-     */
-    public function group()
-    {
-        return $this->belongsTo('UserFrosting\Sprinkle\Site\Model\Group');
-    }
-
-    /**
-     * Get the dl token of the set.
-     */
-    public function token()
-    {
-        return $this->hasOne('UserFrosting\Sprinkle\Site\Model\Token','segset_id');
-    }
 }

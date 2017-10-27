@@ -39,4 +39,12 @@ class set extends UFModel
     {
         return $this->belongsTo('UserFrosting\Sprinkle\Site\Model\Group');
     }
+
+    /**
+     * Get the dl token of the set.
+     */
+    public function token()
+    {
+        return $this->hasOne('UserFrosting\Sprinkle\Site\Model\Token');
+    }
 }

@@ -225,6 +225,8 @@ $app->group('/api/sets', function () {
 
 	$this->get('/mysetsNA', 'UserFrosting\Sprinkle\Site\Controller\SetController:getMySetsNA');
 
+	$this->get('/dlInfos', 'UserFrosting\Sprinkle\Site\Controller\SetController:getSetDlInfos');
+
 });//->add('authGuard');
 $app->group('/api/segSets', function () {
 

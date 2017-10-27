@@ -14,6 +14,7 @@ use UserFrosting\Sprinkle\Site\Model\ImgArea;
 use UserFrosting\Sprinkle\Site\Model\ImgLinks;
 use UserFrosting\Sprinkle\Site\Model\Set;
 use UserFrosting\Sprinkle\Site\Model\SegSet;
+use UserFrosting\Sprinkle\Site\Model\Token;
 
 /**
  * Controller class for site-related requests.
@@ -301,21 +302,30 @@ class SiteController extends SimpleController
             if (count($imgToExport) > 0) {
             
                 $tmpFolder = sha1(rand().microtime());
-                $exportFileName = $currentUser->user_name."_".time();
-                
-                if(!$this->saveTmpFolder($tmpFolder,$tmpFolder."/".$exportFileName.".zip",$db))
-                    exit;
+                $token = $tmpFolder;
+                $set = Set::where('id', '=', $requestedSet)
+                        ->with('group')
+                        ->first();
+                $setName = str_replace(" ", "_", $set->name);
+                $grpName = str_replace(" ", "_", $set->group->name);
+                $exportFileName = $setName."_".$grpName."_".time();
+
+                $oldTokens = Token::where('set_id', '=', $requestedSet)->get();
+                $BDDtoken = $this->saveTmpFolder($token,$tmpFolder."/".$exportFileName.".zip",$db,$requestedSet,"bbox");
                 
                 mkdir("tmp/".$tmpFolder, 0700);
                 $filename = ("tmp/".$tmpFolder."/".$exportFileName.".zip");
 
-
-                
+                set_time_limit(0);
+                ####################### ZIP CREATE  + COUNT INFOS ###################################
                 $zip = new \ZipArchive();
                 $zip->open($filename, \ZipArchive::CREATE);
                 $allfilenamePath = "tmp/".$tmpFolder."/filename.txt";
                 $allFilename = fopen($allfilenamePath, "w") or die("Unable to open file!");
                 /* fetch object array */
+                $nbrImages = 0;
+                $nbrAreas = 0;
+                $areasPerType = [];
                 foreach ($imgToExport as $NImage) {
                     $imgToExportPath = "img/".$NImage->path;
                     $path_parts = pathinfo($NImage->path);
@@ -334,6 +344,13 @@ class SiteController extends SimpleController
                         $line = $category_." 0 0 0 ".$imgArea->rectLeft." ".$imgArea->rectTop." ".$imgArea->rectRight." ".$imgArea->rectBottom." 0 0 0 0 0 0 0";
                         fwrite($txtfile, $line);
                         fwrite($txtfile, "\n");
+                        //Counting Areas
+                        $nbrAreas++;
+                        if($areasPerType[$category]){
+                            $areasPerType[$category]++;
+                        }else{
+                            $areasPerType[$category] = 1;
+                        }
                     }
                     
                     //Closing txt file with polygon data
@@ -344,18 +361,40 @@ class SiteController extends SimpleController
                     $zip->addFile($txtpath, $path_parts['filename'] .".txt");
                     $zip->addFile($imgToExportPath, $path_parts['filename'].".jpeg");
                     fwrite($allFilename, $NImage->path.",".$NImage->originalName."\n");
+
+                    //Counting images
+                    $nbrImages++;
                 }
                 fclose($allFilename);
                 $zip->addFile($allfilenamePath, "filename.txt");
                 $zip->close();
-               
+                ####################### ZIP  ###################################
+                set_time_limit(120);
 
+                //Unlink all textfile
                 $files = glob('tmp/'.$tmpFolder.'/*.{txt}', GLOB_BRACE);
                 foreach($files as $file) {
                   unlink($file);
                 }
-                
-                $res=array("link"=>$tmpFolder,"msg"=>"Download Ready");
+
+                //Fill Zip info in bdd
+                $BDDtoken->size = filesize("tmp/".$BDDtoken->archivePath);
+                $BDDtoken->user = $currentUser->user_name;
+                $BDDtoken->nbrImages = $nbrImages;
+                $BDDtoken->nbrAreas = $nbrAreas;
+                $BDDtoken->nbrAreas_per_type = json_encode($areasPerType);
+                $BDDtoken->save();
+
+                foreach ($oldTokens as $oldToken){
+                    //Delete old token of set (in bdd) and zip file (in folder)
+                    //folder
+                    $this->rrmdir("tmp/".$oldToken->token);
+                    //bdd
+                    $oldToken->delete();
+                }
+                $dlInfos = Token::where('id', '=', $BDDtoken->id)->first();
+                $res=array("msg"=>"Download Ready","link"=>$dlInfos->token,"size"=>$dlInfos->size,"user"=>$dlInfos->user,"dateGen"=>$dlInfos->date_generated,
+                    "nbrImgs"=>$dlInfos->nbrImages,"nbrAreas"=>$dlInfos->nbrAreas,"areaPerType"=>$dlInfos->nbrAreas_per_type);
                 echo json_encode($res);
                 
             }
@@ -430,18 +469,24 @@ class SiteController extends SimpleController
                                 ->get();
             
             if (count($imgToExport) > 0) {
-            
-               $tmpFolder = sha1(rand().microtime());
-                $exportFileName = $currentUser->user_name."_".time();
                 
-                if(!$this->saveTmpFolder($tmpFolder,$tmpFolder."/".$exportFileName.".zip",$db))
-                    exit;
+                $tmpFolder = sha1(rand().microtime());
+                $token = $tmpFolder;
+                $set = SegSet::where('id', '=', $requestedSet)
+                        ->with('group')
+                        ->first();
+                $setName = str_replace(" ", "_", $set->name);
+                $grpName = str_replace(" ", "_", $set->group->name);
+                $exportFileName = $setName."_".$grpName."_".time();
+
+                $oldTokens = Token::where('segset_id', '=', $requestedSet)->get();
+                $BDDtoken = $this->saveTmpFolder($token,$tmpFolder."/".$exportFileName.".zip",$db,$requestedSet,"segmentation");
                 
                 mkdir("tmp/".$tmpFolder, 0700);
                 $filename = ("tmp/".$tmpFolder."/".$exportFileName.".zip");
 
-
-                
+                set_time_limit(0);
+                ####################### ZIP CREATE  + COUNT INFOS ###################################
                 $zip = new \ZipArchive();
                 $zip->open($filename, \ZipArchive::CREATE);
                 
@@ -449,6 +494,9 @@ class SiteController extends SimpleController
                 $allFilename = fopen($allfilenamePath, "w") or die("Unable to open file!");
                 
                 /* fetch object array */
+                $nbrImages = 0;
+                $nbrAreas = 0;
+                $areasPerType = [];
                 foreach ($imgToExport as $NImage) {
                     $imgToExportPath = "img/segmentation/".$NImage->path;
                     $path_parts = pathinfo($NImage->path);
@@ -496,6 +544,14 @@ class SiteController extends SimpleController
                         $line = $category_." ".$imgArea->data;
                         fwrite($txtfile, $line);
                         fwrite($txtfile, "\n");
+
+                        //Counting Areas
+                        $nbrAreas++;
+                        if($areasPerType[$category]){
+                            $areasPerType[$category]++;
+                        }else{
+                            $areasPerType[$category] = 1;
+                        }
                     }
                     
                     //Closing txt file with polygon data
@@ -507,19 +563,42 @@ class SiteController extends SimpleController
                     $zip->addFile($pngpath, $path_parts['filename'] .".png");
                     $zip->addFile($imgToExportPath, $path_parts['filename'].".jpeg");
                     fwrite($allFilename, $NImage->path.",".$NImage->originalName."\n");
+
+                    //Counting images
+                    $nbrImages++;
                 }
 
                 fclose($allFilename);
                 $zip->addFile($allfilenamePath, "filename.txt");
                 $zip->close();
+                ####################### ZIP  ###################################
+                set_time_limit(120);
                
 
                 $files = glob('tmp/'.$tmpFolder.'/*.{txt}', GLOB_BRACE);
                 foreach($files as $file) {
                   unlink($file);
                 }
+
+                //Fill Zip info in bdd
+                $BDDtoken->size = filesize("tmp/".$BDDtoken->archivePath);
+                $BDDtoken->user = $currentUser->user_name;
+                $BDDtoken->nbrImages = $nbrImages;
+                $BDDtoken->nbrAreas = $nbrAreas;
+                $BDDtoken->nbrAreas_per_type = json_encode($areasPerType);
+                $BDDtoken->save();
+
+                foreach ($oldTokens as $oldToken){
+                    //Delete old token of set (in bdd) and zip file (in folder)
+                    //folder
+                    $this->rrmdir("tmp/".$oldToken->token);
+                    //bdd
+                    $oldToken->delete();
+                }
                 
-                $res=array("link"=>$tmpFolder,"msg"=>"Download Ready");
+                $dlInfos = Token::where('id', '=', $BDDtoken->id)->first();
+                $res=array("msg"=>"Download Ready","link"=>$dlInfos->token,"size"=>$dlInfos->size,"user"=>$dlInfos->user,"dateGen"=>$dlInfos->date_generated,
+                    "nbrImgs"=>$dlInfos->nbrImages,"nbrAreas"=>$dlInfos->nbrAreas,"areaPerType"=>$dlInfos->nbrAreas_per_type);
                 echo json_encode($res);
                 
             }
@@ -613,15 +692,6 @@ class SiteController extends SimpleController
         ob_end_flush();
         ob_get_flush();
         print readfile($filename);
-
-        error_log("etape 5");
-        $this->rrmdir($tmpPath.$token);
-
-        $sql = "DELETE FROM `labelimgexportlinks` WHERE `labelimgexportlinks`.`token` = '$token'";
-        if(!$db->query($sql))
-            error_log("Delete failed in labelimgexportlinks");
-        exit;
-
 
     }
     /**
@@ -733,20 +803,22 @@ class SiteController extends SimpleController
         rmdir($src);
     }
 
-    private function saveTmpFolder($token, $archivePath,$db){
-        $aliveTime = time() + (6 * 60 * 60);
-        $expires = date('Y-m-d H:i:s', $aliveTime);
-        
-        $sql = "
-                INSERT INTO labelimgexportlinks (token, archivePath, expires)
-                VALUES ('$token','$archivePath','$expires')";
-
-        //check insert
-        if ($db->query($sql) === TRUE) {
-            return true;
-        } else {
-            return false;
+    private function saveTmpFolder($token, $archivePath,$db,$setId,$mode){
+        $aliveTimeHour = 20;// In years
+        //$expires = date('Y-m-d H:i:s', $aliveTime);
+        $expires = date('Y-m-d H:i:s', mktime(0, 0, 0, date("m"),   date("d"),   date("Y")+$aliveTimeHour));
+        $BDDtoken = new Token;
+        $BDDtoken->token = $token;
+        $BDDtoken->archivePath = $archivePath;
+        $BDDtoken->expires = $expires;
+        if($mode == "segmentation"){
+            $BDDtoken->segset_id = $setId;
+        }else{
+            $BDDtoken->set_id = $setId;            
         }
+        
+        $BDDtoken->save();
+        return $BDDtoken;
     }
 
     private function cleanExport($db){

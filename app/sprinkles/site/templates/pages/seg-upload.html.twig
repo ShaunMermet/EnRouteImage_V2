@@ -41,19 +41,34 @@
     </div>
     <div class="panel-body">
     <div class="labelimg-container">
-    	<div class="column column-two" style="max-width: 100px;">
+    	<div class="column column-two" style="max-width: 100px;background: #ffffff;border: none;">
             <b>Set</b>
             <select class="js-basic-single export set" id="setAssignEx" onchange="export_onComboChanged()"></select>
             <div  id="comboColumnSet"></div>
         </div>
-    	<div class="column column-two">
-    		<button id="exportButton"class="button" type="button" onclick="export_onExportClicked()">Export</button>
-    		<button id="dlButton"class="button-validate" type="button" onclick="export_onDlClicked()" style="opacity: 0.5;pointer-events: none;" disabled>Download</button>
+        <div class="column column-three" id="dlColumn" style="background: #ffffff;border: none;max-width: 150px;min-width: 150px;">
+            <div style="min-height: 90px;">
+                <button id="dlButton"class="button-validate" type="button" onclick="export_onDlClicked()"  style="opacity: 0.5;pointer-events: none;" disabled>Download</button>
+                <div class="stdLoaderButton" style="display:none;"></div>
+            </div>
+            <div id="dlNbrImgs"></div>
+            <div id="dlNbrAreas"></div>
+            <div id="dlAreaTypes"></div>
+            <div id="dlNbrAreaPerType"></div>
+            <br>
+            <div id="dlSize"></div>
+            <div id="dlDateGen"></div>
+            <div id="dlUser"></div>
+        </div>
+        <div class="column column-three" id="exportColumn" style="background: #ffffff;border: none;max-width: 150px;">
+            <div style="min-height: 90px;">
+                <button id="exportButton"class="button" type="button" onclick="export_onExportClicked()" style="opacity: 0.5;pointer-events: none;" disabled>Export</button>
+                <div class="stdLoaderButton" style="display:none;"></div>
+            </div>
             <div id="imgCounter"></div>
-    		<div id="prepare"></div>
-    		<div id="dlLink"></div>
+            <br>
+            <div id="exportState"></div>
     	</div>
-    	
     </div>
     </div>
 </div>
@@ -202,6 +217,8 @@
                 <span style="width:200px">
                     <select class="js-basic-single" id="setAssignFolder" style="max-width:90%;" style="width: 150px;" onchange="onDownloadImageSetChanged()"></select>
                 </span>
+                <br>
+                <span class="LoaderSmallCustom1" style="margin-left: 20px;display:none" id="tableDownloadLoader"></span>
             </div>
         </div>
         <br>

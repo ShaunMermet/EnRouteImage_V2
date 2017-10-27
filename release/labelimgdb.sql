@@ -1003,3 +1003,27 @@ ADD CONSTRAINT `1ImgBySet` UNIQUE (path,set_id);
 --------------------------------
 --- Changes for Beta 0.3.13 ----
 --------------------------------
+
+
+--ALTER TABLE `sets` ADD `token_id` INT NOT NULL AFTER `group_id`;
+ALTER TABLE `labelimgexportlinks` ADD `set_id` INT NOT NULL AFTER `id`;
+ALTER TABLE `labelimgexportlinks` ADD `segset_id` INT NOT NULL AFTER `set_id`;
+
+ALTER TABLE `labelimgexportlinks` ADD `date_generated` TIMESTAMP NOT NULL AFTER `token`, 
+                                  ADD `size` INT NOT NULL AFTER `date_generated`, 
+                                  ADD `user` TINYTEXT NOT NULL AFTER `size`, 
+                                  ADD `nbrImages` INT NOT NULL AFTER `user`, 
+                                  ADD `nbrAreas` INT NOT NULL AFTER `nbrImages`, 
+                                  ADD `nbrAreas_per_type` LONGTEXT NOT NULL AFTER `nbrAreas`;
+
+ALTER TABLE `labelimgexportlinks` CHANGE `set_id` `set_id` INT(11) NOT NULL DEFAULT '0', 
+                                  CHANGE `segset_id` `segset_id` INT(11) NOT NULL DEFAULT '0', 
+                                  CHANGE `date_generated` `date_generated` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, 
+                                  CHANGE `size` `size` INT(11) NOT NULL DEFAULT '0', 
+                                  CHANGE `nbrImages` `nbrImages` INT(11) NOT NULL DEFAULT '0', 
+                                  CHANGE `nbrAreas` `nbrAreas` INT(11) NOT NULL DEFAULT '0';
+
+ALTER TABLE `labelimgexportlinks` CHANGE `user` `user` TINYTEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL, 
+                                  CHANGE `nbrAreas_per_type` `nbrAreas_per_type` LONGTEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+                                  

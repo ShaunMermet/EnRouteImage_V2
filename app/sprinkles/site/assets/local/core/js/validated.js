@@ -119,7 +119,7 @@ function validated_initCombo(comboElem,data){
 		$(comboElem).append("<option value=25>25</option>");
 		$(comboElem).append("<option value=50>50</option>");
 		$(comboElem).append("<option value=100>100</option>");
-		$(comboElem).val(100);
+		$(comboElem).val(5);
 		$(comboElem).select2()
 	}else if(comboElem.id == 'comboValidatedMode'){
 		//$(comboElem).append("<option value=-1>ALL</option>");
