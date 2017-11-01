@@ -1005,7 +1005,6 @@ ADD CONSTRAINT `1ImgBySet` UNIQUE (path,set_id);
 --------------------------------
 
 
---ALTER TABLE `sets` ADD `token_id` INT NOT NULL AFTER `group_id`;
 ALTER TABLE `labelimgexportlinks` ADD `set_id` INT NOT NULL AFTER `id`;
 ALTER TABLE `labelimgexportlinks` ADD `segset_id` INT NOT NULL AFTER `set_id`;
 
@@ -1026,4 +1025,7 @@ ALTER TABLE `labelimgexportlinks` CHANGE `set_id` `set_id` INT(11) NOT NULL DEFA
 ALTER TABLE `labelimgexportlinks` CHANGE `user` `user` TINYTEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL, 
                                   CHANGE `nbrAreas_per_type` `nbrAreas_per_type` LONGTEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
 
-                                  
+                                
+--------------------------------
+--- Changes for Beta 0.3.14 ----
+--------------------------------  
