@@ -257,6 +257,7 @@ function rectAttacheEvents(element){
 			onElementDblClickHandler(e,$(this));
 		}
 		onUpHandler(e);
+		onClickHandler(e);
 		resizeMode = false;
 		elemMoveMode = false;
 		element = null;
