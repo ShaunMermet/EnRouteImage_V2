@@ -1029,3 +1029,4 @@ ALTER TABLE `labelimgexportlinks` CHANGE `user` `user` TINYTEXT CHARACTER SET la
 --------------------------------
 --- Changes for Beta 0.3.14 ----
 --------------------------------  
+ALTER TABLE `labelimgexportlinks` CHANGE `expires` `expires` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
