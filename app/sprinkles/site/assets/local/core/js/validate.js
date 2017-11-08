@@ -197,12 +197,16 @@ function validate_addImage(){
 	  validate_drawRects(validate_srcId);//initSelection();
 	  validate_rectsApplyState();
 	  img.removeEventListener('load', loaded);
-	  img.removeEventListener('load', error);
+	  img.removeEventListener('error', error);
 	  initSelectAll();
 	  updateNbrAreas();
 	}
 	function error() {
 		//alert('error');
+		img.removeEventListener('load', loaded);
+	  	img.removeEventListener('error', error);
+	  	updateNbrAreas();
+	  	updateNbrSelectedAreas();
 	}
 	if (img.complete) {
 	  loaded();

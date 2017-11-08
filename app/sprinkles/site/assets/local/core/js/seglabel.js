@@ -112,11 +112,13 @@ function label_addImage(){
 		  label_drawAreas(label_srcName);//initSelection();
 		  label_drawLegend(label_srcName);
 		  img.removeEventListener('load', loaded);
-		  img.removeEventListener('load', error);
+		  img.removeEventListener('error', error);
 		  updateNbrAreas();
 		}
 		function error() {
-			
+			img.removeEventListener('load', loaded);
+		  	img.removeEventListener('error', error);
+		  	updateNbrAreas();
 		}
 		if (img.complete) {
 		  loaded();

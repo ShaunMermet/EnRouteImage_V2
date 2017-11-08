@@ -178,10 +178,13 @@ function validate_addImage(){
 	  validate_drawLegend(validate_srcId);
 	  validate_drawAreas(validate_srcId);//initSelection();
 	  img.removeEventListener('load', loaded);
-	  img.removeEventListener('load', error);
+	  img.removeEventListener('error', error);
 	  updateNbrAreas();
 	}
 	function error() {
+		img.removeEventListener('load', loaded);
+		img.removeEventListener('error', error);
+		updateNbrAreas();
 		
 	}
 	if (img.complete) {

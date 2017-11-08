@@ -152,6 +152,8 @@ function label_addImage(){
 		}
 		function error() {
 			//alert('error');
+			img.removeEventListener('load', loaded);
+	  		img.removeEventListener('error', error);
 		}
 		if (img.complete) {
 		  loaded();
