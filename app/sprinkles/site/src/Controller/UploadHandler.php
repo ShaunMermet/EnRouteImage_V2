@@ -448,6 +448,10 @@ class UploadHandler
         $file = new \stdClass();
         $bddFile = $this->get_file_bdd_by_id($file_id);
         $file->name = $bddFile['path'];
+        $file->originalName = $bddFile['originalName'];
+        if($file->originalName == ""){
+            $file->originalName = "original Name not found";
+        }
         $file->imgID = $bddFile['id'];
         $file->set = $bddFile['set']['name'];
         $file->setID = $bddFile['set_id'];
@@ -717,6 +721,7 @@ class UploadHandler
     }
 
     protected function gd_get_image_object($file_path, $func, $no_cache = false) {
+        ini_set ('gd.jpeg_ignore_warning', 1);
         if (empty($this->image_objects[$file_path]) || $no_cache) {
             $this->gd_destroy_image_object($file_path);
             $this->image_objects[$file_path] = $func($file_path);

@@ -235,7 +235,7 @@ function validated_loadImages(categories,filter){
 				for(var i = 0; i < data.rows.length; ++i){
 					var img = data.rows[i];
 					if(!img.updated_at) img.updated_at = " ";
-	    			$('#preview').append("<div  style='margin: 10px;position:relative;' id='imgdiv"+img.id+"' ><img id='img"+img.id+"' data-id="+img.id+" data-state="+img.state+" data-mode="+mode+" data-updated="+img.updated_at.replace(" ", ";") +" data-naturalWidth="+img.naturalWidth+" data-naturalHeight="+img.naturalHeight+" class='imgDisp' unselectable='on' src='"+imgPath+img.path+"' onload='onImgLoaded(this.id)'/><canvas id='areaCanvas"+img.id+"' style='position:absolute;top: 0px;left: 0px;pointer-events: none;''></canvas></div>");
+	    			$('#preview').append("<div  style='margin: 10px;position:relative;' id='imgdiv"+img.id+"' ><img id='img"+img.id+"' data-id="+img.id+" data-state="+img.state+" data-mode="+mode+" data-updated="+img.updated_at.replace(" ", ";") +" data-naturalWidth="+img.naturalWidth+" data-naturalHeight="+img.naturalHeight+" data-originalName='"+img.originalName+"' class='imgDisp' unselectable='on' src='"+imgPath+img.path+"' onload='onImgLoaded(this.id)'/><canvas id='areaCanvas"+img.id+"' style='position:absolute;top: 0px;left: 0px;pointer-events: none;''></canvas></div>");
 				}
 	    		document.removeEventListener( "click",__onImgLeftClicked);
 				document.addEventListener( "click",__onImgLeftClicked);
@@ -358,7 +358,11 @@ function validated_loadImages(categories,filter){
 	        taskItemInContext = clickInsideElement( e, taskItemClassName );
 	          if ( taskItemInContext ) {
 		        tmpMenu = document.getElementById("context_menu_title");
-		        tmpMenu.childNodes[1].textContent = " Image "+taskItemInContext.getAttribute("data-id");
+		        var itemTitle = taskItemInContext.getAttribute("data-originalName");
+		        if(itemTitle == "null"){
+		        	itemTitle = "original filename not found";
+		        }
+		        tmpMenu.childNodes[1].textContent = "  "+itemTitle;
 		    	e.preventDefault();
 		        if(taskItemInContext.getAttribute(   "data-state"   ) == 3  ||  //Validated
 	          			taskItemInContext.getAttribute(   "data-state"   ) == 2 ){//pending

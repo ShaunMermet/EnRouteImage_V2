@@ -427,7 +427,7 @@
   position: absolute;
   z-index: 10;
   //padding: 12px 0;
-  width: 240px;
+  width: 400px;
   background-color: #fff;
   border: solid 1px #dfdfdf;
   box-shadow: 1px 1px 2px #cfcfcf;
@@ -442,7 +442,7 @@
   padding: 0;
 }
 .context-menu__title{
-  display: block;
+  display: -webkit-box;
   padding: 6px 0px 0px 6px;
 }
 .context-menu__item {

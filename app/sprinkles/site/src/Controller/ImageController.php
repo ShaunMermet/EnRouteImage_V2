@@ -837,6 +837,7 @@ class ImageController extends SimpleController
         
     }
     protected function imageCreateFromAny($filepath) { 
+        ini_set ('gd.jpeg_ignore_warning', 1);
         $type = exif_imagetype($filepath); // [] if you don't have exif you could use getImageSize() 
         $allowedTypes = array( 
             1,  // [] gif 
