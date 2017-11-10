@@ -23,6 +23,7 @@ var minSize = 10;
 
 
 function label_initpage(pagemode){
+	hideLeftSub();
 	var user = document.getElementsByClassName("dropdown user user-menu");
 	if(user.length > 0){
 		pagemode = "label";
@@ -65,9 +66,13 @@ function label_loadImages(){
 				//var res = JSON.parse(data);
 				label_imgPathList = data;//res;
 			}
-			else label_imgPathList = [];
+			else {
+				label_imgPathList = [];
+				document.getElementById('imgCounter').style = "DISPLAY: initial;max-width: 100px;";
+				$("#fetchFeedback").text("No images");
+				showFiler();
+			}
 			label_imgPathListIndex = 0;
-			if(label_imgPathList.length == 0){document.getElementById('imgCounter').style = "DISPLAY: initial;max-width: 100px;";}
 			label_loadRects();
 	    },
 	    // Fetch failed
@@ -109,61 +114,27 @@ function label_loadRects(){
 function label_addImage(){
 	label_removeImage();
 	if(label_imgPathList.length>0){
-		var nativeWidth = label_imgPathList[label_imgPathListIndex].naturalWidth;
-		var nativeHeight = label_imgPathList[label_imgPathListIndex].naturalHeight;
-		var img = document.getElementById('image');
-		var columnFour = document.getElementById('columnFour');
-		var imgContainer = document.getElementsByClassName('labelimg-container');
-		if(nativeWidth/nativeHeight > 16/9){
-			console.log("wide image");
-			img.style.height = "100%";
-			img.style.width = "";
-			columnFour.style.width= "calc(100% - 110px)";
-			imgContainer[0].style.height = "calc(100vh - 168px)";
-		}else{
-			console.log("classic image");
-			img.style.height = "";
-			img.style.width = "100%";
-			columnFour.style.width= "100%";
-			imgContainer[0].style.height = "";
-		}
+		
 		label_srcName = label_imgPathList[label_imgPathListIndex].id;
-		var imgName = label_imgPathList[label_imgPathListIndex].path;
-		var imgToAdd = label_imgPath+imgName;
-		document.getElementById('image').src = imgToAdd;//$('#preview').html("<img id='image' unselectable='on' onresize='"label_onImgResize()"' src='"+imgToAdd+"' />")
+
+		genericAddImage(label_imgPathList[label_imgPathListIndex],label_imgPath);
+		
+		
 		label_initSelection();
-		document.getElementById('imgCounter').style = "DISPLAY: none;";//"Image "+(label_imgPathListIndex+1)+" / "+label_imgPathList.length;
+		
+		document.getElementById('imgCounter').style = "DISPLAY: none;";
 		document.getElementById("moreButton").style = "DISPLAY: none;";
 		document.getElementById("nextButton").style = "DISPLAY: initial;";
+		
 		updateNbrAreas();
 
-		///Load complete
-		function loaded() {
-		  //draw rect
-		  label_addRectsList(label_rectanglesList);
-		  //var elements = label_drawRects(label_rectanglesList);//initSelection();
-		  //rectsApplyState(elements);
-		  //rectsApplyAnchor(elements);
-		  img.removeEventListener('load', loaded);
-		  img.removeEventListener('load', error);
-		  //Listen to rect add by other users
-		  listenRectsAddedByOther(label_srcName);
-
-		}
-		function error() {
-			//alert('error');
-			img.removeEventListener('load', loaded);
-	  		img.removeEventListener('error', error);
-		}
-		if (img.complete) {
-		  loaded();
-		} else {
-		  img.addEventListener('load', loaded)
-		  img.addEventListener('error', error)
-		}
 	}
 	else
 		label_removeImage();
+}
+function onImageLoaded(){
+	label_addRectsList(label_rectanglesList);
+	listenRectsAddedByOther(label_srcName);
 }
 function label_addRectsList(rectList){
 	if(rectList.length == 0) return;
@@ -622,6 +593,7 @@ function label_initComboSet(){
 	}
 	$("#combo4").select2({width: '100px',placeholder: 'Select a set'})
 	.on("change", function(e) {
+		hideLeftSub();
     	label_updateComboCat();
     	label_loadImages();
     });
@@ -1184,6 +1156,7 @@ function drawAnchor(element){
 
 
 function label_onNextClicked(){
+	hideLeftSub();
 	areaList = getRectInfoToSend();
 	if(areaList.length>0){
 		sendSave(1);
@@ -1242,6 +1215,7 @@ function sendSave(validImage){
 	);
 }
 function label_onMoreClicked(){
+	hideLeftSub();
 	label_loadImages();
 }
 window.onbeforeunload = function(e) {
@@ -1266,7 +1240,7 @@ window.onscroll = function(){
 	if(intendedHeight < 0) intendedHeight = 0;
 	var heightTest = ( intendedHeight + leftMenu.offsetHeight) < filler.parentElement.offsetHeight;
 	if( heightTest > 0 )
-		filler.style.height = (intendedHeight)+ 'px';
+		filler.style.paddingTop = (intendedHeight)+ 'px';
 };
 ////////////////////////////////////////////
 

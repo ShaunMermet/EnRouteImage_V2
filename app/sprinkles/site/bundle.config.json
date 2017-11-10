@@ -190,6 +190,7 @@
         },
 		"js/label": {
             "scripts": [
+                "local/core/js/modes/common.js",
                 "local/core/js/label.js",
                 "local/core/js/labelInit.js"
             ],
@@ -203,7 +204,8 @@
         },
         "js/seglabel": {
             "scripts": [
-                "local/core/js/seglabel.js"
+                "local/core/js/seglabel.js",
+                "local/core/js/modes/common.js"
             ],
             "options": {
                 "result": {
@@ -228,7 +230,8 @@
         },
 		"js/validate": {
             "scripts": [
-                "local/core/js/validate.js"
+                "local/core/js/validate.js",
+                "local/core/js/modes/common.js"
             ],
             "options": {
                 "result": {
@@ -240,7 +243,8 @@
         },
         "js/segValidate": {
             "scripts": [
-                "local/core/js/segValidate.js"
+                "local/core/js/segValidate.js",
+                "local/core/js/modes/common.js"
             ],
             "options": {
                 "result": {

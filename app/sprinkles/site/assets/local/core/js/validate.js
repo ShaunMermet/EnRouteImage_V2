@@ -90,6 +90,7 @@ function validate_initComboSet(){
 	}
 	$("#combo4").select2({width: '100px',placeholder: 'Select a set'})
 	.on("change", function(e) {
+		hideLeftSub();
     	validate_updateComboCat();
     	validate_loadImages();
     });
@@ -140,9 +141,11 @@ function validate_loadImages(){
 	data["setID"]=imgSet;
 	var url = site.uri.public + '/images/annotated';
 	$.ajax({
-	  type: "GET",
-	  url: url,
-	  data: data
+		type: "GET",
+	  	url: url,
+	  	data: data,
+	  	complete: function() {
+    	}
 	})
 	.then(
 	    // Fetch successful
@@ -150,9 +153,11 @@ function validate_loadImages(){
 	    	if(data!=""){
 	    		validate_imgPathList = data;//res;
 			}
-			else validate_imgPathList = [];
-			if(validate_imgPathList.length == 0){
+			else {
+				validate_imgPathList = [];
 				document.getElementById('imgCounter').style = "DISPLAY: initial;";
+				$("#fetchFeedback").text("No images");
+				showFiler();
 			}
 			validate_imgPathListIndex = 0;
 			validate_loadRects();
@@ -172,57 +177,29 @@ function validate_addImage(){
 		document.getElementById("AreaValidButton").style = "DISPLAY: none;";
 		return;
 	}
-	var nativeWidth = validate_imgPathList[validate_imgPathListIndex].naturalWidth;
-	var nativeHeight = validate_imgPathList[validate_imgPathListIndex].naturalHeight;
-	var img = document.getElementById('image');
-	var imgContainer = document.getElementsByClassName('labelimg-container');
-	if(nativeWidth/nativeHeight > 16/9){
-		console.log("wide image");
-		img.style.height = "100%";
-		img.style.width = "";
-		imgContainer[0].style.height = "calc(100vh - 168px)";
-	}else{
-		console.log("classic image");
-		img.style.height = "";
-		img.style.width = "100%";
-		imgContainer[0].style.height = "";
-	}
+
 	validate_srcId = validate_imgPathList[validate_imgPathListIndex].id;
-	var imgName = validate_imgPathList[validate_imgPathListIndex].path;
-	var imgToAdd = validate_imgPath+imgName;
-	document.getElementById('image').src = imgToAdd;//$('#preview').html("<img id='image' unselectable='on' src='"+imgToAdd+"' />")
 	
-	function loaded() {
-	  //alert('loaded')
-	  validate_drawRects(validate_srcId);//initSelection();
-	  validate_rectsApplyState();
-	  img.removeEventListener('load', loaded);
-	  img.removeEventListener('error', error);
-	  initSelectAll();
-	  updateNbrAreas();
-	}
-	function error() {
-		//alert('error');
-		img.removeEventListener('load', loaded);
-	  	img.removeEventListener('error', error);
-	  	updateNbrAreas();
-	  	updateNbrSelectedAreas();
-	}
-	if (img.complete) {
-	  loaded();
-	} else {
-	  img.addEventListener('load', loaded)
-	  img.addEventListener('error', error)
-	}
+	genericAddImage(validate_imgPathList[validate_imgPathListIndex],validate_imgPath);
+
 	
 	label_initSelection();
 	document.getElementById('imgCounter').style = "DISPLAY: none;";//"Image "+(validate_imgPathListIndex+1)+" of "+validate_imgPathList.length;
 	document.getElementById("moreButton").style = "DISPLAY: none;";
 	document.getElementById("ImgValidButton").style = "DISPLAY: initial;";
 	document.getElementById("AreaValidButton").style = "DISPLAY: initial;";
+
+	updateNbrAreas();
+	updateNbrSelectedAreas();
+}
+function onImageLoaded(){
+	validate_drawRects(validate_srcId);//initSelection();
+	validate_rectsApplyState();
+	initSelectAll();
+	updateNbrAreas();
+	updateNbrSelectedAreas();
 }
 moveCounter = 0;
-
 function rectAttacheEvents(element){
 	element.onmousedown = function(e){
 		moveCounter = 0;
@@ -497,12 +474,14 @@ function validate_wipeRectangle(){
 /////////////////////////
 
 function validate_onAreaValidClicked(){
+	hideLeftSub();
 	console.log("Area valid");
 	//validate_nextImage();
 	validate_sendData(1);
 }
 
 function validate_onImgValidClicked(){
+	hideLeftSub();
 	console.log("Img valid");
 	//validate_nextImage();
 	validate_sendData(2);
@@ -553,9 +532,11 @@ function getRectInfoToSend(){
 	return areaList;
 }
 function validate_onNextClicked(){
+	hideLeftSub();
 	validate_nextImage();
 }
 function validate_onMoreClicked(){
+	hideLeftSub();
 	validate_loadImages();
 	//validate_loadRects();
 	console.log("Load more");
@@ -586,7 +567,7 @@ window.onscroll = function(){
 	if(intendedHeight < 0) intendedHeight = 0;
 	var heightTest = ( intendedHeight + leftMenu.offsetHeight) < filler.parentElement.offsetHeight;
 	if( heightTest > 0 )
-		filler.style.height = (intendedHeight)+ 'px';
+		filler.style.paddingTop = (intendedHeight)+ 'px';
 };
 ////////////////////////////////////////////
 function validate_onViewLabelClicked(element){

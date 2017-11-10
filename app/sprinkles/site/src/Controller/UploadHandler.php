@@ -321,15 +321,13 @@ class UploadHandler
         }
         return $size;
     }
-    protected function get_file_group($file_name){
-        $bddFile = $this->get_file_bdd($file_name);
-        $setID = $bddFile['set_id'];
+    protected function get_file_group($file_setId){
         if($this->options['imageMode'] == 'segmentation'){
-            $getGrp = SegSet::where('id',  $bddFile['set_id'])
+            $getGrp = SegSet::where('id',  $file_setId)
                     ->with('group')
                     ->first();
         }else{
-            $getGrp = Set::where('id',  $bddFile['set_id'])
+            $getGrp = Set::where('id',  $file_setId)
                     ->with('group')
                     ->first();
         }
@@ -408,7 +406,7 @@ class UploadHandler
             $file->imgID = $bddFile['id'];
             $file->set = $bddFile['set']['name'];
             $file->setID = $bddFile['set_id'];
-            $file->group = $this->get_file_group($file_name);
+            $file->group = $this->get_file_group($file->setID);
             $file->size = $this->get_file_size(
                 $this->get_upload_path($file_name)
             );
@@ -455,7 +453,7 @@ class UploadHandler
         $file->imgID = $bddFile['id'];
         $file->set = $bddFile['set']['name'];
         $file->setID = $bddFile['set_id'];
-        $file->group = $this->get_file_group($file->name);
+        $file->group = $this->get_file_group($file->setID);
         $file->size = $this->get_file_size(
             $this->get_upload_path($file->name)
         );
@@ -1250,14 +1248,13 @@ class UploadHandler
         
 		if ($this->validate($uploaded_file, $file, $error, $index)) {
             
-			$returnMsg = $this->insertInDB($file);
-            error_log($returnMsg);
-			if($returnMsg == "OK"){
-                $bddFile = $this->get_file_bdd($file->name);
+			$returnInsert = $this->insertInDB($file);
+            if($returnInsert['msg'] == "OK"){
+                $bddFile = $this->get_file_bdd_by_id($returnInsert["file"]->id);
                 $file->imgID = $bddFile['id'];
                 $file->set = $bddFile['set']['name'];
                 $file->setID = $bddFile['set_id'];
-                $file->group = $this->get_file_group($file->name);
+                $file->group = $this->get_file_group($file->setID);
 				$upload_dir = $this->get_upload_path();
 				if (!is_dir($upload_dir)) {
 					mkdir($upload_dir, $this->options['mkdir_mode'], true);
@@ -1303,7 +1300,8 @@ class UploadHandler
 				}
 				$this->set_additional_file_properties($file);
 			}else{
-                if (strpos($returnMsg, "Duplicate entry") !== false){
+                $error = $returnInsert['error'];
+                if (strpos($error, "Duplicate entry") !== false){
 					$file->error = $this->get_error_message('duplicate_key');//duplicate_key
 				}else{
 					$file->error = $this->get_error_message('insert_db_failed');//insert_db_failed
@@ -1337,7 +1335,7 @@ class UploadHandler
                 $SegImg->save();
             }
             catch (QueryException $e){
-                return $e;
+                return array("msg"=>"NOK","error"=>$e);
             }
             
             $areas = array_filter(explode("\n",$area));
@@ -1380,11 +1378,11 @@ class UploadHandler
                     $imgToValid->save();
                 }
                 catch (QueryException $e){
-                    return $e;
+                    return array("msg"=>"NOK","error"=>$e);
                 }
 
             }
-            return "OK";
+            return array("msg"=>"OK","file"=>$SegImg);
         }else{
             if ($set == '') $set = 1;
             $BboxImg = new ImgLinks;
@@ -1398,7 +1396,7 @@ class UploadHandler
                 $BboxImg->save();
             }
             catch (QueryException $e){
-                return $e;
+                return array("msg"=>"NOK","error"=>$e);
             }
             
             $areas = explode(",",$area);
@@ -1447,10 +1445,10 @@ class UploadHandler
                     $imgToValid->save();
                 }
                 catch (QueryException $e){
-                    return $e;
+                    return array("msg"=>"NOK","error"=>$e);
                 }
             }
-            return "OK";
+            return array("msg"=>"OK","file"=>$BboxImg);
         }
 	}
     protected function rand_color() {

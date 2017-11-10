@@ -14,43 +14,47 @@
 {% block body_matter %}
 	<section>
 	<div class="labelimg-container">
-		<div class="column column-one" style="position:sticky;max-width: 100px;">
-			<div id="filler"></div>
-			<div id="leftMenu" style ="display: flex;flex-direction: column;">
-				<div style="max-width: 100px">{{translate("COMBOTITLE.SET")}}</div>
-        		<select class="js-basic-single" id="combo4" style="max-width:90%;" style="width: 150px;"></select>
-        		<button id="nextButton"class="button" type="button" onclick="validate_onNextClicked()">{{translate("BUTTON.NEXT_IMAGE")}}</button>
-				<button id="AreaValidButton"class="button-validate" type="button" onclick="validate_onAreaValidClicked()" title="Save the selected areas and return image to further labeling">Valid Area</button>
-				<button id="ImgValidButton"class="button-validate" type="button" onclick="validate_onImgValidClicked()" title="Save the selected areas and tag the image as ready to export">Valid Image</button>
-				<button id="moreButton"class="button" type="button" onclick="validate_onMoreClicked()">More image</button>
-				<button id="drawButton" class="btn-mode" type="button"onclick="label_onDrawClicked()">{{translate("BUTTON.DRAW")}}</button>
-				<button id="eraseButton"class="btn-mode" type="button" onclick="label_onEraseClicked()">{{translate("BUTTON.DELETE")}}</button>
-				<div id="imgCounter">{{translate("FEEDBACK.NO_IMAGE")}}</div>
-				<div>{{translate("LEGEND.LABEL.NBR_BBOX")}}<span id="value1"></span></div>
-				<div>{{translate("LEGEND.LABEL.NBR_SELECTED_BBOX")}}<span id="value2"></span></div>
-				<div style="max-width: 100px">{{translate("BB_LABEL_FULL")}}</div>
-				<select class="js-basic-single" id="combo" style="max-width:90%;" style="width: 150px;"></select>
-				<br>
-				<div>{{translate("LEGEND.LABEL.SWITCH")}}</div>
-				<label class="switch" title="Show / Hide label">
-				  <input id="labelShowSwitch" type="checkbox" checked onchange ="validate_onViewLabelClicked(this)">
-				  <div class="slider round"></div>
-				</label>
-				<div>{{translate("LEGEND.SRECT.SWITCH")}}</div>
-				<label class="switch" title="Show / Hide selected areas">
-				  <input id="labelShowAreaSwitch" type="checkbox" checked onchange ="validate_onShowAreaClicked(this)">
-				  <div class="slider round"></div>
-				</label>
-				<div>{{translate("LEGEND.URECT.SWITCH")}}</div>
-				<label class="switch" title="Show / Hide unselected areas">
-				  <input id="labelShowAreaSwitch" type="checkbox" checked onchange ="validate_onShowUAreaClicked(this)">
-				  <div class="slider round"></div>
-				</label>
-				<button id="selectAllButton"class="btn-mode" type="button" onclick="valdiate_onSelectAllClicked()">{{translate("BUTTON.SELECTALL")}}</button>
+		<div class="column column-one" style="position:sticky;max-width: 102px;">
+			<div id="filler" style="">
+				<div id="leftMenu" style ="display: block;overflow-y:auto;overflow-x:hidden;max-height: 100vh;">
+					<div style="max-width: 100px">{{translate("COMBOTITLE.SET")}}</div>
+	        		<select class="js-basic-single" id="combo4" style="max-width:90%;" style="width: 150px;"></select>
+	        		<div id="fetchFeedback"></div>
+	        		<div id="leftSubMenu" style ="flex-direction: column;display:none;">
+		        		<button id="nextButton"class="button" type="button" onclick="validate_onNextClicked()">{{translate("BUTTON.NEXT_IMAGE")}}</button>
+						<button id="AreaValidButton"class="button-validate" type="button" onclick="validate_onAreaValidClicked()" title="Save the selected areas and return image to further labeling">Valid Area</button>
+						<button id="ImgValidButton"class="button-validate" type="button" onclick="validate_onImgValidClicked()" title="Save the selected areas and tag the image as ready to export">Valid Image</button>
+						<button id="moreButton"class="button" type="button" onclick="validate_onMoreClicked()">More image</button>
+						<button id="drawButton" class="btn-mode" type="button"onclick="label_onDrawClicked()">{{translate("BUTTON.DRAW")}}</button>
+						<button id="eraseButton"class="btn-mode" type="button" onclick="label_onEraseClicked()">{{translate("BUTTON.DELETE")}}</button>
+						<div id="imgCounter">{{translate("FEEDBACK.NO_IMAGE")}}</div>
+						<div>{{translate("LEGEND.LABEL.NBR_BBOX")}}<span id="value1"></span></div>
+						<div>{{translate("LEGEND.LABEL.NBR_SELECTED_BBOX")}}<span id="value2"></span></div>
+						<div style="max-width: 100px">{{translate("BB_LABEL_FULL")}}</div>
+						<select class="js-basic-single" id="combo" style="max-width:90%;" style="width: 150px;"></select>
+						<br>
+						<div>{{translate("LEGEND.LABEL.SWITCH")}}</div>
+						<label class="switch" title="Show / Hide label">
+						  <input id="labelShowSwitch" type="checkbox" checked onchange ="validate_onViewLabelClicked(this)">
+						  <div class="slider round"></div>
+						</label>
+						<div>{{translate("LEGEND.SRECT.SWITCH")}}</div>
+						<label class="switch" title="Show / Hide selected areas">
+						  <input id="labelShowAreaSwitch" type="checkbox" checked onchange ="validate_onShowAreaClicked(this)">
+						  <div class="slider round"></div>
+						</label>
+						<div>{{translate("LEGEND.URECT.SWITCH")}}</div>
+						<label class="switch" title="Show / Hide unselected areas">
+						  <input id="labelShowAreaSwitch" type="checkbox" checked onchange ="validate_onShowUAreaClicked(this)">
+						  <div class="slider round"></div>
+						</label>
+						<button id="selectAllButton"class="btn-mode" type="button" onclick="valdiate_onSelectAllClicked()">{{translate("BUTTON.SELECTALL")}}</button>
+					</div>
+				</div>
 			</div>
 		</div>
 		<div class="column column-four">
-			<div id="preview" class="imgcontainer" ondragstart="return false;" ondrop="return false;" style="position: relative;overflow: auto;white-space: nowrap;height:100%;">
+			<div id="preview" class="imgcontainer" ondragstart="return false;" ondrop="return false;" style="position: relative;white-space: nowrap;height:100%;">
 				<img id='image' unselectable='on' onresize='onImgResize()' src='' ontouchend="label_onTouchEnd(event)"
 			ontouchcancel="label_onTouchCancel(event)" ontouchmove="label_onTouchMove(event)" ontouchstart="label_onTouchStart(event)"/>
 			</div>
