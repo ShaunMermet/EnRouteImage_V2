@@ -9,6 +9,8 @@ function upl_initPage(pagemode){
 	upl_pagemode = pagemode;
 	upl_loadGroups();
 	upl_loadSets();
+	$("#page-nav").pagination();
+	$("#page-nav2").pagination();
 }
 function upl_loadGroups(){
 	// Fetch the groups
@@ -90,6 +92,7 @@ function upl_loadSets(){
 	    }
 	);
 }
+
 function upl_initComboClass(className){
 	var x = document.getElementsByClassName(className);
 	var i;
@@ -132,10 +135,10 @@ function upl_initCombo(comboElem, row){
 	else if(comboElem.id == "setGrpList"){
 		initCombo(comboElem, preValue, "GRP");
 	}
-	else if(comboElem.id == "setEditList" || comboElem.id == "setAssignEx" || comboElem.id == "catEditSetList"){
+	else if(comboElem.id == "setEditList" || comboElem.id == "setAssignEx" || comboElem.id == "catEditSetList" || comboElem.id == "setAssignFolder"){
 		initCombo(comboElem, preValue, "SET");
 	}
-	else if(comboElem.id == "setAssignAll" || comboElem.id == "setAssignFolder"){
+	else if(comboElem.id == "setAssignAll"){
 		initCombo(comboElem, preValue, "SET", true);
 	}
 	else if(comboElem.id == "setAssignUp"){
@@ -157,6 +160,22 @@ function upl_initCombo(comboElem, row){
 	}
 	else if(comboElem.id == "catEditList"){
 		initCombo(comboElem, preValue, "CAT");
+	}
+	else if(comboElem.id == 'comboValidatedValidated'){
+		$(comboElem).append("<option value=-1>ALL</option>");
+		$(comboElem).append("<option value=1>New</option>");
+		$(comboElem).append("<option value=2>Pending</option>");
+		$(comboElem).append("<option value=3>Validated</option>");
+		$(comboElem).append("<option value=4>Rejected</option>");
+		$(comboElem).select2()
+	}
+	else if(comboElem.id == 'comboValidatedNbrResult'){
+		$(comboElem).append("<option value=5>5</option>");
+		$(comboElem).append("<option value=25>25</option>");
+		$(comboElem).append("<option value=50>50</option>");
+		$(comboElem).append("<option value=100>100</option>");
+		$(comboElem).val(5);
+		$(comboElem).select2()
 	}
 }
 function initCombo(comboElem, value, type, allowClear = false, mode = "", row=null){
@@ -269,7 +288,7 @@ function displayTableDownloadLoader(bool){
 		loader.style.display = "none";
 	}
 }
-function upl_GetImg(){
+function upl_GetImg(page = null){
 	console.log("fetch image");
 	var form = document.getElementById("fileupload");
 	var dlTable = document.getElementById("downloadTable");
@@ -280,7 +299,23 @@ function upl_GetImg(){
 	}
 	
 	var data= {};
-	data["set"]= $("#setAssignFolder")[0].value;
+	data["sprunjeParam"] = {}
+	if (page == null){
+		//page = $("#page-nav").pagination('getCurrentPage')-1;
+		page = 0;
+	}
+	data["sprunjeParam"]["page"] = page;
+	mainContainer.pageRequested = data["sprunjeParam"]["page"];
+	data["sprunjeParam"]["size"] = document.getElementById("comboValidatedNbrResult").value;
+	mainContainer.resPerpage = data["sprunjeParam"]["size"];
+	data["sprunjeParam"]['sorts'] = {id : 'desc'};
+	data["sprunjeParam"]['filters'] = {};
+	data["sprunjeParam"]["filters"]["set_id"] = $("#setAssignFolder")[0].value;
+	var validatedType = document.getElementById("comboValidatedValidated").value;
+	if(validatedType != -1 ){
+		data['sprunjeParam']["filters"]['state'] = validatedType;
+	}
+	//data["set"]= $("#setAssignFolder")[0].value;
 	displayTableDownloadLoader(true);
 	$.ajax({
 	  type: "GET",
@@ -296,6 +331,25 @@ function upl_GetImg(){
 	        $(form).fileupload('option', 'done')
 	            .call(form, $.Event('done'), {result: data});
 	        upl_initComboClass("js-basic-single setDown");
+	        $('#uplNbrImgs').text(data.count+" image(s) found");
+	        $("#page-nav").pagination({
+		        items: data.count,
+		        itemsOnPage: mainContainer.resPerpage,
+		        cssStyle: 'light-theme',
+		        currentPage: mainContainer.pageRequested+1,
+		        onPageClick: function(pageNum) {
+		        	upl_GetImg(pageNum-1);
+		        }
+		    });
+		    $("#page-nav2").pagination({
+		        items: data.count,
+		        itemsOnPage: mainContainer.resPerpage,
+		        cssStyle: 'light-theme',
+		        currentPage: mainContainer.pageRequested+1,
+		        onPageClick: function(pageNum) {
+		        	upl_GetImg(pageNum-1);
+		        }
+		    });
 	    },
 	    // Fetch failed
 	    function (data) {
@@ -406,3 +460,50 @@ $('#fileupload').bind('fileuploadsubmit', function (e, data) {
     data.formData.push(csrfName);
     data.formData.push(csrfValue);
 });
+
+function upl_listenArchiveProgress(){
+	var url = site.uri.public + '/admin/upload/keepUpdated';
+	var source = new EventSource(url);
+	mainContainer.KUEvent = source;
+	$('.progress-extendedLine2').hide();
+	$('#progress_bar_process_main').hide();
+	source.onmessage = function(event) {
+		var data = JSON.parse(event.data);
+		if(!mainContainer.archiveProgress_lastTick) mainContainer.archiveProgress_lastTick = 0;
+		console.log(data);
+	    var filesPerSec = data.current - mainContainer.archiveProgress_lastTick;
+	    console.log(filesPerSec);
+	    if(filesPerSec == 0) {
+	    	if(!mainContainer.archiveProgress_NoChangeCount)mainContainer.archiveProgress_NoChangeCount = 0;
+	    	mainContainer.archiveProgress_NoChangeCount++;
+	    	return;
+	    } else{
+	    	filesPerSec = filesPerSec/mainContainer.archiveProgress_NoChangeCount;
+	    	mainContainer.archiveProgress_NoChangeCount = 1;
+	    }
+	    var remainingSec = (data.total - data.current) / filesPerSec;
+	    var remainingTime = formatTime(remainingSec);
+	    console.log(remainingTime);
+	    var processingProgress = Math.floor(data.current / data.total * 100);
+	    if(!processingProgress)processingProgress = 0;
+	    $('.progress-extendedLine2').html("File processing | "+processingProgress+"% | "+data.current+"/"+data.total+" | "+remainingTime);
+	    $('#progress_bar_process').width(processingProgress+"%");
+	    mainContainer.archiveProgress_lastTick = data.current;
+	};
+}
+function upl_listenArchiveProgressStop(){
+	closeEventSource(mainContainer.KUEvent);
+}
+function closeEventSource(source){
+	if(source)
+		source.close();
+}
+function formatTime(seconds){
+	var date = new Date(seconds * 1000),
+        days = Math.floor(seconds / 86400);
+    days = days ? days + 'd ' : '';
+    return days +
+        ('0' + date.getUTCHours()).slice(-2) + ':' +
+        ('0' + date.getUTCMinutes()).slice(-2) + ':' +
+        ('0' + date.getUTCSeconds()).slice(-2);
+}

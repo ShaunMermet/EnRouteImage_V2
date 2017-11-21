@@ -2,6 +2,7 @@
 
 {% block stylesheets_page %}
     {{ assets.css('css/site') | raw }}
+    {{ assets.css('css/simplePagination') | raw }}
 <!-- Bootstrap styles -->
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 <!-- Generic page styles -->
@@ -206,6 +207,10 @@
 			</div>
 			<!-- The extended global progress state -->
 			<div class="progress-extended">&nbsp;</div>
+            <div class="progress progress-striped active" role="progressbar" id="progress_bar_process_main" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar progress-bar-success" id="progress_bar_process" style="width:0%;"></div>
+            </div>
+            <div class="progress-extendedLine2">&nbsp;</div>
 		</div>
 	</div>
 	<!-- The table listing the files available for upload/download -->
@@ -216,19 +221,32 @@
             <h3 class="box-title"><i class="fa fa-folder-open-o"></i> {{translate("UPLOAD.TITLE.FOLDER")}}</h3>
         </div>
         <br>
+        <table style="border-collapse: separate;border-spacing: 10px;" align="center">
+            <tr>
+                <th>Set</th>
+                <th>State</th>
+                <th>Results per page</th>
+            </tr>
+            <tr>
+                <td><select class="js-basic-single" id="setAssignFolder" style="max-width:90%;" style="width: 150px;"></select></td>
+                <td><select class="js-basic-single" id="comboValidatedValidated"></select></td>
+                <td><select class="js-basic-single" id="comboValidatedNbrResult"  onchange="onDownloadImageSetChanged()"></select></td>
+                <td><button id="searchButton"class="btn-mode2" type="button" onclick="onDownloadImageSetChanged()">Search</button></td>
+            </tr>
+        </table>
         <div class="row fileupload-buttonbar">
             <div class="col-lg-7" style="display: flex;justify-content: center;flex-wrap: wrap;width:100%;float:none">
-                <span style="width:200px">
-                    <select class="js-basic-single" id="setAssignFolder" style="max-width:90%;" style="width: 150px;" onchange="onDownloadImageSetChanged()"></select>
-                </span>
-                <br>
                 <span class="LoaderSmallCustom1" style="margin-left: 20px;display:none" id="tableDownloadLoader"></span>
             </div>
         </div>
         <br>
+        <div id="uplNbrImgs" style="display: flex;justify-content: center;"></div>
+        <div id="page-nav" style="display: table;margin: auto;">
+        <br>
     </div>
     {% endif %} 
 	<table id="downloadTable" role="presentation" class="table table-striped"><tbody class="filesA"></tbody></table>
+    <div id="page-nav2" style="display: table;margin: auto;"></div>
 </form>
 
 
@@ -404,5 +422,6 @@
     {{ assets.js('js/setsEditor') | raw }}
     {% endif %} 
     {{ assets.js('js/import') | raw }}
+    {{ assets.js('js/simplePagination') | raw }}
     {{ assets.js('js/upload') | raw }}
 {% endblock %}

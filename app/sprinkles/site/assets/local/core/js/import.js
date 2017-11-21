@@ -40,8 +40,7 @@ function import_onOtherChanged(){
 					
 					var rowFound = promisedImages[j];
 					getFileData(otherList[i],rowFound,function(data,row){
-						var cat = getCat(data);
-						row.getElementsByClassName("data")[0].innerText = cat+" : "+data.length;
+						row.getElementsByClassName("data")[0].innerText = getCatDesc(data);
 						row.getElementsByClassName("hiddenData")[0].value = data;
 					});
 				}
@@ -56,9 +55,7 @@ function import_onOtherChanged(){
             var reader = new FileReader();
 
             reader.onload = function(e) {
-                console.log (reader.result);
-                res = reader.result.split("\n");
-                res = res.filter(Boolean);
+                res = reader.result;
                 console.log(res);
                 callback(res,row);
             }
@@ -68,11 +65,25 @@ function import_onOtherChanged(){
             console.log("File not supported!");
         }
 	}
-	function getCat(data){
-		cat = "";
-		if (data.length > 0) {
-			cat = data[0].split(" ")[0];
+	function getCatDesc(data){
+		var count = [];
+		if (data) {
+			var res = data.split("\n");
+			res = res.filter(Boolean);
+			for(i = 0; i < res.length; i++){
+				row = res[i].split(" ");
+				if(!count[row[0]])count[row[0]] = 0;
+				count[row[0]] = count[row[0]]+1;
+			}
+			console.log(count);
 		}
+		var tmpRes=[];
+		for(var key in count){
+			if (count.hasOwnProperty(key)) {
+			    tmpRes.push(key+" : "+count[key]);
+			}
+		}
+		var cat = tmpRes.join("\n");
 		return cat;
 	}
 }

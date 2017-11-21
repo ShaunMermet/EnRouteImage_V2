@@ -10,6 +10,7 @@ class ImgLinksSprunje extends Sprunje
     protected $name = 'ImgLinks';
 
     protected $sortable = [
+        'id',
         'validated_at'
     ];
 

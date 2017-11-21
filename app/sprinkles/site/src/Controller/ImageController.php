@@ -579,20 +579,6 @@ class ImageController extends SimpleController
         /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
         $classMapper = $this->ci->classMapper;
 
-        $UserWGrp = $classMapper->staticMethod('user', 'where', 'id', $currentUser->id)
-                                ->with('group')
-                                ->first();
-
-        $validSet = [];
-        foreach ($UserWGrp->group as $group) {
-            $sets = Set::where('group_id', '=', $group->id)
-                    ->get();
-            foreach ($sets as $set) {
-                array_push($validSet, $set->id);
-            }
-        }
-        //$params['filters']['set_id'] = implode("||",$validSet);
-
         $sprunje = new ImgLinksSprunje($classMapper, $params);
 
         // Be careful how you consume this data - it has not been escaped and contains untrusted user-supplied content.

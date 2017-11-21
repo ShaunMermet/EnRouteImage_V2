@@ -23,7 +23,7 @@ use UserFrosting\Sprinkle\Site\Model\Token;
  */
 class SiteController extends SimpleController
 {
-	/**
+    /**
      * Renders a simple "index" page for Users.
      *
      * Request type: GET
@@ -912,6 +912,22 @@ class SiteController extends SimpleController
         $translator = $this->ci->translator;
         
         return $this->ci->view->render($response, 'pages/index.html.twig');
+        
+    }
+    public function archiveUploadKeepProgress($request, $response, $args){
+        //error_log("Keep ".$_SESSION["upload_current"]."/".$_SESSION["upload_total"]);
+        if (array_key_exists("upload_current",$_SESSION) && array_key_exists("upload_total",$_SESSION)){
+            $array = array("current"=>$_SESSION["upload_current"],"total"=>$_SESSION["upload_total"]);
+        }
+        else{
+            $array = [];
+        }
+        $data = json_encode($array);
+        
+        return $response
+            ->withHeader("Content-Type", "text/event-stream")
+            ->withHeader("Cache-Control", "no-cache")
+            ->write("retry: 1000\ndata: {$data}\n\n");
         
     }
 }

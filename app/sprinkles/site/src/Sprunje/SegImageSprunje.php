@@ -10,6 +10,7 @@ class SegImageSprunje extends Sprunje
     protected $name = 'SegImage';
 
     protected $sortable = [
+        'id',
         'validated_at'
     ];
 

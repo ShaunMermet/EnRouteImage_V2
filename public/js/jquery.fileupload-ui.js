@@ -145,6 +145,9 @@
                 if (e.isDefaultPrevented()) {
                     return false;
                 }
+                if(data.files[0].name.split('.')[1] == "zip"){
+                    upl_listenArchiveProgress();
+                }
                 var that = $(this).data('blueimp-fileupload') ||
                         $(this).data('fileupload');
                 if (data.context && data.dataType &&
@@ -177,6 +180,7 @@
                     template,
                     deferred;
                 if (data.context) {
+                    upl_listenArchiveProgressStop();
                     data.context.each(function (index) {
                         var file = files[index] ||
                                 {error: 'Empty file upload result'};
@@ -322,7 +326,9 @@
                         progress + '%'
                     );
                 if(data.loaded == data.total){
-                    //upl_GetImg();
+                    console.log("upload complete");
+                    $('.progress-extendedLine2').show();
+                    $('#progress_bar_process_main').show();
                 }
             },
             // Callback for uploads start, equivalent to the global ajaxStart event:
@@ -476,7 +482,8 @@
         },
 
         _renderExtendedProgress: function (data) {
-            return this._formatBitrate(data.bitrate) + ' | ' +
+            return "Upload"+ ' | ' +
+                this._formatBitrate(data.bitrate) + ' | ' +
                 this._formatTime(
                     (data.total - data.loaded) * 8 / data.bitrate
                 ) + ' | ' +

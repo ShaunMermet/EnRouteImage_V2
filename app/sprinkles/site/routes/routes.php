@@ -65,6 +65,7 @@ $app->group('/admin', function () {
 	$this->post('/upload/upload', 'UserFrosting\Sprinkle\Site\Controller\SiteController:uploadHandler');
 
 	$this->delete('/upload/upload', 'UserFrosting\Sprinkle\Site\Controller\SiteController:uploadHandler');
+	$this->get('/upload/keepUpdated', 'UserFrosting\Sprinkle\Site\Controller\SiteController:archiveUploadKeepProgress');
 
 	//SEGMENTATION
 	$this->get('/segUpload', 'UserFrosting\Sprinkle\Site\Controller\SiteController:pageSegUpload');
