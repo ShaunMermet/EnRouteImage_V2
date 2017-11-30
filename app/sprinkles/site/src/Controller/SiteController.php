@@ -278,6 +278,8 @@ class SiteController extends SimpleController
             }
         }
 
+        $tmpFolderPath = "efs/tmp/";
+
         // Get parameters: 
         $params = $request->getParsedBody();
         $data = json_decode(json_encode($params), FALSE);
@@ -313,23 +315,23 @@ class SiteController extends SimpleController
                 $oldTokens = Token::where('set_id', '=', $requestedSet)->get();
                 $BDDtoken = $this->saveTmpFolder($token,$tmpFolder."/".$exportFileName.".zip",$db,$requestedSet,"bbox");
                 
-                mkdir("tmp/".$tmpFolder, 0700);
-                $filename = ("tmp/".$tmpFolder."/".$exportFileName.".zip");
+                mkdir($tmpFolderPath.$tmpFolder, 0700);
+                $filename = ($tmpFolderPath.$tmpFolder."/".$exportFileName.".zip");
 
                 set_time_limit(0);
                 ####################### ZIP CREATE  + COUNT INFOS ###################################
                 $zip = new \ZipArchive();
                 $zip->open($filename, \ZipArchive::CREATE);
-                $allfilenamePath = "tmp/".$tmpFolder."/filename.txt";
+                $allfilenamePath = $tmpFolderPath.$tmpFolder."/filename.txt";
                 $allFilename = fopen($allfilenamePath, "w") or die("Unable to open file!");
                 /* fetch object array */
                 $nbrImages = 0;
                 $nbrAreas = 0;
                 $areasPerType = [];
                 foreach ($imgToExport as $NImage) {
-                    $imgToExportPath = "img/".$NImage->path;
+                    $imgToExportPath = "efs/img/".$NImage->path;
                     $path_parts = pathinfo($NImage->path);
-                    $txtpath = "tmp/".$tmpFolder."/".$path_parts['filename'] .".txt";
+                    $txtpath = $tmpFolderPath.$tmpFolder."/".$path_parts['filename'] .".txt";
                     $txtfile = fopen($txtpath, "w") or die("Unable to open file!");
 
                     //Building txt file with area data
@@ -372,13 +374,13 @@ class SiteController extends SimpleController
                 set_time_limit(120);
 
                 //Unlink all textfile
-                $files = glob('tmp/'.$tmpFolder.'/*.{txt}', GLOB_BRACE);
+                $files = glob($tmpFolderPath.$tmpFolder.'/*.{txt}', GLOB_BRACE);
                 foreach($files as $file) {
                   unlink($file);
                 }
 
                 //Fill Zip info in bdd
-                $BDDtoken->size = filesize("tmp/".$BDDtoken->archivePath);
+                $BDDtoken->size = filesize($tmpFolderPath.$BDDtoken->archivePath);
                 $BDDtoken->user = $currentUser->user_name;
                 $BDDtoken->nbrImages = $nbrImages;
                 $BDDtoken->nbrAreas = $nbrAreas;
@@ -388,7 +390,7 @@ class SiteController extends SimpleController
                 foreach ($oldTokens as $oldToken){
                     //Delete old token of set (in bdd) and zip file (in folder)
                     //folder
-                    $this->rrmdir("tmp/".$oldToken->token);
+                    $this->rrmdir($tmpFolderPath.$oldToken->token);
                     //bdd
                     $oldToken->delete();
                 }
@@ -448,6 +450,8 @@ class SiteController extends SimpleController
             }
         }
 
+        $tmpFolderPath = "efs/tmp/";
+
         // Get parameters: 
         $params = $request->getParsedBody();
         $data = json_decode(json_encode($params), FALSE);
@@ -482,15 +486,15 @@ class SiteController extends SimpleController
                 $oldTokens = Token::where('segset_id', '=', $requestedSet)->get();
                 $BDDtoken = $this->saveTmpFolder($token,$tmpFolder."/".$exportFileName.".zip",$db,$requestedSet,"segmentation");
                 
-                mkdir("tmp/".$tmpFolder, 0700);
-                $filename = ("tmp/".$tmpFolder."/".$exportFileName.".zip");
+                mkdir( $tmpFolderPath.$tmpFolder, 0700);
+                $filename = ( $tmpFolderPath.$tmpFolder."/".$exportFileName.".zip");
 
                 set_time_limit(0);
                 ####################### ZIP CREATE  + COUNT INFOS ###################################
                 $zip = new \ZipArchive();
                 $zip->open($filename, \ZipArchive::CREATE);
                 
-                $allfilenamePath = "tmp/".$tmpFolder."/filename.txt";
+                $allfilenamePath =  $tmpFolderPath.$tmpFolder."/filename.txt";
                 $allFilename = fopen($allfilenamePath, "w") or die("Unable to open file!");
                 
                 /* fetch object array */
@@ -498,10 +502,10 @@ class SiteController extends SimpleController
                 $nbrAreas = 0;
                 $areasPerType = [];
                 foreach ($imgToExport as $NImage) {
-                    $imgToExportPath = "img/segmentation/".$NImage->path;
+                    $imgToExportPath = "efs/img/segmentation/".$NImage->path;
                     $path_parts = pathinfo($NImage->path);
-                    $pngpath = "tmp/".$tmpFolder."/".$path_parts['filename'] .".png";
-                    $txtpath = "tmp/".$tmpFolder."/".$path_parts['filename'] .".txt";
+                    $pngpath =  $tmpFolderPath.$tmpFolder."/".$path_parts['filename'] .".png";
+                    $txtpath =  $tmpFolderPath.$tmpFolder."/".$path_parts['filename'] .".txt";
                     $txtfile = fopen($txtpath, "w") or die("Unable to open file!");
                     $size = getimagesize($imgToExportPath);
                     $im = @imagecreate($size[0], $size[1])
@@ -575,13 +579,13 @@ class SiteController extends SimpleController
                 set_time_limit(120);
                
 
-                $files = glob('tmp/'.$tmpFolder.'/*.{txt}', GLOB_BRACE);
+                $files = glob( $tmpFolderPath.$tmpFolder.'/*.{txt}', GLOB_BRACE);
                 foreach($files as $file) {
                   unlink($file);
                 }
 
                 //Fill Zip info in bdd
-                $BDDtoken->size = filesize("tmp/".$BDDtoken->archivePath);
+                $BDDtoken->size = filesize( $tmpFolderPath.$BDDtoken->archivePath);
                 $BDDtoken->user = $currentUser->user_name;
                 $BDDtoken->nbrImages = $nbrImages;
                 $BDDtoken->nbrAreas = $nbrAreas;
@@ -651,7 +655,7 @@ class SiteController extends SimpleController
             error_log($args['dl_id']);
         }
         error_log("etape 1");
-        $tmpPath = "tmp/";
+        $tmpPath = "efs/tmp/";
         $token = mysqli_real_escape_string($db,$args['dl_id']);
         $sql = "SELECT exlk.archivePath FROM labelimgexportlinks exlk WHERE exlk.token = '$token'";
         $res = $db->query($sql);
@@ -778,8 +782,8 @@ class SiteController extends SimpleController
         error_reporting(E_ALL | E_STRICT);
         $upload_handler = new UploadHandler($this->ci,array(
             'script_url' => '/admin/segUpload/upload',
-            'upload_dir' => '/img/segmentation/',
-            'upload_url' => '/img/segmentation/',
+            'upload_dir' => '/efs/img/segmentation/',
+            'upload_url' => '/efs/img/segmentation/',
             'imageMode' => 'segmentation',
             'groups' => $validGroup
             ));
@@ -823,7 +827,7 @@ class SiteController extends SimpleController
 
     private function cleanExport($db){
         //clean tmp folder
-        $dir    = 'tmp';
+        $dir    = 'efs/tmp';
         $tmpArray = scandir($dir);
         foreach($tmpArray as $file){
             $folder = basename($file);
@@ -834,8 +838,8 @@ class SiteController extends SimpleController
                     if(date('Y-m-d H:i:s') > $token->expires ){
                         $sql = "DELETE FROM `labelimgexportlinks` WHERE token = '$folder'"; 
                         if ($db->query($sql) === TRUE) {
-                            if(file_exists ("tmp/".$token->token))
-                                $this->rrmdir("tmp/".$token->token);
+                            if(file_exists ($dir.$token->token))
+                                $this->rrmdir($dir.$token->token);
                         } else {
                             echo "Error: " . $sql . "<br>" . $db->error;
                         }
@@ -846,8 +850,8 @@ class SiteController extends SimpleController
                 }
                 $count = mysqli_num_rows($tokens);
                 if($count == 0) 
-                    if(file_exists ("tmp/".$folder))
-                        $this->rrmdir("tmp/".$folder);
+                    if(file_exists ($dir.$folder))
+                        $this->rrmdir($dir.$folder);
             }
         }
         $sql = "SELECT `token`,`expires` FROM `labelimgexportlinks` WHERE 1";
@@ -857,8 +861,8 @@ class SiteController extends SimpleController
                 $sql = "DELETE FROM `labelimgexportlinks` WHERE token = '$token->token'";   
                 if ($db->query($sql) === TRUE) {
                     error_log("Clean DB: ".$token->token);
-                    if(file_exists ("tmp/".$token->token))
-                        $this->rrmdir("tmp/".$token->token);
+                    if(file_exists ($dir.$token->token))
+                        $this->rrmdir($dir.$token->token);
                 } else {
                     echo "Error: " . $sql . "<br>" . $db->error;
                 }

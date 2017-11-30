@@ -62,8 +62,8 @@ class UploadHandler extends SimpleController
         $this->response = array();
         $this->options = array(
             'script_url' => $this->get_full_url().'/admin/upload/upload'/*.$this->basename($this->get_server_var('SCRIPT_NAME'))*/,
-            'upload_dir' => dirname($this->get_server_var('SCRIPT_FILENAME')).'/img/',
-            'upload_url' => $this->get_full_url().'/img/',
+            'upload_dir' => dirname($this->get_server_var('SCRIPT_FILENAME')).'/efs/img/',
+            'upload_url' => $this->get_full_url().'/efs/img/',
             'input_stream' => 'php://input',
             'user_dirs' => false,
             'mkdir_mode' => 0755,
@@ -1257,7 +1257,7 @@ class UploadHandler extends SimpleController
         $zipFileNameStripped = pathinfo($uploaded_file,PATHINFO_FILENAME);
         $addData = $this->handle_form_data($name, $index);
         
-        $tmpFileLoc = "tmp/import/";
+        $tmpFileLoc = "efs/tmp/import/";
         $tmpFolder = $this->basename($name).microtime();
         $thingsToReplace = array(' ','.');
         $tmpFolder = str_replace($thingsToReplace, "_", $tmpFolder);

@@ -1,6 +1,6 @@
 var validate_imgPathList=[];
 var validate_imgPathListIndex = 0;
-var validate_imgPath = "../img/segmentation/light/";
+var validate_imgPath = "../efs/img/segmentation/light/";
 var validate_phpPath = "../../php/";
 var validate_srcId = 0;
 

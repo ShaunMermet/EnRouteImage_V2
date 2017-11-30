@@ -766,8 +766,8 @@ class ImageController extends SimpleController
             $groupRate = $publicGrp->bb_cprs_rate;
         }
             
-        $source = "img/".$imgName;
-        $dest = "img/light/".$imgName;
+        $source = "efs/img/".$imgName;
+        $dest = "efs/img/light/".$imgName;
         if($imgRate != $groupRate){
             $this->createLightImg($source,$dest,$imgName,$groupRate);
             $img->cprs_rate = $groupRate;
@@ -799,8 +799,8 @@ class ImageController extends SimpleController
             $groupRate = $publicGrp->bb_cprs_rate;
         }
             
-        $source = "img/".$imgName;
-        $dest = "img/segmentation/light/".$imgName;
+        $source = "efs/img/".$imgName;
+        $dest = "efs/img/segmentation/light/".$imgName;
         if($imgRate != $groupRate){
             $this->createLightImg($source,$dest,$imgName,$groupRate);
             $img->cprs_rate = $groupRate;
