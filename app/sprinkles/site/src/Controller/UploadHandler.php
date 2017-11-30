@@ -185,6 +185,14 @@ class UploadHandler extends SimpleController
         if ($ci) {
             $this->ci = $ci;
         }
+        session_start();
+        if(!array_key_exists('upload_status',$_SESSION)){
+            $_SESSION['upload_status'] = [];
+        }
+        if(!array_key_exists($this->ci->currentUser->id,$_SESSION['upload_status'])){
+            $_SESSION['upload_status'][$this->ci->currentUser->id] = [];
+        }
+        session_write_close();
         if ($options) {
             $this->options = $options + $this->options;
             if(array_key_exists('script_url',$options)){
@@ -1244,6 +1252,9 @@ class UploadHandler extends SimpleController
 
     protected function handle_zip_upload($uploaded_file, $name, $size, $type, $error,
             $index = null, $content_range = null) {
+
+        
+        $zipFileNameStripped = pathinfo($uploaded_file,PATHINFO_FILENAME);
         $addData = $this->handle_form_data($name, $index);
         
         $tmpFileLoc = "tmp/import/";
@@ -1262,8 +1273,8 @@ class UploadHandler extends SimpleController
         $za->open($uploaded_file); 
         set_time_limit(0);
         session_start();
-        $_SESSION["upload_current"] = 0;
-        $_SESSION["upload_total"] = $za->numFiles;
+        $_SESSION['upload_status'][$this->ci->currentUser->id][$zipFileNameStripped]["upload_current"] = 0;
+        $_SESSION['upload_status'][$this->ci->currentUser->id][$zipFileNameStripped]["upload_total"] = $za->numFiles;
         session_write_close();
         $Oname = $za->getFromName('filename.txt');
         $OnamesList = [];
@@ -1278,14 +1289,11 @@ class UploadHandler extends SimpleController
         for( $i = 0; $i < $za->numFiles; $i++ ){ 
             $stat = $za->statIndex( $i ); 
             $file_type = $this->get_file_type($stat['name']);
-            //error_log($file_type);
             if($file_type == 'image/jpeg' || $file_type == 'image/png'){
                 if($za->extractTo($tmpFileLoc.$tmpFolder, array($za->getNameIndex($i)))){
                     $filename = pathinfo($stat['name'],PATHINFO_FILENAME);
                     $areaData = $za->getFromName($filename.'.txt');
                     $OriginalName = $OnamesList[$stat['name']];
-                //    $areaData = str_replace(["\r\n", "\r", "\n"], ',', $areaData);
-                    //error_log('Call handle file upload');
                     $data = array("data"=>$areaData, "set"=>$addData['set'], "Oname"=>$OriginalName);
                     $this->handle_file_upload($tmpFileLoc.$tmpFolder.'/'.$za->getNameIndex($i), 
                                         $stat['name'], 
@@ -1297,12 +1305,26 @@ class UploadHandler extends SimpleController
                                         $data);
                 }else{
                     error_log(print_r('Unable to extract the file.'));
+                    error_log($za->getStatusString());
                 }
                 
             }
+            else{
+                error_log("file is not an image");
+            }
             session_start();
-            $_SESSION["upload_current"] = $i+1;
+            if(!array_key_exists($zipFileNameStripped,$_SESSION['upload_status'][$this->ci->currentUser->id])){
+                $_SESSION['upload_status'][$this->ci->currentUser->id][$zipFileNameStripped] = [];
+            }
+            $_SESSION['upload_status'][$this->ci->currentUser->id][$zipFileNameStripped]["upload_current"] = $i+1;
+            $_SESSION['upload_status'][$this->ci->currentUser->id][$zipFileNameStripped]["upload_total"] = $za->numFiles;
             session_write_close();
+            
+            foreach ($_FILES['files']['tmp_name'] as $key => $value) {
+                $eye = pathinfo($value,PATHINFO_FILENAME);
+                error_log($eye);
+            }
+                    
         }
         $za->close();
         $this->rrmdir($tmpFileLoc.$tmpFolder);
@@ -1310,8 +1332,8 @@ class UploadHandler extends SimpleController
         set_time_limit(120);
         //Reset to initial state
         session_start();
-        $_SESSION["upload_current"] = 0;
-        $_SESSION["upload_total"] = 0;
+        $_SESSION['upload_status'][$this->ci->currentUser->id][$zipFileNameStripped] = [];
+        unset($_SESSION['upload_status'][$this->ci->currentUser->id][$zipFileNameStripped]);
         session_write_close();
         return $file;
     }
@@ -1771,8 +1793,7 @@ class UploadHandler extends SimpleController
     public function post($print_response = true) {
         ini_set('post_max_size', '0');
         session_start();
-        $_SESSION["upload_current"] = 0;
-        $_SESSION["upload_total"] = 0;
+        $_SESSION['upload_status'][$this->ci->currentUser->id] = [];
         session_write_close();
         error_log("In post func");
         if ($this->get_query_param('_method') === 'DELETE') {
@@ -1875,7 +1896,6 @@ class UploadHandler extends SimpleController
             }
         }
         $response = array($this->options['param_name'] => $files);
-        error_log("Response");
         return $this->generate_response($response, $print_response);
     }
 

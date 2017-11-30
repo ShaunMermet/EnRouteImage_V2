@@ -985,11 +985,12 @@ ALTER TABLE `segcategories` ADD `set_id` INT(1) NOT NULL DEFAULT '1' AFTER `Colo
 
 --then run the scripts, initCategoriesSetColumn.php and initSegcategoriesSetColumn.php
 
-ALTER TABLE `labelimglinks`
+
 alter table `labelimglinks` drop index path;
+ALTER TABLE `labelimglinks`
 ADD CONSTRAINT `1ImgBySet` UNIQUE (path,set_id);
-ALTER TABLE `segimages`
 alter table `segimages` drop index path;
+ALTER TABLE `segimages`
 ADD CONSTRAINT `1ImgBySet` UNIQUE (path,set_id);
 
 

@@ -180,7 +180,6 @@
                     template,
                     deferred;
                 if (data.context) {
-                    upl_listenArchiveProgressStop();
                     data.context.each(function (index) {
                         var file = files[index] ||
                                 {error: 'Empty file upload result'};
@@ -229,6 +228,7 @@
                     template,
                     deferred;
                 if (data.context) {
+                    upl_listenArchiveProgressStop();
                     data.context.each(function (index) {
                         if (data.errorThrown !== 'abort') {
                             var file = data.files[index];

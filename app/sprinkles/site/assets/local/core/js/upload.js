@@ -4,6 +4,7 @@ var upl_grpText=[];
 var upl_set = [];
 var upl_pagemode = "";//"bbox","segmentation"
 var mainContainer = {};
+mainContainer.tickFrameNumber = 5;
 
 function upl_initPage(pagemode){
 	upl_pagemode = pagemode;
@@ -462,17 +463,34 @@ $('#fileupload').bind('fileuploadsubmit', function (e, data) {
 });
 
 function upl_listenArchiveProgress(){
+	$('#progress_bar_process').width("0%");
 	var url = site.uri.public + '/admin/upload/keepUpdated';
+	if(mainContainer.KUEvent){
+		closeEventSource(mainContainer.KUEvent);
+	}
 	var source = new EventSource(url);
 	mainContainer.KUEvent = source;
-	$('.progress-extendedLine2').hide();
-	$('#progress_bar_process_main').hide();
+	mainContainer.lastTicksTable = [];
+	for(var i = 0; i < mainContainer.tickFrameNumber; i++){
+		mainContainer.lastTicksTable.push(0);
+	}
+	mainContainer.archiveProgress_lastTick = 0;
 	source.onmessage = function(event) {
 		var data = JSON.parse(event.data);
 		if(!mainContainer.archiveProgress_lastTick) mainContainer.archiveProgress_lastTick = 0;
 		console.log(data);
-	    var filesPerSec = data.current - mainContainer.archiveProgress_lastTick;
-	    console.log(filesPerSec);
+		if(jQuery.isEmptyObject(data)){
+			$('#progress_bar_process').width("0%");
+		}
+		var current = 0;
+	    var total = 0;
+	    for (var key in data) {
+		    current = current + data[key].upload_current;
+		    total = total + data[key].upload_total;
+		}
+		var filesPerSec = current - mainContainer.archiveProgress_lastTick;
+	    var filesPerSecFrame = meanLastTicks(filesPerSec);
+	    console.log(filesPerSecFrame);
 	    if(filesPerSec == 0) {
 	    	if(!mainContainer.archiveProgress_NoChangeCount)mainContainer.archiveProgress_NoChangeCount = 0;
 	    	mainContainer.archiveProgress_NoChangeCount++;
@@ -481,14 +499,22 @@ function upl_listenArchiveProgress(){
 	    	filesPerSec = filesPerSec/mainContainer.archiveProgress_NoChangeCount;
 	    	mainContainer.archiveProgress_NoChangeCount = 1;
 	    }
-	    var remainingSec = (data.total - data.current) / filesPerSec;
+	    var remainingSec = (total - current) / filesPerSec;
 	    var remainingTime = formatTime(remainingSec);
-	    console.log(remainingTime);
-	    var processingProgress = Math.floor(data.current / data.total * 100);
+	    var remainingSecFrane = (total - current) / filesPerSecFrame;
+	    var remainingTimeFrame = formatTime(remainingSecFrane);
+	    var processingProgress = Math.floor(current / total * 100);
 	    if(!processingProgress)processingProgress = 0;
-	    $('.progress-extendedLine2').html("File processing | "+processingProgress+"% | "+data.current+"/"+data.total+" | "+remainingTime);
+	    $('.progress-extendedLine2').html("File processing | "+processingProgress+"% | "+current+"/"+total+" | "+remainingTimeFrame);
 	    $('#progress_bar_process').width(processingProgress+"%");
-	    mainContainer.archiveProgress_lastTick = data.current;
+	    mainContainer.archiveProgress_lastTick = current;
+	    console.log("Current : "+current);
+	    console.log("Total : "+total);
+	    if(total == current){
+	    	upl_listenArchiveProgressStop();
+	    	$('.progress-extendedLine2').hide();
+			$('#progress_bar_process_main').hide();
+	    }
 	};
 }
 function upl_listenArchiveProgressStop(){
@@ -499,6 +525,9 @@ function closeEventSource(source){
 		source.close();
 }
 function formatTime(seconds){
+	if(seconds < 0 ){
+		seconds = 0;
+	}
 	var date = new Date(seconds * 1000),
         days = Math.floor(seconds / 86400);
     days = days ? days + 'd ' : '';
@@ -506,4 +535,16 @@ function formatTime(seconds){
         ('0' + date.getUTCHours()).slice(-2) + ':' +
         ('0' + date.getUTCMinutes()).slice(-2) + ':' +
         ('0' + date.getUTCSeconds()).slice(-2);
+}
+function meanLastTicks(filesPerSec){
+	//Return the files proccessed by seconds over the last 5 ticks
+
+	mainContainer.lastTicksTable.push(filesPerSec);
+	mainContainer.lastTicksTable.shift();
+
+	var total = 0;
+	for(i = 0; i < mainContainer.lastTicksTable.length; i++){
+		total = total+mainContainer.lastTicksTable[i];
+	}
+	return total/mainContainer.tickFrameNumber;
 }

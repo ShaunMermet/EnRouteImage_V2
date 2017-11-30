@@ -915,13 +915,18 @@ class SiteController extends SimpleController
         
     }
     public function archiveUploadKeepProgress($request, $response, $args){
-        //error_log("Keep ".$_SESSION["upload_current"]."/".$_SESSION["upload_total"]);
-        if (array_key_exists("upload_current",$_SESSION) && array_key_exists("upload_total",$_SESSION)){
-            $array = array("current"=>$_SESSION["upload_current"],"total"=>$_SESSION["upload_total"]);
+        if (array_key_exists("upload_status",$_SESSION)){
+            if(array_key_exists($this->ci->currentUser->id,$_SESSION['upload_status'])){
+                $array = $_SESSION['upload_status'][$this->ci->currentUser->id];
+            }
+            else{
+                $array = [];
+            }
         }
         else{
             $array = [];
         }
+
         $data = json_encode($array);
         
         return $response
