@@ -1037,3 +1037,7 @@ ALTER TABLE `labelimgexportlinks` CHANGE `expires` `expires` TIMESTAMP NOT NULL 
 
 
 UPDATE `permissions` SET `conditions` = 'always()' WHERE `permissions`.`id` = 28;
+
+--------------------------------
+--- Changes for Beta 0.3.15 ----
+-------------------------------- 
