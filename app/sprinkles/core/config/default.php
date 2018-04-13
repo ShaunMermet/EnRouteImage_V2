@@ -81,7 +81,7 @@
             'secure'     => 'tls',
             'username'   => getenv('SMTP_USER') ?: null,
             'password'   => getenv('SMTP_PASSWORD') ?: null,
-            'smtp_debug' => 4,
+            'smtp_debug' => 3,
             'message_options' => [
                 'CharSet' => 'UTF-8',
                 'isHtml' => true,

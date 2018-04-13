@@ -524,8 +524,7 @@ function label_loadCategories(){
 	    // Fetch successful
 	    function (data) {
 	        mainContainer.catData = data;
-        	label_updateComboCat();
-			label_loadset();
+        	label_loadset();
 	    },
 	    // Fetch failed
 	    function (data) {
@@ -559,6 +558,7 @@ function label_loadset(){
 			}
 			label_set.sort(function(a, b){return a.id-b.id})
 			label_initComboSet();
+			label_updateComboCat();
 			label_loadImages();
 	    },
 	    // Fetch failed

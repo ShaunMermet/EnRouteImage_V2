@@ -927,7 +927,6 @@ ALTER TABLE `sets`
 
 ALTER TABLE `segimages` ADD `set_id` INT(1) NOT NULL DEFAULT '1' COMMENT 'Id of the set the image belongs to' AFTER `requested`;
 
-
 --
 -- Table structure for table `segsets`
 --
@@ -1035,3 +1034,6 @@ ALTER TABLE `labelimgexportlinks` CHANGE `expires` `expires` TIMESTAMP NOT NULL 
 --------------------------------
 --- Changes for Beta 0.3.15 ----
 --------------------------------  
+
+
+UPDATE `permissions` SET `conditions` = 'always()' WHERE `permissions`.`id` = 28;
