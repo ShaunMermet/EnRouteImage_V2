@@ -36,6 +36,7 @@ $app->group('/bbox', function () {
 	$this->get('/validate', 'UserFrosting\Sprinkle\Site\Controller\SiteController:pageValidate');
 
 	$this->put('/validate/evaluate', 'UserFrosting\Sprinkle\Site\Controller\AreaController:areaEvaluate');
+	$this->post('/api/upload', 'UserFrosting\Sprinkle\Site\Controller\SiteController:uploadHandlerPublic');
 
 });//->add('authGuard');
 

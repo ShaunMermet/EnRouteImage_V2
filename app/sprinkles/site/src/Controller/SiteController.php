@@ -742,6 +742,48 @@ class SiteController extends SimpleController
 
     }
 
+    public function uploadHandlerPublic($request, $response, $args)
+    {
+        /** @var UserFrosting\Sprinkle\Account\Authenticate\Authenticator $authenticator */
+        /*$authenticator = $this->ci->authenticator;
+        if (!$authenticator->check()) {
+            $loginPage = $this->ci->router->pathFor('login');
+            return $response->withRedirect($loginPage, 400);
+        }*/
+
+        /** @var UserFrosting\Sprinkle\Account\Authorize\AuthorizationManager */
+        //$authorizer = $this->ci->authorizer;
+        /** @var UserFrosting\Sprinkle\Account\Model\User $currentUser */
+        //$currentUser = $this->ci->currentUser;
+        // Access-controlled page
+        /*if (!$authorizer->checkAccess($currentUser, 'uri_upload')) {
+            $loginPage = $this->ci->router->pathFor('login');
+           return $response->withRedirect($loginPage, 400);
+        }*/
+
+        /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
+        //$classMapper = $this->ci->classMapper;
+
+        /*$UserWGrp = $classMapper->staticMethod('user', 'where', 'id', $currentUser->id)
+                                ->with('group')
+                                ->first();
+        */
+        error_log(print_r($_FILES,true));
+        return;
+        $validGroup = [1];
+        foreach ($UserWGrp->group as $group) {
+            array_push($validGroup, $group->id);
+        }
+
+        //include('UploadHandler.php');
+        error_reporting(E_ALL | E_STRICT);
+        $upload_handler = new UploadHandler($this->ci,array(
+            'groups' => $validGroup,
+            'param_name' => 'yo'
+            ));
+
+    }
+
     /**
      * Renders a simple "segupload" page for Users.
      *
@@ -808,7 +850,7 @@ class SiteController extends SimpleController
     }
 
     private function saveTmpFolder($token, $archivePath,$db,$setId,$mode){
-        $aliveTimeHour = 20;// In years
+        $aliveTimeHour = 10;// In years
         //$expires = date('Y-m-d H:i:s', $aliveTime);
         $expires = date('Y-m-d H:i:s', mktime(0, 0, 0, date("m"),   date("d"),   date("Y")+$aliveTimeHour));
         $BDDtoken = new Token;

@@ -39,7 +39,21 @@
                 'user_defaults' => [
                     'group' => 'Public'
                 ]
-            ]
+            ],
+            'csrf' => [
+                'blacklist' => [
+                    '^/bbox/api/upload' => [
+                        'POST'
+                    ]
+                ]
+            ] 
         ],   
-        'timezone' => 'Asia/Tokyo'        
+        'timezone' => 'Asia/Tokyo',
+        'csrf' => [
+            'blacklist' => [
+                '^/bbox/api/upload' => [
+                    'POST'
+                ]
+            ]
+        ]      
     ];
