@@ -4,7 +4,7 @@
 {% block content %}
 <div class="login-box">
     <div class="login-logo">
-        <span><img src="{{ assets.url('assets://local/core/img/LogoTitleSignIn.png') }}" style="max-width:200px;"></span>
+        <span><img src="{{ assets.url('assets://userfrosting/img/LogoTitleSignIn.png') }}" style="max-width:200px;"></span>
     </div>
     <!-- /.login-logo -->
 
@@ -14,7 +14,7 @@
         <div class="form-alerts" id="alerts-page"></div>
 
         <form action="{{site.uri.public}}/account/login" id="sign-in" method="post">
-          {% include "components/csrf.html.twig" %}
+          {% include "forms/csrf.html.twig" %}
           <div class="form-group has-feedback">
             <input type="text" class="form-control" placeholder="{% if site.login.enable_email %}{{translate('EMAIL_OR_USERNAME')}}{% else %}{{translate('USERNAME')}}{% endif %}" name="user_name">
             <i class="glyphicon glyphicon-user form-control-icon" aria-hidden="true"></i>

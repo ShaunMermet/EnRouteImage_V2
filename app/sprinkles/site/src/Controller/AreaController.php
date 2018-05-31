@@ -15,10 +15,10 @@ use UserFrosting\Support\Exception\ForbiddenException;
 use UserFrosting\Sprinkle\Account\Authenticate\Authenticator;
 use UserFrosting\Sprinkle\Site\Sprunje\ImgAreaSprunje;
 use UserFrosting\Sprinkle\Site\Sprunje\SegAreaSprunje;
-use UserFrosting\Sprinkle\Site\Model\ImgArea;
-use UserFrosting\Sprinkle\Site\Model\ImgLinks;
-use UserFrosting\Sprinkle\Site\Model\SegArea;
-use UserFrosting\Sprinkle\Site\Model\SegImage;
+use UserFrosting\Sprinkle\Site\Database\Models\ImgArea;
+use UserFrosting\Sprinkle\Site\Database\Models\ImgLinks;
+use UserFrosting\Sprinkle\Site\Database\Models\SegArea;
+use UserFrosting\Sprinkle\Site\Database\Models\SegImage;
 
 /**
  * Controller class for category-related requests.

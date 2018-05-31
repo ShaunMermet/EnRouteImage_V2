@@ -4,7 +4,7 @@
 {% block content %}
 <div class="login-box">
     <div class="login-logo">
-        <span><img src="{{ assets.url('assets://local/core/img/LogoTitleSignIn.png') }}" style="max-width:200px;"></span>
+        <span><img src="{{ assets.url('assets://userfrosting/img/LogoTitleSignIn.png') }}" style="max-width:200px;"></span>
     </div>
     <!-- /.login-logo -->
 
@@ -15,7 +15,7 @@
         <div class="form-alerts" id="alerts-page"></div>
 
         <form id="request-verification-email" role="form" action="{{site.uri.public}}/account/resend-verification" method="post" class="r-form">
-            {% include "components/csrf.html.twig" %}
+            {% include "forms/csrf.html.twig" %}
             <div class="form-group">
                 <label class="sr-only" for="verification-form-email">{{translate("EMAIL")}}</label>
                 <input type="text" name="email" placeholder="{{translate("EMAIL")}}" class="form-control" id="verification-form-email">

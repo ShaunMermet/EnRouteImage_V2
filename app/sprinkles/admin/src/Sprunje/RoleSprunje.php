@@ -3,7 +3,6 @@
  * UserFrosting (http://www.userfrosting.com)
  *
  * @link      https://github.com/userfrosting/UserFrosting
- * @copyright Copyright (c) 2013-2016 Alexander Weissman
  * @license   https://github.com/userfrosting/UserFrosting/blob/master/licenses/UserFrosting.md (MIT License)
  */
 namespace UserFrosting\Sprinkle\Admin\Sprunje;
@@ -34,14 +33,16 @@ class RoleSprunje extends Sprunje
         'info'
     ];
 
+    protected $excludeForAll = [
+        'info'
+    ];
+
     /**
      * {@inheritDoc}
      */
     protected function baseQuery()
     {
-        $query = $this->classMapper->createInstance('role');
-
-        return $query;
+        return $this->classMapper->createInstance('role')->newQuery();
     }
 
     /**
@@ -49,18 +50,18 @@ class RoleSprunje extends Sprunje
      *
      * @param Builder $query
      * @param mixed $value
-     * @return Builder
+     * @return $this
      */
     protected function filterInfo($query, $value)
     {
         // Split value on separator for OR queries
         $values = explode($this->orSeparator, $value);
-        return $query->where(function ($query) use ($values) {
+        $query->where(function ($query) use ($values) {
             foreach ($values as $value) {
-                $query = $query->orLike('name', $value)
-                                ->orLike('description', $value);
+                $query->orLike('name', $value)
+                        ->orLike('description', $value);
             }
-            return $query;
         });
+        return $this;
     }
 }

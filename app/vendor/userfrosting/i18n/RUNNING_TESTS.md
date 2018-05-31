@@ -14,10 +14,13 @@ If you don't have composer, you need to install it:
   2. Be sure to [install Composer **globally**](https://getcomposer.org/doc/00-intro.md#globally): `mv composer.phar /usr/local/bin/composer`
 
 ## Running
+
 Once the prerequisites are installed, run the tests from the project root directory:
+
 ```
-vendor/bin/phpunit tests
+phpunit --bootstrap tests/bootstrap.php tests
 ```
+
 
 If the tests are successful, you should see something similar to this. Otherwise, the errors will be displayed.
 ```

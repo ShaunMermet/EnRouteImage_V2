@@ -1,14 +1,14 @@
 <?php
-
 /**
- * en_US
+ * UserFrosting (http://www.userfrosting.com)
  *
- * US English message token translations for the core sprinkle.
+ * @link      https://github.com/userfrosting/UserFrosting
+ * @license   https://github.com/userfrosting/UserFrosting/blob/master/licenses/UserFrosting.md (MIT License)
  *
- * @package UserFrosting
- * @link http://www.userfrosting.com/components/#i18n
+ * US English message token translations for the 'core' sprinkle.
+ *
+ * @package userfrosting\i18n\en_US
  * @author Alexander Weissman
- *
  */
 
 return [
@@ -39,26 +39,40 @@ return [
 
     "HOME"  => "Home",
 
-    "LEGAL" => "Legal Policy",
+    "LEGAL" => [
+        "@TRANSLATION" => "Legal Policy",
+        "DESCRIPTION" => "Our legal policy applies to your usage of this website and our services."
+    ],
 
     "LOCALE" => [
         "@TRANSLATION" => "Locale"
     ],
 
-    "MAIL_ERROR" => "Fatal error attempting mail, contact your server administrator.  If you are the admin, please check the UF mail log.",
-
     "NAME"  => "Name",
     "NAVIGATION" => "Navigation",
+    "NO_RESULTS" => "Sorry, we've got nothing here.",
 
     "PAGINATION" => [
         "GOTO" => "Jump to Page",
-        "SHOW" => "Show"
+        "SHOW" => "Show",
+
+        // Paginator
+        // possible variables: {size}, {page}, {totalPages}, {filteredPages}, {startRow}, {endRow}, {filteredRows} and {totalRows}
+        // also {page:input} & {startRow:input} will add a modifiable input in place of the value
+        "OUTPUT" => "{startRow} to {endRow} of {filteredRows} ({totalRows})",
+        "NEXT" => "Next page",
+        "PREVIOUS" => "Previous page",
+        "FIRST" => "First page",
+        "LAST" => "Last page"
     ],
-    "PRIVACY" => "Privacy Policy",
+    "PRIVACY" => [
+        "@TRANSLATION" => "Privacy Policy",
+        "DESCRIPTION" => "Our privacy policy outlines what kind of information we collect from you and how we will use it."
+    ],
 
     "SLUG" => "Slug",
     "SLUG_CONDITION" => "Slug/Conditions",
-    "SLUG_IN_USE" => "A <strong>{{slug}}</strong> slug already exist",
+    "SLUG_IN_USE" => "A <strong>{{slug}}</strong> slug already exists",
     "STATUS" => "Status",
     "SUGGEST" => "Suggest",
 
@@ -101,5 +115,6 @@ return [
 
     // Misc.
     "BUILT_WITH_UF" => "Built with <a href=\"http://www.userfrosting.com\">UserFrosting</a>",
-    "ADMINLTE_THEME_BY" => "Theme by <strong><a href=\"http://almsaeedstudio.com\">Almsaeed Studio</a>.</strong> All rights reserved"
+    "ADMINLTE_THEME_BY" => "Theme by <strong><a href=\"http://almsaeedstudio.com\">Almsaeed Studio</a>.</strong> All rights reserved",
+    "WELCOME_TO" => "Welcome to {{title}}!"
 ];

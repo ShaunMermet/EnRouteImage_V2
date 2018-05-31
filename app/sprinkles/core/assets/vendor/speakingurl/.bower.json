@@ -25,6 +25,6 @@
     "commit": "352be558e73edf5791a591bb55b9ad17148b588f"
   },
   "_source": "https://github.com/pid/speakingurl.git",
-  "_target": "11.0.0",
+  "_target": "^11.0",
   "_originalSource": "speakingurl"
 }

@@ -3,12 +3,12 @@
  * UserFrosting (http://www.userfrosting.com)
  *
  * @link      https://github.com/userfrosting/UserFrosting
- * @copyright Copyright (c) 2013-2016 Alexander Weissman
  * @license   https://github.com/userfrosting/UserFrosting/blob/master/licenses/UserFrosting.md (MIT License)
  */
 namespace UserFrosting\Sprinkle\Core;
 
 use FastRoute\Dispatcher;
+use Illuminate\Filesystem\Filesystem;
 use InvalidArgumentException;
 use RuntimeException;
 use Psr\Http\Message\ServerRequestInterface;
@@ -77,5 +77,25 @@ class Router extends \Slim\Router implements RouterInterface
         $this->routeCounter++;
 
         return $route;
+    }
+
+    /**
+     * Delete the cache file
+     *
+     * @access public
+     * @return bool true/false if operation is successfull
+     */
+    public function clearCache()
+    {
+        // Get Filesystem instance
+        $fs = new FileSystem;
+
+        // Make sure file exist and delete it
+        if ($fs->exists($this->cacheFile)) {
+            return $fs->delete($this->cacheFile);
+        }
+
+        // It's still considered a success if file doesn't exist
+        return true;
     }
 }

@@ -193,7 +193,7 @@
                     </div>
                 </div>
                 <div class="box-body">
-                    {% include "components/tables/activities.html.twig" with {
+                    {% include "tables/activities.html.twig" with {
                             "table" : {
                                 "id" : "table-activities",
                                 "columns" : ["user"]
@@ -242,7 +242,7 @@
                   </h3>
                 </div>
                 <div class="widget-user-image">
-                  <img class="img-circle" src="{{assets.url('assets://local/core/favicons/Labelligent_ico.png')}}" alt="User Avatar">
+                  <img class="img-circle" src="{{assets.url('assets://userfrosting/favicons/Labelligent_ico.png')}}" alt="User Avatar">
                 </div>
                 <div class="box-footer">
                     <h4>Welcome to {{site.title}}!</h4>
@@ -268,7 +268,7 @@
                   </h3>
                 </div>
                 <div class="widget-user-image">
-                  <img class="img-circle" src="{{assets.url('assets://local/core/favicons/Labelligent_ico.png')}}" alt="User Avatar">
+                  <img class="img-circle" src="{{assets.url('assets://userfrosting/favicons/Labelligent_ico.png')}}" alt="User Avatar">
                 </div>
                 <div class="box-footer">
                     <h4>Welcome to {{site.title}}!</h4>
@@ -290,7 +290,7 @@
 {% block scripts_page %}
     <!-- Include page variables -->
     <script>
-    {% include "components/page.js.twig" %}
+    {% include "pages/partials/page.js.twig" %}
 
     // Add user name
     page = $.extend(

@@ -1,15 +1,16 @@
 <?php
-
 /**
- * en_US
+ * UserFrosting (http://www.userfrosting.com)
  *
- * US English message token translations for the 'admin' sprinkle.
+ * @link      https://github.com/userfrosting/UserFrosting
+ * @license   https://github.com/userfrosting/UserFrosting/blob/master/licenses/UserFrosting.md (MIT License)
  *
- * @package UserFrosting
- * @link http://www.userfrosting.com/components/#i18n
- * @author Alexander Weissman
+ * French message token translations for the 'admin' sprinkle.
+ *
+ * @package userfrosting\i18n\fr
+ * @author Louis Charette
  */
-
+ 
 return [
     "ACTIVITY" => [
         1 => "Activité",
@@ -18,10 +19,6 @@ return [
         "LAST" => "Dernière activité",
         "PAGE" => "Une liste des activités des utilisateurs",
         "TIME" => "Date de l'activité"
-    ],
-
-    "ADMIN" => [
-        "PANEL" => "Panneau d'administration"
     ],
 
     "CACHE" => [
@@ -56,6 +53,7 @@ return [
         "ICON"          => "Icône",
         "ICON_EXPLAIN"  => "Icône des membres du groupe",
         "INFO_PAGE"     => "Informations sur le groupe {{name}}",
+        "MANAGE"        => "Gérer le groupe",
         "NAME"          => "Nom du groupe",
         "NAME_EXPLAIN"  => "Spécifiez le nom du groupe",
         "NOT_EMPTY"     => "Vous ne pouvez pas le faire car il y a encore des utilisateurs associés au groupe <strong>{{name}}</strong>.",

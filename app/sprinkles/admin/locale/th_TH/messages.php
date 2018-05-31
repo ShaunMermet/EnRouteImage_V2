@@ -1,12 +1,13 @@
 <?php
-
 /**
- * th_TH
+ * UserFrosting (http://www.userfrosting.com)
+ *
+ * @link      https://github.com/userfrosting/UserFrosting
+ * @license   https://github.com/userfrosting/UserFrosting/blob/master/licenses/UserFrosting.md (MIT License)
  *
  * Thai message token translations for the 'admin' sprinkle.
  *
- * @package UserFrosting
- * @link http://www.userfrosting.com/components/#i18n
+ * @package userfrosting\i18n\th
  * @author Karuhut Komol
  */
 
@@ -18,10 +19,6 @@ return [
        "LAST" => "กิจกรรมล่าสุด",
        "PAGE" => "รายการกิจกรรมของผู้ใช้",
        "TIME" => "เวลาที่ทำกิจกรรม"
-    ],
-
-    "ADMIN" => [
-        "PANEL" => "แผงควบคุมของผู้ดูแลระบบ"
     ],
 
     "CACHE" => [
@@ -52,6 +49,7 @@ return [
         "ICON"          => "ไอคอนกลุ่ม",
         "ICON_EXPLAIN"  => "ไอคอนสำหรับสมาชิกกลุ่ม",
         "INFO_PAGE"     => "หน้าข้อมูลกลุ่มสำหรับ {{name}}",
+        //"MANAGE"        => "Manage group",
         "NAME"          => "ชื่อกลุ่ม",
         "NAME_EXPLAIN"  => "กรุณาตั้งชื่อสำหรับกลุ่มนี้",
         "PAGE_DESCRIPTION" => "รายชื่อกลุ่มในเว็บของคุณ ประกอบไปด้วยเครื่องมือในการจัดการสำหรับการแก้ไขและลบกลุ่ม"

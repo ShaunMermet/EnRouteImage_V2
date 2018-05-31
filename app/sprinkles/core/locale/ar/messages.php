@@ -1,14 +1,14 @@
 <?php
-
 /**
- *  ar
+ * UserFrosting (http://www.userfrosting.com)
  *
- * Modern Spoken Arabic message token translations for the core sprinkle
+ * @link      https://github.com/userfrosting/UserFrosting
+ * @license   https://github.com/userfrosting/UserFrosting/blob/master/licenses/UserFrosting.md (MIT License)
  *
- * @package UserFrosting
- * @link http://wwwuserfrostingcom/components/#i18n
+ * Modern Standard Arabic message token translations for the 'core' sprinkle.
+ *
+ * @package userfrosting\i18n\ar
  * @author Alexander Weissman and Abdullah Seba
- *
  */
 
 return [
@@ -38,23 +38,31 @@ return [
     ],
 
     "HOME"  => "الصفحة الرئيسية",
-
-    "LEGAL" => "السياسة القانونية",
+	
+    "LEGAL" => [
+        "@TRANSLATION" => "السياسة القانونية",
+        "DESCRIPTION" => "تسري سياستنا القانونية على استخدامك لهذا الموقع وخدماتنا"
+    ],
 
     "LOCALE" => [
         "@TRANSLATION" => "اللغه",
     ],
-
-    "MAIL_ERROR" => "خطأ فادح في محاولة البريد الإلكتروني، اتصل بمسؤول المقع إذا كنت المشرف، يرجى التحقق من التسجل البريد الإلكتروني UF",
 
     "NAME"  => "اسم",
     "NAVIGATION" => "التنقل",
 
     "PAGINATION" => [
         "GOTO" => "انتقال إلى الصفحة",
-        "SHOW" => "تبين"
+        "SHOW" => "عرض",
+        "NEXT" => "الصفحة التالية",
+        "PREVIOUS" => "الصفحة السابقة",
+        "FIRST" => "الصفحة الأولى",
+        "LAST" => "آخر صفحة"
     ],
-    "PRIVACY" => "سياسة الخصوصية",
+    "PRIVACY" => [
+        "@TRANSLATION" => "سياسة الخصوصية",
+        "DESCRIPTION" => "تحدد سياسة الخصوصية لدينا نوع المعلومات التي نجمعها منك وكيفية استخدامها."
+    ],
 
     "SLUG" => "Slug",
     "SLUG_CONDITION" => "Slug/الظروف",
@@ -98,6 +106,7 @@ return [
     "OPTIONAL" => "اختياري",
 
     // Misc
-    "BUILT_WITH_UF" => "بنيت مع <a href=\"http://wwwuserfrostingcom\">UserFrosting</a>",
-    "ADMINLTE_THEME_BY" => "فكرة رئيسية <strong><a href=\"http://almsaeedstudiocom\">Almsaeed Studio</a></strong> كل الحقوق محفوظة"
+    "BUILT_WITH_UF" => "بنيت مع <a href=\"http://www.userfrosting.com\">UserFrosting</a>",
+    "ADMINLTE_THEME_BY" => "فكرة رئيسية <strong><a href=\"http://almsaeedstudio.com\">Almsaeed Studio</a></strong> كل الحقوق محفوظة",
+    "WELCOME_TO" => "مرحبا بك في {{title}}!"
 ];

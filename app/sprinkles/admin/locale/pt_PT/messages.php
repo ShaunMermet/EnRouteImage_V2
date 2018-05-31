@@ -1,12 +1,13 @@
 <?php
-
 /**
- * pt_PT
+ * UserFrosting (http://www.userfrosting.com)
  *
- * PT Portuguese message token translations for the core sprinkle.
+ * @link      https://github.com/userfrosting/UserFrosting
+ * @license   https://github.com/userfrosting/UserFrosting/blob/master/licenses/UserFrosting.md (MIT License)
  *
- * @package UserFrosting
- * @link http://www.userfrosting.com/components/#i18n
+ * Portuguese message token translations for the 'admin' sprinkle.
+ *
+ * @package userfrosting\i18n\pt
  * @author Bruno Silva (brunomnsilva@gmail.com)
  */
 
@@ -18,10 +19,6 @@ return [
        "LAST" => "Última atividade",
        "PAGE" => "Lista de atividade dos utilizadores",
        "TIME" => "Tempo da Atividade"
-    ],
-
-    "ADMIN" => [
-        "PANEL" => "Painel de Administração"
     ],
 
     "CACHE" => [
@@ -54,6 +51,7 @@ return [
         "ICON"          => "Icon do grupo",
         "ICON_EXPLAIN"  => "Icon para membros do grupo",
         "INFO_PAGE"     => "Página informativa do grupo {{name}}",
+        //"MANAGE"        => "Manage group",
         "NAME"          => "Nome do grupo",
         "NAME_EXPLAIN"  => "Por favor introduza um nome para o grupo",
         "PAGE_DESCRIPTION" => "Lista de grupos do site. Contém opções para editar e remover grupos."

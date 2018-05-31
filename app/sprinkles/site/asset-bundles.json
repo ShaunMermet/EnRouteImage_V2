@@ -1,0 +1,352 @@
+{
+    "bundle": {
+        "js/tools": {
+            "scripts": [
+                "userfrosting/js/group/tools.js"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "scripts": "plain"
+                    }
+                }
+            }
+        },
+        "js/simplePagination": {
+            "scripts": [
+                "userfrosting/js/jquery.simplePagination.js"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "scripts": "plain"
+                    }
+                }
+            }
+        },
+        "js/export": {
+            "scripts": [
+                "userfrosting/js/export.js",
+                "userfrosting/js/bbExportInit.js"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "scripts": "plain"
+                    }
+                }
+            }
+        },
+        "js/segExport": {
+            "scripts": [
+                "userfrosting/js/export.js",
+                "userfrosting/js/segExportInit.js"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "scripts": "plain"
+                    }
+                }
+            }
+        },
+        "js/import": {
+            "scripts": [
+                "userfrosting/js/import.js"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "scripts": "plain"
+                    }
+                }
+            }
+        },
+        "js/segImport": {
+            "scripts": [
+                "userfrosting/js/segImport.js"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "scripts": "plain"
+                    }
+                }
+            }
+        },
+        "js/account_settings": {
+            "scripts": [
+                "userfrosting/js/account_settings.js"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "scripts": "plain"
+                    }
+                }
+            }
+        },
+        "js/upload": {
+            "scripts": [
+                "userfrosting/js/upload.js",
+                "userfrosting/js/uploadInit.js"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "scripts": "plain"
+                    }
+                }
+            }
+        },
+        "js/segUpload": {
+            "scripts": [
+                "userfrosting/js/upload.js",
+                "userfrosting/js/segUploadInit.js"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "scripts": "plain"
+                    }
+                }
+            }
+        },
+        "js/validated": {
+            "scripts": [
+                "userfrosting/js/validated.js"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "scripts": "plain"
+                    }
+                }
+            }
+        },
+        "js/categoriesEditor": {
+            "scripts": [
+                "userfrosting/js/categoriesEditor.js",
+                "userfrosting/js/bbCatEditInit.js"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "scripts": "plain"
+                    }
+                }
+            }
+        },
+        "js/segCategoriesEditor": {
+            "scripts": [
+                "userfrosting/js/categoriesEditor.js",
+                "userfrosting/js/segCatEditInit.js"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "scripts": "plain"
+                    }
+                }
+            }
+        },
+        "js/setsEditor": {
+            "scripts": [
+                "userfrosting/js/setsEditor.js",
+                "userfrosting/js/bbSetEditInit.js"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "scripts": "plain"
+                    }
+                }
+            }
+        },
+        "js/segSetsEditor": {
+            "scripts": [
+                "userfrosting/js/setsEditor.js",
+                "userfrosting/js/segSetEditInit.js"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "scripts": "plain"
+                    }
+                }
+            }
+        },
+        "js/jscolor": {
+            "scripts": [
+                "userfrosting/js/jscolor.js"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "scripts": "plain"
+                    }
+                }
+            }
+        },
+		"js/label": {
+            "scripts": [
+                "userfrosting/js/modes/common.js",
+                "userfrosting/js/label.js",
+                "userfrosting/js/labelInit.js"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "scripts": "plain"
+                    }
+                }
+            }
+        },
+        "js/seglabel": {
+            "scripts": [
+                "userfrosting/js/seglabel.js",
+                "userfrosting/js/modes/common.js"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "scripts": "plain"
+                    }
+                }
+            }
+        },
+        "js/homepage": {
+            "scripts": [
+                "userfrosting/js/modes/common.js",
+                "userfrosting/js/label.js",
+                "userfrosting/js/homepageInit.js"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "scripts": "plain"
+                    }
+                }
+            }
+        },
+		"js/validate": {
+            "scripts": [
+                "userfrosting/js/validate.js",
+                "userfrosting/js/modes/common.js"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "scripts": "plain"
+                    }
+                }
+            }
+        },
+        "js/segValidate": {
+            "scripts": [
+                "userfrosting/js/segValidate.js",
+                "userfrosting/js/modes/common.js"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "scripts": "plain"
+                    }
+                }
+            }
+        },
+        "js/frontpage": {
+            "scripts": [
+                "userfrosting/js/FrontPage/creative.js"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "scripts": "plain"
+                    }
+                }
+            }
+        },
+		"js/blueimp": {
+            "scripts": [
+                "userfrosting/js/blueimp/vendor/jquery.ui.widget.js",
+                "userfrosting/js/blueimp/cors/jquery.postmessage-transport.js",
+                "userfrosting/js/blueimp/cors/jquery.xdr-transport.js",
+				"userfrosting/js/blueimp/app.js",
+				"userfrosting/js/blueimp/jquery.fileupload.js",
+				"userfrosting/js/blueimp/jquery.fileupload-angular.js",
+				"userfrosting/js/blueimp/jquery.fileupload-audio.js",
+				"userfrosting/js/blueimp/jquery.fileupload-image.js",
+				"userfrosting/js/blueimp/jquery.fileupload-jquery-ui.js",
+				"userfrosting/js/blueimp/jquery.fileupload-process.js",
+				"userfrosting/js/blueimp/jquery.fileupload-ui.js",
+				"userfrosting/js/blueimp/jquery.fileupload-validate.js",
+				"userfrosting/js/blueimp/jquery.fileupload-video.js",
+				"userfrosting/js/blueimp/jquery.iframe-transport.js",
+				"userfrosting/js/blueimp/main.js"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "scripts": "plain"
+                    }
+                }
+            }
+        },
+        "css/site": {
+            "styles": [
+                "userfrosting/css/style.css"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "styles": "plain"
+                    }
+                }
+            }
+        },
+        "css/frontpage": {
+            "styles": [
+                "userfrosting/css/FrontPage/bootstrap.css",
+                "userfrosting/css/FrontPage/creative.css"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "styles": "plain"
+                    }
+                }
+            }
+        },
+        "css/simplePagination": {
+            "styles": [
+                "userfrosting/css/simplePagination.css"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "styles": "plain"
+                    }
+                }
+            }
+        },
+		"css/blueimp": {
+            "styles": [
+                "userfrosting/css/blueimp/style.css",
+				"userfrosting/css/blueimp/demo.css",
+				"userfrosting/css/blueimp/demo-ie8.css",
+				"userfrosting/css/blueimp/jquery.fileupload.css",
+				"userfrosting/css/blueimp/jquery.fileupload-noscript.css",
+				"userfrosting/css/blueimp/jquery.fileupload-ui.css",
+				"userfrosting/css/blueimp/jquery.fileupload-ui-noscript.css"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "styles": "plain"
+                    }
+                }
+            }
+        }
+    }
+}

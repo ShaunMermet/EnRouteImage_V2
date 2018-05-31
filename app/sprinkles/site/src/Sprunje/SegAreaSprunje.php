@@ -3,7 +3,7 @@ namespace UserFrosting\Sprinkle\Site\Sprunje;
 
 use UserFrosting\Sprinkle\Core\Facades\Debug;
 use UserFrosting\Sprinkle\Core\Sprunje\Sprunje;
-use UserFrosting\Sprinkle\Site\Model\SegArea;
+use UserFrosting\Sprinkle\Site\Database\Models\SegArea;
 
 class SegAreaSprunje extends Sprunje
 {

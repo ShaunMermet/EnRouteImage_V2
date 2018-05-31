@@ -1,14 +1,14 @@
 <?php
-
 /**
- * fr_FR
+ * UserFrosting (http://www.userfrosting.com)
+ *
+ * @link      https://github.com/userfrosting/UserFrosting
+ * @license   https://github.com/userfrosting/UserFrosting/blob/master/licenses/UserFrosting.md (MIT License)
  *
  * French message token translations for the 'account' sprinkle.
  *
- * @package UserFrosting
- * @link http://www.userfrosting.com/components/#i18n
- * @author Alexander Weissman
- * @translator Louis Charette
+ * @package userfrosting\i18n\fr
+ * @author Louis Charette
  */
 
 return [
@@ -26,8 +26,10 @@ return [
         "MASTER_NOT_EXISTS" => "Vous ne pouvez pas enregistrer un compte tant que le compte principal n'a pas été créé!",
         "MY"                => "Mon compte",
 
-        "SESSION_COMPROMISED"       => "Votre session a été compromise. Vous devez vous déconnecter de tous les périphériques, puis vous reconnecter et vous assurer que vos données n'ont pas été altérées.",
-        "SESSION_COMPROMISED_TITLE" => "Votre compte peut avoir été compromis",
+        "SESSION_COMPROMISED" => [
+            "@TRANSLATION"  => "Votre session a été compromise. Vous devez vous déconnecter de tous les périphériques, puis vous reconnecter et vous assurer que vos données n'ont pas été altérées.",
+            "TITLE"         => "Votre compte peut avoir été compromis"
+        ],
         "SESSION_EXPIRED"           => "Votre session a expiré. Veuillez vous connecter à nouveau.",
 
         "SETTINGS" => [
@@ -114,7 +116,7 @@ return [
             "INVALID"           => "Cette requête de réinitialisation de mot de passe n'a pas pu être trouvée ou a expiré. Veuillez réessayer <a href=\"{{url}}\"> de soumettre votre demande <a>.",
             "PAGE"              => "Obtenir un lien pour réinitialiser votre mot de passe.",
             "REQUEST_CANNED"    => "Demande de mot de passe perdu annulée.",
-            "REQUEST_SENT"      => "Un lien de réinitialisation du mot de passe a été envoyé à {{email}}."
+            "REQUEST_SENT"      => "Si l'adresse e-mail <strong>{{email}}</strong> correspond à un compte dans notre système, un lien de réinitialisation de mot de passe sera envoyé à <strong>{{email}}</strong>."
         ],
 
         "RESET" => [
@@ -148,7 +150,7 @@ return [
         "WELCOME"        => "L'inscription est rapide et simple."
     ],
 
-    "RATE_LIMIT_EXCEEDED"       => "La limite tarifaire pour cette action a été dépassée. Vous devez attendre un autre {{délai}} secondes avant de pouvoir effectuer une autre tentative.",
+    "RATE_LIMIT_EXCEEDED"       => "La limite de tentatives pour cette action a été dépassée. Vous devez attendre {{delay}} secondes avant de pouvoir effectuer une autre tentative.",
     "REMEMBER_ME"               => "Se souvenir de moi!",
     "REMEMBER_ME_ON_COMPUTER"   => "Se souvenir de moi sur cet ordinateur (non recommandé pour les ordinateurs publics)",
 

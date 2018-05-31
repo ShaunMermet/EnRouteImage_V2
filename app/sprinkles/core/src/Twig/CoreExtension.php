@@ -3,7 +3,6 @@
  * UserFrosting (http://www.userfrosting.com)
  *
  * @link      https://github.com/userfrosting/UserFrosting
- * @copyright Copyright (c) 2013-2016 Alexander Weissman
  * @license   https://github.com/userfrosting/UserFrosting/blob/master/licenses/UserFrosting.md (MIT License)
  */
 namespace UserFrosting\Sprinkle\Core\Twig;
@@ -16,7 +15,7 @@ use UserFrosting\Sprinkle\Core\Util\Util;
  *
  * @author Alex Weissman (https://alexanderweissman.com)
  */
-class CoreExtension extends \Twig_Extension
+class CoreExtension extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
 {
 
     /**

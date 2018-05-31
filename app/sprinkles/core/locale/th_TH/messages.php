@@ -1,14 +1,14 @@
 <?php
-
 /**
- * th_TH
+ * UserFrosting (http://www.userfrosting.com)
  *
- * Thai message token translations for the core sprinkle.
+ * @link      https://github.com/userfrosting/UserFrosting
+ * @license   https://github.com/userfrosting/UserFrosting/blob/master/licenses/UserFrosting.md (MIT License)
  *
- * @package UserFrosting
- * @link http://www.userfrosting.com/components/#i18n
+ * Thai message token translations for the 'core' sprinkle.
+ *
+ * @package userfrosting\i18n\th
  * @author Karuhut Komol
- *
  */
 
 return [
@@ -45,14 +45,13 @@ return [
         "@TRANSLATION" => "ภาษา"
     ],
 
-    "MAIL_ERROR" => "เกิดข้อผิดพลาดร้ายแรงระหว่างการพยายามส่งอีเมล กรุณาติดต่อผู้ดูแลระบบของเซิฟเวอร์นี้ หากคุณเป็นผู้ดูแล กรุณาตรวจสอบบันทึกอีเมลของ UF",
-
     "NAME"  => "ชื่อ",
     "NAVIGATION" => "เมนูนำทาง",
 
     "PAGINATION" => [
         "GOTO" => "ข้ามไปยังหน้า",
-        "SHOW" => "แสดง"
+        "SHOW" => "แสดง",
+        "OUTPUT" => "{startRow} to {endRow} of {filteredRows} ({totalRows})"
     ],
     "PRIVACY" => "นโยบายความเป็นส่วนตัว",
 

@@ -1,13 +1,16 @@
 <?php
-
 /**
- * de_DE
+ * UserFrosting (http://www.userfrosting.com)
  *
- * German generic message translations for the core sprinkle.
+ * @link      https://github.com/userfrosting/UserFrosting
+ * @license   https://github.com/userfrosting/UserFrosting/blob/master/licenses/UserFrosting.md (MIT License)
  *
- * @package UserFrosting
- * @link http://www.userfrosting.com/components/#i18n
- * @author @X-Anonymous-Y
+ * German message token translations for the 'core' sprinkle.
+ *
+ * @package userfrosting\i18n\de
+ * @author X-Anonymous-Y
+ * @author kevinrombach
+ * @author splitt3r
  */
 
 return [
@@ -19,6 +22,11 @@ return [
         "LENGTH_RANGE"                  => "{{label}} muss zwischen {{min}} und {{max}} Zeichen lang sein.",
         "NO_LEAD_WS"                    => "Der Wert für <strong>{{label}}</strong> kann nicht mit Leerzeichen, Tabulatoren oder anderen Leerzeichen beginnen.",
         "NO_TRAIL_WS"                   => "Der Wert für <strong>{{label}}</strong> kann nicht mit Leerzeichen, Tabulatoren oder anderen Leerzeichen enden.",
-        "REQUIRED"                      => "Bitte geben Sie einen Wert für <strong>{{label}}</strong> an."
+        "REQUIRED"                      => "Bitte geben Sie einen Wert für <strong>{{label}}</strong> an.",
+        "SPRUNJE" => [
+            "BAD_FILTER"                => "<strong>{{name}}</strong> ist kein gültiger Filter für dieses Sprunje.",
+            "BAD_LIST"                  => "<strong>{{name}}</strong> ist kein gültige Liste für dieses Sprunje.",
+            "BAD_SORT"                  => "<strong>{{name}}</strong> ist kein gültiges Sortierungsfeld für dieses Sprunje."
+        ]
     ]
 ];

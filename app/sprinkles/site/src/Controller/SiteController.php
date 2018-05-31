@@ -8,13 +8,13 @@ use UserFrosting\Support\Exception\ForbiddenException;
 use Alchemy\Zippy\Zippy;
 use Chumper\Zipper\Zipper;
 use UserFrosting\Sprinkle\Site\Controller\UploadHandler;
-use UserFrosting\Sprinkle\Site\Model\SegImage;
-use UserFrosting\Sprinkle\Site\Model\SegArea;
-use UserFrosting\Sprinkle\Site\Model\ImgArea;
-use UserFrosting\Sprinkle\Site\Model\ImgLinks;
-use UserFrosting\Sprinkle\Site\Model\Set;
-use UserFrosting\Sprinkle\Site\Model\SegSet;
-use UserFrosting\Sprinkle\Site\Model\Token;
+use UserFrosting\Sprinkle\Site\Database\Models\SegImage;
+use UserFrosting\Sprinkle\Site\Database\Models\SegArea;
+use UserFrosting\Sprinkle\Site\Database\Models\ImgArea;
+use UserFrosting\Sprinkle\Site\Database\Models\ImgLinks;
+use UserFrosting\Sprinkle\Site\Database\Models\Set;
+use UserFrosting\Sprinkle\Site\Database\Models\SegSet;
+use UserFrosting\Sprinkle\Site\Database\Models\Token;
 
 /**
  * Controller class for site-related requests.
@@ -768,8 +768,10 @@ class SiteController extends SimpleController
                                 ->with('group')
                                 ->first();
         */
+        error_log("api call for upload");
         error_log(print_r($_FILES,true));
-        return;
+        //return;
+        
         $validGroup = [1];
         foreach ($UserWGrp->group as $group) {
             array_push($validGroup, $group->id);
@@ -779,7 +781,7 @@ class SiteController extends SimpleController
         error_reporting(E_ALL | E_STRICT);
         $upload_handler = new UploadHandler($this->ci,array(
             'groups' => $validGroup,
-            'param_name' => 'yo'
+            'param_name' => 'file'
             ));
 
     }
@@ -950,6 +952,8 @@ class SiteController extends SimpleController
         $params = $request->getParsedBody();
         $data = json_decode(json_encode($params), FALSE);
 
+        error_log("language");
+        error_log(print_r($data,true));
 
         $config = $this->ci->config;
         $config['site.locales.selector'] = $data->locale;

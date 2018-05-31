@@ -1,8 +1,8 @@
-# Config module for UserFrosting
+# Config module for UserFrosting 4.1
 
 ## Usage
 
-Create a file `default.php`, in a directory `/path/to/main/config/`:
+Create a file `default.php`, in a directory `/path/to/core/config/`:
 
 **default.php**
 
@@ -15,20 +15,6 @@ return [
         ]
     ]
 ];
-```
-
-Instantiate the config object, and use `setPaths` to specify path(s) where your config files may be located.  Config files in multiple paths will be merged in the order in which the paths are specified.
-
-```
-$config = new \UserFrosting\Config\Config();
-$config->setPaths([
-    '/path/to/main/config/'
-]);
-
-$config->loadConfigurationFiles();
-
-echo $config->get('contacts.housekeeper.name');
-// Prints 'Alex'
 ```
 
 Suppose now you have another config file which can override values in this base config file.  For example, in `/path/to/plugin/config/`, you have:
@@ -45,22 +31,44 @@ return [
 ];
 ```
 
-Now you can override the base config value by adding this path:
+You can generate an ordered list of these configuration files using the `ConfigPathBuilder` class, and merge them together using an instance of `UserFrosting\Support\Respository\Loader\ArrayFileLoader`.
+
+### Path builder
+
+Create `UniformResourceLocator` and `ConfigPathBuilder` classes to build a list of configuration files:
 
 ```
-$config = new \UserFrosting\Config\Config();
-$config->setPaths([
-    '/path/to/main/config/',
-    '/path/to/plugin/config/'
-]);
+$locator = new UniformResourceLocator(__DIR__);
+$locator->addPath('config', '', 'path/to/core/config');
+$locator->addPath('config', '', 'path/to/plugin/config');
 
-$config->loadConfigurationFiles();
+$builder = new ConfigPathBuilder($locator, 'config://');
+$paths = $builder->buildPaths();
 
+// Generates a list of paths:
+[
+    '/core/config/default.php'
+    '/plugin/config/default.php'
+]
+```
+
+### Data loader
+
+You can then use the `ArrayFileLoader` class to load and merge all configuration data from this list of paths:
+
+```
+$loader = new \UserFrosting\Support\Respository\Loader\ArrayFileLoader($builder->buildPaths());
+$config = new \UserFrosting\Support\Respository\Repository($loader->load());
+```
+
+Config files in multiple paths will be merged in the order in which the paths are specified.  You can now access your configuration data via the standard `Repository` methods:
+
+```
 echo $config->get('contacts.housekeeper.name');
-// Prints 'Alex "the man" Weissman'
+// Prints 'Alex'
 ```
 
-You can also specify environment-specific config files in each path.  If an environment name is passed to `loadConfigurationFiles`, `Config` will merge in the environment-specific file in a path immediately after merging in `default.php`:
+You can also specify environment-specific config files in each path.  If an environment name is passed to `buildPaths()`, `ConfigPathBuilder` will merge in the environment-specific file in a path immediately after merging in `default.php`:
 
 **development.php**
 
@@ -72,25 +80,14 @@ return [
 ];
 ```
 
-Since `Config` implements `Illuminate\Config\Repository`, which itself implements PHP's `ArrayAccess`, you can use a `UserFrosting\Config` object in any place that requires an array-like object.  For example, you should be able to inject it directly into Slim 3's [Container](http://www.slimframework.com/docs/objects/application.html#application-configuration) on application initialization:
+To merge this in, you would call:
 
 ```
-$app = new \Slim\App();
+$paths = $builder->buildPaths('development');
+```
 
-$container = $app->getContainer();    
-    
-// Site config object (separate from Slim settings)
-$container['config'] = function ($c) {
-    // Create and inject new config item
-    $config = new \UserFrosting\Config\Config();
+## Testing
 
-    $config->setPaths([
-        '/path/to/main/config/',
-        '/path/to/plugin/config/'
-    ]);
-    
-    $config->loadConfigurationFiles('development');
-    
-    return $config;
-};
+```
+phpunit --bootstrap tests/bootstrap.php tests
 ```

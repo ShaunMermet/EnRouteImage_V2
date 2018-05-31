@@ -3,21 +3,37 @@
 namespace UserFrosting\I18n;
 
 use PHPUnit\Framework\TestCase;
+use RocketTheme\Toolbox\ResourceLocator\UniformResourceLocator;
+use UserFrosting\I18n\LocalePathBuilder;
+use UserFrosting\Support\Repository\Loader\ArrayFileLoader;
 
 class MessageTranslatorTest extends TestCase
 {
+    protected $basePath;
+
+    protected $locator;
+
+    public function setUp()
+    {
+        $this->basePath = __DIR__ . '/data';
+        $this->locator = new UniformResourceLocator($this->basePath);
+
+        // Add them one at a time to simulate how they are added in SprinkleManager
+        $this->locator->addPath('locale', '', 'core/locale');
+        $this->locator->addPath('locale', '', 'account/locale');
+        $this->locator->addPath('locale', '', 'admin/locale');
+    }
 
     public function testTranslateEN()
     {
-
-        // Create the $translator object
-        $translator = new MessageTranslator();
-
-        // Add search paths for the test locale files relative to this file. We won't test setPaths with this test (yet)
-        $translator->setPaths([dirname(__FILE__)."/locale"]);
-
         // Load the en_US locale files, no user locale
-        $translator->loadLocaleFiles('en_US');
+        $builder = new LocalePathBuilder($this->locator, 'locale://');
+        $builder->addLocales('en_US');
+        $paths = $builder->buildPaths();
+        $loader = new ArrayFileLoader($paths);
+    
+        // Create the $translator object
+        $translator = new MessageTranslator($loader->load());
 
         // Test most basic functionality
         $this->assertEquals($translator->translate('USERNAME'), "Username");
@@ -110,15 +126,13 @@ class MessageTranslatorTest extends TestCase
 
     public function testTranslateFR()
     {
+        // Load the en_US locale files as base and fr_FR on top
+        $builder = new LocalePathBuilder($this->locator, 'locale://', ['en_US', 'fr_FR']);
+        $paths = $builder->buildPaths();
+        $loader = new ArrayFileLoader($paths);
 
         // Create the $translator object
-        $translator = new MessageTranslator();
-
-        // Add search paths for the test locale files relative to this file. We won't test setPaths with this test (yet)
-        $translator->setPaths([dirname(__FILE__)."/locale"]);
-
-        // Load the en_US locale files as base and fr_FR on top
-        $translator->loadLocaleFiles(['en_US', 'fr_FR']);
+        $translator = new MessageTranslator($loader->load());
 
         // Test most basic functionality
         $this->assertEquals($translator->translate('USERNAME'), "Nom d'utilisateur");
@@ -204,16 +218,16 @@ class MessageTranslatorTest extends TestCase
         $this->assertEquals($translator->translate("TEST_LIMIT", ["min" => 4, "max" => 200]), "Votre test doit être entre 4 et 200 patates.");
     }
 
-    public function testReadme() {
+    public function testReadme()
+    {
+        // Load the en_US locale files, no user locale
+        $builder = new LocalePathBuilder($this->locator, 'locale://');
+        $builder->setLocales('en_US');
+        $paths = $builder->buildPaths();
+        $loader = new ArrayFileLoader($paths);
 
         // Create the $translator object
-        $translator = new MessageTranslator();
-
-        // Add search paths for the test locale files relative to this file. We won't test setPaths with this test (yet)
-        $translator->setPaths([dirname(__FILE__)."/locale"]);
-
-        // Load the en_US locale files, no user locale
-        $translator->loadLocaleFiles('en_US');
+        $translator = new MessageTranslator($loader->load());
 
         // Test from the README
         $carMake = "Honda";
@@ -239,29 +253,22 @@ class MessageTranslatorTest extends TestCase
         ]), "There's a child and no adults in the white Honda Civic 1993");
     }
 
-    // Test for the `getAvailableLocales` function
-    public function test_getAvaialbleLocale() {
-        $translator = new MessageTranslator();
-        //Load the paths twice to make sure there's no duplicate
-        $translator->setPaths([dirname(__FILE__)."/locale", dirname(__FILE__)."/locale"]);
-        $this->assertEquals($translator->getAvailableLocales(), ['en_US', 'fr_FR']);
-    }
-
     // Test for placeholder applied to `$key` if it doesn't match any languages keys
-    public function testWithoutKeys() {
+    public function testWithoutKeys()
+    {
         $translator = new MessageTranslator();
         $this->assertEquals($translator->translate("You are {{status}}", ['status' => 'dumb']), "You are dumb");
     }
 
-    public function testTwigFilters() {
-        // Create the $translator object
-        $translator = new MessageTranslator();
-
-        // Add search paths for the test locale files relative to this file. We won't test setPaths with this test (yet)
-        $translator->setPaths([dirname(__FILE__)."/locale"]);
-
+    public function testTwigFilters()
+    {
         // Load the en_US locale files, no user locale
-        $translator->loadLocaleFiles('en_US');
+        $builder = new LocalePathBuilder($this->locator, 'locale://', 'en_US');
+        $paths = $builder->buildPaths();
+        $loader = new ArrayFileLoader($paths);
+
+        // Create the $translator object
+        $translator = new MessageTranslator($loader->load());
 
         //ESCAPE : http://twig.sensiolabs.org/doc/2.x/filters/escape.html
         //RAW : http://twig.sensiolabs.org/doc/2.x/filters/raw.html

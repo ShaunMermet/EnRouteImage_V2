@@ -3,13 +3,12 @@
  * UserFrosting (http://www.userfrosting.com)
  *
  * @link      https://github.com/userfrosting/UserFrosting
- * @copyright Copyright (c) 2013-2017 Alexander Weissman
  * @license   https://github.com/userfrosting/UserFrosting/blob/master/licenses/UserFrosting.md (MIT License)
  */
 namespace UserFrosting\Sprinkle\Account\Authorize;
 
 use Interop\Container\ContainerInterface;
-use UserFrosting\Sprinkle\Site\Model\User;
+use UserFrosting\Sprinkle\Site\Database\Models\User;
 
 /**
  * AuthorizationManager class.
@@ -68,7 +67,7 @@ class AuthorizationManager
      *
      * Determine if this user has access to the given $slug under the given $params.
      *
-     * @param UserFrosting\Sprinkle\Account\Model\User $user
+     * @param UserFrosting\Sprinkle\Account\Database\Models\User $user
      * @param string $slug The permission slug to check for access.
      * @param array $params[optional] An array of field names => values, specifying any additional data to provide the authorization module
      * when determining whether or not this user has access.
@@ -148,7 +147,8 @@ class AuthorizationManager
         $permissionsInfo = [];
         foreach ($permissions as $permission) {
             $permissionData = array_only($permission->toArray(), ['id', 'slug', 'name', 'conditions', 'description']);
-            $permissionData['roles_via'] = $permission->roles_via->pluck('id')->all();
+            // Remove this until we can find an efficient way to only load these once during debugging
+            //$permissionData['roles_via'] = $permission->roles_via->pluck('id')->all();
             $permissionsInfo[] = $permissionData;
         }
 

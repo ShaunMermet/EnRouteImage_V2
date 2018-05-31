@@ -1,26 +1,21 @@
 <?php
-
 /**
- * de_DE
+ * UserFrosting (http://www.userfrosting.com)
  *
- * German message token translations for the error pages
+ * @link      https://github.com/userfrosting/UserFrosting
+ * @license   https://github.com/userfrosting/UserFrosting/blob/master/licenses/UserFrosting.md (MIT License)
  *
- * @package UserFrosting
- * @link http://www.userfrosting.com/components/#i18n
- * @author @X-Anonymous-Y
+ * German message token translations for the 'core' sprinkle.
+ *
+ * @package userfrosting\i18n\de
+ * @author X-Anonymous-Y
+ * @author kevinrombach
+ * @author splitt3r
  */
 
 return [
     "ERROR" => [
         "@TRANSLATION"                  => "Fehler",
-
-        "TITLE"                         => "Störung in der Kraft",
-        "DESCRIPTION"                   => "Wir haben eine große Störung in der Macht erkannt.",
-        "ENCOUNTERED"                   => "Uhhh ... etwas ist passiert. Wir wissen nicht was.",
-        "DETAIL"                        => "Hier haben wir:",
-        "RETURN"                        => "Klicken Sie <a href='{{url}}'>Hier</a>, um zur Startseite zurückzukehren.",
-
-        "SERVER"                        => "Hoppla, sieht aus als hätte der Server möglicherweise gepatzt. Wenn Sie ein Administrator sind, überprüfen Sie bitte die PHP- oder UF-Fehlerprotokolle.",
 
         "400" => [
             "TITLE"                     => "Fehler 400: Ungültige Anforderung",
@@ -40,6 +35,19 @@ return [
             "DESCRIPTION"               => "Einige UserFrosting-Konfigurationsanforderungen wurden nicht erfüllt.",
             "DETAIL"                    => "Etwas stimmt hier nicht.",
             "RETURN"                    => "Bitte beheben Sie die folgenden Fehler dann laden Sie die <a href='{{url}}'>Website</a> neu."
-        ]
+        ],
+
+        "DESCRIPTION"                   => "Wir haben eine große Störung in der Macht erkannt.",
+        "DETAIL"                        => "Hier haben wir:",
+
+        "ENCOUNTERED"                   => "Uhhh ... etwas ist passiert. Wir wissen nicht was.",
+
+        "MAIL"                        => "Schwerwiegender Fehler beim Mailversand, wenden Sie sich an Ihren Serveradministrator. Wenn Sie der Administrator sind, überprüfen Sie bitte das UF-Mail-Protokoll.",
+
+        "RETURN"                        => "Klicken Sie <a href='{{url}}'>Hier</a>, um zur Startseite zurückzukehren.",
+
+        "SERVER"                        => "Hoppla, sieht aus als hätte der Server möglicherweise gepatzt. Wenn Sie ein Administrator sind, überprüfen Sie bitte die PHP- oder UF-Fehlerprotokolle.",
+
+        "TITLE"                         => "Störung in der Kraft"
     ]
 ];

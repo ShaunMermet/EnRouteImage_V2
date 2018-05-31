@@ -44,11 +44,8 @@
     "/node_modules",
     "/bower_components",
     "/.git",
-    "/addons",
     "/beta-testing",
-    "/css",
     "/docs",
-    "/js",
     "/testing",
     "/Gruntfile.js",
     "/package.json",
@@ -77,14 +74,14 @@
     "grunt-jscs": "^3.0.0",
     "grunt-string-replace": "^1.2.1"
   },
-  "version": "2.27.8",
-  "_release": "2.27.8",
+  "version": "2.28.15",
+  "_release": "2.28.15",
   "_resolution": {
     "type": "version",
-    "tag": "v2.27.8",
-    "commit": "d73e9513e0a487467e3b1dd394b1e38bb1af6cf3"
+    "tag": "v2.28.15",
+    "commit": "c1c55c56886b20d774f2007338d85fb2535d3148"
   },
   "_source": "https://github.com/Mottie/tablesorter.git",
-  "_target": "~2.27.8",
+  "_target": "2.28",
   "_originalSource": "jquery.tablesorter"
 }

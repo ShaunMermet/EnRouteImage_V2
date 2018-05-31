@@ -3,7 +3,6 @@
  * UserFrosting (http://www.userfrosting.com)
  *
  * @link      https://github.com/userfrosting/UserFrosting
- * @copyright Copyright (c) 2013-2016 Alexander Weissman
  * @license   https://github.com/userfrosting/UserFrosting/blob/master/licenses/UserFrosting.md (MIT License)
  */
 namespace UserFrosting\Sprinkle\Admin\Sprunje;
@@ -36,34 +35,13 @@ class ActivitySprunje extends Sprunje
     protected $name = 'activities';
 
     /**
-     * @var bool Keep track of whether the users table has already been joined on the query.
-     */
-    protected $joinedUsers = false;
-
-    /**
      * Set the initial query used by your Sprunje.
      */
     protected function baseQuery()
     {
         $query = $this->classMapper->createInstance('activity');
 
-        return $query;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function applyTransformations($collection)
-    {
-        // Exclude password field from results
-        $collection->transform(function ($item, $key) {
-            if (isset($item->user)) {
-                unset($item->user->password);
-            }
-            return $item;
-        });
-
-        return $collection;
+        return $query->joinUser();
     }
 
     /**
@@ -71,26 +49,20 @@ class ActivitySprunje extends Sprunje
      *
      * @param Builder $query
      * @param mixed $value
-     * @return Builder
+     * @return $this
      */
     protected function filterUser($query, $value)
     {
-        if (!$this->joinedUsers) {
-            $query = $query->joinUser();
-        }
-
-        $this->joinedUsers = true;
-
         // Split value on separator for OR queries
         $values = explode($this->orSeparator, $value);
-        return $query->where(function ($query) use ($values) {
+        $query->where(function ($query) use ($values) {
             foreach ($values as $value) {
-                $query = $query->orLike('users.first_name', $value)
-                                ->orLike('users.last_name', $value)
-                                ->orLike('users.email', $value);
+                $query->orLike('users.first_name', $value)
+                    ->orLike('users.last_name', $value)
+                    ->orLike('users.email', $value);
             }
-            return $query;
         });
+        return $this;
     }
 
     /**
@@ -98,16 +70,11 @@ class ActivitySprunje extends Sprunje
      *
      * @param Builder $query
      * @param string $direction
-     * @return Builder
+     * @return $this
      */
     protected function sortUser($query, $direction)
     {
-        if (!$this->joinedUsers) {
-            $query = $query->joinUser();
-        }
-
-        $this->joinedUsers = true;
-
-        return $query->orderBy('users.last_name', $direction);
+        $query->orderBy('users.last_name', $direction);
+        return $this;
     }
 }

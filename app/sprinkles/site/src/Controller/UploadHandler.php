@@ -12,14 +12,14 @@
  */
 namespace UserFrosting\Sprinkle\Site\Controller;
 
-use UserFrosting\Sprinkle\Site\Model\ImgCategories;
-use UserFrosting\Sprinkle\Site\Model\ImgArea;
-use UserFrosting\Sprinkle\Site\Model\ImgLinks;
-use UserFrosting\Sprinkle\Site\Model\SegImage;
-use UserFrosting\Sprinkle\Site\Model\SegCategory;
-use UserFrosting\Sprinkle\Site\Model\SegArea;
-use UserFrosting\Sprinkle\Site\Model\Set;
-use UserFrosting\Sprinkle\Site\Model\SegSet;
+use UserFrosting\Sprinkle\Site\Database\Models\ImgCategories;
+use UserFrosting\Sprinkle\Site\Database\Models\ImgArea;
+use UserFrosting\Sprinkle\Site\Database\Models\ImgLinks;
+use UserFrosting\Sprinkle\Site\Database\Models\SegImage;
+use UserFrosting\Sprinkle\Site\Database\Models\SegCategory;
+use UserFrosting\Sprinkle\Site\Database\Models\SegArea;
+use UserFrosting\Sprinkle\Site\Database\Models\Set;
+use UserFrosting\Sprinkle\Site\Database\Models\SegSet;
 use UserFrosting\Sprinkle\Site\Sprunje\ImgLinksSprunje;
 use UserFrosting\Sprinkle\Site\Sprunje\SegImageSprunje;
 use Illuminate\Database\QueryException;

@@ -1,14 +1,14 @@
 <?php
-
 /**
- * pt_PT
+ * UserFrosting (http://www.userfrosting.com)
  *
- * PT Portuguese message token translations for the core sprinkle.
+ * @link      https://github.com/userfrosting/UserFrosting
+ * @license   https://github.com/userfrosting/UserFrosting/blob/master/licenses/UserFrosting.md (MIT License)
  *
- * @package UserFrosting
- * @link http://www.userfrosting.com/components/#i18n
+ * Portuguese message token translations for the 'account' sprinkle.
+ *
+ * @package userfrosting\i18n\pt
  * @author Bruno Silva (brunomnsilva@gmail.com)
- *
  */
 
 return [
@@ -26,8 +26,10 @@ return [
         "MASTER_NOT_EXISTS" => "Não pode registrar uma conta enquanto a conta principal não for criada!",
         "MY"                => "A minha conta",
 
-        "SESSION_COMPROMISED"       => "A sua sessão foi comprometida.  Deverá fechar todas as sessões, voltar a iniciar sessão e verificar que os seus dados não foram alterados por alheios.",
-        "SESSION_COMPROMISED_TITLE" => "A sua sessão pode ter sido comprometida",
+        "SESSION_COMPROMISED" => [
+            "@TRANSLATION"  => "A sua sessão foi comprometida.  Deverá fechar todas as sessões, voltar a iniciar sessão e verificar que os seus dados não foram alterados por alheios.",
+            "TITLE"         => "A sua sessão pode ter sido comprometida"
+        ],
         "SESSION_EXPIRED"       => "A sua sessão expirou. Por favor inicie nova sessão.",
 
         "SETTINGS" => [
@@ -107,7 +109,7 @@ return [
             "INVALID"           => "This password reset request could not be found, or has expired.  Please try <a href=\"{{url}}\">resubmitting your request<a>.",
             "PAGE"              => "Obtenha um link para fazer reset à sua password.",
             "REQUEST_CANNED"    => "Pedido de password esquecida foi cancelado.",
-            "REQUEST_SENT"      => "Um link de reset da sua password foi enviado para {{email}}."
+            "REQUEST_SENT"      => "Se o email <strong>{{email}}</strong> corresponder a uma conta em nosso sistema, um link de redefinição de senha será enviado para <strong>{{email}}</strong>."
         ],
 
         "RESET" => [

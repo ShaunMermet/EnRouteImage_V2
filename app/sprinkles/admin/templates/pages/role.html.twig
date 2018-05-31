@@ -1,4 +1,4 @@
-{% extends "layouts/dashboard.html.twig" %}
+{% extends "pages/abstract/dashboard.html.twig" %}
 
 {% block stylesheets_page %}
     <!-- Page-group-specific CSS asset bundle -->
@@ -29,6 +29,13 @@
                                                 <i class="fa fa-edit fa-fw"></i> {{translate('EDIT')}}
                                             </a>
                                         </li>
+                                        {% if 'permissions' not in tools.hidden %}
+                                        <li>
+                                            <a href="#" class="js-role-permissions" data-slug="{{role.slug}}">
+                                            <i class="fa fa-key"></i> {{translate("PERMISSION.MANAGE")}}
+                                            </a>
+                                        </li>
+                                        {% endif %}
                                         {% if 'delete' not in tools.hidden %}
                                             <li>
                                                 <a href="#" class="js-role-delete" data-slug="{{role.slug}}">
@@ -68,14 +75,29 @@
             <div id="widget-role-permissions" class="box box-primary">
                 <div class="box-header">
                     <h3 class="box-title"><i class="fa fa-fw fa-key"></i> {{translate('PERMISSION', 2)}}</h3>
-                    <div class="box-tools pull-right">
-                        <button class="btn btn-sm btn-default js-download-table"><i class="fa fa-table"></i> {{ translate("DOWNLOAD.CSV") }}</button>
-                    </div>
+                    {% include "tables/table-tool-menu.html.twig" %}
                 </div>
                 <div class="box-body">
-                    {% include "components/tables/permissions.html.twig" with {
+                    {% include "tables/permissions.html.twig" with {
                             "table" : {
                                 "id" : "table-role-permissions"
+                            }
+                        }
+                    %}
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <div id="widget-role-users" class="box box-primary">
+                <div class="box-header">
+                    <h3 class="box-title"><i class="fa fa-fw fa-key"></i> {{translate('USER', 2)}}</h3>
+                    {% include "tables/table-tool-menu.html.twig" %}
+                </div>
+                <div class="box-body">
+                    {% include "tables/users.html.twig" with {
+                            "table" : {
+                                "id" : "table-role-users",
+                                "columns" : ["last_activity"]
                             }
                         }
                     %}
@@ -87,7 +109,7 @@
 {% block scripts_page %}
     <!-- Include page variables -->
     <script>
-    {% include "components/page.js.twig" %}
+    {% include "pages/partials/page.js.twig" %}
 
     // Add user name
     page = $.extend(

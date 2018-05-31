@@ -1,14 +1,14 @@
 <?php
-
 /**
- * pt_PT
+ * UserFrosting (http://www.userfrosting.com)
  *
- * PT Portuguese message token translations for the core sprinkle.
+ * @link      https://github.com/userfrosting/UserFrosting
+ * @license   https://github.com/userfrosting/UserFrosting/blob/master/licenses/UserFrosting.md (MIT License)
  *
- * @package UserFrosting
- * @link http://www.userfrosting.com/components/#i18n
+ * Portuguese message token translations for the 'core' sprinkle.
+ *
+ * @package userfrosting\i18n\pt
  * @author Bruno Silva (brunomnsilva@gmail.com)
- *
  */
 
 return [
@@ -45,14 +45,13 @@ return [
         "@TRANSLATION" => "Localização"
     ],
 
-    "MAIL_ERROR" => "Erro fatal ao tentar enviar email, contate o administrator do servidor.  Se é administrador, por favor consulte o log de mail do UF.",
-
     "NAME"  => "Nome",
     "NAVIGATION" => "Navegação",
 
     "PAGINATION" => [
         "GOTO" => "Saltar para Página",
-        "SHOW" => "Mostrar"
+        "SHOW" => "Mostrar",
+        "OUTPUT" => "{startRow} to {endRow} of {filteredRows} ({totalRows})"
     ],
     "PRIVACY" => "Política de Privacidade",
 

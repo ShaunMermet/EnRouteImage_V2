@@ -1,14 +1,14 @@
 <?php
-
 /**
- * th_TH
+ * UserFrosting (http://www.userfrosting.com)
+ *
+ * @link      https://github.com/userfrosting/UserFrosting
+ * @license   https://github.com/userfrosting/UserFrosting/blob/master/licenses/UserFrosting.md (MIT License)
  *
  * Thai message token translations for the 'account' sprinkle.
  *
- * @package UserFrosting
- * @link http://www.userfrosting.com/components/#i18n
+ * @package userfrosting\i18n\th
  * @author Karuhut Komol
- *
  */
 
 return [
@@ -107,7 +107,7 @@ return [
             "INVALID"           => "ขอรีเซ็ตรหัสผ่านนี้ไม่มีอยู่ หรือหมดอายุไปแล้ว กรุณาลอง <a href=\"{{url}}\">ส่งคำขอของคุณอีกครั้ง<a>",
             "PAGE"              => "รับลิงก์สำหรับการรีเซ็ตรหัสผ่านของคุณ",
             "REQUEST_CANNED"    => "คำขอลืมรหัสผ่านได้ถูกยกเลิก",
-            "REQUEST_SENT"      => "ลิงก์รีเซ็ตรหัสผ่านได้ส่งไปยัง {{email}}"
+            "REQUEST_SENT"      => "หากอีเมล <strong>{{email}}</strong> ตรงกับบัญชีในระบบของเราลิงก์การรีเซ็ตรหัสผ่านจะถูกส่งไปที่ <strong>{{email}}</strong>"
         ],
 
         "RESET" => [

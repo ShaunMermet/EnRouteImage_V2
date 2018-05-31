@@ -1,10 +1,11 @@
-# I18n module for UserFrosting
+# I18n module for UserFrosting 4.1
 
-Louis Charette & Alexander Weissman, 2016
+Louis Charette & Alexander Weissman, 2016-2017
 
 The I18n module handles translation tasks for UserFrosting.  The `MessageTranslator` class can be used as follows:
 
 ## Basic usage
+
 ### Step 1 - Set up language file(s).
 
 A language file returns an array mapping _message keys_ to _localized messages_.  Messages may optionally have placeholders.  For example:
@@ -31,24 +32,36 @@ return array(
 );
 ```
 
-### Step 2 - Set up translator object
+### Step 2 - Set up UniformResourceLocator and LocalePathBuilder classes:
 
 ```
-$translator = new \UserFrosting\I18n\MessageTranslator();
-$translator->setPaths("locale/");
-$translator->loadLocaleFiles("en_US");
+// Set up a locator class
+$locator = new UniformResourceLocator(__DIR__);
+$locator->addPath('locale', '', 'locale');
+
+// Build paths to the desired languages
+$builder = new LocalePathBuilder($locator, 'locale://', ['en_US']);
 ```
 
-The above will load the files located in the `locale/en_US` directory. You can also define a more than one language using multiple `loadLocaleFiles`. The other languages will be loaded on top of the other. For example:
+The `LocalePathBuilder` will build a list of the files located in the `locale/en_US` directory. You can also load paths for more than one language in the array passed to the constructor, or using the `addLocales` method. The languages will be merged together in the order in which they were added. For example:
 
 ```
-$translator->loadLocaleFiles("en_US");
-$translator->loadLocaleFiles("es_ES");
+$builder = new LocalePathBuilder($locator, 'locale://', ['en_US', 'es_ES']);
 ```
 
-This will use the `english` translation as a base and load the `spanish` translation on top. All keys not found in the spanish translation will fallback to the english one.
+This will use the English (`en_US`) translation as a base and load the Spanish (`es_ES`) translation on top. All keys not found in the Spanish translation will fallback to the English one.
 
-### Step 3 - Do a translation!
+### Step 3 - Initialize a `MessageTranslator` object:
+
+```
+// Load and combine translation data from the locale files
+$loader = new ArrayFileLoader($builder->buildPaths());
+
+// Create the MessageTranslator object
+$translator = new MessageTranslator($loader->load());
+```
+
+### Step 4 - Do a translation!
 
 ```
 echo $translator->translate("ACCOUNT_USER_CHAR_LIMIT", [
@@ -385,4 +398,10 @@ echo $translator->translate("COMPLEX_STRING", [
 ### Result
 ```
 There's a child and no adults in the white Honda Civic 1993
+```
+
+## Testing
+
+```
+phpunit --bootstrap tests/bootstrap.php tests
 ```

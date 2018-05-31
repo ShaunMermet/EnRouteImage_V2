@@ -3,7 +3,6 @@
  * UserFrosting (http://www.userfrosting.com)
  *
  * @link      https://github.com/userfrosting/UserFrosting
- * @copyright Copyright (c) 2013-2016 Alexander Weissman
  * @license   https://github.com/userfrosting/UserFrosting/blob/master/licenses/UserFrosting.md (MIT License)
  */
 namespace UserFrosting\Sprinkle\Admin\Sprunje;
@@ -34,14 +33,16 @@ class PermissionSprunje extends Sprunje
         'info'
     ];
 
+    protected $excludeForAll = [
+        'info'
+    ];
+
     /**
      * {@inheritDoc}
      */
     protected function baseQuery()
     {
-        $query = $this->classMapper->createInstance('permission');
-
-        return $query;
+        return $this->classMapper->createInstance('permission')->newQuery();
     }
 
     /**
@@ -49,7 +50,7 @@ class PermissionSprunje extends Sprunje
      *
      * @param Builder $query
      * @param mixed $value
-     * @return Builder
+     * @return $this
      */
     protected function filterInfo($query, $value)
     {
@@ -61,20 +62,20 @@ class PermissionSprunje extends Sprunje
      *
      * @param Builder $query
      * @param mixed $value
-     * @return Builder
+     * @return $this
      */
     protected function filterProperties($query, $value)
     {
         // Split value on separator for OR queries
         $values = explode($this->orSeparator, $value);
-        return $query->where(function ($query) use ($values) {
+        $query->where(function ($query) use ($values) {
             foreach ($values as $value) {
-                $query = $query->orLike('slug', $value)
-                                ->orLike('conditions', $value)
-                                ->orLike('description', $value);
+                $query->orLike('slug', $value)
+                        ->orLike('conditions', $value)
+                        ->orLike('description', $value);
             }
-            return $query;
         });
+        return $this;
     }
 
     /**
@@ -82,10 +83,11 @@ class PermissionSprunje extends Sprunje
      *
      * @param Builder $query
      * @param string $direction
-     * @return Builder
+     * @return $this
      */
     protected function sortProperties($query, $direction)
     {
-        return $query->orderBy('slug', $direction);
+        $query->orderBy('slug', $direction);
+        return $this;
     }
 }

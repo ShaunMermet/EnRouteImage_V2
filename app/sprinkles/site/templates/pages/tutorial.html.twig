@@ -1,4 +1,4 @@
-{% extends "@core/pages/index.html.twig" %}
+{% extends "layouts/default.html.twig" %}
 
 {% block stylesheets_page_group %}
   {{ assets.css('css/site') | raw }}
@@ -51,7 +51,7 @@
 {% include 'components/tutorial2.html.twig' %}
 
 
-    <button class="btn-signup" type="button" style="display: block; margin: 0 auto;" onclick=location.href="account/sign-in">{{translate("BUTTON.SIGN_UP")}}</button>
+    <button class="btn-signup" type="button" style="display: block; margin: 0 auto;" onclick=location.href="{{site.uri.public}}/account/sign-in">{{translate("BUTTON.SIGN_UP")}}</button>
 
 <br>
 <br>

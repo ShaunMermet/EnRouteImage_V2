@@ -13,8 +13,8 @@ namespace UserFrosting\Sprinkle\Site\Controller;
 use UserFrosting\Sprinkle\Core\Controller\SimpleController;
 use UserFrosting\Support\Exception\ForbiddenException;
 use UserFrosting\Sprinkle\Account\Authenticate\Authenticator;
-use UserFrosting\Sprinkle\Site\Model\Set;
-use UserFrosting\Sprinkle\Site\Model\SegSet;
+use UserFrosting\Sprinkle\Site\Database\Models\Set;
+use UserFrosting\Sprinkle\Site\Database\Models\SegSet;
 
 /**
  * Controller class for category-related requests.

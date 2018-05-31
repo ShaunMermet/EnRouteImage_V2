@@ -4,8 +4,8 @@
   
   
   
-    <!-- Bootstrap core CSS -->
-    <link href="app/vendor/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <!-- Bootstrap core CSS
+    <link href="app/vendor/bootstrap/css/bootstrap.css" rel="stylesheet">-->
 
     <!-- Custom fonts for this template -->
     <link href="app/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
@@ -17,8 +17,9 @@
 
     <!-- Custom styles for this template -->
     <!--<link href="css/creative.min.css" rel="stylesheet">-->
-    {{ assets.css('css/frontpage') | raw }}
     {{ assets.css('css/site') | raw }}
+    {{ assets.css('css/frontpage') | raw }}
+    
 {% endblock %}
 
 
@@ -50,16 +51,16 @@
       </div>
     </nav>-->
     <header class="main-header">
-      {% include "components/default/main-nav.html.twig" %}
+      {% include "navigation/main-nav.html.twig" %}
     </header>
 
-    <header class="masthead" id="page-top" style="background-image: url(../efs/img/portfolio/MainR.jpg);">
+    <header class="masthead" id="page-top" style="background-image: url(efs/img/portfolio/MainR.jpg);">
       <div class="header-content">
         <div class="header-content-inner">
           <h1 id="homeHeading">{{translate("TOPPAGE.MAIN.TITLE")}}</h1>
           <hr>
           <p>{{translate("TOPPAGE.MAIN.SUBTITLE")}}</p>
-          <a class="btn btn-primary btn-xl" href="/tutorial">{{translate("TOPPAGE.MAIN.BUTTON")}}</a>
+          <a class="btn-index btn-primary btn-xl" href="tutorial">{{translate("TOPPAGE.MAIN.BUTTON")}}</a>
         </div>
       </div>
     </header>
@@ -71,7 +72,7 @@
             <h2 class="section-heading text-white">{{translate("TOPPAGE.ABOUT.TITLE")}}</h2>
             <hr class="light">
             <p class="text-faded">{{translate("TOPPAGE.ABOUT.DESCRIPTION")}}</p>
-            <a class="btn btn-default btn-xl sr-button" href="/account/sign-in">{{translate("TOPPAGE.ABOUT.BUTTON")}}</a>
+            <a class="btn-index btn-Idefault btn-xl sr-button" href="account/sign-in">{{translate("TOPPAGE.ABOUT.BUTTON")}}</a>
           </div>
         </div>
       </div>
@@ -124,7 +125,7 @@
       <div class="container-fluid">
         <div class="row no-gutter">
           <div class="col-lg-6 col-sm-6">
-            <a class="portfolio-box" href="/tutorial">
+            <a class="portfolio-box" href="tutorial">
               <img class="img-fluid" src="efs/img/portfolio/thumbnails/tuto.jpg" alt="">
               <div class="portfolio-box-caption">
                 <div class="portfolio-box-caption-content">
@@ -137,7 +138,7 @@
             </a>
           </div>
           <div class="col-lg-6 col-sm-6">
-            <a class="portfolio-box" href="/account/sign-in">
+            <a class="portfolio-box" href="account/sign-in">
               <img class="img-fluid" src="efs/img/portfolio/thumbnails/sign.jpg" alt="">
               <div class="portfolio-box-caption">
                 <div class="portfolio-box-caption-content">
@@ -216,7 +217,7 @@
     <!--<div class="call-to-action bg-dark">
       <div class="container text-center">
         <h2>Free Download at Start Bootstrap!</h2>
-        <a class="btn btn-default btn-xl sr-button" href="http://startbootstrap.com/template-overviews/creative/">Download Now!</a>
+        <a class="btn btn-Idefault btn-xl sr-button" href="http://startbootstrap.com/template-overviews/creative/">Download Now!</a>
       </div>
     </div>-->
 

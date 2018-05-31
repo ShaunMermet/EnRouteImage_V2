@@ -20,7 +20,7 @@ use UserFrosting\Fortress\Adapter\JqueryValidationAdapter;
 use UserFrosting\Sprinkle\Account\Authenticate\Authenticator;
 use UserFrosting\Sprinkle\Account\Controller\Exception\SpammyRequestException;
 use UserFrosting\Sprinkle\Account\Model\Group;
-use UserFrosting\Sprinkle\Site\Model\User;
+use UserFrosting\Sprinkle\Site\Database\Models\User;
 use UserFrosting\Sprinkle\Account\Util\Password;
 use UserFrosting\Sprinkle\Account\Util\Util as AccountUtil;
 use UserFrosting\Sprinkle\Core\Controller\SimpleController;

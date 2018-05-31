@@ -1,14 +1,14 @@
 <?php
-
 /**
- * fr_FR
+ * UserFrosting (http://www.userfrosting.com)
  *
- * FR French generic message translations for the core sprinkle.
+ * @link      https://github.com/userfrosting/UserFrosting
+ * @license   https://github.com/userfrosting/UserFrosting/blob/master/licenses/UserFrosting.md (MIT License)
  *
- * @package UserFrosting
- * @link http://www.userfrosting.com/components/#i18n
- * @author Alexander Weissman
- * @translator Louis Charette
+ * French message token translations for the 'core' sprinkle.
+ *
+ * @package userfrosting\i18n\fr
+ * @author Louis Charette
  */
 
 return [
@@ -45,14 +45,14 @@ return [
         "@TRANSLATION" => "Langue"
     ],
 
-    "MAIL_ERROR" => "Erreur fatale lors de l'envoie du courriel. Contactez votre administrateur. Si vous être administrateur, consultez les logs.",
-
     "NAME"  => "Nom",
     "NAVIGATION" => "Menu principal",
+    "NO_RESULTS" => "Aucun résultat trouvé.",
 
     "PAGINATION" => [
         "GOTO" => "Aller à la page",
-        "SHOW" => "Afficher"
+        "SHOW" => "Afficher",
+        "OUTPUT" => "{startRow} à {endRow} de {filteredRows} ({totalRows})"
     ],
     "PRIVACY" => "Politique de confidentialité",
 
@@ -93,7 +93,7 @@ return [
     "SUBMIT" => "Envoyer",
     "PRINT" => "Imprimer",
     "REMOVE" => "Supprimer",
-    "UNACTIVATED" => "Désactivé",
+    "UNACTIVATED" => "Non activé",
     "UPDATE" => "Mettre à jour",
     "YES" => "Oui",
     "NO" => "Non",

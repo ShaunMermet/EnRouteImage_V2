@@ -17,10 +17,10 @@ use UserFrosting\Fortress\RequestDataTransformer;
 use UserFrosting\Fortress\RequestSchema;
 use UserFrosting\Sprinkle\Site\Sprunje\ImgLinksSprunje;
 use UserFrosting\Sprinkle\Site\Sprunje\SegImageSprunje;
-use UserFrosting\Sprinkle\Site\Model\ImgLinks;
-use UserFrosting\Sprinkle\Site\Model\SegImage;
-use UserFrosting\Sprinkle\Site\Model\Set;
-use UserFrosting\Sprinkle\Site\Model\SegSet;
+use UserFrosting\Sprinkle\Site\Database\Models\ImgLinks;
+use UserFrosting\Sprinkle\Site\Database\Models\SegImage;
+use UserFrosting\Sprinkle\Site\Database\Models\Set;
+use UserFrosting\Sprinkle\Site\Database\Models\SegSet;
 
 /**
  * Controller class for category-related requests.

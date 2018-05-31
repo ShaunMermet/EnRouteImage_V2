@@ -3,7 +3,7 @@ namespace UserFrosting\Sprinkle\Site\Sprunje;
 
 use UserFrosting\Sprinkle\Core\Facades\Debug;
 use UserFrosting\Sprinkle\Core\Sprunje\Sprunje;
-use UserFrosting\Sprinkle\Site\Model\ImgLinks;
+use UserFrosting\Sprinkle\Site\Database\Models\ImgLinks;
 
 class ImgLinksSprunje extends Sprunje
 {

@@ -1,27 +1,19 @@
 <?php
-
 /**
- * fr_FR
+ * UserFrosting (http://www.userfrosting.com)
  *
- * French message token translations for the core sprinkle.
+ * @link      https://github.com/userfrosting/UserFrosting
+ * @license   https://github.com/userfrosting/UserFrosting/blob/master/licenses/UserFrosting.md (MIT License)
  *
- * @package UserFrosting
- * @link http://www.userfrosting.com/components/#i18n
- * @author Alexander Weissman
- * @translator Louis Charette
+ * French message token translations for the 'core' sprinkle.
+ *
+ * @package userfrosting\i18n\fr
+ * @author Louis Charette
  */
 
 return [
     "ERROR" => [
         "@TRANSLATION" => "Erreur",
-
-        "TITLE" => "Bouleversement de la Force",
-        "DESCRIPTION" => "Nous avons ressenti un grand bouleversement de la Force.",
-        "ENCOUNTERED" => "D'oh! Quelque chose s'est produit. Aucune idée c'est quoi.",
-        "DETAIL" => "Voici les détails :",
-        "RETURN" => 'Cliquez <a href="{{url}}">ici</a> pour retourner à la page d\'accueil.',
-
-        "SERVER" => "Oops, il semblerait que le serveur a gaffé. Si vous êtes administrateur, s-v-p vérifier les logs d'erreurs PHP ou ceux de UserFrosting.",
 
         "400" => [
             "TITLE" => "Erreur 400: Mauvaise requête",
@@ -33,7 +25,7 @@ return [
             "DESCRIPTION" => "Nous ne pouvons trouver ce que vous cherchez.",
             "DETAIL" => "Nous avons tout tenté...",
             "EXPLAIN" => "Nous ne pouvons trouver la page que vous cherchez.",
-            "RETURN" => 'Cliquez <a href="{{url}}">ici</a> pour retourner à la page d\'acceuil.'
+            "RETURN" => 'Cliquez <a href="{{url}}">ici</a> pour retourner à la page d\'accueil.'
         ],
 
         "CONFIG" => [
@@ -41,6 +33,19 @@ return [
             "DESCRIPTION" => "Les exigences de configuration de UserFrosting n'ont pas été satisfaites.",
             "DETAIL" => "Quelque chose cloche ici...",
             "RETURN" => 'Corrigez les erreurs suivantes, ensuite <a href="{{url}}"> recharger la page</a>.'
-        ]
+        ],
+
+        "DESCRIPTION" => "Nous avons ressenti un grand bouleversement de la Force.",
+        "DETAIL" => "Voici les détails :",
+
+        "ENCOUNTERED" => "D'oh! Quelque chose s'est produit. Aucune idée c'est quoi.",
+
+        "MAIL" => "Erreur fatale lors de l'envoie du courriel. Contactez votre administrateur. Si vous être administrateur, consultez les logs.",
+
+        "RETURN" => 'Cliquez <a href="{{url}}">ici</a> pour retourner à la page d\'accueil.',
+
+        "SERVER" => "Oops, il semblerait que le serveur a gaffé. Si vous êtes administrateur, s-v-p vérifier les logs d'erreurs PHP ou ceux de UserFrosting.",
+
+        "TITLE" => "Bouleversement de la Force"
     ]
 ];

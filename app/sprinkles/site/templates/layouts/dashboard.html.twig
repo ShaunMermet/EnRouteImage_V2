@@ -1,12 +1,12 @@
-{% extends "@admin/layouts/dashboard.html.twig" %}
+{% extends "@admin/pages/abstract/dashboard.html.twig" %}
 
 
 {% block navbar_logo %}
   <a href="{{site.uri.public}}" class="logo">
   <!-- mini logo for sidebar mini 50x50 pixels -->
-  <span class="logo-mini"><img src="{{ assets.url('assets://local/core/img/LogoTitleSquare.png') }}" style="max-width:35px;max-height:35px"></span>
+  <span class="logo-mini"><img src="{{ assets.url('assets://userfrosting/img/LogoTitleSquare.png') }}" style="max-width:35px;max-height:35px"></span>
   <!-- logo for regular state and mobile devices -->
-  <span class="logo-lg"><img src="{{ assets.url('assets://local/core/img/LogoTitle.png') }}" style="max-width:150px;max-height:35px"></span>
+  <span class="logo-lg"><img src="{{ assets.url('assets://userfrosting/img/LogoTitle.png') }}" style="max-width:150px;max-height:35px"></span>
 </a>
 {% endblock %}
 
