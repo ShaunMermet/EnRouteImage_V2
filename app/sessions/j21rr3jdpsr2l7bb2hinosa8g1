@@ -1,1 +1,0 @@
-site|a:2:{s:4:"csrf";C:11:"ArrayObject":86:{x:i:0;a:1:{s:17:"csrf5b066781a8091";s:32:"5264932fc64f41b2be4d44e2aa756a6c";};m:a:0:{}}s:6:"alerts";a:1:{i:0;a:2:{s:4:"type";s:7:"warning";s:7:"message";s:26:"You are already logged in!";}}}account|a:1:{s:15:"current_user_id";i:12;}
