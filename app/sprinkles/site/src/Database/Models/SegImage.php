@@ -47,6 +47,14 @@ class SegImage extends Model
     {
         return $this->hasMany('UserFrosting\Sprinkle\Site\Database\Models\SegArea','source');
     }
+
+    /**
+     * Get all of the areas of the image.
+     */
+    public function mask()
+    {
+        return $this->hasOne('UserFrosting\Sprinkle\Site\Database\Models\SegMask','source');
+    }
     
     /**
      * Get the group where the image belongs.

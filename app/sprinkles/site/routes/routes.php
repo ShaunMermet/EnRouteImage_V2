@@ -38,7 +38,7 @@ $app->group('/bbox', function () {
 	$this->put('/validate/evaluate', 'UserFrosting\Sprinkle\Site\Controller\AreaController:areaEvaluate');
 	$this->post('/api/upload', 'UserFrosting\Sprinkle\Site\Controller\SiteController:uploadHandlerPublic');
 
-});//->add('authGuard');
+})->add('authGuard');
 
 $app->group('/segment', function () {
 	$this->get('', 'UserFrosting\Sprinkle\Site\Controller\SiteController:pageSegLabel');
@@ -49,7 +49,7 @@ $app->group('/segment', function () {
 
 	$this->put('/validate/evaluate', 'UserFrosting\Sprinkle\Site\Controller\AreaController:segAreaEvaluate');
 
-});//->add('authGuard');
+})->add('authGuard');
 
 $app->group('/admin', function () {
 	$this->get('/overview', 'UserFrosting\Sprinkle\Site\Controller\SiteController:pageValidated');
@@ -136,6 +136,8 @@ $app->group('/segImages', function () {
  	$this->get('/imgSprunje', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getSegImageSprunje');
 
  	$this->put('/imgEdit', 'UserFrosting\Sprinkle\Site\Controller\ImageController:editSegImage');
+
+ 	$this->get('/SLIC/byId', 'UserFrosting\Sprinkle\Site\Controller\ImageController:getSegImageSlicById');
 
 });//->add('authGuard');
 

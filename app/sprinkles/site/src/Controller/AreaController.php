@@ -19,6 +19,7 @@ use UserFrosting\Sprinkle\Site\Database\Models\ImgArea;
 use UserFrosting\Sprinkle\Site\Database\Models\ImgLinks;
 use UserFrosting\Sprinkle\Site\Database\Models\SegArea;
 use UserFrosting\Sprinkle\Site\Database\Models\SegImage;
+use UserFrosting\Sprinkle\Site\Database\Models\SegMask;
 
 /**
  * Controller class for category-related requests.
@@ -449,6 +450,9 @@ class AreaController extends SimpleController
         $params = $request->getParsedBody();
         $data = json_decode(json_encode($params), FALSE);
 
+        error_log("saveSegSlic");
+        error_log(print_r($data,true));
+
         $checkImage = SegImage::where('id', $data->dataSrc)
                     ->where('updated_at',$data->updated)
                     ->count();
@@ -458,8 +462,9 @@ class AreaController extends SimpleController
 
         if (!empty($data))
         {
-            $this->deleteSegAreas($data->dataSrc,FALSE);
-            $areas= $data->areas;
+            //$this->deleteSegAreas($data->dataSrc,FALSE);
+            
+            /*$areas= $data->areas;
             foreach ($areas as $num => $area) {//for each rectangle
                 $SegArea = new SegArea;
                 $SegArea->source = $data->dataSrc;
@@ -472,8 +477,24 @@ class AreaController extends SimpleController
                 }
                 $segArea->state = $this->AREA_STATE_PENDING;
                 $SegArea->save();
+            }*/
+
+            $targetImg = SegImage::where('id', $data->dataSrc)->with('mask')->first();
+            error_log("masque");
+            error_log(print_r($targetImg->toArray(),true));
+            if(!$targetImg->mask){
+                $mask = new SegMask;
+            }else{
+                $mask = $targetImg->mask;
             }
-            $targetImg = SegImage::where('id', $data->dataSrc)->first();
+            $mask->source = $data->dataSrc;
+            $mask->NbrSeg = $data->nbrSegments;
+            $mask->compactness = $data->compactness;
+            $mask->user = $currentUser->id;
+            $mask->slicStr = $data->slic->slic->data;
+            $mask->segInfo = json_encode($data->slic->slic->tag);
+            $mask->save();
+        
             $targetImg->state = 2;
             $targetImg->save();
         }
@@ -721,7 +742,7 @@ class AreaController extends SimpleController
         }
 
         $segimg = SegImage::where('id', $data->dataSrc)->first();
-        $Areas = SegArea::where('source', '=', $segimg->id)->get();
+        //$Areas = SegArea::where('source', '=', $segimg->id)->get();
                                 
         if($data->validateType == 0){
             $state = 4;
@@ -730,10 +751,10 @@ class AreaController extends SimpleController
             $state = 3;
         }
         $segimg->state = $state;
-        foreach ($Areas as $Area) {
-            $Area->state = $state;
-            $Area->save();
-        }
+        //foreach ($Areas as $Area) {
+        //    $Area->state = $state;
+        //    $Area->save();
+        //}
         $segimg->save();
     }
 

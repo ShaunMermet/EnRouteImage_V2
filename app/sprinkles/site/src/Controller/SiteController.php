@@ -15,6 +15,7 @@ use UserFrosting\Sprinkle\Site\Database\Models\ImgLinks;
 use UserFrosting\Sprinkle\Site\Database\Models\Set;
 use UserFrosting\Sprinkle\Site\Database\Models\SegSet;
 use UserFrosting\Sprinkle\Site\Database\Models\Token;
+use UserFrosting\Sprinkle\Site\Database\Models\SegCategory;
 
 /**
  * Controller class for site-related requests.
@@ -464,10 +465,12 @@ class SiteController extends SimpleController
         if(!array_key_exists ('groups',$data)) $data->groups = [1];
         $requestedSet = $data->setID;
         if($requestedSet == null) $requestedSet = 1;
+        error_log("prepareSeg");
         error_log(print_r($data,true));
         if (!empty($data))
         {
             $imgToExport = SegImage::where ('state', '=', 3)
+                                ->with('mask')
                                 ->whereIn('set_id', $validSet)
                                 ->where ('set_id', '=', $requestedSet)
                                 ->get();
@@ -512,8 +515,8 @@ class SiteController extends SimpleController
                         or die("Cannot Initialize new GD image stream");
                     $background_color = imagecolorallocate($im, 0, 0, 0);
                     
-                    //Building segmentation image 
-                    $imgAreas = SegArea::with('category')
+                    //Building segmentation image from areas
+                    /*$imgAreas = SegArea::with('category')
                                 ->where('source', $NImage->id)
                                 ->get();
       
@@ -531,14 +534,108 @@ class SiteController extends SimpleController
                         $col_poly = imagecolorallocate($im, 255, 255, 255);
                         imagesetthickness($im, 3);
                         imagepolygon($im, $arrPoly2, count($arrPoly),$col_poly);
+                    }*/
+                    //Building segmentation image from mask
+                    $catref = SegCategory::whereIn('set_id', $validSet)
+                                ->where ('set_id', '=', $requestedSet)
+                                ->get();
+
+                    foreach ($catref as $cat) {
+                        error_log(print_r($cat->Color,true));
+                        $hexColor = $cat->Color;
+                        $hex = ltrim($hexColor,'#');
+                        $r = hexdec(substr($hex,0,2));
+                        $g = hexdec(substr($hex,2,2));
+                        $b = hexdec(substr($hex,4,2));
+                        error_log($r." ".$g." ".$b);
+                        $color = imagecolorallocate($im, $r, $g, $b);
+                        $cat->colorAllocate = $color;
                     }
+                    $catArray = $catref->toArray();
+                    error_log("Categories");
+                    error_log(print_r($catArray,true));
+
+                    $catlist=[];
+                    $segments = json_decode($NImage->mask->segInfo);
+                    /*foreach ($segments as $segNum => $catId) {
+                        if($catId != -1){
+                            //Draw om $im
+                            //1. Get color
+                            $key = array_search($catId, array_column($catArray, 'id'));
+                            $hexColor = $catArray[$key]["Color"];//"#ffffff";
+                            $hex = ltrim($hexColor,'#');
+                            $r = hexdec(substr($hex,0,2));
+                            $g = hexdec(substr($hex,2,2));
+                            $b = hexdec(substr($hex,4,2));
+
+                            error_log($r." ".$g." ".$b);
+
+                            $color = imagecolorallocate($im, $r, $g, $b);
+                            //download info
+                            $catlist[$catId] = true;
+                        }
+                    }*/
+                    
+                    //x y info
+                    $big = gzuncompress(base64_decode($NImage->mask->slicStr));
+                    $bigArray = explode(" ",$big);
+                    $big2DArray = [];
+                    $width = $NImage->naturalWidth;
+                    foreach ($bigArray as $key => $value) {
+                        $y = intdiv($key,$width);
+                        $x = $key % $width;
+                        if(!isset($big2DArray[$y])){
+                            $big2DArray[$y]=[];
+                        }
+                        $big2DArray[$y][$x] = $value;
+                    }
+                    $numPixelColored = 0;
+                    foreach ($big2DArray as $numLine => $line) {
+                        //error_log("line ".$numLine);
+                        $numPixelLine = 0;
+                        foreach ($line as $numCol => $value) {
+                            $catId = $segments[$value];
+                            if($catId != -1){
+                                //Draw pixel
+                                //1. Get color
+                                //error_log($segments[$value]);
+
+                                //error_log($r." ".$g." ".$b);
+                                if($numLine == 100){
+                                    //error_log("pixel ".$numLine." ".$numCol." ".$catId." ".$hexColor);
+                                }
+                            
+                                $key = array_search($catId, array_column($catArray, 'id'));
+                                $color = $catArray[$key]["colorAllocate"];
+                                if($numLine == 100){
+                                    error_log(print_r($color,true));
+                                }
+                                imagesetpixel($im, $numCol, $numLine, $color);
+                                if($numLine == 74){
+                                    //error_log(print_r($color,true));
+                                }
+
+                                $catlist[$catId] = true;
+                                $numPixelColored++;
+                                $numPixelLine++;
+                            }
+                        }
+                        //error_log("pixelperLine ".$numLine." ".$numPixelLine." ".$numPixelColored);
+                    }
+                    //error_log("big");
+                    //error_log(print_r($big2DArray,true));
+                    error_log("Cat found in this image");
+                    error_log(print_r($catlist,true));
+                    error_log("Num pixel colored");
+                    error_log(print_r($numPixelColored,true));
+
                     //Save segmentation image 
                     header('Content-Type: image/png');
                     imagepng($im,$pngpath);
                     imagedestroy($im);
 
                     //Building txt file with polygon data
-                    $imgAreas = SegArea::with('category')
+                    /*$imgAreas = SegArea::with('category')
                                 ->where('source', $NImage->id)
                                 ->get();
       
@@ -556,8 +653,11 @@ class SiteController extends SimpleController
                         }else{
                             $areasPerType[$category] = 1;
                         }
-                    }
-                    
+                    }*/
+                    //Building txt file with slicString and infoSeg
+                    fwrite($txtfile, $NImage->mask->slicStr);
+                    fwrite($txtfile, "\n");
+                    fwrite($txtfile, $NImage->mask->segInfo);
                     //Closing txt file with polygon data
                     fclose($txtfile);
 
@@ -595,7 +695,8 @@ class SiteController extends SimpleController
                 foreach ($oldTokens as $oldToken){
                     //Delete old token of set (in bdd) and zip file (in folder)
                     //folder
-                    $this->rrmdir("tmp/".$oldToken->token);
+                    error_log(print_r($tmpFolderPath.$oldToken->token,true));
+                    $this->rrmdir($tmpFolderPath.$oldToken->token);
                     //bdd
                     $oldToken->delete();
                 }

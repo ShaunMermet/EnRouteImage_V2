@@ -10,9 +10,7 @@
         },
         "ssnukala"
     ],
-    "dependencies": {
-        "pako": ">=1.0.6"
-    },
+    "dependencies": {},
     "moduleType": [
         "node"
     ],

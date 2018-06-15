@@ -52,3 +52,6 @@ app/.env.old
 app/sprinkles/site/assets/local/core/img/LogoTitle_OLD.png
 app/sprinkles/site/assets/local/core/img/LogoTitleSignIn_OLD.png
 app/sprinkles/site/assets/local/core/img/LogoTitleSquare_OLD.png
+app/sprinkles/site/src/Controller/imageSmall.jpg
+app/sprinkles/site/src/Controller/tomato2.jpg
+app/sprinkles/site/src/Controller/tomato2.png

@@ -24,21 +24,48 @@
 			<button id="nextButton"class="button" type="button" onclick="label_onNextClicked()">{{translate("BUTTON.NEXT_IMAGE")}}</button>
 			<button id="moreButton"class="button" type="button" onclick="label_onMoreClicked()" style="display:none;">{{translate("BUTTON.MORE_IMAGE")}}</button>
 			<button id="drawButton" class="btn-mode" type="button"onclick="label_onDrawClicked()">{{translate("BUTTON.DRAW")}}</button>
-			<button id="eraseButton"class="btn-mode" type="button" onclick="label_onEraseClicked()" style = "DISPLAY: none;">{{translate("BUTTON.DELETE")}}</button>
 			<button id="eraseButton"class="btn-mode" type="button" onclick="label_onResetClicked()">{{translate("BUTTON.RESET")}}</button>
 			<div id="imgCounter">{{translate("FEEDBACK.NO_IMAGE")}}</div>
 			<div max-width= "100px">{{translate("LEGEND.SEG.NBR_AREA")}}<span id="value1"></span></div>
 			<br>
 			<!-- Rounded switch -->
+			<div>{{translate("LEGEND.SEGMENT.SWITCH")}}</div>
+			<label class="switch" title="Show / Hide segment">
+			  <input id="segmentShowSwitch" type="checkbox" checked onchange ="label_onViewSegmentClicked(this)">
+			  <div class="slider round"></div>
+			</label>
+			<div>{{translate("LEGEND.GRID.SWITCH")}}</div>
+			<label class="switch" title="Show / Hide grid">
+			  <input id="gridShowSwitch" type="checkbox" checked onchange ="label_onViewGridClicked(this)">
+			  <div class="slider round"></div>
+			</label>
+			<div>{{translate("LEGEND.IMG.SWITCH")}}</div>
+			<label class="switch" title="Show / Hide image">
+			  <input id="imgShowSwitch" type="checkbox" checked onchange ="label_onViewImgClicked(this)">
+			  <div class="slider round"></div>
+			</label>
+			<!-- Rounded switch -->
+			<div style="max-width: 100px">{{translate("SEG.PARAMS.NBR_SEG")}}</div>
+			<select class="js-basic-single" id="comboNbrSeg" style="max-width:90%;" style="width: 150px;"></select>
+			<div style="max-width: 100px">{{translate("SEG.PARAMS.COMPACT")}}</div>
+			<select class="js-basic-single" id="comboCompact" style="max-width:90%;" style="width: 150px;"></select>
+			
+			<button id="reloadButton"class="button" type="button" onclick="label_onReloadClicked()">{{translate("BUTTON.RELOAD_IMAGE")}}</button>
+
 			<div id="legend" style="max-width:100px"></div>
 		</div>
 	</div>
 	<div class="column column-four" id="columnFour">
-			<div id="preview" class="imgcontainer" ondragstart="return false;" ondrop="return false;" style="position: relative;overflow: auto;white-space: nowrap;height:100%;">
-				<img id='image' unselectable='on' src=''/>
-				<canvas id="lineCanvas" style="position:absolute;top: 0px;left: 0px;"></canvas>
-				<canvas id="areaCanvas" style="position:absolute;top: 0px;left: 0px;" ontouchstart="label_onTouchStart(event)" ontouchend="label_onTouchEnd(event)"
-			ontouchcancel="label_onTouchCancel(event)" ontouchmove="label_onTouchMove(event)"></canvas>
+			<div id="preview" class="imgcontainer" ondragstart="return false;" ondrop="return false;" style="position: relative;height:100%;">
+				<div class="stdLoaderButton" style="display:none;position: absolute;top: 40%;left: 45%;"></div>
+				<div id="imageDiv">
+					<canvas id="lineCanvas" style="position:absolute;top: 0px;left: 0px;"></canvas>
+					<img id='image' unselectable='on' src=''/>
+					<canvas id="slicCanvas" style="position:absolute;top: 0px;left: 0px;"></canvas>
+					<canvas id="segmentCanvas" style="position:absolute;top: 0px;left: 0px;"></canvas>
+					<canvas id="areaCanvas" style="position:absolute;top: 0px;left: 0px;" ontouchstart="label_onTouchStart(event)" ontouchend="label_onTouchEnd(event)"
+						ontouchcancel="label_onTouchCancel(event)" ontouchmove="label_onTouchMove(event)"></canvas>
+				</div>
 			</div>
 	</div>
 </div>	
@@ -59,6 +86,7 @@
 	{{ assets.js('js/tools') | raw }}
 {% endblock %}
 {% block scripts_page %}
+	{{ assets.js('js/pako') | raw }}
 	{{ assets.js('js/seglabel') | raw }}
 {% endblock %}
 	

@@ -7,6 +7,7 @@ var validate_srcId = 0;
 var validate_AreasList = [];
 var validate_currentRectangle = null;
 
+var mainContainer = {};
 
 ///  COMBO    //////////////////
 //creating categories 
@@ -23,6 +24,7 @@ function validate_loadCategories(){
 	.then(
 	    // Fetch successful
 	    function (data) {
+	    	mainContainer.catData = data;
 			validate_loadset();
 	    },
 	    // Fetch failed
@@ -77,8 +79,8 @@ function validate_initComboSet(){
 
 
 ////////////GET IMG FROM SERVER//////
-//validate_loadCategories();
-validate_loadset();
+validate_loadCategories();
+//validate_loadset();
 
 function validate_loadImages(){
 	// Fetch and render the images
@@ -88,6 +90,8 @@ function validate_loadImages(){
 	var data= {};
 	data["setID"]=imgSet;
 	var url = site.uri.public + '/segImages/annotated';
+	$('#preview .stdLoaderButton').show();
+	$('#nextButton').prop('disabled', true);
 	$.ajax({
 	  type: "GET",
 	  url: url,
@@ -95,9 +99,44 @@ function validate_loadImages(){
 	})
 	.then(
 	    // Fetch successful
-	    function (data) {
-	    	if(data!=""){
-	    		validate_imgPathList = data;//res;
+	    function (datas) {
+	    	$('#preview .stdLoaderButton').hide();
+	    	$('#nextButton').prop('disabled', false);
+	    	if(datas!=""){
+	    		validate_imgPathList = datas;//res;
+	    		for (data of datas) {
+				    var dec = window.atob(data.mask.slicStr);
+					function atos(arr) {
+					    for (var i=0, l=arr.length, s='', c; c = arr[i++];)
+					        s += String.fromCharCode(
+					            c > 0xdf && c < 0xf0 && i < l-1
+					                ? (c & 0xf) << 12 | (arr[i++] & 0x3f) << 6 | arr[i++] & 0x3f
+					            : c > 0x7f && i < l
+					                ? (c & 0x1f) << 6 | arr[i++] & 0x3f
+					            : c
+					        );
+					    return s
+					}
+					result = atos(pako.ungzip(dec));
+					ar1d = result.split(" ");
+					ar2d = [];
+					for(j = 0 ; j < data.naturalHeight; j++){
+						ar2d[j] = [];
+					}
+					for(i = 0 ; i < ar1d.length; i++){
+						row = Math.floor(i/data.naturalWidth);
+						col = i%data.naturalWidth;
+						ar2d[row][col]=parseInt(ar1d[i]);
+					}
+					data.mask.udata = ar2d;
+					data.mask.segInfo = JSON.parse(data.mask.segInfo);
+					//tag =[];
+					//for (k = 0 ; k < data.mask.NbrSeg ; k++) {
+					//	tag[k]=-1;
+					//}
+					//data.nask.tag = tag;
+				}
+				console.log(datas);
 			}
 			else validate_imgPathList = [];
 			if(validate_imgPathList.length == 0){
@@ -175,8 +214,10 @@ function validate_addImage(){
 	document.getElementById('image').src = imgToAdd;//$('#preview').html("<img id='image' unselectable='on' src='"+imgToAdd+"' />")
 	
 	function loaded() {
+	  validate_drawSlic();
 	  validate_drawLegend(validate_srcId);
 	  validate_drawAreas(validate_srcId);//initSelection();
+	  validate_drawSegments();
 	  img.removeEventListener('load', loaded);
 	  img.removeEventListener('error', error);
 	  updateNbrAreas();
@@ -199,6 +240,97 @@ function validate_addImage(){
 	document.getElementById("RejectButton").style = "DISPLAY: initial;";
 	document.getElementById("ValidateButton").style = "DISPLAY: initial;";
 }
+
+function validate_drawSlic(){
+	data = validate_imgPathList[validate_imgPathListIndex];
+	gridarray = data.mask.udata;
+	//console.log("draw grid");
+	//console.log(gridarray);
+	var refImage = document.getElementById('image');
+	var slicCanvas = document.getElementById("slicCanvas");
+	slicCanvas.width = parseInt(data.naturalWidth);
+	slicCanvas.height = parseInt(data.naturalHeight);
+	var segmentCanvas = document.getElementById("segmentCanvas");
+	segmentCanvas.width = parseInt(data.naturalWidth);
+	segmentCanvas.height = parseInt(data.naturalHeight);
+	function drawPixel(x,y){
+		slicCtx = slicCanvas.getContext("2d");
+		slicCtx.fillStyle = "#FFFF00";
+		slicCtx.fillRect( x, y, 1, 1 );
+	}
+	for(j = 0; j < data.naturalHeight -1 ; j++){
+		for(i = 0 ; i < data.naturalWidth -1; i++){
+			if(gridarray[j][i] != gridarray[j][(i+1)]  || gridarray[j][i] != gridarray[(j+1)][i]){
+				drawPixel(i, j);
+			}
+		}
+	}
+	document.getElementById('value2').innerHTML = data.mask.NbrSeg;
+	document.getElementById('value3').innerHTML = data.mask.compactness;
+}
+function redrawSlic(){
+
+	var initRatio = validate_getImgRatio();
+
+	data = validate_imgPathList[validate_imgPathListIndex];
+	if(typeof data === 'undefined'){
+		return;
+	}
+	gridarray = data.mask.udata;
+	//console.log("draw grid");
+	//console.log(gridarray);
+	var refImage = document.getElementById('image');
+	var slicCanvas = document.getElementById("slicCanvas");
+	slicCanvas.style.width = refImage.width+'px';
+	slicCanvas.style.height = refImage.height+'px';
+	var segmentCanvas = document.getElementById("segmentCanvas");
+	segmentCanvas.style.width = refImage.width+'px';
+	segmentCanvas.style.height = refImage.height+'px';
+	var lineCanvas = document.getElementById("lineCanvas");
+	lineCanvas.style.width = refImage.width+'px';
+	lineCanvas.style.height = refImage.height+'px';
+	
+}
+function validate_drawSegments(){
+	var initRatio = validate_getImgRatio();
+	var refPreview = document.getElementById('preview');
+	var segmentCanvas = document.getElementById("segmentCanvas");
+	data = validate_imgPathList[validate_imgPathListIndex];
+	segInfo = data.mask.segInfo;
+	for(var i = 0; i < segInfo.length; i++){
+		if(segInfo[i] != -1){
+			//color segment
+			selectedCat = mainContainer.catData[mainContainer.catData.findIndex(function(x){return x.id == segInfo[i]})];
+			color = selectedCat.Color;
+			validate_segFillCollor(segmentCanvas, i, color, data);
+		}
+	}
+}
+function validate_segFillCollor(canva, segment, color, data){
+	gridarray = data.mask.udata;
+	
+	var initRatio = validate_getImgRatio();
+	canvaCtx = canva.getContext("2d");
+		
+	function drawPixel(x,y,color,canva){
+		canvaCtx.clearRect(x, y, 1, 1);
+		if(color == "null"){
+			
+		}else{
+			canvaCtx.fillStyle = color;
+			canvaCtx.fillRect( x, y, 1, 1 );
+		}
+	}
+	for(j = 0; j < gridarray.length ; j++){
+		for(i = 0 ; i < gridarray[j].length; i++){
+			//console.log(gridarray[j][i]+" "+segment)
+			if(gridarray[j][i] == segment){
+				drawPixel(i, j,color, canva);
+			}
+		}
+	}
+}
+
 function validate_drawAreas(idImage){
 	var areaCanvas = document.getElementById("areaCanvas");
 	var refImage = document.getElementById('image');
@@ -299,6 +431,14 @@ function validate_removeImage(){
 		//refImage.remove();
 		refImage.src = "";
 	}
+	validate_wipeSegment();
+	validate_wipeGrid();
+}
+function validate_wipeSegment(){
+	var segmentCanvas = document.getElementById("segmentCanvas");
+	slicCtx = segmentCanvas.getContext("2d");
+	slicCtx.clearRect(0, 0, segmentCanvas.width, segmentCanvas.height);
+	validate_wipeLegend();
 }
 function validate_wipeLegend(){
 	var elements = document.getElementsByClassName("legend");
@@ -306,6 +446,11 @@ function validate_wipeLegend(){
 		elements[0].remove();
 		
 	}
+}
+function validate_wipeGrid(){
+	var slicCanvas = document.getElementById("slicCanvas");
+	slicCtx = slicCanvas.getContext("2d");
+	slicCtx.clearRect(0, 0, slicCanvas.width, slicCanvas.height);
 }
 function validate_wipeAreas(){
 	var areaCanvas = document.getElementById("areaCanvas");
@@ -403,6 +548,79 @@ window.onscroll = function(){
 };
 ////////////////////////////////////////////
 
+//window.addEventListener("resize", function(){
+//  	validate_drawAreas(validate_srcId);
+//});
+
+function redrawAll(){
+	redrawSlic();
+}
 window.addEventListener("resize", function(){
-  	validate_drawAreas(validate_srcId);
+	redrawAll();
 });
+
+//chrome fix
+var globImage = document.getElementById('image');
+new ResizeObserver(redrawAll).observe(globImage);
+
+
+
+
+///////// SWITCHS /////////////
+
+function validate_onViewSegmentClicked(element){
+
+	if (element.checked){
+		validate_showSegSegment(true);
+	}
+	else{
+		validate_showSegSegment(false);
+	}
+}
+function validate_showSegSegment(bool){
+	var segmentCanvas = document.getElementById("segmentCanvas");
+	if(bool){
+		segmentCanvas.style.display = "initial";
+	}else{
+		segmentCanvas.style.display = "none";
+	}
+}
+
+function validate_onViewGridClicked(element){
+
+	if (element.checked){
+		validate_showSegGrid(true);
+	}
+	else{
+		validate_showSegGrid(false);
+	}
+}
+function validate_showSegGrid(bool){
+	var slicCanvas = document.getElementById("slicCanvas");
+	if(bool){
+		slicCanvas.style.display = "initial";
+	}else{
+		slicCanvas.style.display = "none";
+	}
+}
+
+function validate_onViewImgClicked(element){
+
+	if (element.checked){
+		validate_showSegImg(true);
+	}
+	else{
+		validate_showSegImg(false);
+	}
+}
+function validate_showSegImg(bool){
+	var lineCanvas = document.getElementById("lineCanvas");
+	//var image = document.getElementById("image");
+	if(bool){
+		lineCanvas.style.background = "initial";
+		//image.style.display = "initial";
+	}else{
+		lineCanvas.style.background = "black";
+		//image.style.display = "none";
+	}
+}

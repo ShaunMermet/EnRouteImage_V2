@@ -25,13 +25,40 @@
 				<button id="moreButton"class="button" type="button" onclick="validate_onMoreClicked()" style = "DISPLAY: none;">More image</button>
 				<div id="imgCounter">{{translate("FEEDBACK.NO_IMAGE")}}</div>
 				<div>{{translate("LEGEND.SEG.NBR_AREA")}}<span id="value1"></span></div>
+
+				<!-- Rounded switch -->
+				<div>{{translate("LEGEND.SEGMENT.SWITCH")}}</div>
+				<label class="switch" title="Show / Hide segment">
+				  <input id="segmentShowSwitch" type="checkbox" checked onchange ="validate_onViewSegmentClicked(this)">
+				  <div class="slider round"></div>
+				</label>
+				<div>{{translate("LEGEND.GRID.SWITCH")}}</div>
+				<label class="switch" title="Show / Hide grid">
+				  <input id="gridShowSwitch" type="checkbox" checked onchange ="validate_onViewGridClicked(this)">
+				  <div class="slider round"></div>
+				</label>
+				<div>{{translate("LEGEND.IMG.SWITCH")}}</div>
+				<label class="switch" title="Show / Hide image">
+				  <input id="imgShowSwitch" type="checkbox" checked onchange ="validate_onViewImgClicked(this)">
+				  <div class="slider round"></div>
+				</label>
+				<!-- Rounded switch -->
+				<div>{{translate("SEG.PARAMS.NBR_SEG")}}<span id="value2"></span></div>
+				<div>{{translate("SEG.PARAMS.COMPACT")}}<span id="value3"></span></div>
+
 				<div id="legend" style="max-width:100px"></div>
 			</div>
 		</div>
 		<div class="column column-four">
-			<div id="preview" class="imgcontainer" ondragstart="return false;" ondrop="return false;" style="position: relative;overflow: auto;white-space: nowrap;height:100%;">
-				<img id='image' unselectable='on' src='' />
-				<canvas id="areaCanvas" style="position:absolute;top: 0px;left: 0px;"></canvas>
+			<div id="preview" class="imgcontainer" ondragstart="return false;" ondrop="return false;" style="position: relative;height:100%;">
+				<div class="stdLoaderButton" style="display:none;position: absolute;top: 40%;left: 45%;"></div>
+				<div id="imageDiv">
+					<canvas id="lineCanvas" style="position:absolute;top: 0px;left: 0px;"></canvas>
+					<img id='image' unselectable='on' src='' />
+					<canvas id="slicCanvas" style="position:absolute;top: 0px;left: 0px;"></canvas>
+					<canvas id="segmentCanvas" style="position:absolute;top: 0px;left: 0px;"></canvas>
+					<canvas id="areaCanvas" style="position:absolute;top: 0px;left: 0px;"></canvas>
+				</div>
 			</div>
 			
 		</div>
@@ -54,5 +81,6 @@
 	{{ assets.js('js/tools') | raw }}
 {% endblock %}
 {% block scripts_page %}
+	{{ assets.js('js/pako') | raw }}
 	{{ assets.js('js/segValidate') | raw }}
 {% endblock %}

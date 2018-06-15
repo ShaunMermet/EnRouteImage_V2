@@ -157,6 +157,10 @@ class ImageController extends SimpleController
         // GET parameters
         $params = $request->getQueryParams();
         $requestedSet = $params["setID"];
+        $nbrSegmentsRequested = $params["nbrSegments"];
+        $requestedID = $params["imgID"];
+        $compactnessRequested = $params["compactness"];
+
         if($requestedSet == null) $requestedSet = 1;
         
         if($requestedSet == null) $requestedSet = 1;
@@ -170,9 +174,25 @@ class ImageController extends SimpleController
                 ->inRandomOrder()
                 ->limit($maxImageRequested)
                 ->get();
-
+        if($requestedID != null){
+            $segImg = SegImage::where(function ($imgLinks){
+                $imgLinks->where ('state', '=', 1)
+                        ->orWhere ('state', '=', 4);
+                })
+                ->whereIn('set_id', $validSet)
+                ->where ('set_id', '=', $requestedSet)
+                ->where ('id', '=', $requestedID)
+                ->get();
+        }
+        if($nbrSegmentsRequested == null) {
+            $nbrSegmentsRequested = 200;
+        }
+        if($compactnessRequested == null) {
+            $compactnessRequested = 10;
+        }
         foreach ($segImg as $img) {
             $this->createLightImgSeg($img->path);
+            $img->slic = $this->createSlicInfoSeg($img, $nbrSegmentsRequested, $compactnessRequested);
         }
 
         $result = $segImg->toArray();
@@ -360,6 +380,7 @@ class ImageController extends SimpleController
         $segImg = SegImage::where ('state', '=', 2)
                     ->whereIn('set_id', $validSet)
                     ->where ('set_id', '=', $requestedSet)
+                    ->with('mask')
                     ->inRandomOrder()
                     ->limit($maxImageRequested)
                     ->get();
@@ -747,6 +768,83 @@ class ImageController extends SimpleController
         $img->save();
     }
 
+    /**
+     * Returns seg image SLIC info.
+     *
+     * This page requires authentication.
+     * Request type: GET
+     */
+    public function getSegImageSlicById($request, $response, $args)
+    {
+        /** @var UserFrosting\Sprinkle\Account\Authenticate\Authenticator $authenticator */
+        $authenticator = $this->ci->authenticator;
+        if (!$authenticator->check()) {
+            $loginPage = $this->ci->router->pathFor('login');
+            return $response->withRedirect($loginPage, 400);
+        }
+
+        /** @var UserFrosting\Sprinkle\Account\Authorize\AuthorizationManager */
+        $authorizer = $this->ci->authorizer;
+
+        /** @var UserFrosting\Sprinkle\Account\Model\User $currentUser */
+        $currentUser = $this->ci->currentUser;
+
+        /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
+        $classMapper = $this->ci->classMapper;
+
+        // Access-controlled page
+        if (!$authorizer->checkAccess($currentUser, 'uri_label')) {
+            $loginPage = $this->ci->router->pathFor('login');
+           return $response->withRedirect($loginPage, 400);
+        }
+
+        // GET parameters
+        $params = $request->getQueryParams();
+
+        $UserWGrp = $classMapper->staticMethod('user', 'where', 'id', $currentUser->id)
+                                ->with('group')
+                                ->first();
+
+        $validSet = [];
+        foreach ($UserWGrp->group as $group) {
+            $sets = SegSet::where('group_id', '=', $group->id)
+                    ->get();
+            foreach ($sets as $set) {
+                array_push($validSet, $set->id);
+            }
+        }
+
+        $maxImageRequested = getenv('MAX_IMAGE_REQUESTED');
+
+        // GET parameters
+        $params = $request->getQueryParams();
+        $requestedSet = $params["setID"];
+        if($requestedSet == null) $requestedSet = 1;
+        
+        if($requestedSet == null) $requestedSet = 1;
+
+        $segImg = SegImage::where(function ($imgLinks){
+                $imgLinks->where ('state', '=', 1)
+                        ->orWhere ('state', '=', 4);
+                })
+                ->whereIn('set_id', $validSet)
+                ->where ('set_id', '=', $requestedSet)
+                ->inRandomOrder()
+                ->limit($maxImageRequested)
+                ->get();
+
+        foreach ($segImg as $img) {
+            $this->createLightImgSeg($img->path);
+        }
+
+        $result = $segImg->toArray();
+        
+        // Be careful how you consume this data - it has not been escaped and contains untrusted user-supplied content.
+        // For example, if you plan to insert it into an HTML DOM, you must escape it on the client side (or use client-side templating).
+        return $response->withJson($result, 200, JSON_PRETTY_PRINT);
+
+    }
+
     protected function createLightImgBbox($imgName){
         /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
         $classMapper = $this->ci->classMapper;
@@ -811,6 +909,41 @@ class ImageController extends SimpleController
             $img->cprs_rate = $groupRate;
             $img->save();
         }
+    }
+
+    protected function createSlicInfoSeg($img, $nbrSegments, $compactness){
+        error_log("createSlicInfoSeg 1");
+        $scriptpath = dirname(__FILE__)."\Slic.py";
+        error_log(print_r($scriptpath,true));
+        $filepath = realpath(dirname(__FILE__)."\..\..\..\..\..\\efs\img\segmentation\\".$img->path);
+        error_log("$filepath");
+        $cmd = "python $scriptpath $filepath $nbrSegments $compactness";
+        exec($cmd, $output, $error);
+        $result = [];
+        if ($error) {
+            error_log("exec error");
+            error_log(print_r($output,true));
+            return false;
+        }else{
+            error_log("createSlicInfoSeg");
+            //error_log(print_r($output,true));
+            $result["nbrSeg"] = $output[0];
+            $dim = $output[1];
+            error_log(print_r($dim,true));
+            $result["x"] = $output[2];
+            $result["y"] = $output[1];
+            $find = array(",","[","]");
+            $replace = array("");
+            $result["data"] = str_replace($find,$replace,$output[3]);
+            $result["data"] = base64_encode(gzcompress($result["data"], 9, ZLIB_ENCODING_DEFLATE));
+            error_log(print_r($result,true));
+
+        }
+        return $result;
+        
+    }
+    protected function getSlicInfoSeg(){
+
     }
     protected function createLightImg($imgPath,$destPath,$imgName,$scale){
         $before = ini_get('memory_limit');

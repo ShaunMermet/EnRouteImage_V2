@@ -7,10 +7,12 @@ var label_AreasList = [];
 
 var mainContainer = {};
 
+//var pako = require('pako');
+
 
 ////////////GET IMG FROM SERVER//////
 
-function label_loadImages(){
+function label_loadImages(idImage){
 	label_imgPathList = [];
 	var combo4 = document.getElementById("combo4");
 	var imgSet;
@@ -18,8 +20,20 @@ function label_loadImages(){
 	
 	var data= {};
 	data["setID"]=imgSet;
+	var comboNbrSeg = document.getElementById("comboNbrSeg");
+	var nbrSegments = comboNbrSeg.options[comboNbrSeg.selectedIndex].value;
+	data["nbrSegments"]= nbrSegments;
+	var comboCompact = document.getElementById("comboCompact");
+	var compactness = comboCompact.options[comboCompact.selectedIndex].value;
+	data["compactness"] = compactness
 	// Fetch and render the images
 	var url = site.uri.public + '/segImages/clean';
+	if(typeof idImage !== 'undefined'){
+		data["imgID"]=idImage;
+	}
+	$('#preview .stdLoaderButton').show();
+	$('#nextButton').prop('disabled', true);
+	$('#reloadButton').prop('disabled', true);
 	$.ajax({
 	  type: "GET",
 	  url: url,
@@ -27,12 +41,45 @@ function label_loadImages(){
 	})
 	.then(
 	    // Fetch successful
-	    function (data) {
-	    	if(data!=""){
-				//var res = JSON.parse(data);
-				label_imgPathList = data;//res;
-				console.log("Seg images");
-				console.log(data);
+	    function (datas) {
+	    	$('#preview .stdLoaderButton').hide();
+	    	$('#nextButton').prop('disabled', false);
+	    	$('#reloadButton').prop('disabled', false);
+	    	if(datas!=""){
+				//var res = JSON.parse(datas);
+				label_imgPathList = datas;//res;
+				for (data of datas) {
+				    var dec = window.atob(data.slic.data);
+					function atos(arr) {
+					    for (var i=0, l=arr.length, s='', c; c = arr[i++];)
+					        s += String.fromCharCode(
+					            c > 0xdf && c < 0xf0 && i < l-1
+					                ? (c & 0xf) << 12 | (arr[i++] & 0x3f) << 6 | arr[i++] & 0x3f
+					            : c > 0x7f && i < l
+					                ? (c & 0x1f) << 6 | arr[i++] & 0x3f
+					            : c
+					        );
+					    return s
+					}
+					result = atos(pako.ungzip(dec));
+					ar1d = result.split(" ");
+					ar2d = [];
+					for(j = 0 ; j < data.slic.y; j++){
+						ar2d[j] = [];
+					}
+					for(i = 0 ; i < ar1d.length; i++){
+						row = Math.floor(i/data.slic.x);
+						col = i%data.slic.x;
+						ar2d[row][col]=parseInt(ar1d[i]);
+					}
+					data.slic.udata = ar2d;
+					tag =[];
+					for (k = 0 ; k < data.slic.nbrSeg ; k++) {
+						tag[k]=-1;
+					}
+					data.slic.tag = tag;
+				}
+				console.log(datas);
 			}
 			else label_imgPathList = [];
 			if(label_imgPathList.length == 0){document.getElementById('imgCounter').style = "DISPLAY: initial;max-width: 100px;";}
@@ -44,6 +91,7 @@ function label_loadImages(){
 	        
 	    }
 	);
+	
 }
 function label_loadRects(){
 	var data= {};
@@ -85,13 +133,13 @@ function label_addImage(){
 		var columnFour = document.getElementById('columnFour');
 		var imgContainer = document.getElementsByClassName('labelimg-container');
 		if(nativeWidth/nativeHeight > 16/9){
-			console.log("wide image");
+			//console.log("wide image");
 			img.style.height = "100%";
 			img.style.width = "";
 			columnFour.style.width= "calc(100% - 110px)";
 			imgContainer[0].style.height = "calc(100vh - 168px)";
 		}else{
-			console.log("classic image");
+			//console.log("classic image");
 			img.style.height = "";
 			img.style.width = "100%";
 			columnFour.style.width= "100%";
@@ -104,11 +152,13 @@ function label_addImage(){
 		label_initSelection();
 		document.getElementById('imgCounter').style = "DISPLAY: none;";//"Image "+(label_imgPathListIndex+1)+" / "+label_imgPathList.length;
 		document.getElementById("moreButton").style = "DISPLAY: none;";
-		document.getElementById("nextButton").style = "DISPLAY: initial;";
+		//document.getElementById("nextButton").style = "DISPLAY: initial;";
+		//document.getElementById("reloadButton").style = "DISPLAY: initial;"
 
 		
 
 		function loaded() {
+		  label_drawSlic(label_srcName);
 		  label_drawAreas(label_srcName);//initSelection();
 		  label_drawLegend(label_srcName);
 		  img.removeEventListener('load', loaded);
@@ -132,6 +182,32 @@ function label_addImage(){
 
 var dataAreas = [];
 var currentPoly= {};
+
+function label_drawSlic(label_srcName){
+	data = label_imgPathList[label_imgPathListIndex];
+	gridarray = data.slic.udata;
+	//console.log("draw grid");
+	//console.log(gridarray);
+	var refImage = document.getElementById('image');
+	var slicCanvas = document.getElementById("slicCanvas");
+	slicCanvas.width = parseInt(data.slic.x);
+	slicCanvas.height = parseInt(data.slic.y);
+	var segmentCanvas = document.getElementById("segmentCanvas");
+	segmentCanvas.width = parseInt(data.slic.x);
+	segmentCanvas.height = parseInt(data.slic.y);
+	function drawPixel(x,y){
+		slicCtx = slicCanvas.getContext("2d");
+		slicCtx.fillStyle = "#FFFF00";
+		slicCtx.fillRect( x, y, 1, 1 );
+	}
+	for(j = 0; j < data.slic.y -1 ; j++){
+		for(i = 0 ; i < data.slic.x -1; i++){
+			if(gridarray[j][i] != gridarray[j][(i+1)]  || gridarray[j][i] != gridarray[(j+1)][i]){
+				drawPixel(i, j);
+			}
+		}
+	}
+}
 
 function label_drawAreas(idImage){
 	var areaCanvas = document.getElementById("areaCanvas");
@@ -174,14 +250,48 @@ function label_drawAreas(idImage){
 	}
 	updateNbrAreas();
 }
-function redrawArea(){
-	var areaCanvas = document.getElementById("areaCanvas");
+function redrawSlic(){
+
+	var initRatio = label_getImgRatio();
+
+	data = label_imgPathList[label_imgPathListIndex];
+	if(typeof data === 'undefined'){
+		return;
+	}
+	gridarray = data.slic.udata;
+	//console.log("draw grid");
+	//console.log(gridarray);
 	var refImage = document.getElementById('image');
+	var slicCanvas = document.getElementById("slicCanvas");
+	slicCanvas.style.width = refImage.width+'px';
+	slicCanvas.style.height = refImage.height+'px';
+	var segmentCanvas = document.getElementById("segmentCanvas");
+	segmentCanvas.style.width = refImage.width+'px';
+	segmentCanvas.style.height = refImage.height+'px';
+	function drawPixel(x,y){
+		slicCtx = slicCanvas.getContext("2d");
+		slicCtx.fillStyle = "#FFFF00";
+		slicCtx.fillRect( x*initRatio, y*initRatio, 1, 1 );
+	}
+	for(j = 0; j < data.slic.y -1 ; j++){
+		for(i = 0 ; i < data.slic.x -1; i++){
+			if(gridarray[j][i] != gridarray[j][(i+1)]  || gridarray[j][i] != gridarray[(j+1)][i]){
+				//drawPixel(i, j);
+			}
+		}
+	}
+}
+function redrawArea(){
+	var refImage = document.getElementById('image');
+	var areaCanvas = document.getElementById("areaCanvas");
 	areaCanvas.width = refImage.width;
 	areaCanvas.height = refImage.height;
 	var lineCanvas = document.getElementById("lineCanvas");
 	lineCanvas.width = refImage.width;
 	lineCanvas.height = refImage.height;
+	var slicCanvas = document.getElementById("slicCanvas");
+	//slicCanvas.width = refImage.width;
+	//slicCanvas.height = refImage.height;
 	var initRatio = label_getImgRatio();
 	for(var i = 0; i < dataAreas.length; ++i){
 		reviewedArea = dataAreas[i];
@@ -217,11 +327,23 @@ function label_drawLegend(idImage){
 	var legendDiv = document.getElementById("legend");
 	legendDiv.innerHTML = "";
 	var legend = {};
+
+
 	for(var i = 0; i < dataAreas.length; ++i){
 		var areaType = dataAreas[i].type;
-		legend[areaType] = mainContainer.catData[mainContainer.catData.findIndex(function(x){return x.id == type})];;
+		legend[areaType] = mainContainer.catData[mainContainer.catData.findIndex(function(x){return x.id == areaType})];;
 	}
-	console.log(legend);
+
+	data = label_imgPathList[label_imgPathListIndex];
+	segdata = data.slic.tag;
+	for(var i = 0; i < segdata.length; ++i){
+		var segmentCatID = segdata[i];
+		if(segmentCatID != -1){
+			legend[segmentCatID] = mainContainer.catData[mainContainer.catData.findIndex(function(x){return x.id == segmentCatID})];;
+		}
+	}
+
+	//console.log(legend);
 	for (var key in legend){
 		var cat = legend[key];
 		legContainer = document.createElement('div');
@@ -248,7 +370,10 @@ function label_drawLegend(idImage){
 		legendDiv.appendChild(legContainer);
 	}
 }
-
+function label_wipeLegend(){
+	var legendDiv = document.getElementById("legend");
+	legendDiv.innerHTML = "";
+}
 function label_getImgRatio(){
 	var refImage = document.getElementById('image');
 	return refImage.clientWidth/refImage.naturalWidth;
@@ -276,6 +401,8 @@ function label_nextImage(){
 
 function label_removeImage(){
 	label_wipeAreas();
+	label_wipeGrid();
+	label_wipeSegment();
 	var refImage = document.getElementById('image');
 	if(refImage){
 		refImage.src = "";
@@ -285,9 +412,30 @@ function label_wipeAreas(){
 	var areaCanvas = document.getElementById("areaCanvas");
 	areaCtx = areaCanvas.getContext("2d");
 	areaCtx.clearRect(0, 0, areaCanvas.width, areaCanvas.height);
+
 	dataAreas = [];
 	updateNbrAreas();
 
+	
+
+}
+function label_wipeGrid(){
+	var slicCanvas = document.getElementById("slicCanvas");
+	slicCtx = slicCanvas.getContext("2d");
+	slicCtx.clearRect(0, 0, slicCanvas.width, slicCanvas.height);
+}
+function label_wipeSegment(){
+	var segmentCanvas = document.getElementById("segmentCanvas");
+	slicCtx = segmentCanvas.getContext("2d");
+	slicCtx.clearRect(0, 0, segmentCanvas.width, segmentCanvas.height);
+	label_wipeLegend();
+	// Reset all values
+	var data = label_imgPathList[label_imgPathListIndex];
+	segments = data.slic.tag;
+	for(var i = 0; i < segments.length; i++){
+		segments[i] = -1;
+	}
+	console.log(segments);
 }
 
 /////////////////////////
@@ -297,6 +445,8 @@ function label_wipeAreas(){
 //creating categories 
 
 
+label_initComboNbrSeg();
+label_initComboCompact();
 label_loadCategories();
 function label_loadCategories(){
 	// Fetch and render the categories
@@ -372,15 +522,13 @@ function label_initComboSet(){
 
 
 	function appendToCombo(text,value){
-		$("#combo4").append("<option value=\""+value+"\">"+text+"</option>")
-		.on("change", function(e) {
-			label_updateComboCat();
-    		label_loadImages();
-		});
+		$("#combo4").append("<option value=\""+value+"\">"+text+"</option>");
 	}
-
-
-	$("#combo4").select2({width: '100px',placeholder: 'Select a set'});
+	$("#combo4").select2({width: '100px',placeholder: 'Select a set'})
+	.on("change", function(e) {
+		label_updateComboCat();
+    	label_loadImages();
+    });
 }
 function emptyCombo(comboElem){
 	while (comboElem.childElementCount != 0){
@@ -438,6 +586,7 @@ function label_updateButtons(){
 ///////////////////////////
 function label_onResetClicked(){
 	label_wipeAreas();
+	label_wipeSegment();
 }
 
 
@@ -479,7 +628,7 @@ function updateNbrAreas(){
 }	
 function label_initDraw(canvas) {
 
-	var canvas = document.getElementById('preview');
+	var canvas = document.getElementById('imageDiv');
 	/////  CLICK  ///////////////////////////
 	document.onmousemove = function (e) {
 		onMoveHandler(e);
@@ -521,6 +670,8 @@ function label_onTouchMove(e){
 ///////////////////////////////////////////
 	
 function onClickHandler(e) {
+	var initRatio = label_getImgRatio();
+	var refPreview = document.getElementById('preview');
 	if(eraseMode== true){
 		if(e.target.className == "rectangle"){
 			e.target.remove();
@@ -528,10 +679,57 @@ function onClickHandler(e) {
 		else if(e.target.className == "rectangleText"){
 			e.target.parentElement.remove();
 		}
+	}else{
+		data = label_imgPathList[label_imgPathListIndex];
+		gridarray = data.slic.udata;
+		if(e.type == "click"){
+			x = Math.round(e.offsetX/initRatio);
+			y = Math.round(e.offsetY/initRatio);
+		}
+		else if(e.type == "touchstart"){
+			x = Math.round((e.targetTouches[0].pageX - areaCanvas.offsetParent.offsetParent.offsetLeft + refPreview.scrollLeft)/initRatio);
+			y = Math.round((e.targetTouches[0].pageY - areaCanvas.offsetParent.offsetParent.offsetTop + refPreview.scrollTop)/initRatio);
+		}
+		else{
+			console.log("no event recognized");
+		}
+
+		
+		segmentId = gridarray[y][x];
+
+		//console.log("mouse click");
+		//console.log(e);
+		//console.log(x+" "+y+" "+segmentId);
+		//canvas OK
+		var segmentCanvas = document.getElementById("segmentCanvas");
+
+		//segment OK 
+
+		//color get color
+		var combo = document.getElementById("combo");
+		var type = combo.options[combo.selectedIndex].value;
+		var selectedCat = mainContainer.catData[mainContainer.catData.findIndex(function(x){return x.id == type})];
+		var color = selectedCat.Color;
+		var colorId = parseInt(type);
+		segdata = data.slic.tag;
+		if(segdata[segmentId] == colorId){
+			segdata[segmentId] = -1;
+			color = "null";
+		}else{
+			segdata[segmentId] = colorId;
+		}
+		console.log(segdata);
+
+		// launch function
+
+		label_segFillCollor(segmentCanvas, segmentId, color, data);
+
+		label_drawLegend();
 	}
 }
 
 function onDownHandler(e) {
+	return;
 	console.log("mouse down");
 	painting = true;
 	lineCtx.strokeStyle = "#ffffff";
@@ -569,7 +767,7 @@ function onDownHandler(e) {
 }
 
 function onMoveHandler(e) {
-
+	return;
 	if (painting) {
 		var refPreview = document.getElementById('preview');
         if(e.type == "mousemove"){
@@ -602,6 +800,7 @@ function onMoveHandler(e) {
 }
 
 function onUpHandler(e) {
+	return;
 	console.log("mouse up");
 		if(painting){
 			var combo = document.getElementById("combo");
@@ -627,6 +826,32 @@ function onUpHandler(e) {
 	updateNbrAreas();
 }
 
+//Fill the segment provided with the provided color
+//If segment already colored, uncolor it
+function label_segFillCollor(canva, segment, color, data){
+	gridarray = data.slic.udata;
+	
+	var initRatio = label_getImgRatio();
+	canvaCtx = canva.getContext("2d");
+		
+	function drawPixel(x,y,color,canva){
+		canvaCtx.clearRect(x, y, 1, 1);
+		if(color == "null"){
+			
+		}else{
+			canvaCtx.fillStyle = color;
+			canvaCtx.fillRect( x, y, 1, 1 );
+		}
+	}
+	for(j = 0; j < gridarray.length ; j++){
+		for(i = 0 ; i < gridarray[j].length; i++){
+			//console.log(gridarray[j][i]+" "+segment)
+			if(gridarray[j][i] == segment){
+				drawPixel(i, j,color, canva);
+			}
+		}
+	}
+}
 
 
 // Get the modal
@@ -655,12 +880,30 @@ function label_onModalClicked(){
 
 function label_onNextClicked(){
 	var elements = document.getElementsByClassName("rectangle");
-	if(dataAreas.length>0){
+	var imageData = label_imgPathList[label_imgPathListIndex];
+	var segments = imageData.slic.tag;
+	imageData.slic.udata = [];
+	var gridChanged = false;
+	for(var i = 0; i < segments.length ; i++){
+		if(segments[i] != -1){
+			gridChanged = true;
+			break;
+		}
+	}
+	console.log(data);
+	if(gridChanged){
 		console.log("prepare request");
 		var data= {};
 		data["areas"]=dataAreas;
+		data["slic"] = imageData;
 		data["dataSrc"]=label_srcName;
 		data["updated"]= label_imgPathList[label_imgPathListIndex].updated_at;
+		var comboNbrSeg = document.getElementById("comboNbrSeg");
+		var nbrSegments = comboNbrSeg.options[comboNbrSeg.selectedIndex].value;
+		data["nbrSegments"]= nbrSegments;
+		var comboCompact = document.getElementById("comboCompact");
+		var compactness = comboCompact.options[comboCompact.selectedIndex].value;
+		data["compactness"] = compactness
 		console.log(data);
 		data[site.csrf.keys.name] = site.csrf.name;
 		data[site.csrf.keys.value] = site.csrf.value;
@@ -705,6 +948,98 @@ window.onscroll = function(){
 };
 
 ///////////////////////////////
+
+function redrawAll(){
+	redrawArea();
+	redrawSlic();
+}
 window.addEventListener("resize", function(){
-  	redrawArea();
+	redrawAll();
 });
+
+//chrome fix
+var globImage = document.getElementById('image');
+new ResizeObserver(redrawAll).observe(globImage);
+
+
+
+///////// SWITCHS /////////////
+
+function label_onViewSegmentClicked(element){
+
+	if (element.checked){
+		label_showSegSegment(true);
+	}
+	else{
+		label_showSegSegment(false);
+	}
+}
+function label_showSegSegment(bool){
+	var segmentCanvas = document.getElementById("segmentCanvas");
+	if(bool){
+		segmentCanvas.style.display = "initial";
+	}else{
+		segmentCanvas.style.display = "none";
+	}
+}
+
+function label_onViewGridClicked(element){
+
+	if (element.checked){
+		label_showSegGrid(true);
+	}
+	else{
+		label_showSegGrid(false);
+	}
+}
+function label_showSegGrid(bool){
+	var slicCanvas = document.getElementById("slicCanvas");
+	if(bool){
+		slicCanvas.style.display = "initial";
+	}else{
+		slicCanvas.style.display = "none";
+	}
+}
+
+function label_onViewImgClicked(element){
+
+	if (element.checked){
+		label_showSegImg(true);
+	}
+	else{
+		label_showSegImg(false);
+	}
+}
+function label_showSegImg(bool){
+	var lineCanvas = document.getElementById("lineCanvas");
+	//var image = document.getElementById("image");
+	if(bool){
+		lineCanvas.style.background = "initial";
+		//image.style.display = "initial";
+	}else{
+		lineCanvas.style.background = "black";
+		//image.style.display = "none";
+	}
+}
+function label_initComboNbrSeg(){
+	$('#comboNbrSeg').append("<option value=100>100</option>");
+	$('#comboNbrSeg').append("<option value=250>250</option>");
+	$('#comboNbrSeg').append("<option value=500>500</option>");
+	$('#comboNbrSeg').append("<option value=1000>1000</option>");
+	$('#comboNbrSeg').val(250);
+	$('#comboNbrSeg').select2({tags: true});
+}
+function label_initComboCompact(){
+	$('#comboCompact').append("<option value=0.01>0.01</option>");
+	$('#comboCompact').append("<option value=0.1>0.1</option>");
+	$('#comboCompact').append("<option value=1>1</option>");
+	$('#comboCompact').append("<option value=10>10</option>");
+	$('#comboCompact').append("<option value=100>100</option>");
+	$('#comboCompact').val(10);
+	$('#comboCompact').select2({tags: true});
+}
+function label_onReloadClicked(){
+	var data = label_imgPathList[label_imgPathListIndex];
+	label_removeImage();
+	label_loadImages(data.id);
+}
