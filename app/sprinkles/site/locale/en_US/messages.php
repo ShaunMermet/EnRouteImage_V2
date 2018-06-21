@@ -67,6 +67,7 @@ return [
         "SIGN_UP" => "Sign up",
         "RESET" => "Reset",
         "SELECTALL" => "Select all",
+        "RELOAD_IMAGE" => "Reload",
     ],
     "FEEDBACK"              => [
         "NO_IMAGE" => "No image",
@@ -88,9 +89,24 @@ return [
         "URECT" =>[
             "SWITCH" => "Show non-selected",
         ],
+        "SEGMENT" =>[
+            "SWITCH" => "Show tags",
+        ],
+        "GRID" =>[
+            "SWITCH" => "Show grid",
+        ],
+        "IMG" =>[
+            "SWITCH" => "Show image",
+        ],
     ],
     "LABEL"              => [
         "@TRANSLATION" => "Label",
+    ],
+    "SEG" => [
+        "PARAMS" => [
+            "NBR_SEG" =>"Segment number",
+            "COMPACT" =>"Compactness"
+        ]
     ],
     "VALIDATE"           => "Validate",
     
@@ -112,6 +128,9 @@ return [
             "BBOX_STATS"     =>"Bbox statistics",
             "SEG_STATS"     =>"Segmentation statistics"
         ]
+    ],
+    "SEGLABEL" =>[
+        "CATEGORIES"=>"Categories"
     ],
 
 

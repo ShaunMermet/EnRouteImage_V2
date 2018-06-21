@@ -491,7 +491,7 @@ class UserController extends SimpleController
             throw $e;
         }
 
-        return $this->ci->view->render($response, 'components/modals/confirm-delete-user.html.twig', [
+        return $this->ci->view->render($response, 'modals/confirm-delete-user.html.twig', [
             'user' => $user,
             'form' => [
                 'action' => "api/users/u/{$user->user_name}",
@@ -568,7 +568,7 @@ class UserController extends SimpleController
         $schema = new RequestSchema('schema://user/create.json');
         $validator = new JqueryValidationAdapter($schema, $this->ci->translator);
 
-        return $this->ci->view->render($response, 'components/modals/user.html.twig', [
+        return $this->ci->view->render($response, 'modals/user.html.twig', [
             'user' => $user,
             'groups' => $groups,
             'locales' => $locales,
@@ -593,6 +593,7 @@ class UserController extends SimpleController
      */
     public function getModalEdit($request, $response, $args)
     {
+        error_log("site in modeledit 0");
         // GET parameters
         $params = $request->getQueryParams();
 
@@ -612,7 +613,7 @@ class UserController extends SimpleController
         foreach ($user->group as $grp) {
             //error_log(print_r($grp,true));
         }
-        
+        error_log("site in modeledit 1");
         /** @var UserFrosting\Sprinkle\Account\Authorize\AuthorizationManager */
         $authorizer = $this->ci->authorizer;
 
@@ -627,7 +628,7 @@ class UserController extends SimpleController
         ])) {
             throw new ForbiddenException();
         }
-
+        error_log("site in modeledit 2");
         // Get a list of all groups
         $groups = $classMapper->staticMethod('group', 'all');
 
@@ -642,7 +643,7 @@ class UserController extends SimpleController
             'hidden' => ['theme'],
             'disabled' => ['user_name']
         ];
-
+        error_log("site in modeledit 3");
         // Disable group field if currentUser doesn't have permission to modify group
         if (!$authorizer->checkAccess($currentUser, 'update_user_field', [
             'user' => $user,
@@ -650,14 +651,14 @@ class UserController extends SimpleController
         ])) {
             $fields['disabled'][] = 'group';
         }
-
+        error_log("site in modeledit 4");
         // Load validation rules
         $schema = new RequestSchema('schema://user/edit-info.json');
         $validator = new JqueryValidationAdapter($schema, $this->ci->translator);
-
+        error_log("site in modeledit 5");
         $translator = $this->ci->translator;
-
-        return $this->ci->view->render($response, 'components/modals/user.html.twig', [
+        error_log("site in modeledit 6");
+        return $this->ci->view->render($response, 'modals/user.html.twig', [
             'user' => $user,
             'groups' => $groups,
             'locales' => $locales,
@@ -710,7 +711,7 @@ class UserController extends SimpleController
         $schema = new RequestSchema('schema://user/edit-password.json');
         $validator = new JqueryValidationAdapter($schema, $this->ci->translator);
 
-        return $this->ci->view->render($response, 'components/modals/user-set-password.html.twig', [
+        return $this->ci->view->render($response, 'modals/user-set-password.html.twig', [
             'user' => $user,
             'page' => [
                 'validators' => $validator->rules('json', false)
@@ -751,7 +752,7 @@ class UserController extends SimpleController
             throw new ForbiddenException();
         }
 
-        return $this->ci->view->render($response, 'components/modals/user-manage-roles.html.twig', [
+        return $this->ci->view->render($response, 'modals/user-manage-roles.html.twig', [
             'user' => $user
         ]);
     }
@@ -1213,12 +1214,12 @@ class UserController extends SimpleController
     protected function getUserFromParams($params)
     {
         // Load the request schema
-        $schema = new RequestSchema('schema://user/get-by-username.json');
+        $schema = new RequestSchema('schema://requests/user/get-by-username.yaml');
 
         // Whitelist and set parameter defaults
         $transformer = new RequestDataTransformer($schema);
         $data = $transformer->transform($params);
-
+        
         // Validate, and throw exception on validation errors.
         $validator = new ServerSideValidator($schema, $this->ci->translator);
         if (!$validator->validate($data)) {

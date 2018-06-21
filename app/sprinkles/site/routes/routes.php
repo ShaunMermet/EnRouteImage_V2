@@ -212,8 +212,19 @@ $app->group('/api/users', function () {
     //$this->put('/u/{user_name}/{field}', 'UserFrosting\Sprinkle\Site\Controller\Overrides\UserController:updateField');
 })->add('authGuard');
 
-$app->group('/modals/users', function () {
+/*$app->group('/modals/users', function () {
     $this->get('/edit', 'UserFrosting\Sprinkle\Site\Controller\Overrides\UserController:getModalEdit');
+})->add('authGuard');*/
+$app->group('/modals/users', function () {
+    $this->get('/confirm-delete', 'UserFrosting\Sprinkle\Site\Controller\Overrides\UserController:getModalConfirmDelete');
+
+    $this->get('/create', 'UserFrosting\Sprinkle\Site\Controller\Overrides\UserController:getModalCreate');
+
+    $this->get('/edit', 'UserFrosting\Sprinkle\Site\Controller\Overrides\UserController:getModalEdit');
+
+    $this->get('/password', 'UserFrosting\Sprinkle\Site\Controller\Overrides\UserController:getModalEditPassword');
+
+    $this->get('/roles', 'UserFrosting\Sprinkle\Site\Controller\Overrides\UserController:getModalEditRoles');
 })->add('authGuard');
 
 $app->group('/api/groups', function () {

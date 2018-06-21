@@ -1041,3 +1041,42 @@ UPDATE `permissions` SET `conditions` = 'always()' WHERE `permissions`.`id` = 28
 --------------------------------
 --- Changes for Beta 0.3.16 ----
 -------------------------------- 
+
+--
+-- Table structure for table `segmasks`
+--
+
+CREATE TABLE `segmasks` (
+  `id` int(4) NOT NULL,
+  `source` int(4) NOT NULL,
+  `user` int(4) NOT NULL DEFAULT '0' COMMENT 'id of the user that submitted the area',
+  `NbrSeg` int(11) DEFAULT NULL,
+  `compactness` int(11) DEFAULT NULL,
+  `segInfo` text CHARACTER SET utf8 COLLATE utf8_unicode_ci,
+  `slicStr` longtext CHARACTER SET utf8 COLLATE utf8_unicode_ci,
+  `deleted_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `segmasks`
+--
+ALTER TABLE `segmasks`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `segmasks`
+--
+ALTER TABLE `segmasks`
+  MODIFY `id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
