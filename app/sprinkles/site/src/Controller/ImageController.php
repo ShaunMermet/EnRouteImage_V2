@@ -912,11 +912,8 @@ class ImageController extends SimpleController
     }
 
     protected function createSlicInfoSeg($img, $nbrSegments, $compactness){
-        error_log("createSlicInfoSeg 1");
-        $scriptpath = dirname(__FILE__)."\Slic.py";
-        error_log(print_r($scriptpath,true));
-        $filepath = realpath(dirname(__FILE__)."\..\..\..\..\..\\efs\img\segmentation\\".$img->path);
-        error_log("$filepath");
+        $scriptpath = realpath(dirname(__FILE__)."/Slic.py");
+        $filepath = realpath(dirname(__FILE__)."/../../../../../efs/img/segmentation/".$img->path);
         $cmd = "python $scriptpath $filepath $nbrSegments $compactness";
         exec($cmd, $output, $error);
         $result = [];
@@ -925,19 +922,14 @@ class ImageController extends SimpleController
             error_log(print_r($output,true));
             return false;
         }else{
-            error_log("createSlicInfoSeg");
-            //error_log(print_r($output,true));
             $result["nbrSeg"] = $output[0];
             $dim = $output[1];
-            error_log(print_r($dim,true));
             $result["x"] = $output[2];
             $result["y"] = $output[1];
             $find = array(",","[","]");
             $replace = array("");
             $result["data"] = str_replace($find,$replace,$output[3]);
             $result["data"] = base64_encode(gzcompress($result["data"], 9, ZLIB_ENCODING_DEFLATE));
-            error_log(print_r($result,true));
-
         }
         return $result;
         
