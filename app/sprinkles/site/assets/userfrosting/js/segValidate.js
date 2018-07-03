@@ -25,13 +25,29 @@ function validate_loadCategories(){
 	    // Fetch successful
 	    function (data) {
 	    	mainContainer.catData = data;
-			validate_loadset();
+	    	validate_loadset();
 	    },
 	    // Fetch failed
 	    function (data) {
 	        
 	    }
 	);
+}
+function validate_updateComboCat(){
+	function appendToCombo(text,data){
+		$("#combo").append("<option value=\""+data+"\">"+text+"</option>");
+	}
+	emptyCombo($("#combo")[0]);
+	var setCombo = $("#combo4")[0];
+	var setSelectedID = setCombo.value;
+	if(setSelectedID == "") setSelectedID = 1;
+	for (i = 0; i < mainContainer.catData.length; i++) {
+		var cat = mainContainer.catData[i];
+		if(cat.set_id == setSelectedID){
+			appendToCombo(cat.Category,cat.id);
+		}
+	}
+	$("#combo").select2({ width: '100px'});
 }
 function validate_loadset(){
 	// Fetch the sets
@@ -53,6 +69,7 @@ function validate_loadset(){
 			}
 			validate_set.sort(function(a, b){return a.id-b.id})
 			validate_initComboSet();
+			validate_updateComboCat();
 			validate_loadImages();
 	    },
 	    // Fetch failed
@@ -73,7 +90,16 @@ function validate_initComboSet(){
 	}
 
 
-	$("#combo4").select2({width: '100px',placeholder: 'Select a set'});
+	$("#combo4").select2({width: '100px',placeholder: 'Select a set'})
+	.on("change", function(e) {
+		validate_updateComboCat();
+    	validate_loadImages();
+    });
+}
+function emptyCombo(comboElem){
+	while (comboElem.childElementCount != 0){
+		comboElem.removeChild(comboElem.firstChild);
+	}
 }
 ///////////////////////////////
 
@@ -83,6 +109,7 @@ validate_loadCategories();
 //validate_loadset();
 
 function validate_loadImages(){
+	validate_removeImage();
 	// Fetch and render the images
 	var combo4 = document.getElementById("combo4");
 	var imgSet;
@@ -221,6 +248,8 @@ function validate_addImage(){
 	  img.removeEventListener('load', loaded);
 	  img.removeEventListener('error', error);
 	  updateNbrAreas();
+	  validate_initDraw();
+	  redrawAll();
 	}
 	function error() {
 		img.removeEventListener('load', loaded);
@@ -365,13 +394,26 @@ function validate_drawAreas(idImage){
 }
 function validate_drawLegend(idImage){
 	var legendDiv = document.getElementById("legend");
-	var legend = {};
+	/*var legend = {};
 	for(var i = 0; i < validate_AreasList.length; ++i){
 		reviewedArea = validate_AreasList[i];
 		if(parseInt(reviewedArea.source) == idImage){
 			legend[reviewedArea.category.id] = reviewedArea.category;
 		}
+	}*/
+
+	legendDiv.innerHTML = "";
+	var legend = {};
+
+	data = validate_imgPathList[validate_imgPathListIndex];
+	segdata = data.mask.segInfo;
+	for(var i = 0; i < segdata.length; ++i){
+		var segmentCatID = segdata[i];
+		if(segmentCatID != -1){
+			legend[segmentCatID] = mainContainer.catData[mainContainer.catData.findIndex(function(x){return x.id == segmentCatID})];;
+		}
 	}
+
 	console.log(legend);
 	for (var key in legend){
 		var cat = legend[key];
@@ -472,10 +514,14 @@ function validate_onRejectClicked(){
 
 function validate_sendData(validated){
 
+	var imageData = validate_imgPathList[validate_imgPathListIndex];
+	imageData.mask.udata = [];
+	
 	var data= {};
 	data["dataSrc"]=validate_srcId;
 	data["validateType"]=validated;
 	data["updated"]= validate_imgPathList[validate_imgPathListIndex].updated_at;
+	data["slic"] = imageData;
 	data[site.csrf.keys.name] = site.csrf.name;
 	data[site.csrf.keys.value] = site.csrf.value;
 	// Validate or reject areas
@@ -555,13 +601,51 @@ window.onscroll = function(){
 function redrawAll(){
 	redrawSlic();
 }
-window.addEventListener("resize", function(){
+
+/*window.addEventListener("resize", function(){
 	redrawAll();
 });
 
 //chrome fix
 var globImage = document.getElementById('image');
-new ResizeObserver(redrawAll).observe(globImage);
+new ResizeObserver(redrawAll).observe(globImage);*/
+
+// please note, 
+// that IE11 now returns undefined again for window.chrome
+// and new Opera 30 outputs true for window.chrome
+// but needs to check if window.opr is not undefined
+// and new IE Edge outputs to true now for window.chrome
+// and if not iOS Chrome check
+// so use the below updated condition
+var isChromium = window.chrome;
+var winNav = window.navigator;
+var vendorName = winNav.vendor;
+var isOpera = typeof window.opr !== "undefined";
+var isIEedge = winNav.userAgent.indexOf("Edge") > -1;
+var isIOSChrome = winNav.userAgent.match("CriOS");
+
+if (isIOSChrome) {
+   // is Google Chrome on IOS
+  //chrome fix
+	var globImage = document.getElementById('image');
+	new ResizeObserver(redrawAll).observe(globImage);
+} else if(
+  isChromium !== null &&
+  typeof isChromium !== "undefined" &&
+  vendorName === "Google Inc." &&
+  isOpera === false &&
+  isIEedge === false
+) {
+   // is Google Chrome
+   //chrome fix
+	var globImage = document.getElementById('image');
+	new ResizeObserver(redrawAll).observe(globImage);
+} else { 
+   // not Google Chrome 
+   window.addEventListener("resize", function(){
+		redrawAll();
+	});
+}
 
 
 
@@ -623,4 +707,56 @@ function validate_showSegImg(bool){
 		lineCanvas.style.background = "black";
 		//image.style.display = "none";
 	}
+}
+
+function validate_initDraw(){
+	var canvas = document.getElementById('imageDiv');
+	canvas.onclick = function(e){
+		onClickHandler(e);
+	}
+}
+
+function onClickHandler(e) {
+	var initRatio = validate_getImgRatio();
+	var refPreview = document.getElementById('preview');
+	
+	data = validate_imgPathList[validate_imgPathListIndex];
+	gridarray = data.mask.udata;
+	if(e.type == "click"){
+		x = Math.round(e.offsetX/initRatio);
+		y = Math.round(e.offsetY/initRatio);
+	}
+	else if(e.type == "touchstart"){
+		x = Math.round((e.targetTouches[0].pageX - areaCanvas.offsetParent.offsetParent.offsetLeft + refPreview.scrollLeft)/initRatio);
+		y = Math.round((e.targetTouches[0].pageY - areaCanvas.offsetParent.offsetParent.offsetTop + refPreview.scrollTop)/initRatio);
+	}
+	else{
+		console.log("no event recognized");
+	}
+
+	
+	segmentId = gridarray[y][x];
+
+	var segmentCanvas = document.getElementById("segmentCanvas");
+
+	
+	//color get color
+	var combo = document.getElementById("combo");
+	var type = combo.options[combo.selectedIndex].value;
+	var selectedCat = mainContainer.catData[mainContainer.catData.findIndex(function(x){return x.id == type})];
+	var color = selectedCat.Color;
+	var colorId = parseInt(type);
+	segdata = data.mask.segInfo;
+	if(segdata[segmentId] == colorId){
+		segdata[segmentId] = -1;
+		color = "null";
+	}else{
+		segdata[segmentId] = colorId;
+	}
+	
+	// launch function
+
+	validate_segFillCollor(segmentCanvas, segmentId, color, data);
+
+	validate_drawLegend(validate_imgPathList[validate_imgPathListIndex].id);
 }

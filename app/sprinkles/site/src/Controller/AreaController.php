@@ -741,14 +741,20 @@ class AreaController extends SimpleController
             //$this->deleteSegAreas($data->dataSrc,FALSE);
         }
 
-        $segimg = SegImage::where('id', $data->dataSrc)->first();
+        $segimg = SegImage::where('id', $data->dataSrc)->with('mask')->first();
         //$Areas = SegArea::where('source', '=', $segimg->id)->get();
-                                
+        $mask = $segimg->mask;
+
         if($data->validateType == 0){
             $state = 4;
         }
         else{
             $state = 3;
+            //search mask
+            //replace with new
+            //$mask->user = $currentUser->id;
+            $mask->segInfo = json_encode($data->slic->mask->segInfo);
+            $mask->save();
         }
         $segimg->state = $state;
         //foreach ($Areas as $Area) {

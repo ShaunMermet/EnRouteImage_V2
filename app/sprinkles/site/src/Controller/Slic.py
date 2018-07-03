@@ -4,7 +4,6 @@ import sys
 #import StringIO
 import cv2
 
-from skimage.color import rgb2gray
 from skimage.segmentation import slic
 from skimage.segmentation import mark_boundaries
 from PIL import Image
@@ -20,13 +19,20 @@ name,ext = lastpath[-1].split(".")
 #print(name)
 #print(ext)
 
+f1=open('./efs/tmp/testfile.txt', 'w+')
+f1.write(filename+'\n')
+f1.write(str(nbrSegments)+'\n')
+f1.write(str(compactness)+'\n')
+
+
 #image = Image.open(filename)
-image = cv2.imread(filename)
+image = cv2.imread(filename,1)
+
 #image.show()
 img=np.asarray(image)
 #RGB_img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 #img = image
-
+check = img.tolist()
 segments_slic = slic(img, n_segments=nbrSegments, compactness=compactness, sigma=1)
 #print('SLIC number of segments: {}'.format(len(np.unique(segments_slic))))
 print('{}'.format(len(np.unique(segments_slic))))
@@ -53,5 +59,7 @@ print(nplist)
 ##### PLOT #### 
 #plt.imshow(mark_boundaries(RGB_img, segments_slic))
 #plt.show()
-
+f1.write(str(check)+'\n')
+f1.write(str(nplist)+'\n')
+f1.close()
 

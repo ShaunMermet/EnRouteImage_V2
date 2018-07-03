@@ -13,6 +13,8 @@ var mainContainer = {};
 ////////////GET IMG FROM SERVER//////
 
 function label_loadImages(idImage){
+	label_wipeGrid();
+	label_wipeSegment();
 	label_imgPathList = [];
 	var combo4 = document.getElementById("combo4");
 	var imgSet;
@@ -94,6 +96,8 @@ function label_loadImages(idImage){
 	
 }
 function label_loadRects(){
+	label_addImage();
+	return;
 	var data= {};
 	data["ids"]=[];
 	for(var i = 0; i < label_imgPathList.length; ++i){
@@ -164,6 +168,7 @@ function label_addImage(){
 		  img.removeEventListener('load', loaded);
 		  img.removeEventListener('error', error);
 		  updateNbrAreas();
+		  redrawAll();
 		}
 		function error() {
 			img.removeEventListener('load', loaded);
@@ -335,6 +340,9 @@ function label_drawLegend(idImage){
 	}
 
 	data = label_imgPathList[label_imgPathListIndex];
+	if(!data){
+		return;
+	}
 	segdata = data.slic.tag;
 	for(var i = 0; i < segdata.length; ++i){
 		var segmentCatID = segdata[i];
@@ -431,11 +439,13 @@ function label_wipeSegment(){
 	label_wipeLegend();
 	// Reset all values
 	var data = label_imgPathList[label_imgPathListIndex];
-	segments = data.slic.tag;
-	for(var i = 0; i < segments.length; i++){
-		segments[i] = -1;
+	if(data){
+		segments = data.slic.tag;
+		for(var i = 0; i < segments.length; i++){
+			segments[i] = -1;
+		}
+		console.log(segments);
 	}
-	console.log(segments);
 }
 
 /////////////////////////
@@ -459,7 +469,6 @@ function label_loadCategories(){
 	    // Fetch successful
 	    function (data) {
 	        mainContainer.catData = data;
-			label_updateComboCat();
 			label_loadset();
 	    },
 	    // Fetch failed
@@ -488,6 +497,7 @@ function label_loadset(){
 			}
 			label_set.sort(function(a, b){return a.id-b.id})
 			label_initComboSet();
+			label_updateComboCat();
 			label_loadImages();
 	    },
 	    // Fetch failed
@@ -953,14 +963,45 @@ function redrawAll(){
 	redrawArea();
 	redrawSlic();
 }
-window.addEventListener("resize", function(){
-	redrawAll();
-});
 
-//chrome fix
-var globImage = document.getElementById('image');
-new ResizeObserver(redrawAll).observe(globImage);
 
+
+// please note, 
+// that IE11 now returns undefined again for window.chrome
+// and new Opera 30 outputs true for window.chrome
+// but needs to check if window.opr is not undefined
+// and new IE Edge outputs to true now for window.chrome
+// and if not iOS Chrome check
+// so use the below updated condition
+var isChromium = window.chrome;
+var winNav = window.navigator;
+var vendorName = winNav.vendor;
+var isOpera = typeof window.opr !== "undefined";
+var isIEedge = winNav.userAgent.indexOf("Edge") > -1;
+var isIOSChrome = winNav.userAgent.match("CriOS");
+
+if (isIOSChrome) {
+   // is Google Chrome on IOS
+  //chrome fix
+	var globImage = document.getElementById('image');
+	new ResizeObserver(redrawAll).observe(globImage);
+} else if(
+  isChromium !== null &&
+  typeof isChromium !== "undefined" &&
+  vendorName === "Google Inc." &&
+  isOpera === false &&
+  isIEedge === false
+) {
+   // is Google Chrome
+   //chrome fix
+	var globImage = document.getElementById('image');
+	new ResizeObserver(redrawAll).observe(globImage);
+} else { 
+   // not Google Chrome 
+   window.addEventListener("resize", function(){
+		redrawAll();
+	});
+}
 
 
 ///////// SWITCHS /////////////

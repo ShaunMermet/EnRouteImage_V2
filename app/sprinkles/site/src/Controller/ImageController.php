@@ -914,6 +914,10 @@ class ImageController extends SimpleController
     protected function createSlicInfoSeg($img, $nbrSegments, $compactness){
         $scriptpath = realpath(dirname(__FILE__)."/Slic.py");
         $filepath = realpath(dirname(__FILE__)."/../../../../../efs/img/segmentation/".$img->path);
+        error_log("nbr segment");
+        error_log(print_r($nbrSegments,true));
+        error_log("compactness");
+        error_log(print_r($compactness,true));
         $cmd = "python $scriptpath $filepath $nbrSegments $compactness";
         exec($cmd, $output, $error);
         $result = [];

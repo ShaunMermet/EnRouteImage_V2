@@ -1080,3 +1080,7 @@ ALTER TABLE `segmasks`
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+
+INSERT INTO `permission_roles` (`permission_id`, `role_id`, `created_at`, `updated_at`) VALUES ('36', '4', NULL, NULL), ('28', '4', NULL, NULL);
+UPDATE `permissions` SET `conditions` = 'has_role(self.id,2)||has_role(self.id,4)', `created_at` = NULL, `updated_at` = NULL WHERE `permissions`.`id` = 28;
