@@ -1042,6 +1042,10 @@ UPDATE `permissions` SET `conditions` = 'always()' WHERE `permissions`.`id` = 28
 --- Changes for Beta 0.3.16 ----
 -------------------------------- 
 
+--------------------------------
+--- Changes for Beta 0.3.17 ----
+-------------------------------- 
+
 --
 -- Table structure for table `segmasks`
 --
@@ -1084,3 +1088,12 @@ ALTER TABLE `segmasks`
 
 INSERT INTO `permission_roles` (`permission_id`, `role_id`, `created_at`, `updated_at`) VALUES ('36', '4', NULL, NULL), ('28', '4', NULL, NULL);
 UPDATE `permissions` SET `conditions` = 'has_role(self.id,2)||has_role(self.id,4)', `created_at` = NULL, `updated_at` = NULL WHERE `permissions`.`id` = 28;
+
+
+
+UPDATE `permissions` SET `conditions` = 'always()' WHERE `permissions`.`id` = 29;
+INSERT INTO `permission_roles` (`permission_id`, `role_id`, `created_at`, `updated_at`) VALUES ('29', '4', NULL, NULL);
+
+
+INSERT INTO `permission_roles` (`permission_id`, `role_id`, `created_at`, `updated_at`) VALUES ('35', '4', NULL, NULL);
+ALTER TABLE `labelimgexportlinks` CHANGE `size` `size` BIGINT(11) NOT NULL DEFAULT '0';

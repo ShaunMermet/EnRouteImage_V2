@@ -24,6 +24,7 @@ use UserFrosting\Sprinkle\Site\Sprunje\ImgLinksSprunje;
 use UserFrosting\Sprinkle\Site\Sprunje\SegImageSprunje;
 use Illuminate\Database\QueryException;
 use UserFrosting\Sprinkle\Core\Controller\SimpleController;
+use Illuminate\Database\Capsule\Manager as Capsule;
 
 class UploadHandler extends SimpleController
 {
@@ -111,7 +112,7 @@ class UploadHandler extends SimpleController
             'accept_file_types' => '/\.(jpe?g|png|zip)$/i',
             // The php.ini settings upload_max_filesize and post_max_size
             // take precedence over the following max_file_size setting:
-            'max_file_size' => 10*1024*1024,
+            'max_file_size' => 12*1024*1024,
             'min_file_size' => 1,
             // The maximum number of files for the upload directory:
             'max_number_of_files' => null,
@@ -365,6 +366,7 @@ class UploadHandler extends SimpleController
         return $result;
     }
     protected function get_file_bdd_by_id($file_id){
+        Capsule::disableQueryLog();
         if($this->options['imageMode'] == 'segmentation'){
             $getSet = SegImage::where('id',  $file_id)
                                 ->with('set')
@@ -373,7 +375,11 @@ class UploadHandler extends SimpleController
             $getSet = ImgLinks::where('id',  $file_id)
                                 ->with('set')
                                 ->first();
+            //$getSet = Capsule::table('labelimglinks')->where('id',  $file_id)
+                                //->with('set')
+            //                    ->first();
         }
+        //return 1;
         if(!$getSet) return '';
         $result = $getSet->toArray();
         return $result;
@@ -899,6 +905,10 @@ class UploadHandler extends SimpleController
             default:
                 return false;
         }
+        if($version == ''){return true;}
+        //if($version == 'thumbnail' ){return true;}
+        //if($version == 'light' ){return true;}
+        //error_log($this->get_memory_usage()." before src_img");
         $src_img = $this->gd_get_image_object(
             $file_path,
             $src_func,
@@ -915,8 +925,11 @@ class UploadHandler extends SimpleController
                 $src_func
             );
         }
+        //error_log(print_r($src_img,true));
         $max_width = $img_width = imagesx($src_img);
         $max_height = $img_height = imagesy($src_img);
+        //error_log(print_r($max_width,true));
+        //error_log(print_r($max_height,true));
         if (!empty($options['max_width'])) {
             $max_width = $options['max_width'];
         }
@@ -936,6 +949,7 @@ class UploadHandler extends SimpleController
             }
             return true;
         }
+        
         if (empty($options['crop'])) {
             $new_width = $img_width * $scale;
             $new_height = $img_height * $scale;
@@ -976,7 +990,23 @@ class UploadHandler extends SimpleController
             $img_width,
             $img_height
         ) && $write_func($new_img, $new_file_path, $image_quality);
+        //error_log("gd end");
+
+        //error_log(print_r($file_path,true));
+        //error_log(print_r($new_img,true));
+        //error_log(print_r($src_img,true));
+        //error_log($this->get_memory_usage());
         $this->gd_set_image_object($file_path, $new_img);
+        //error_log(memory_get_usage());
+        //imagedestroy($src_img);
+        //$src_img = null;
+        //error_log(memory_get_usage());
+        error_log($this->get_memory_usage()." scale ".$version." ".$scale." ".$src_img." ".$file_path);
+        //$optionsize = strlen(serialize($this->options));
+        //error_log($optionsize." option size");
+        //error_log(print_r($src_img,true));
+        //error_log(print_r($this->image_objects,true));
+        //error_log(print_r($success,true));
         return $success;
     }
 
@@ -1285,16 +1315,20 @@ class UploadHandler extends SimpleController
                 $OnamesList[$namesPart[0]] = $namesPart[1];
             }
         }
+        Capsule::connection()->disableQueryLog();
         /////////////////////////////////////////////////////////////////
         for( $i = 0; $i < $za->numFiles; $i++ ){ 
+            $this->image_objects = array();
             $stat = $za->statIndex( $i ); 
             $file_type = $this->get_file_type($stat['name']);
             if($file_type == 'image/jpeg' || $file_type == 'image/png'){
                 if($za->extractTo($tmpFileLoc.$tmpFolder, array($za->getNameIndex($i)))){
                     $filename = pathinfo($stat['name'],PATHINFO_FILENAME);
                     $areaData = $za->getFromName($filename.'.txt');
+                    unset($filename);
                     $OriginalName = $OnamesList[$stat['name']];
                     $data = array("data"=>$areaData, "set"=>$addData['set'], "Oname"=>$OriginalName);
+                    unset($areaData);
                     $this->handle_file_upload($tmpFileLoc.$tmpFolder.'/'.$za->getNameIndex($i), 
                                         $stat['name'], 
                                         $stat['size'], 
@@ -1303,6 +1337,7 @@ class UploadHandler extends SimpleController
                                         null,
                                         null,
                                         $data);
+                    unset($data);
                 }else{
                     error_log(print_r('Unable to extract the file.'));
                     error_log($za->getStatusString());
@@ -1321,11 +1356,15 @@ class UploadHandler extends SimpleController
             session_write_close();
             
             foreach ($_FILES['files']['tmp_name'] as $key => $value) {
-                $eye = pathinfo($value,PATHINFO_FILENAME);
-                error_log($eye);
+                //$eye = pathinfo($value,PATHINFO_FILENAME);
+                //error_log($eye);
             }
-                    
+            unset($stat);
+            unset($file_type);
+            error_log($this->get_memory_usage()." in loop");     
         }
+        error_log("zip loop");
+        error_log($this->get_memory_usage());
         $za->close();
         $this->rrmdir($tmpFileLoc.$tmpFolder);
         ///////////////////////////////////////////////////////////////////////
@@ -1341,7 +1380,7 @@ class UploadHandler extends SimpleController
     protected function handle_file_upload($uploaded_file, $name, $size, $type, $error,
             $index = null, $content_range = null, $data = null) {
         
-        error_log("handle size ". $size);
+        //error_log("handle size ". $size);
 
         $file = new \stdClass();
     //  $file->name = $this->get_file_name($uploaded_file, $name, $size, $type, $error,$index, $content_range);
@@ -1352,18 +1391,19 @@ class UploadHandler extends SimpleController
         {
             $addData = $this->handle_form_data($name, $index);
         }
-        error_log(print_r($addData,True));
+        //error_log(print_r($addData,True));
         $file->areaData = $addData['data'];
         $file->setValue = $addData['set'];
         $file->originalName = $addData['Oname'];
         if($file->originalName == "")
             $file->originalName = $name;
         
-        error_log($file->setValue);
+        //error_log("1 file av ".memory_get_usage());
+        //error_log($file->setValue);
 		$tmpHashName = sha1_file($uploaded_file);
 		$file->name = $this->fix_file_extension($uploaded_file, $tmpHashName, $size, $type, $error,
             $index, $content_range);
-		error_log($file->name);
+		//error_log($file->name);
         $file->size = $this->fix_integer_overflow((int)$size);
         $file->type = $type;
         
@@ -1386,6 +1426,7 @@ class UploadHandler extends SimpleController
 				}
 				$file_path = $this->get_upload_path($file->name);
 				$append_file = $content_range && is_file($file_path) && $file->size > $this->get_file_size($file_path);
+                ////////////////////
                 if($data){//archive file
                     rename($uploaded_file, $file_path);
                 }else{
@@ -1410,15 +1451,19 @@ class UploadHandler extends SimpleController
                 }
 				
 				$file_size = $this->get_file_size($file_path, $append_file);
+                error_log($file_path);
+                error_log($append_file);
+                error_log($file_size);
+                error_log($file->size);
 				if ($file_size === $file->size) {
-    //              error_log("upload handler non abort size test");
+                  error_log("upload handler non abort size test");
 					$file->url = $this->get_download_url($file->name);
 					if ($this->is_valid_image_file($file_path)) {
 						$this->handle_image_file($file_path, $file);
 					}
                 } else {
 					$file->size = $file_size;
-    //              error_log("upload handler abort");
+                  error_log("upload handler abort");
 					if (!$content_range && $this->options['discard_aborted_uploads']) {
 						unlink($file_path);
 						$file->error = $this->get_error_message('abort');
@@ -1626,8 +1671,8 @@ class UploadHandler extends SimpleController
             $result[$_POST['name'][$key]]['set'] = $_POST['set'][$key];
             $result[$_POST['name'][$key]]['Oname'] = $_POST['Oname'][$key];
         }
-        error_log(print_r($_POST,true));
-        error_log(print_r($result,true));
+        //error_log(print_r($_POST,true));
+        //error_log(print_r($result,true));
         return $result[$file];
     }
 
@@ -1818,6 +1863,7 @@ class UploadHandler extends SimpleController
             preg_split('/[^0-9]+/', $content_range_header) : null;
         $size =  $content_range ? $content_range[3] : null;
         $files = array();
+        error_log($this->get_memory_usage()." Start");
         if ($upload) {
             //error_log("Upload_123");
             //error_log( print_r($upload, TRUE) );
@@ -1894,8 +1940,13 @@ class UploadHandler extends SimpleController
                 }
                 
             }
+            //error_log(memory_get_usage());
+            error_log($this->get_memory_usage()." Only once");
+            $this->image_objects = array();
+            error_log($this->get_memory_usage()." Only once");
         }
         $response = array($this->options['param_name'] => $files);
+        error_log($this->get_memory_usage()." End");
         return $this->generate_response($response, $print_response);
     }
 
@@ -1979,4 +2030,16 @@ class UploadHandler extends SimpleController
         closedir($dir);
         rmdir($src);
     }
+
+    protected function get_memory_usage(){
+        $mem = memory_get_usage();
+        $strMem = (string)$mem;
+        if(strlen($strMem) == 8){$strMem = "0".$strMem;}
+        if(strlen($strMem) == 10){$strMem = "00".$strMem;}
+        if(strlen($strMem) == 11){$strMem = "0".$strMem;}
+        $formatMem = wordwrap($strMem , 3 , ' ' , true );
+        return $formatMem;
+    }
 }
+
+

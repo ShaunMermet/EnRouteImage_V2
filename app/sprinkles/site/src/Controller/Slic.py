@@ -1,12 +1,25 @@
-import matplotlib.pyplot as plt
-import numpy as np
 import sys
+named_libs = [('matplotlib', 'mp'), ('numpy', 'np')] # (library_name, shorthand)
+for (name, short) in named_libs:
+    try:
+        lib = __import__(name)
+    except:
+        print (name+" missing")
+    else:
+        globals()[short] = lib
+        #print(name+" OK")
+
+#import matplotlib.pyplot as plt
+#import numpy as np
 #import StringIO
 import cv2
-
+	#print ("debug 1")
 from skimage.segmentation import slic
+	#print ("debug 2")
 from skimage.segmentation import mark_boundaries
+	#print ("debug 3")
 from PIL import Image
+	#print ("debug 4")
 
 
 #print('Argument List:', str(sys.argv))
@@ -19,10 +32,10 @@ name,ext = lastpath[-1].split(".")
 #print(name)
 #print(ext)
 
-f1=open('./efs/tmp/testfile.txt', 'w+')
-f1.write(filename+'\n')
-f1.write(str(nbrSegments)+'\n')
-f1.write(str(compactness)+'\n')
+##f1=open('./efs/tmp/testfile.txt', 'w+')
+##f1.write(filename+'\n')
+##f1.write(str(nbrSegments)+'\n')
+#f1.write(str(compactness)+'\n')
 
 
 #image = Image.open(filename)
@@ -59,7 +72,7 @@ print(nplist)
 ##### PLOT #### 
 #plt.imshow(mark_boundaries(RGB_img, segments_slic))
 #plt.show()
-f1.write(str(check)+'\n')
-f1.write(str(nplist)+'\n')
-f1.close()
+##f1.write(str(check)+'\n')
+##f1.write(str(nplist)+'\n')
+##f1.close()
 

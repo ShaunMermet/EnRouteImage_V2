@@ -247,6 +247,7 @@ class SiteController extends SimpleController
      */
     public function prepareZip($request, $response, $args)
     {
+        error_log("in prepareZip");
         /** @var UserFrosting\Sprinkle\Account\Authenticate\Authenticator $authenticator */
         $authenticator = $this->ci->authenticator;
         if (!$authenticator->check()) {
@@ -318,13 +319,23 @@ class SiteController extends SimpleController
                 
                 mkdir($tmpFolderPath.$tmpFolder, 0700);
                 $filename = ($tmpFolderPath.$tmpFolder."/".$exportFileName.".zip");
-
+                $exportMode = "darknet";
+                //$fileImage = "Image";
+                //$fileLabel = "Label";
                 set_time_limit(0);
                 ####################### ZIP CREATE  + COUNT INFOS ###################################
                 $zip = new \ZipArchive();
                 $zip->open($filename, \ZipArchive::CREATE);
+                //$zip->addEmptyDir($fileImage);
+                //$zip->addEmptyDir($fileLabel);
                 $allfilenamePath = $tmpFolderPath.$tmpFolder."/filename.txt";
                 $allFilename = fopen($allfilenamePath, "w") or die("Unable to open file!");
+                $allImagePath = $tmpFolderPath.$tmpFolder."/imagePath.txt";
+                $allImage = fopen($allImagePath, "w") or die("Unable to open file!");
+                $allLabelPath = $tmpFolderPath.$tmpFolder."/labelPath.txt";
+                $allLabel = fopen($allLabelPath, "w") or die("Unable to open file!");
+                $allCategoriesPath = $tmpFolderPath.$tmpFolder."/categoriesList.txt";
+                $allCategories = fopen($allCategoriesPath, "w") or die("Unable to open file!");
                 /* fetch object array */
                 $nbrImages = 0;
                 $nbrAreas = 0;
@@ -344,9 +355,6 @@ class SiteController extends SimpleController
                     foreach ($imgAreas as $imgArea) {
                         $category = $imgArea->category->Category;
                         $category_ = str_replace(" ", "_", $category);
-                        $line = $category_." 0 0 0 ".$imgArea->rectLeft." ".$imgArea->rectTop." ".$imgArea->rectRight." ".$imgArea->rectBottom." 0 0 0 0 0 0 0";
-                        fwrite($txtfile, $line);
-                        fwrite($txtfile, "\n");
                         //Counting Areas
                         $nbrAreas++;
                         if($areasPerType[$category]){
@@ -354,6 +362,17 @@ class SiteController extends SimpleController
                         }else{
                             $areasPerType[$category] = 1;
                         }
+                        $categoryIndex = array_search($category, array_keys($areasPerType));
+                        if($exportMode == "darknet"){
+                            $pixelWidth = $imgArea->rectRight-$imgArea->rectLeft;
+                            $pixelHeight = $imgArea->rectBottom-$imgArea->rectTop;
+                            $line = $categoryIndex." ".(($imgArea->rectLeft+$pixelWidth/2)/$NImage->naturalWidth)." ".(($imgArea->rectTop+$pixelHeight/2)/$NImage->naturalHeight)." ".($pixelWidth/$NImage->naturalWidth)." ".($pixelHeight/$NImage->naturalHeight);
+                        }else if($exportMode == "KITTI"){
+                            $line = $category_." 0 0 0 ".$imgArea->rectLeft." ".$imgArea->rectTop." ".$imgArea->rectRight." ".$imgArea->rectBottom." 0 0 0 0 0 0 0";
+                        }
+                        fwrite($txtfile, $line);
+                        fwrite($txtfile, "\n");
+                        
                     }
                     
                     //Closing txt file with polygon data
@@ -362,14 +381,22 @@ class SiteController extends SimpleController
 
                     //Completing Zip
                     $zip->addFile($txtpath, $path_parts['filename'] .".txt");
-                    $zip->addFile($imgToExportPath, $path_parts['filename'].".jpeg");
+                    $zip->addFile($imgToExportPath, $path_parts['filename'].".jpg");
                     fwrite($allFilename, $NImage->path.",".$NImage->originalName."\n");
+                    fwrite($allImage, $path_parts['filename'].".jpg"."\n");
+                    fwrite($allLabel, $path_parts['filename'].".txt"."\n");
 
                     //Counting images
                     $nbrImages++;
                 }
+                foreach ($areasPerType as $key => $value){
+                    fwrite($allCategories, $key."\n");
+                }
                 fclose($allFilename);
                 $zip->addFile($allfilenamePath, "filename.txt");
+                $zip->addFile($allImagePath, "imagePath.txt");
+                $zip->addFile($allLabelPath, "labelPath.txt");
+                $zip->addFile($allCategoriesPath, "categoriesList.txt");
                 $zip->close();
                 ####################### ZIP  ###################################
                 set_time_limit(120);
