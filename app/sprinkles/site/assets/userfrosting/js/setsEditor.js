@@ -24,6 +24,7 @@ function setEdit_fillSetEditPanel(){
 		var pos = getIndexFromParam(upl_set,"id",setEditText.setId)
 		setEditText.value = upl_set[pos]["name"];
 		$("#setGrpList").val(upl_set[pos]["group"].id).trigger("change.select2");
+		//Update the category combolist to only show categories of the selected set ?
 	}
 	else{
 		setEdit_newSet();

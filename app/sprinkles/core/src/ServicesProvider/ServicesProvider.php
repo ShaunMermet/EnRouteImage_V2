@@ -298,6 +298,7 @@ class ServicesProvider
             $capsule->bootEloquent();
 
             if ($config['debug.queries']) {
+                error_log("query log on");
                 $logger = $c->queryLogger;
 
                 foreach ($config['db'] as $name => $dbConfig) {
@@ -487,6 +488,7 @@ class ServicesProvider
          * Extend this service to push additional handlers onto the 'query' log stack.
          */
         $container['queryLogger'] = function ($c) {
+            error_log("queryloger ???????");
             $logger = new Logger('query');
 
             $logFile = $c->locator->findResource('log://userfrosting.log', true, true);

@@ -11,7 +11,8 @@
             ]
         ],    
         'debug' => [
-            'auth' => false
+            'auth' => false,
+            'queries'=> false
         ],
         'site' => [
             'author'    =>      '',

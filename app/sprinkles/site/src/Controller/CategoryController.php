@@ -128,7 +128,7 @@ class CategoryController extends SimpleController
         $authenticator = $this->ci->authenticator;
         if (!$authenticator->check()) {
             $loginPage = $this->ci->router->pathFor('login');
-            return $response->withRedirect($loginPage, 400);
+            return $response->withRedirect($loginPage, 400);//Bad request
         }
 
         /** @var UserFrosting\Sprinkle\Account\Authorize\AuthorizationManager */
@@ -140,7 +140,7 @@ class CategoryController extends SimpleController
         // Access-controlled page
         if (!$authorizer->checkAccess($currentUser, 'uri_label')) {
             $loginPage = $this->ci->router->pathFor('login');
-           return $response->withRedirect($loginPage, 400);
+           return $response->withRedirect($loginPage, 400);//Change to 403 Forbidden
         }
 
         /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
@@ -168,8 +168,12 @@ class CategoryController extends SimpleController
 
         // Be careful how you consume this data - it has not been escaped and contains untrusted user-supplied content.
         // For example, if you plan to insert it into an HTML DOM, you must escape it on the client side (or use client-side templating).
-        return $response->withJson($result, 200, JSON_PRETTY_PRINT);
+        return $response->withJson($result, 200, JSON_PRETTY_PRINT);//OK
     }
+
+
+
+    //Do a getCategoryBySetIds
 
     /**
      * Edit a category.

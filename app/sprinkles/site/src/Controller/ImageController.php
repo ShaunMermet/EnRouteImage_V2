@@ -919,6 +919,7 @@ class ImageController extends SimpleController
         error_log("compactness");
         error_log(print_r($compactness,true));
         $cmd = "python $scriptpath $filepath $nbrSegments $compactness";
+        error_log(print_r($cmd,true));
         exec($cmd, $output, $error);
         $result = [];
         if ($error) {
