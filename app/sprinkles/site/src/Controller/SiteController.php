@@ -418,7 +418,11 @@ class SiteController extends SimpleController
                 foreach ($oldTokens as $oldToken){
                     //Delete old token of set (in bdd) and zip file (in folder)
                     //folder
-                    $this->rrmdir($tmpFolderPath.$oldToken->token);
+                    try{
+                        $this->rrmdir($tmpFolderPath.$oldToken->token);
+                    } catch(Exception $e){
+                        error_log(print_r($e,true));
+                    }
                     //bdd
                     $oldToken->delete();
                 }
@@ -426,7 +430,6 @@ class SiteController extends SimpleController
                 $res=array("msg"=>"Download Ready","link"=>$dlInfos->token,"size"=>$dlInfos->size,"user"=>$dlInfos->user,"dateGen"=>$dlInfos->date_generated,
                     "nbrImgs"=>$dlInfos->nbrImages,"nbrAreas"=>$dlInfos->nbrAreas,"areaPerType"=>$dlInfos->nbrAreas_per_type);
                 echo json_encode($res);
-                
             }
             else
                 echo json_encode("No file found");
@@ -963,20 +966,22 @@ class SiteController extends SimpleController
     }
 
     private function rrmdir($src) {
-        $dir = opendir($src);
-        while(false !== ( $file = readdir($dir)) ) {
-            if (( $file != '.' ) && ( $file != '..' )) {
-                $full = $src . '/' . $file;
-                if ( is_dir($full) ) {
-                    $this->rrmdir($full);
-                }
-                else {
-                    unlink($full);
+        if (is_dir($src)) {
+            $dir = opendir($src);
+            while(false !== ( $file = readdir($dir)) ) {
+                if (( $file != '.' ) && ( $file != '..' )) {
+                    $full = $src . '/' . $file;
+                    if ( is_dir($full) ) {
+                        $this->rrmdir($full);
+                    }
+                    else {
+                        unlink($full);
+                    }
                 }
             }
+            closedir($dir);
+            rmdir($src);
         }
-        closedir($dir);
-        rmdir($src);
     }
 
     private function saveTmpFolder($token, $archivePath,$db,$setId,$mode){
