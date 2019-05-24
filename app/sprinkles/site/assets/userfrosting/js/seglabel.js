@@ -51,7 +51,7 @@ function label_loadImages(idImage){
 				//var res = JSON.parse(datas);
 				label_imgPathList = datas;//res;
 				for (data of datas) {
-				    var dec = window.atob(data.slic.data);
+				    /*var dec = window.atob(data.slic.data);
 					function atos(arr) {
 					    for (var i=0, l=arr.length, s='', c; c = arr[i++];)
 					        s += String.fromCharCode(
@@ -63,8 +63,10 @@ function label_loadImages(idImage){
 					        );
 					    return s
 					}
-					result = atos(pako.ungzip(dec));
+					result = atos(pako.ungzip(dec));*/
+					result = data.slic.data;
 					ar1d = result.split(" ");
+					result = null;
 					ar2d = [];
 					for(j = 0 ; j < data.slic.y; j++){
 						ar2d[j] = [];
@@ -74,14 +76,17 @@ function label_loadImages(idImage){
 						col = i%data.slic.x;
 						ar2d[row][col]=parseInt(ar1d[i]);
 					}
+					ar1d = null;
 					data.slic.udata = ar2d;
+					ar2d =[];
 					tag =[];
 					for (k = 0 ; k < data.slic.nbrSeg ; k++) {
 						tag[k]=-1;
 					}
 					data.slic.tag = tag;
+					tag = [];
 				}
-				console.log(datas);
+				//console.log(datas);
 			}
 			else label_imgPathList = [];
 			if(label_imgPathList.length == 0){document.getElementById('imgCounter').style = "DISPLAY: initial;max-width: 100px;";}
@@ -200,18 +205,30 @@ function label_drawSlic(label_srcName){
 	var segmentCanvas = document.getElementById("segmentCanvas");
 	segmentCanvas.width = parseInt(data.slic.x);
 	segmentCanvas.height = parseInt(data.slic.y);
-	function drawPixel(x,y){
-		slicCtx = slicCanvas.getContext("2d");
+	//function drawPixel(x,y){
+		var slicCtx = slicCanvas.getContext("2d");
 		slicCtx.fillStyle = "#FFFF00";
-		slicCtx.fillRect( x, y, 1, 1 );
-	}
-	for(j = 0; j < data.slic.y -1 ; j++){
-		for(i = 0 ; i < data.slic.x -1; i++){
+		//slicCtx.fillRect( x, y, 1, 1 );
+		
+	//}
+	var imageData = slicCtx.getImageData(0, 0, data.naturalWidth, data.naturalHeight);
+	var dataPxl = imageData.data;
+	for(j = 0; j < data.naturalHeight -1 ; j++){
+		for(i = 0 ; i < data.naturalWidth -1; i++){
 			if(gridarray[j][i] != gridarray[j][(i+1)]  || gridarray[j][i] != gridarray[(j+1)][i]){
-				drawPixel(i, j);
+				//slicCtx.fillRect( i, j, 1, 1 );
+				var index = (j * data.naturalWidth + i) * 4;
+
+		        //var value = x * y & 0xff;
+
+		        dataPxl[index]   = 255;    // red
+		        dataPxl[++index] = 255;    // green
+		        dataPxl[++index] = 0;    // blue
+		        dataPxl[++index] = 255;      // alpha
 			}
 		}
 	}
+	slicCtx.putImageData(imageData, 0, 0);
 }
 
 function label_drawAreas(idImage){
@@ -273,7 +290,7 @@ function redrawSlic(){
 	var segmentCanvas = document.getElementById("segmentCanvas");
 	segmentCanvas.style.width = refImage.width+'px';
 	segmentCanvas.style.height = refImage.height+'px';
-	function drawPixel(x,y){
+	/*function drawPixel(x,y){
 		slicCtx = slicCanvas.getContext("2d");
 		slicCtx.fillStyle = "#FFFF00";
 		slicCtx.fillRect( x*initRatio, y*initRatio, 1, 1 );
@@ -284,7 +301,8 @@ function redrawSlic(){
 				//drawPixel(i, j);
 			}
 		}
-	}
+	}*/
+	//gridarray = [];
 }
 function redrawArea(){
 	var refImage = document.getElementById('image');
@@ -422,6 +440,7 @@ function label_wipeAreas(){
 	areaCtx.clearRect(0, 0, areaCanvas.width, areaCanvas.height);
 
 	dataAreas = [];
+	currentPoly= {};
 	updateNbrAreas();
 
 	
@@ -892,7 +911,7 @@ function label_onNextClicked(){
 	var elements = document.getElementsByClassName("rectangle");
 	var imageData = label_imgPathList[label_imgPathListIndex];
 	var segments = imageData.slic.tag;
-	imageData.slic.udata = [];
+	//imageData.slic.udata = [];
 	var gridChanged = false;
 	for(var i = 0; i < segments.length ; i++){
 		if(segments[i] != -1){
@@ -900,12 +919,17 @@ function label_onNextClicked(){
 			break;
 		}
 	}
-	console.log(data);
+	var stringedTag = JSON.stringify(imageData.slic.tag);
+	
+	var lzwCompressed = JSON.stringify(LZW.compress(imageData.slic.data));//testStr
+	var lzwTagCompressed = JSON.stringify(LZW.compress(stringedTag));
+    
 	if(gridChanged){
 		console.log("prepare request");
 		var data= {};
 		data["areas"]=dataAreas;
-		data["slic"] = imageData;
+		data["slicStr"] = lzwCompressed;//compressedTest;//compressedStr;
+		data["segInfo"] = lzwTagCompressed;
 		data["dataSrc"]=label_srcName;
 		data["updated"]= label_imgPathList[label_imgPathListIndex].updated_at;
 		var comboNbrSeg = document.getElementById("comboNbrSeg");
@@ -914,7 +938,7 @@ function label_onNextClicked(){
 		var comboCompact = document.getElementById("comboCompact");
 		var compactness = comboCompact.options[comboCompact.selectedIndex].value;
 		data["compactness"] = compactness
-		console.log(data);
+		//console.log(data);
 		data[site.csrf.keys.name] = site.csrf.name;
 		data[site.csrf.keys.value] = site.csrf.value;
 
@@ -933,13 +957,28 @@ function label_onNextClicked(){
 		    // Fetch failed
 		    function (data) {
 		    	modal.style.display = "block";
-		        console.log("Sorry image outdated, go to the next one");
+		    	if (data.status == 408){
+		    		console.log("Sorry image outdated, go to the next one");
+		    	}else if (data.status == 489){
+		    		console.log("Sorry image too big");
+		    	}else {
+		    		console.log("Sorry an error occured at the server level");
+		    	}
+		        
 		    }
 		);
 	}
 	else{
 		label_nextImage();
 	}
+}
+
+function hexToString (hex) {
+    var string = '';
+    for (var i = 0; i < hex.length; i ++) {
+      string += hex.charCodeAt(i).toString(16)
+    }
+    return string;
 }
 
 function label_onMoreClicked(){
@@ -1084,3 +1123,85 @@ function label_onReloadClicked(){
 	label_removeImage();
 	label_loadImages(data.id);
 }
+
+//LZW Compression/Decompression for Strings
+var LZW = {
+    compress: function (uncompressed) {
+        "use strict";
+        // Build the dictionary.
+        var i,
+            dictionary = {},
+            c,
+            wc,
+            w = "",
+            result = [],
+            dictSize = 256;
+        for (i = 0; i < 256; i += 1) {
+            dictionary[String.fromCharCode(i)] = i;
+        }
+ 
+        for (i = 0; i < uncompressed.length; i += 1) {
+            c = uncompressed.charAt(i);
+            wc = w + c;
+            //Do not use dictionary[wc] because javascript arrays 
+            //will return values for array['pop'], array['push'] etc
+           // if (dictionary[wc]) {
+            if (dictionary.hasOwnProperty(wc)) {
+                w = wc;
+            } else {
+                result.push(dictionary[w]);
+                // Add wc to the dictionary.
+                dictionary[wc] = dictSize++;
+                w = String(c);
+            }
+        }
+ 
+        // Output the code for w.
+        if (w !== "") {
+            result.push(dictionary[w]);
+        }
+        return result;
+    },
+ 
+ 
+    decompress: function (compressed) {
+        "use strict";
+        // Build the dictionary.
+        var i,
+            dictionary = [],
+            w,
+            result,
+            k,
+            entry = "",
+            dictSize = 256;
+        for (i = 0; i < 256; i += 1) {
+            dictionary[i] = String.fromCharCode(i);
+        }
+ 
+        w = String.fromCharCode(compressed[0]);
+        result = w;
+        for (i = 1; i < compressed.length; i += 1) {
+            k = compressed[i];
+            if (dictionary[k]) {
+                entry = dictionary[k];
+            } else {
+                if (k === dictSize) {
+                    entry = w + w.charAt(0);
+                } else {
+                    return null;
+                }
+            }
+ 
+            result += entry;
+ 
+            // Add w+entry[0] to the dictionary.
+            dictionary[dictSize++] = w + entry.charAt(0);
+ 
+            w = entry;
+        }
+        return result;
+    }
+}/*, // For Test Purposes
+    comp = LZW.compress("TOBEORNOTTOBEORTOBEORNOT"),
+    decomp = LZW.decompress(comp);
+document.write(comp + '<br>' + decomp)*/;

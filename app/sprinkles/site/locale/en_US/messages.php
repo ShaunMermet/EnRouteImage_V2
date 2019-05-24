@@ -191,7 +191,7 @@ return [
         ],
         "CONTACT"=>[
             "TITLE"=>"Let's Get In Touch !",
-            "MAIL"=>"info@elab.co.jp",
+            "MAIL"=>"info@attraclab.com",
             "DESCRIPTION" => "",
         ]
     ]

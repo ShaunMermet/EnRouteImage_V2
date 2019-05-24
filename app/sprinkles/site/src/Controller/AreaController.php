@@ -451,37 +451,26 @@ class AreaController extends SimpleController
         $data = json_decode(json_encode($params), FALSE);
 
         error_log("saveSegSlic");
-        error_log(print_r($data,true));
-
+        //error_log(print_r($data,true));
+        
+        error_log(print_r($data->dataSrc,true));
         $checkImage = SegImage::where('id', $data->dataSrc)
                     ->where('updated_at',$data->updated)
                     ->count();
+        error_log(print_r($data->updated,true));
         if($checkImage != 1){
+            error_log("checkimage != 1");
+            error_log(print_r($checkimage,true));
             return $response->withJson([], 408, JSON_PRETTY_PRINT);
         }
 
+        error_log("apres 408");
+
         if (!empty($data))
         {
-            //$this->deleteSegAreas($data->dataSrc,FALSE);
-            
-            /*$areas= $data->areas;
-            foreach ($areas as $num => $area) {//for each rectangle
-                $SegArea = new SegArea;
-                $SegArea->source = $data->dataSrc;
-                $SegArea->areaType = $area->type;
-                $SegArea->data = serialize($area->points);//$array2 = unserialize($array);
-                if($currentUser){
-                    $SegArea->user = $currentUser->id;
-                }else{
-                    $SegArea->user = 0;
-                }
-                $segArea->state = $this->AREA_STATE_PENDING;
-                $SegArea->save();
-            }*/
 
             $targetImg = SegImage::where('id', $data->dataSrc)->with('mask')->first();
-            error_log("masque");
-            error_log(print_r($targetImg->toArray(),true));
+            //error_log(print_r($targetImg->toArray(),true));
             if(!$targetImg->mask){
                 $mask = new SegMask;
             }else{
@@ -491,10 +480,29 @@ class AreaController extends SimpleController
             $mask->NbrSeg = $data->nbrSegments;
             $mask->compactness = $data->compactness;
             $mask->user = $currentUser->id;
-            $mask->slicStr = $data->slic->slic->data;
-            $mask->segInfo = json_encode($data->slic->slic->tag);
-            $mask->save();
-        
+            //$mask->slicStr = $data->slic->slic->data;
+            error_log("avant slic");
+            $mask->slicStr = $data->slicStr;
+            error_log("avant tag");
+            $mask->segInfo = $data->segInfo;
+            error_log("apres tag");
+            try{
+                error_log("try save");
+                $mask->save(); // returns false
+            }
+            catch(\Exception $e){
+                // do task when error
+                error_log("error save");
+                $catchedError = $e->getMessage();   // insert query
+                $log = substr($catchedError, 0, 1000);
+                error_log(print_r($log,true));
+                return $response->withJson([], 489, JSON_PRETTY_PRINT);
+            }
+
+
+            //$mask->save();
+            error_log("masque apres save");
+            
             $targetImg->state = 2;
             $targetImg->save();
         }
@@ -753,7 +761,7 @@ class AreaController extends SimpleController
             //search mask
             //replace with new
             //$mask->user = $currentUser->id;
-            $mask->segInfo = json_encode($data->slic->mask->segInfo);
+            $mask->segInfo = $data->segInfo;
             $mask->save();
         }
         $segimg->state = $state;

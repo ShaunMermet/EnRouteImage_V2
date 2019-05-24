@@ -13,6 +13,12 @@ function export_onComboChanged(){
 	document.getElementById("exportButton").style.opacity = 1;
 	document.getElementById("exportButton").style.pointerEvents = "all";
 	$('#exportState').text("");
+	document.getElementById("trainButton").disabled = false;
+	document.getElementById("trainButton").style.opacity = 1;
+	document.getElementById("trainButton").style.pointerEvents = "all";
+
+	document.getElementById('trainState').innerHTML = "";
+	document.getElementById('trainProgress').innerHTML = "";
 }
 
 
@@ -196,4 +202,123 @@ function export_onDlClicked(){
 	//document.getElementById("dlButton").style.opacity = 0.5;
 	window.location.href = "../export/dl/"+export_token;
 	//document.getElementById('imgCounter').innerHTML = "";
+}
+
+function export_onTrainClicked(){
+	$('#trainButton').hide();
+	$('#trainColumn .stdLoaderButton').show();
+	var data= {};
+	var setCombo = document.getElementById("setAssignEx");
+	var setRequestedId = setCombo.options[setCombo.selectedIndex].value;
+	console.log("ask to train model "+setRequestedId);
+
+	data["setID"]=setRequestedId;
+
+	data[site.csrf.keys.name] = site.csrf.name;
+	data[site.csrf.keys.value] = site.csrf.value;
+
+	if(export_pagemode == "bbox"){
+		var url = site.uri.public + '/train';
+	}else if(export_pagemode == "segmentation"){
+		var url = site.uri.public + '/segTrain';
+	}
+	export_listenTrainProgress();
+	$.ajax({
+	  type: "POST",
+	  url: url,
+	  data: data
+	})
+	.then(
+	    // Fetch successful
+	    function (data) {
+	    	var res = JSON.parse(data);
+			if(typeof res === 'object' && "link" in res){
+				document.getElementById("dlModelButton").disabled = false;
+				document.getElementById("dlModelButton").style.opacity = 1;
+				document.getElementById("dlModelButton").style.pointerEvents = "all";
+				export_token = res.link;
+				document.getElementById('trainState').innerHTML = "Model ready";
+				document.getElementById('trainProgress').innerHTML = "100%";
+				//$('#imgCounter').text(res.nbrImgs+" Image(s) found");
+				//export_fillDLDetails(res);
+				closeEventSource(mainContainer.TKUEvent);
+			}
+			else if( res == "No file found"){
+				$('#trainState').text("No file");
+			}
+			$('#trainButton').show();
+			$('#trainColumn .stdLoaderButton').hide();
+	    },
+	    // Fetch failed
+	    function (data) {
+	        
+	    }
+	);
+	document.getElementById('trainState').innerHTML = "Trainning model...";
+}
+
+function export_listenTrainProgress(){
+	//$('#progress_bar_process').width("0%");
+	var url = site.uri.public + '/admin/train/keepUpdated';
+	if(mainContainer.TKUEvent){
+		closeEventSource(mainContainer.TKUEvent);
+	}
+	var source = new EventSource(url);
+	mainContainer.TKUEvent = source;
+	//mainContainer.lastTicksTable = [];
+	//for(var i = 0; i < mainContainer.tickFrameNumber; i++){
+	//	mainContainer.lastTicksTable.push(0);
+	//}
+	//mainContainer.archiveProgress_lastTick = 0;
+	source.onmessage = function(event) {
+		var data = JSON.parse(event.data);
+		console.log(data);
+		var setCombo = document.getElementById("setAssignEx");
+		var setRequestedId = setCombo.options[setCombo.selectedIndex].value;
+		var progressValue = data[setRequestedId].train_progress;
+		console.log(data[setRequestedId].train_progress);
+		document.getElementById('trainProgress').innerHTML = progressValue+"%...";
+		return;
+		if(!mainContainer.archiveProgress_lastTick) mainContainer.archiveProgress_lastTick = 0;
+		console.log(data);
+		if(jQuery.isEmptyObject(data)){
+			$('#progress_bar_process').width("0%");
+		}
+		var current = 0;
+	    var total = 0;
+	    for (var key in data) {
+		    current = current + data[key].upload_current;
+		    total = total + data[key].upload_total;
+		}
+		var filesPerSec = current - mainContainer.archiveProgress_lastTick;
+	    var filesPerSecFrame = meanLastTicks(filesPerSec);
+	    console.log(filesPerSecFrame);
+	    if(filesPerSec == 0) {
+	    	if(!mainContainer.archiveProgress_NoChangeCount)mainContainer.archiveProgress_NoChangeCount = 0;
+	    	mainContainer.archiveProgress_NoChangeCount++;
+	    	return;
+	    } else{
+	    	filesPerSec = filesPerSec/mainContainer.archiveProgress_NoChangeCount;
+	    	mainContainer.archiveProgress_NoChangeCount = 1;
+	    }
+	    var remainingSec = (total - current) / filesPerSec;
+	    var remainingTime = formatTime(remainingSec);
+	    var remainingSecFrane = (total - current) / filesPerSecFrame;
+	    var remainingTimeFrame = formatTime(remainingSecFrane);
+	    var processingProgress = Math.floor(current / total * 100);
+	    if(!processingProgress)processingProgress = 0;
+	    $('.progress-extendedLine2').html("File processing | "+processingProgress+"% | "+current+"/"+total+" | "+remainingTimeFrame);
+	    $('#progress_bar_process').width(processingProgress+"%");
+	    mainContainer.archiveProgress_lastTick = current;
+	    console.log("Current : "+current);
+	    console.log("Total : "+total);
+	    if(total == current){
+	    	upl_listenArchiveProgressStop();
+	    	$('.progress-extendedLine2').hide();
+			$('#progress_bar_process_main').hide();
+	    }
+	};
+}
+function export_listenTrainProgressStop(){
+	closeEventSource(mainContainer.TKUEvent);
 }

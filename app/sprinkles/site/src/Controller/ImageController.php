@@ -193,6 +193,9 @@ class ImageController extends SimpleController
         foreach ($segImg as $img) {
             $this->createLightImgSeg($img->path);
             $img->slic = $this->createSlicInfoSeg($img, $nbrSegmentsRequested, $compactnessRequested);
+            $newImg = SegImage::where ('path', '=', $img->path)
+                    ->first();
+            $img->updated_at = $newImg->updated_at;
         }
 
         $result = $segImg->toArray();
@@ -387,6 +390,8 @@ class ImageController extends SimpleController
         
         foreach ($segImg as $img) {
             $this->createLightImgSeg($img->path);
+            //$img->mask->slicStr = $img->mask->slicStr;
+            //$img->mask->segInfo = $img->mask->segInfo;
         }
 
         $result = $segImg->toArray();
@@ -924,7 +929,7 @@ class ImageController extends SimpleController
         $result = [];
         if ($error) {
             error_log("exec error");
-            error_log(print_r($output,true));
+            error_log(print_r($error,true));
             return false;
         }else{
             $result["nbrSeg"] = $output[0];
@@ -934,7 +939,7 @@ class ImageController extends SimpleController
             $find = array(",","[","]");
             $replace = array("");
             $result["data"] = str_replace($find,$replace,$output[3]);
-            $result["data"] = base64_encode(gzcompress($result["data"], 9, ZLIB_ENCODING_DEFLATE));
+            //$result["data"] = base64_encode(gzcompress($result["data"], 9, ZLIB_ENCODING_DEFLATE));
         }
         return $result;
         

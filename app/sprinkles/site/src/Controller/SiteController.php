@@ -1,5 +1,7 @@
 <?php
 
+//declare(encoding='UTF-8');
+                    
 namespace UserFrosting\Sprinkle\Site\Controller;
 
 use UserFrosting\Sprinkle\Core\Controller\SimpleController;
@@ -381,10 +383,13 @@ class SiteController extends SimpleController
 
                     //Completing Zip
                     $zip->addFile($txtpath, $path_parts['filename'] .".txt");
-                    $zip->addFile($imgToExportPath, $path_parts['filename'].".jpg");
+                    $zip->addFile($imgToExportPath, $NImage->path);
                     fwrite($allFilename, $NImage->path.",".$NImage->originalName."\n");
                     fwrite($allImage, $path_parts['filename'].".jpg"."\n");
                     fwrite($allLabel, $path_parts['filename'].".txt"."\n");
+
+                    //copy img to folder for training
+                    copy($imgToExportPath, $tmpFolderPath.$tmpFolder."/".$NImage->path);
 
                     //Counting images
                     $nbrImages++;
@@ -402,10 +407,10 @@ class SiteController extends SimpleController
                 set_time_limit(120);
 
                 //Unlink all textfile
-                $files = glob($tmpFolderPath.$tmpFolder.'/*.{txt}', GLOB_BRACE);
-                foreach($files as $file) {
-                  unlink($file);
-                }
+                //$files = glob($tmpFolderPath.$tmpFolder.'/*.{txt}', GLOB_BRACE);
+                //foreach($files as $file) {
+                //  unlink($file);
+                //}
 
                 //Fill Zip info in bdd
                 $BDDtoken->size = filesize($tmpFolderPath.$BDDtoken->archivePath);
@@ -586,29 +591,24 @@ class SiteController extends SimpleController
                     error_log(print_r($catArray,true));
 
                     $catlist=[];
-                    $segments = json_decode($NImage->mask->segInfo);
-                    /*foreach ($segments as $segNum => $catId) {
-                        if($catId != -1){
-                            //Draw om $im
-                            //1. Get color
-                            $key = array_search($catId, array_column($catArray, 'id'));
-                            $hexColor = $catArray[$key]["Color"];//"#ffffff";
-                            $hex = ltrim($hexColor,'#');
-                            $r = hexdec(substr($hex,0,2));
-                            $g = hexdec(substr($hex,2,2));
-                            $b = hexdec(substr($hex,4,2));
-
-                            error_log($r." ".$g." ".$b);
-
-                            $color = imagecolorallocate($im, $r, $g, $b);
-                            //download info
-                            $catlist[$catId] = true;
-                        }
-                    }*/
+                    $raw1 = $NImage->mask->segInfo;
+                    $preparedForm1 = substr($raw1, 1, -1);
                     
-                    //x y info
-                    $big = gzuncompress(base64_decode($NImage->mask->slicStr));
-                    $bigArray = explode(" ",$big);
+                    
+                    $raw = $NImage->mask->slicStr;
+                    error_log(substr($raw, 0, 100));
+                    $preparedForm = substr($raw, 1, -1);
+                    error_log(substr($preparedForm, 0, 100));
+                    $lzw = new LZW();
+                    $uncompressedForm = $lzw->decompress($preparedForm);
+                    error_log(substr($uncompressedForm, 0, 100));
+                    $uncompressedForm1 = $lzw->decompress($preparedForm1);
+                    error_log(print_r($uncompressedForm1,true));
+                    
+
+
+                    $bigArray = explode(" ",$uncompressedForm);
+                    $segments = json_decode($uncompressedForm1);
                     $big2DArray = [];
                     $width = $NImage->naturalWidth;
                     foreach ($bigArray as $key => $value) {
@@ -620,6 +620,7 @@ class SiteController extends SimpleController
                         $big2DArray[$y][$x] = $value;
                     }
                     $numPixelColored = 0;
+                    //error_log(print_r($segments,true));
                     foreach ($big2DArray as $numLine => $line) {
                         //error_log("line ".$numLine);
                         $numPixelLine = 0;
@@ -638,7 +639,7 @@ class SiteController extends SimpleController
                                 $key = array_search($catId, array_column($catArray, 'id'));
                                 $color = $catArray[$key]["colorAllocate"];
                                 if($numLine == 100){
-                                    error_log(print_r($color,true));
+                                    //error_log(print_r($color,true));
                                 }
                                 imagesetpixel($im, $numCol, $numLine, $color);
                                 if($numLine == 74){
@@ -1118,4 +1119,98 @@ class SiteController extends SimpleController
             ->write("retry: 1000\ndata: {$data}\n\n");
         
     }
+    public function trainKeepProgress($request, $response, $args){
+        if (array_key_exists("train_status",$_SESSION)){
+            if(array_key_exists($this->ci->currentUser->id,$_SESSION['train_status'])){
+                $array = $_SESSION['train_status'][$this->ci->currentUser->id];
+            }
+            else{
+                $array = [];
+            }
+        }
+        else{
+            $array = [];
+        }
+
+        $data = json_encode($array);
+        
+        return $response
+            ->withHeader("Content-Type", "text/event-stream")
+            ->withHeader("Cache-Control", "no-cache")
+            ->write("retry: 1000\ndata: {$data}\n\n");
+        
+    }
 }
+
+
+class LZW {
+    function compress($uncompressed) {
+        $dictSize = 256;
+        $dictionary = array();
+        for ($i = 0; $i < 256; $i++) {
+            $dictionary[chr($i)] = $i;
+        }
+        $w = "";
+        $result = "";
+        for ($i = 0; $i < strlen($uncompressed); $i++) {
+            $c = $this->charAt($uncompressed, $i);
+            $wc = $w.$c;
+            if (isset($dictionary[$wc])) {
+                $w = $wc;
+            } else {
+                if ($result != "") {
+                    $result .= ",".$dictionary[$w];
+                } else {
+                    $result .= $dictionary[$w];
+                }
+                $dictionary[$wc] = $dictSize++;
+                $w = "".$c;
+            }
+        }
+        if ($w != "") {
+            if ($result != "") {
+                $result .= ",".$dictionary[$w];
+            } else {
+                $result .= $dictionary[$w];
+            }
+        }
+        return $result;
+    }
+    function decompress($compressed) {
+        $compressed = explode(",", $compressed);
+        $dictSize = 256;
+        $dictionary = array();
+        for ($i = 1; $i < 256; $i++) {
+            $dictionary[$i] = chr($i);
+        }
+        $w = chr($compressed[0]);
+        $result = $w;
+        for ($i = 1; $i < count($compressed); $i++) {
+            $entry = "";
+            $k = $compressed[$i];
+            if (isset($dictionary[$k])) {
+                $entry = $dictionary[$k];
+            } else if ($k == $dictSize) {
+                $entry = $w.$this->charAt($w, 0);
+            } else {
+                return null;
+            }
+            $result .= $entry;
+            $dictionary[$dictSize++] = $w.$this->charAt($entry, 0);
+            $w = $entry;
+        }
+        return $result;
+    }
+    function charAt($string, $index){
+        if($index < mb_strlen($string)){
+            return mb_substr($string, $index, 1);
+        } else{
+            return -1;
+        }
+    }
+}
+ 
+//$lzw = new LZW();
+//$cmp = $lzw->compress("http://webdevwonders.com");
+// 104,116,116,112,58,47,47,119,101,98,100,101,118,119,111,110,266,114,115,46,99,111,109
+//$dcmp = $lzw->decompress($cmp); // http://webdevwonders.com

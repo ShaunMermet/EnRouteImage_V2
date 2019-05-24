@@ -37,7 +37,7 @@
             <div class="box box-primary">
 
 {% if checkAccess('uri_export') %}
-<div class="col-lg-6">
+<div class="col-lg-12">
     <div class="box-header">
         <h3 class="box-title"><i class="fa fa-cloud-download"></i> {{translate("UPLOAD.TITLE.EXPORT")}}</h3>
     </div>
@@ -62,7 +62,7 @@
             <div id="dlDateGen"></div>
             <div id="dlUser"></div>
     	</div>
-        <div class="column column-three" id="exportColumn" style="background: #ffffff;border: none;max-width: 150px;">
+        <div class="column column-three" id="exportColumn" style="background: #ffffff;border: none;max-width: 150px;min-width: 150px;">
             <div style="min-height: 90px;">
                 <button id="exportButton"class="button" type="button" onclick="export_onExportClicked()" style="opacity: 0.5;pointer-events: none;" disabled>Export</button>
                 <div class="stdLoaderButton" style="display:none;"></div>
@@ -72,6 +72,24 @@
             <br>
             <div id="exportState"></div>
     	</div>
+        <div class="column column-three" id="trainColumn" style="background: #ffffff;border: none;max-width: 150px;min-width: 150px;">
+            <div style="min-height: 90px;">
+                <button id="trainButton"class="button" type="button" onclick="export_onTrainClicked()" style="opacity: 0.5;pointer-events: none;" disabled>Train model</button>
+                <div class="stdLoaderButton" style="display:none;"></div>
+            </div>
+            
+            <div id="trainState"></div>
+            <br>
+            <div id="trainProgress"></div>
+        </div>
+        <div class="column column-three" id="dlModelColumn" style="background: #ffffff;border: none;max-width: 150px;min-width: 150px;">
+            <div style="min-height: 90px;">
+                <button id="dlModelButton"class="button" type="button" onclick="export_ondlModelClicked()" style="opacity: 0.5;pointer-events: none;" disabled>Train model</button>
+                <div class="stdLoaderButton" style="display:none;"></div>
+            </div>
+            
+            <div id="trainState"></div>
+        </div>
 
     </div>
 
@@ -79,7 +97,7 @@
 </div>
 {% endif %} 
 {% if checkAccess('uri_setEdit') %}
-<div class="col-lg-6">
+<div class="col-lg-4">
     <div class="box-header">
         <h3 class="box-title"><i class="fa fa-edit"></i> {{translate("UPLOAD.TITLE.SETEDITOR")}}</h3>
     </div>
@@ -116,7 +134,7 @@
 </div>
 {% endif %}
 {% if checkAccess('uri_catEdit') %}
-<div class="col-lg-6">
+<div class="col-lg-4">
     <div class="box-header">
         <h3 class="box-title"><i class="fa fa-edit"></i> {{translate("UPLOAD.TITLE.CATEGORY")}}</h3>
     </div>

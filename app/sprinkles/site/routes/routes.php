@@ -67,6 +67,8 @@ $app->group('/admin', function () {
 
 	$this->delete('/upload/upload', 'UserFrosting\Sprinkle\Site\Controller\SiteController:uploadHandler');
 	$this->get('/upload/keepUpdated', 'UserFrosting\Sprinkle\Site\Controller\SiteController:archiveUploadKeepProgress');
+	
+	$this->get('/train/keepUpdated', 'UserFrosting\Sprinkle\Site\Controller\SiteController:trainKeepProgress');
 
 	//SEGMENTATION
 	$this->get('/segUpload', 'UserFrosting\Sprinkle\Site\Controller\SiteController:pageSegUpload');
@@ -90,6 +92,13 @@ $app->group('/export', function () {
 	$this->post('', 'UserFrosting\Sprinkle\Site\Controller\SiteController:prepareZip');
 
 	$this->get('/dl/{dl_id}', 'UserFrosting\Sprinkle\Site\Controller\SiteController:returnDownload');
+
+});//->add('authGuard');
+
+$app->group('/train', function () {
+	$this->post('', 'UserFrosting\Sprinkle\Site\Controller\SetController:trainSet');
+
+	$this->get('/dl/{dl_id}', 'UserFrosting\Sprinkle\Site\Controller\SetController:returnDownload');
 
 });//->add('authGuard');
 

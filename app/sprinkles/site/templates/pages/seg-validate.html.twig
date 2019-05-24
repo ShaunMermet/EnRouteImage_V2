@@ -54,7 +54,11 @@
 		</div>
 		<div class="column column-four">
 			<div id="preview" class="imgcontainer" ondragstart="return false;" ondrop="return false;" style="position: relative;height:100%;">
-				<div class="stdLoaderButton" style="display:none;position: absolute;top: 40%;left: 45%;"></div>
+				<div id="progressBlock" style="position: absolute;top: 50%;left: 50%;max-width:100px;transform: translate(-50%, -50%);">
+					<div class="stdLoaderButton" style=""></div>
+					<div id="progress" style="position: absolute;top: 36px;left: 28px;"></div>
+				</div>
+				
 				<div id="imageDiv">
 					<canvas id="lineCanvas" style="position:absolute;top: 0px;left: 0px;"></canvas>
 					<img id='image' unselectable='on' src='' />

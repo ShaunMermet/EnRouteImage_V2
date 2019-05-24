@@ -117,53 +117,52 @@ function validate_loadImages(){
 	var data= {};
 	data["setID"]=imgSet;
 	var url = site.uri.public + '/segImages/annotated';
-	$('#preview .stdLoaderButton').show();
+	$('#progressBlock .stdLoaderButton').show();
+	document.getElementById('progress').innerHTML = "0%...";
 	$('#nextButton').prop('disabled', true);
 	$.ajax({
+	  xhr: function()
+	  {
+	    var xhr = new window.XMLHttpRequest();
+	    //Upload progress
+	    xhr.upload.addEventListener("progress", function(evt){
+	      if (evt.lengthComputable) {
+	        var percentComplete = evt.loaded / evt.total;
+	        //Do something with upload progress
+	        console.log(percentComplete);
+	      }
+	    }, false);
+	    //Download progress
+	    xhr.addEventListener("progress", function(evt){
+	      if (evt.lengthComputable) {
+	        var percentComplete = evt.loaded / evt.total;
+	        //Do something with download progress
+	        console.log(parseInt(percentComplete*100, 10)+"%");
+	      }
+	    }, false);
+	    return xhr;
+	  },
 	  type: "GET",
 	  url: url,
-	  data: data
+	  data: data,
 	})
-	.then(
+	.success(
 	    // Fetch successful
 	    function (datas) {
-	    	$('#preview .stdLoaderButton').hide();
+	    	$('#progressBlock .stdLoaderButton').hide();
+	    	document.getElementById('progress').innerHTML = "";
 	    	$('#nextButton').prop('disabled', false);
 	    	if(datas!=""){
 	    		validate_imgPathList = datas;//res;
 	    		for (data of datas) {
-				    var dec = window.atob(data.mask.slicStr);
-					function atos(arr) {
-					    for (var i=0, l=arr.length, s='', c; c = arr[i++];)
-					        s += String.fromCharCode(
-					            c > 0xdf && c < 0xf0 && i < l-1
-					                ? (c & 0xf) << 12 | (arr[i++] & 0x3f) << 6 | arr[i++] & 0x3f
-					            : c > 0x7f && i < l
-					                ? (c & 0x1f) << 6 | arr[i++] & 0x3f
-					            : c
-					        );
-					    return s
-					}
-					result = atos(pako.ungzip(dec));
-					ar1d = result.split(" ");
-					ar2d = [];
-					for(j = 0 ; j < data.naturalHeight; j++){
-						ar2d[j] = [];
-					}
-					for(i = 0 ; i < ar1d.length; i++){
-						row = Math.floor(i/data.naturalWidth);
-						col = i%data.naturalWidth;
-						ar2d[row][col]=parseInt(ar1d[i]);
-					}
+				    var ar1d = LZW.decompress(JSON.parse(data.mask.slicStr)).split(" ");
+					var ar2d = [], size = data.naturalWidth;
+					while (ar1d.length > 0) ar2d.push(ar1d.splice(0, size));
+					var tag1d = LZW.decompress(JSON.parse(data.mask.segInfo)).split(" ");
 					data.mask.udata = ar2d;
-					data.mask.segInfo = JSON.parse(data.mask.segInfo);
-					//tag =[];
-					//for (k = 0 ; k < data.mask.NbrSeg ; k++) {
-					//	tag[k]=-1;
-					//}
-					//data.nask.tag = tag;
+					data.mask.segInfo = JSON.parse(tag1d[0]);
 				}
-				console.log(datas);
+				//console.log(datas);
 			}
 			else validate_imgPathList = [];
 			if(validate_imgPathList.length == 0){
@@ -282,18 +281,30 @@ function validate_drawSlic(){
 	var segmentCanvas = document.getElementById("segmentCanvas");
 	segmentCanvas.width = parseInt(data.naturalWidth);
 	segmentCanvas.height = parseInt(data.naturalHeight);
-	function drawPixel(x,y){
-		slicCtx = slicCanvas.getContext("2d");
+	//function drawPixel(x,y){
+		var slicCtx = slicCanvas.getContext("2d");
 		slicCtx.fillStyle = "#FFFF00";
-		slicCtx.fillRect( x, y, 1, 1 );
-	}
+		//slicCtx.fillRect( x, y, 1, 1 );
+		
+	//}
+	var imageData = slicCtx.getImageData(0, 0, data.naturalWidth, data.naturalHeight);
+	var dataPxl = imageData.data;
 	for(j = 0; j < data.naturalHeight -1 ; j++){
 		for(i = 0 ; i < data.naturalWidth -1; i++){
 			if(gridarray[j][i] != gridarray[j][(i+1)]  || gridarray[j][i] != gridarray[(j+1)][i]){
-				drawPixel(i, j);
+				//slicCtx.fillRect( i, j, 1, 1 );
+				var index = (j * data.naturalWidth + i) * 4;
+
+		        //var value = x * y & 0xff;
+
+		        dataPxl[index]   = 255;    // red
+		        dataPxl[++index] = 255;    // green
+		        dataPxl[++index] = 0;    // blue
+		        dataPxl[++index] = 255;      // alpha
 			}
 		}
 	}
+	slicCtx.putImageData(imageData, 0, 0);
 	document.getElementById('value2').innerHTML = data.mask.NbrSeg;
 	document.getElementById('value3').innerHTML = data.mask.compactness;
 }
@@ -517,11 +528,13 @@ function validate_sendData(validated){
 	var imageData = validate_imgPathList[validate_imgPathListIndex];
 	imageData.mask.udata = [];
 	
+	var stringedTag = JSON.stringify(imageData.mask.segInfo);
+	var lzwTagCompressed = JSON.stringify(LZW.compress(stringedTag));
 	var data= {};
 	data["dataSrc"]=validate_srcId;
 	data["validateType"]=validated;
 	data["updated"]= validate_imgPathList[validate_imgPathListIndex].updated_at;
-	data["slic"] = imageData;
+	data["segInfo"] = lzwTagCompressed;
 	data[site.csrf.keys.name] = site.csrf.name;
 	data[site.csrf.keys.value] = site.csrf.value;
 	// Validate or reject areas
@@ -760,3 +773,85 @@ function onClickHandler(e) {
 
 	validate_drawLegend(validate_imgPathList[validate_imgPathListIndex].id);
 }
+
+//LZW Compression/Decompression for Strings
+var LZW = {
+    compress: function (uncompressed) {
+        "use strict";
+        // Build the dictionary.
+        var i,
+            dictionary = {},
+            c,
+            wc,
+            w = "",
+            result = [],
+            dictSize = 256;
+        for (i = 0; i < 256; i += 1) {
+            dictionary[String.fromCharCode(i)] = i;
+        }
+ 
+        for (i = 0; i < uncompressed.length; i += 1) {
+            c = uncompressed.charAt(i);
+            wc = w + c;
+            //Do not use dictionary[wc] because javascript arrays 
+            //will return values for array['pop'], array['push'] etc
+           // if (dictionary[wc]) {
+            if (dictionary.hasOwnProperty(wc)) {
+                w = wc;
+            } else {
+                result.push(dictionary[w]);
+                // Add wc to the dictionary.
+                dictionary[wc] = dictSize++;
+                w = String(c);
+            }
+        }
+ 
+        // Output the code for w.
+        if (w !== "") {
+            result.push(dictionary[w]);
+        }
+        return result;
+    },
+ 
+ 
+    decompress: function (compressed) {
+        "use strict";
+        // Build the dictionary.
+        var i,
+            dictionary = [],
+            w,
+            result,
+            k,
+            entry = "",
+            dictSize = 256;
+        for (i = 0; i < 256; i += 1) {
+            dictionary[i] = String.fromCharCode(i);
+        }
+ 
+        w = String.fromCharCode(compressed[0]);
+        result = w;
+        for (i = 1; i < compressed.length; i += 1) {
+            k = compressed[i];
+            if (dictionary[k]) {
+                entry = dictionary[k];
+            } else {
+                if (k === dictSize) {
+                    entry = w + w.charAt(0);
+                } else {
+                    return null;
+                }
+            }
+ 
+            result += entry;
+ 
+            // Add w+entry[0] to the dictionary.
+            dictionary[dictSize++] = w + entry.charAt(0);
+ 
+            w = entry;
+        }
+        return result;
+    }
+}/*, // For Test Purposes
+    comp = LZW.compress("TOBEORNOTTOBEORTOBEORNOT"),
+    decomp = LZW.decompress(comp);
+document.write(comp + '<br>' + decomp)*/;
