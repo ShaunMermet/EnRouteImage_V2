@@ -1,0 +1,48 @@
+<form class="js-form" method="{{form.method | default('POST')}}" action="{{site.uri.public}}/{{form.action}}">
+    {% include "forms/csrf.html.twig" %}
+    <div class="js-form-alerts">
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label>{{translate('FILE_NAME')}}</label>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-edit"></i></span>
+                    <input type="text" class="form-control" name="first_name" autocomplete="off" value="{{aimodel.filename}}">
+                </div>
+            </div>
+        </div>
+    </div><br>
+    <input type="hidden" name="last_name" value="{{aimodel.filename}}">
+    <input type="hidden" name="token" value="{{aimodel.token}}">
+    <div class="row">
+        {% if form.edit_buttons %}
+            {% if 'edit' not in form.edit_buttons.hidden %}
+            <div class="col-xs-6 col-sm-3">
+                <div class="vert-pad">
+                    <button type="button" class="btn btn-block btn-md btn-primary js-user-edit" data-user_name="{{user.user_name}}">
+                        <i class="fa fa-edit"></i> {{translate('EDIT')}}
+                    </button>
+                </div>
+            </div>
+            {% endif %}
+        {% else %}
+            <div class="col-xs-8 col-sm-4">
+                <div class="vert-pad">
+                    <button type="submit" class="btn btn-block btn-lg btn-success">
+                        {{form.submit_text}}
+                    </button>
+                </div>
+            </div>
+            <div class="col-xs-4 col-sm-3 pull-right">
+                <div class="vert-pad">
+                    <button type="button" class="btn btn-block btn-lg btn-link" data-dismiss="modal">{{translate('CANCEL')}}</button>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</form>
+<!-- Include validation rules -->
+<script>
+{% include "pages/partials/page.js.twig" %}
+</script>

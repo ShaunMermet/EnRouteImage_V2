@@ -279,6 +279,31 @@
                 }
             }
         },
+        "js/perfectScrollbar": {
+            "scripts": [
+                "userfrosting/js/vendor/perfect-scrollbar/perfect-scrollbar.min.js"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "scripts": "plain"
+                    }
+                }
+            }
+        },
+        "js/bootstrapMin": {
+            "scripts": [
+                "userfrosting/js/vendor/popper.js",
+                "userfrosting/js/vendor/bootstrap.min.js.js"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "scripts": "plain"
+                    }
+                }
+            }
+        },
 		"js/blueimp": {
             "scripts": [
                 "userfrosting/js/blueimp/vendor/jquery.ui.widget.js",
@@ -351,6 +376,66 @@
 				"userfrosting/css/blueimp/jquery.fileupload-noscript.css",
 				"userfrosting/css/blueimp/jquery.fileupload-ui.css",
 				"userfrosting/css/blueimp/jquery.fileupload-ui-noscript.css"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "styles": "plain"
+                    }
+                }
+            }
+        },
+        "css/perfectScrollbar": {
+            "styles": [
+                "userfrosting/css/perfect-scrollbar.css"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "styles": "plain"
+                    }
+                }
+            }
+        },
+        "css/bootstrapMin": {
+            "styles": [
+                "userfrosting/css/bootstrap.min.css"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "styles": "plain"
+                    }
+                }
+            }
+        },
+        "css/tableMain": {
+            "styles": [
+                "userfrosting/css/table-main.css"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "styles": "plain"
+                    }
+                }
+            }
+        },
+        "css/tableUtil": {
+            "styles": [
+                "userfrosting/css/table-util.css"
+            ],
+            "options": {
+                "result": {
+                    "type": {
+                        "styles": "plain"
+                    }
+                }
+            }
+        },
+        "css/fontAwesomeMin": {
+            "styles": [
+                "userfrosting/fonts/font-awesome-4.7.0/css/font-awesome.min.css"
             ],
             "options": {
                 "result": {

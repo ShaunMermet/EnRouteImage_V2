@@ -98,7 +98,9 @@ $app->group('/export', function () {
 $app->group('/train', function () {
 	$this->post('', 'UserFrosting\Sprinkle\Site\Controller\SetController:trainSet');
 
-	$this->get('/dl/{dl_id}', 'UserFrosting\Sprinkle\Site\Controller\SetController:returnDownload');
+	$this->get('/dl/{dl_id}/{dl_filename}', 'UserFrosting\Sprinkle\Site\Controller\SetController:returnDownload');
+
+	$this->post('/del/{dl_id}/{dl_filename}', 'UserFrosting\Sprinkle\Site\Controller\SetController:deleteModel');
 
 });//->add('authGuard');
 
@@ -250,6 +252,10 @@ $app->group('/api/sets', function () {
 	$this->get('/mysetsNA', 'UserFrosting\Sprinkle\Site\Controller\SetController:getMySetsNA');
 
 	$this->get('/dlInfos', 'UserFrosting\Sprinkle\Site\Controller\SetController:getSetDlInfos');
+
+	$this->get('/aiModel/edit', 'UserFrosting\Sprinkle\Site\Controller\SetController:getModalEditModel');
+
+	$this->put('/aiModel/edit/save', 'UserFrosting\Sprinkle\Site\Controller\SetController:updateModelInfo');
 
 });//->add('authGuard');
 $app->group('/api/segSets', function () {

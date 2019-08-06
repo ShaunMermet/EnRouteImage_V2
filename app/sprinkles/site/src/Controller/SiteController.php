@@ -535,6 +535,11 @@ class SiteController extends SimpleController
                 $allfilenamePath =  $tmpFolderPath.$tmpFolder."/filename.txt";
                 $allFilename = fopen($allfilenamePath, "w") or die("Unable to open file!");
                 
+                //create directories
+                $zip->addEmptyDir('images');
+                $zip->addEmptyDir('masks');
+                $zip->addEmptyDir('txt');
+
                 /* fetch object array */
                 $nbrImages = 0;
                 $nbrAreas = 0;
@@ -542,7 +547,8 @@ class SiteController extends SimpleController
                 foreach ($imgToExport as $NImage) {
                     $imgToExportPath = "efs/img/segmentation/".$NImage->path;
                     $path_parts = pathinfo($NImage->path);
-                    $pngpath =  $tmpFolderPath.$tmpFolder."/".$path_parts['filename'] .".png";
+                    //png change //$pngpath =  $tmpFolderPath.$tmpFolder."/".$path_parts['filename'] .".png";
+                    $jpegpath =  $tmpFolderPath.$tmpFolder."/".$path_parts['filename'] .".jpeg";
                     $txtpath =  $tmpFolderPath.$tmpFolder."/".$path_parts['filename'] .".txt";
                     $txtfile = fopen($txtpath, "w") or die("Unable to open file!");
                     $size = getimagesize($imgToExportPath);
@@ -661,8 +667,10 @@ class SiteController extends SimpleController
                     error_log(print_r($numPixelColored,true));
 
                     //Save segmentation image 
-                    header('Content-Type: image/png');
-                    imagepng($im,$pngpath);
+                        //png change//header('Content-Type: image/png');
+                        //png change//imagepng($im,$pngpath);
+                    header('Content-Type: image/jpeg');
+                    imagejpeg($im,$jpegpath);
                     imagedestroy($im);
 
                     //Building txt file with polygon data
@@ -694,9 +702,10 @@ class SiteController extends SimpleController
 
 
                     //Completing Zip
-                    $zip->addFile($txtpath, $path_parts['filename'] .".txt");
-                    $zip->addFile($pngpath, $path_parts['filename'] .".png");
-                    $zip->addFile($imgToExportPath, $path_parts['filename'].".jpeg");
+                    $zip->addFile($txtpath, "txt/" . $path_parts['filename'] .".txt");
+                    //png change//$zip->addFile($pngpath, "masks/" . $path_parts['filename'] .".png");
+                    $zip->addFile($jpegpath, "masks/" . $path_parts['filename'] .".jpeg");
+                    $zip->addFile($imgToExportPath, "images/" . $NImage->path);
                     fwrite($allFilename, $NImage->path.",".$NImage->originalName."\n");
 
                     //Counting images

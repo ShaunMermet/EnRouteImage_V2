@@ -27,7 +27,7 @@ function validate_loadCategories(){
 	    function (data) {
 	        mainContainer.catData = data;
 			validate_updateComboCat();
-			validate_loadset();
+			validate_loadImages();
 	    },
 	    // Fetch failed
 	    function (data) {
@@ -56,7 +56,7 @@ function validate_loadset(){
 			}
 			validate_set.sort(function(a, b){return a.id-b.id})
 			validate_initComboSet();
-			validate_loadImages();
+			validate_loadCategories();
 	    },
 	    // Fetch failed
 	    function (data) {
@@ -70,6 +70,8 @@ function validate_updateComboCat(){
 		$("#combo").append("<option value=\""+data+"\">"+text+"</option>");
 	}
 	emptyCombo($("#combo")[0]);
+	//var combo = document.getElementById("combo4");
+	//var id = combo.options[combo.selectedIndex].value;
 	var setCombo = $("#combo4")[0];
 	var setSelectedID = setCombo.value;
 	if(setSelectedID == "") setSelectedID = 1;
@@ -104,7 +106,8 @@ function emptyCombo(comboElem){
 
 
 ////////////GET IMG FROM SERVER//////
-validate_loadCategories();
+//validate_loadCategories();
+validate_loadset();
 
 function validate_loadRects(){
 	var data= {};

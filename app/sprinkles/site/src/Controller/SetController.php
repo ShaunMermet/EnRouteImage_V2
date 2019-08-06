@@ -17,6 +17,10 @@ use UserFrosting\Sprinkle\Site\Database\Models\Set;
 use UserFrosting\Sprinkle\Site\Database\Models\SegSet;
 use UserFrosting\Sprinkle\Site\Database\Models\ImgCategories;
 use UserFrosting\Sprinkle\Site\Database\Models\ImgLinks;
+use UserFrosting\Fortress\RequestSchema;
+use UserFrosting\Fortress\Adapter\JqueryValidationAdapter;
+use UserFrosting\Fortress\RequestDataTransformer;
+use UserFrosting\Fortress\ServerSideValidator;
 
 /**
  * Controller class for category-related requests.
@@ -272,6 +276,7 @@ class SetController extends SimpleController
      */
     public function getSetDlInfos($request, $response, $args)
     {
+        error_log("in getSetDlInfos");
         /** @var UserFrosting\Sprinkle\Account\Authenticate\Authenticator $authenticator */
         $authenticator = $this->ci->authenticator;
         if (!$authenticator->check()) {
@@ -323,8 +328,24 @@ class SetController extends SimpleController
         }
         
         $dlInfos = $set->token;
+
+        //parse model files
+        $trainFolderPath = "efs/train/";
+        $tmpTrainfolderName = $trainFolderPath.$dlInfos->token;
+        $fileList = glob($tmpTrainfolderName.'/output/*.weights');
+        $modelList = [];
+        foreach($fileList as $filename){
+            if(is_file($filename)){
+                $model = array(
+                    "filename"=>basename($filename),
+                    "filesize"=>filesize($filename),
+                );
+                array_push($modelList, $model);
+            }   
+        }
+            
         $res=array("msg"=>"Download Ready","link"=>$dlInfos->token,"size"=>$dlInfos->size,"user"=>$dlInfos->user,"dateGen"=>$dlInfos->date_generated,
-            "nbrImgs"=>$dlInfos->nbrImages,"nbrAreas"=>$dlInfos->nbrAreas,"areaPerType"=>$dlInfos->nbrAreas_per_type);
+            "nbrImgs"=>$dlInfos->nbrImages,"nbrAreas"=>$dlInfos->nbrAreas,"areaPerType"=>$dlInfos->nbrAreas_per_type,"modelList"=>$modelList);
 
         // Be careful how you consume this data - it has not been escaped and contains untrusted user-supplied content.
         // For example, if you plan to insert it into an HTML DOM, you must escape it on the client side (or use client-side templating).
@@ -382,6 +403,7 @@ class SetController extends SimpleController
         if(!array_key_exists ('category',$data)) $data->category = [];
         if(!array_key_exists ('groups',$data)) $data->groups = [1];
         $requestedSet = $data->setID;
+        $nbrIteration = $data->nbrStep;
         if($requestedSet == null) $requestedSet = 1;
 
         $cats = ImgCategories::whereIn('set_id', [$requestedSet])
@@ -401,22 +423,25 @@ class SetController extends SimpleController
             $config = $this->ci->config['db.default'];
             $db = mysqli_connect($config['host'],$config['username'],$config['password'],$config['database']);
             $tmpPath = "efs/tmp/";
-            $token = mysqli_real_escape_string($db,$args['dl_id']);
+            $token = mysqli_real_escape_string($db,$data->token);
+            error_log(print_r($token,true));
             $sql = "SELECT exlk.archivePath FROM labelimgexportlinks exlk WHERE exlk.token = '$token'";
             $res = $db->query($sql);
             $tmpLink = $res->fetch_object();
-            $tmpfolderName = $tmpPath.$tmpLink->archivePath;
+            $tmpfolderName = $tmpPath.$token;
 
             //create set folder to work in
             $trainFolderPath = "efs/train/";
-            mkdir( $trainFolderPath.$requestedSet, 0700);
+            $tmpTrainfolderName = $trainFolderPath.$token;
+            mkdir( $tmpTrainfolderName, 0700);
+            error_log(print_r($tmpTrainfolderName,true));
             
             //record folder in bdd
                 //maybe skip that
 
 
             //generate voc.names
-            $vocpath =  $trainFolderPath.$requestedSet."/voc.names";
+            $vocpath =  $tmpTrainfolderName."/voc.names";
             $vocfile = fopen($vocpath, "w") or die("Unable to open file!");
                 
             //List of all categories
@@ -425,25 +450,45 @@ class SetController extends SimpleController
                 fwrite($vocfile, $cat["Category"]);
                 fwrite($vocfile, "\n");
             }
-            fclose($txtfile);
+            fclose($vocfile);
 
             //generate voc.data
-            $vocDatapath =  $trainFolderPath.$requestedSet."/voc.data";
+            $vocDatapath =  $tmpTrainfolderName."/voc.data";
             $vocDatafile = fopen($vocDatapath, "w") or die("Unable to open file!");
             
             fwrite($vocDatafile, "classe = ".sizeof($catArray));
             fwrite($vocDatafile, "\n");
-            fwrite($vocDatafile, "train = ".$trainFolderPath.$requestedSet."/train.txt");
+            fwrite($vocDatafile, "train = ".$tmpTrainfolderName."/train.txt");
             fwrite($vocDatafile, "\n");
             fwrite($vocDatafile, "valid = valid.txt");
             fwrite($vocDatafile, "\n");
             fwrite($vocDatafile, "names = voc.names");
             fwrite($vocDatafile, "\n");
             //fwrite($vocDatafile, "backup = output");
-            fwrite($vocDatafile, "backup = ".$trainFolderPath.$requestedSet."/output/");
+            fwrite($vocDatafile, "backup = ".$tmpTrainfolderName."/output/");
             
+
+            //generate personalized cfg file (NN structure)
+            $baseModelPath = $trainFolderPath."cfg/"."yolov3-tiny.cfg";
+            $destModelPath = $tmpTrainfolderName."/yolov3-tiny.cfg";
+            copy($baseModelPath, $destModelPath);
+            $modelData = file_get_contents($destModelPath);
+            $arrModelData = explode("\r\n", $modelData);
+            function customSearch($keyword, $arrayToSearch){
+                foreach($arrayToSearch as $key => $arrayItem){
+                    if( stristr( $arrayItem, $keyword ) ){
+                        return $key;
+                    }
+                }
+            }
+            $mbKey = customSearch("max_batches", $arrModelData);
+            $arrModelData[$mbKey] = "max_batches = ".$nbrIteration;
+            $modelData = implode("\r\n", $arrModelData);
+            file_put_contents($destModelPath, $modelData);
+
+
             //Create output folder
-            mkdir( $trainFolderPath.$requestedSet."/output", 0700);
+            mkdir( $tmpTrainfolderName."/output", 0700);
 
             
             //generate train.txt
@@ -453,7 +498,7 @@ class SetController extends SimpleController
                             ->where ('set_id', '=', $requestedSet)
                             ->get();
             if (count($imgToTrain) > 0) {
-                $allfilenamePath = $trainFolderPath.$requestedSet."/train.txt";
+                $allfilenamePath = $tmpTrainfolderName."/train.txt";
                 $allFilename = fopen($allfilenamePath, "w") or die("Unable to open file!");
             }
             foreach ($imgToTrain as $NImage) {
@@ -465,26 +510,17 @@ class SetController extends SimpleController
 
             error_log("set to train = ");
             error_log(print_r($requestedSet,true));
-            $nbrIteration = 10;
+            //$nbrIteration = 10;
             session_start();
-            $_SESSION['train_status'][$this->ci->currentUser->id][$requestedSet]["train_progress"] = 0;
+            $_SESSION['train_status'][$this->ci->currentUser->id][$token]["train_progress"] = 0;
+            $_SESSION['train_status'][$this->ci->currentUser->id][$token]["iteration_nbr"] = 0;
+            $_SESSION['train_status'][$this->ci->currentUser->id][$token]["iteration_max"] = 0;
             session_write_close();
 
-            $cmd = "darknet detector train efs/train/".$requestedSet."/voc.data efs/train/cfg/yolov3-tiny.cfg efs/train/cfg/darknet53.conv.74";
+            $cmd = "darknet detector train ".$tmpTrainfolderName."/voc.data efs/train/".$token."/yolov3-tiny.cfg efs/train/cfg/darknet53.conv.74";
             
             //$cmd = "darknet";
             set_time_limit(0);
-            //ob_implicit_flush(true);
-            //exec($cmd, $output, $error);
-            
-            /*$cwd = null;
-            $descriptors = array(
-                0 => array('pipe', 'r'),
-                1 => array("pipe", "w"),
-                2 => array('pipe', 'w'),
-            );*/
-
-
 
             while (@ ob_end_flush()); // end all output buffers if any
 
@@ -505,7 +541,9 @@ class SetController extends SimpleController
                     $currentProgress = round($iterationNumber/$nbrIteration*100);
                     //error_log(print_r($currentProgress,true));
                     session_start();
-                    $_SESSION['train_status'][$this->ci->currentUser->id][$requestedSet]["train_progress"] = $currentProgress;
+                    $_SESSION['train_status'][$this->ci->currentUser->id][$token]["train_progress"] = $currentProgress;
+                    $_SESSION['train_status'][$this->ci->currentUser->id][$token]["iteration_nbr"] = $iterationNumber;
+                    $_SESSION['train_status'][$this->ci->currentUser->id][$token]["iteration_max"] = $nbrIteration;
                     session_write_close();
                 }
                 
@@ -515,87 +553,13 @@ class SetController extends SimpleController
 
             pclose($proc);
 
-
-            //$handle = proc_open($cmd, $descriptors, $pipes, $cwd);
-            //stream_set_blocking($pipes[1], true);
-            //if (is_resource($handle))
-            //{
-                /*$i=0;
-                do {
-                    $status = proc_get_status($handle);
-                    // If our stderr pipe has data, grab it for use later.
-                        if (!feof($pipes[1])) {
-                          // We're acting like passthru would and displaying errors as they come in.
-                          $Output_line = fgets($pipes[1]);
-                          //echo $error_line;
-                          error_log(print_r($Output_line,true));
-                          //$stderr_ouput[] = $error_line; 
-                        }
-                    $return_message = fgets($pipes[1], 1024);
-                    if (strlen($return_message) == 0) break;
-                    error_log(print_r($return_message,true));
-                    $i++;
-                    sleep(1);
-                } while ($status['running']);*/
-
-                /*while( ! feof($pipes[1]))
-                {
-                    $return_message = fgets($pipes[1], 1024);
-                    if (strlen($return_message) == 0) break;
-                    $a = explode(":",$return_message);
-                    $iterationNumber = $a[0];
-                    //error_log(print_r($iterationNumber,true));
-                    $currentProgress = round($iterationNumber/$nbrIteration*100);
-                    error_log(print_r($currentProgress,true));
-                    session_start();
-                    $_SESSION['train_status'][$this->ci->currentUser->id][$requestedSet]["train_progress"] = $currentProgress;
-                    session_write_close();
-                    ob_flush();
-                    flush();
-                }*/
-            //}
-            /* $i = 0;
-            while($i < 10){ 
-                $currentProgress = round($i/$nbrIteration*100);
-                error_log(print_r($currentProgress,true));
-                session_start();
-                $_SESSION['train_status'][$this->ci->currentUser->id][$requestedSet]["train_progress"] = $currentProgress;
-                session_write_close();
-                sleep(1);
-                $i++;
-            }*/
-            /*fclose($pipes[0]);
-            fclose($pipes[1]);
-            fclose($pipes[2]);
-            if (!$handle) {
-                echo 'failed to run command';
-            } else {
-                proc_close($handle); // wait for command to finish (optional)
-            }*/
-
             set_time_limit(120);
-            /*$result = [];
-            if ($error) {
-                error_log("train exec error");
-                error_log(print_r($error,true));
-                error_log(print_r($output,true));
-                return false;
-            }else{
-                $result["result"] = $output[0];
-
-
-
-                //$dim = $output[1];
-                //$result["x"] = $output[2];
-                //$result["y"] = $output[1];
-                //$find = array(",","[","]");
-                //$replace = array("");
-                //$result["data"] = str_replace($find,$replace,$output[3]);
-                //$result["data"] = base64_encode(gzcompress($result["data"], 9, ZLIB_ENCODING_DEFLATE));
-            }*/
+            
             //Reset to initial state
             session_start();
-            $_SESSION['train_status'][$this->ci->currentUser->id][$requestedSet]["train_progress"] = 0;
+            $_SESSION['train_status'][$this->ci->currentUser->id][$token]["train_progress"] = 0;
+            $_SESSION['train_status'][$this->ci->currentUser->id][$token]["iteration_nbr"] = 0;
+            $_SESSION['train_status'][$this->ci->currentUser->id][$token]["iteration_max"] = 0;
             session_write_close();
 
             //error_log(print_r($output,true));
@@ -607,5 +571,268 @@ class SetController extends SimpleController
         {
             echo json_encode("No data");
         }
+    }
+
+
+    /**
+     * Return file request to download
+     *
+     * Request type: GET
+     */
+    public function returnDownload($request, $response, $args)
+    {
+        /** @var UserFrosting\Sprinkle\Account\Authenticate\Authenticator $authenticator */
+        $authenticator = $this->ci->authenticator;
+        if (!$authenticator->check()) {
+            $loginPage = $this->ci->router->pathFor('login');
+            return $response->withRedirect($loginPage, 400);
+        }
+
+        /** @var UserFrosting\Sprinkle\Account\Authorize\AuthorizationManager */
+        $authorizer = $this->ci->authorizer;
+        /** @var UserFrosting\Sprinkle\Account\Model\User $currentUser */
+        $currentUser = $this->ci->currentUser;
+        // Access-controlled page
+        if (!$authorizer->checkAccess($currentUser, 'uri_export')) {
+            $loginPage = $this->ci->router->pathFor('login');
+           return $response->withRedirect($loginPage, 400);
+        }
+
+        
+        /** @var UserFrosting\Config\Config $config */
+        $config = $this->ci->config['db.default'];
+        $db = mysqli_connect($config['host'],$config['username'],$config['password'],$config['database']);
+
+        error_log("setC : enter dl");
+
+        if(!isset($args['dl_id'])) {
+            error_log("setC : No token");
+            exit;
+        }
+        else{
+            error_log($args['dl_id']);
+        }
+        error_log("setC : etape 1");
+        $tmpPath = "efs/tmp/";
+        $token = mysqli_real_escape_string($db,$args['dl_id']);
+        $dlFilename = mysqli_real_escape_string($db,$args['dl_filename']);
+        $outputPath = "efs/train/".$token."/output/";
+        //$sql = "SELECT exlk.archivePath FROM labelimgexportlinks exlk WHERE exlk.token = '$token'";
+        //$res = $db->query($sql);
+        //$tmpLink = $res->fetch_object();
+
+        //$count = mysqli_num_rows($res);
+        //error_log($count);
+        //if($count != 1) 
+            //exit;
+        error_log("setC : etape 2");
+
+        $filename = $outputPath. $dlFilename;
+
+        if (!file_exists($filename)) 
+            exit;
+        error_log("setC : etape 3");
+        error_log($filename);
+        // send $filename to browser
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mimeType = finfo_file($finfo, $filename);
+        $size = filesize($filename);
+        $name = basename($filename);
+         error_log("setC : etape 4");
+        if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
+            // cache settings for IE6 on HTTPS
+            header('Cache-Control: max-age=120');
+            header('Pragma: public');
+        } else {
+            header('Cache-Control: private, max-age=120, must-revalidate');
+            header("Pragma: no-cache");
+        }
+        header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // long ago
+        header("Content-Type: $mimeType");
+        header('Content-Disposition: attachment; filename="' . $name . '";');
+        header("Accept-Ranges: bytes");
+        header('Content-Length: ' . filesize($filename));
+         
+        ob_end_flush();
+        ob_get_flush();
+        print readfile($filename);
+
+    }
+
+    /**
+     * delete file requested from set
+     *
+     * Request type: post
+     */
+    public function deleteModel($request, $response, $args)
+    {
+        error_log("in deleteModel");
+        /** @var UserFrosting\Sprinkle\Account\Authenticate\Authenticator $authenticator */
+        $authenticator = $this->ci->authenticator;
+        if (!$authenticator->check()) {
+            $loginPage = $this->ci->router->pathFor('login');
+            return $response->withRedirect($loginPage, 400);
+        }
+
+        /** @var UserFrosting\Sprinkle\Account\Authorize\AuthorizationManager */
+        $authorizer = $this->ci->authorizer;
+        /** @var UserFrosting\Sprinkle\Account\Model\User $currentUser */
+        $currentUser = $this->ci->currentUser;
+        /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
+        $classMapper = $this->ci->classMapper;
+        // Access-controlled page
+        if (!$authorizer->checkAccess($currentUser, 'uri_export')) {
+            $loginPage = $this->ci->router->pathFor('login');
+           return $response->withRedirect($loginPage, 400);
+        }
+
+        $UserWGrp = $classMapper->staticMethod('user', 'where', 'id', $currentUser->id)
+                                ->with('group')
+                                ->first();
+        $validSet = [];
+        foreach ($UserWGrp->group as $group) {
+            $sets = Set::where('group_id', '=', $group->id)
+                    ->get();
+            foreach ($sets as $set) {
+                array_push($validSet, $set->id);
+            }
+        }
+
+        /** @var UserFrosting\Config\Config $config */
+        $config = $this->ci->config['db.default'];
+        $db = mysqli_connect($config['host'],$config['username'],$config['password'],$config['database']);
+
+        if(!isset($args['dl_id'])) {
+            error_log("deleteModel : No token");
+            exit;
+        }
+        else{
+            //error_log($args['dl_id']);
+        }
+
+        $token = mysqli_real_escape_string($db,$args['dl_id']);
+        $dlFilename = mysqli_real_escape_string($db,$args['dl_filename']);
+        $outputPath = "efs/train/".$token."/output/";
+        $filename = $outputPath. $dlFilename;
+        if (!file_exists($filename)) 
+            exit;
+        error_log("delete file");
+        error_log(print_r($filename,true));
+        if (file_exists($filename)) {
+            unlink($filename);
+        } else {
+            // File not found.
+        }
+    }
+
+    /**
+     * Renders the modal form for editing an existing user.
+     *
+     * This does NOT render a complete page.  Instead, it renders the HTML for the modal, which can be embedded in other pages.
+     * This page requires authentication.
+     * Request type: GET
+     */
+    public function getModalEditModel($request, $response, $args)
+    {
+        // GET parameters
+        $params = $request->getQueryParams();
+
+        /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
+        $classMapper = $this->ci->classMapper;
+
+        /** @var UserFrosting\Sprinkle\Account\Authorize\AuthorizationManager */
+        $authorizer = $this->ci->authorizer;
+
+        /** @var UserFrosting\Sprinkle\Account\Model\User $currentUser */
+        $currentUser = $this->ci->currentUser;
+
+        // Get a list of all groups
+        $groups = $classMapper->staticMethod('group', 'all');
+
+        /** @var Config $config */
+        $config = $this->ci->config;
+
+        // Get a list of all locales
+        $locales = $config['site.locales.available'];
+
+        // Generate form
+        $fields = [
+            'hidden' => ['theme'],
+            'disabled' => ['user_name']
+        ];
+        
+        $token = $params['token'];
+        $dlFilename = $params['filename'];
+         // Load validation rules
+        $schema = new RequestSchema('schema://aimodel/edit-info.json');
+        $validator = new JqueryValidationAdapter($schema, $this->ci->translator);
+        $translator = $this->ci->translator;
+        return $this->ci->view->render($response, 'components/modals/aimodel.html.twig', [
+            'aimodel' => [
+                'filename' => $dlFilename,
+                'token' => $token
+            ],
+            'form' => [
+                'action' => "api/sets/aiModel/edit/save",
+                'method' => 'PUT',
+                'submit_text' => $translator->translate("UPDATE")
+            ],
+            'page' => [
+                //'validators' => $validator->rules('json', false)
+            ]
+        ]);
+    }
+
+    /**
+     * Processes the request to update an existing model file name
+     *
+     * Processes the request from the model update form, checking that:
+     * 2. The logged-in user has the necessary permissions to update the putted field(s);
+     * 3. The submitted data is valid.
+     * This route requires authentication.
+     * Request type: PUT
+     */
+    public function updateModelInfo($request, $response, $args)
+    {
+        /** @var Config $config */
+        $params = $request->getQueryParams();
+
+        /** @var UserFrosting\Config\Config $config */
+        $config = $this->ci->config['db.default'];
+        $db = mysqli_connect($config['host'],$config['username'],$config['password'],$config['database']);
+
+        // Get PUT parameters
+        $params = $request->getParsedBody();
+
+        /** @var MessageStream $ms */
+        $ms = $this->ci->alerts;
+
+        // Load the request schema
+        //$schema = new RequestSchema('schema://user/edit-info.json');
+
+        $dlFilename = $params["last_name"];
+        $newFilename = $params["first_name"];
+        $token = $params["token"];
+        $outputPath = "efs/train/".$token."/output/";
+        $filename = $outputPath. $dlFilename;
+        $newFilePath = $outputPath.$newFilename;
+       
+        /** @var UserFrosting\Sprinkle\Account\Authorize\AuthorizationManager */
+        $authorizer = $this->ci->authorizer;
+
+        /** @var UserFrosting\Sprinkle\Account\Model\User $currentUser */
+        $currentUser = $this->ci->currentUser;
+
+        /** @var UserFrosting\Sprinkle\Core\Util\ClassMapper $classMapper */
+        $classMapper = $this->ci->classMapper;
+
+
+        if (file_exists($filename) && 
+            ((!file_exists($newFilePath)) || is_writable($newFilePath))) {
+            rename($filename, $newFilePath);
+            error_log("try rename");
+        }
+        
+        return $response->withStatus(200);
     }
 }

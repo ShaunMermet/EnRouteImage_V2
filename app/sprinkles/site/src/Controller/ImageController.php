@@ -896,10 +896,10 @@ class ImageController extends SimpleController
         }
         $table = $img->toArray();
         $imgRate = $table["cprs_rate"];
-        $groupRate = $table["group"]["bb_cprs_rate"];
+        $groupRate = $table["group"]["seg_cprs_rate"];
         if(is_null($groupRate)){
             $publicGrp = $classMapper->staticMethod('group', 'where', 'id', 1)->first();
-            $groupRate = $publicGrp->bb_cprs_rate;
+            $groupRate = $publicGrp->seg_cprs_rate;
         }
             
         $source = "efs/img/".$imgName;
